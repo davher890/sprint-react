@@ -38,7 +38,7 @@ return (
               <Nav.Link href="/sport_schools/list">Escuelas</Nav.Link>
               <Nav.Link href="/athletes/list">Atletas</Nav.Link>
               <Nav.Link href="/families/list">Familias</Nav.Link>
-              <NavDropdown title="Entrandores" id="collasible-nav-dropdown">
+              <NavDropdown title="Entrenadores" id="collasible-nav-dropdown">
                 <NavDropdown.Item href="/trainers/list">Listado</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item href="/groups/list">Grupos</NavDropdown.Item>
