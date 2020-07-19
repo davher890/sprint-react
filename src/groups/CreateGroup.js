@@ -1,19 +1,39 @@
 import React, { Component } from "react";
 import { 
     Form, InputGroup,
-    Button,
-    Col, Row
+    Container, 
+    Row, Col,
+    Button
 } from 'react-bootstrap';
+import Table from "../utils/Table";
+import { textFilter } from 'react-bootstrap-table2-filter';
 
 class CreateGroup extends Component {
     constructor(props) {
         super(props);
         this.state = {
         	group : {},
-            schedules : []
+            schedules : [],
+            trainers : [],
+            entityName2 : "",
+            columns : [
+                { dataField: 'name', text: 'Nombre', filter: textFilter() }
+            ],
+            columnsAthlete : [
+                { dataField: 'name', text : 'Nombre', filter: textFilter() }, 
+                { dataField: 'birthDate', text : 'Fecha de Nacimiento' }, 
+                { dataField: 'gender', text : 'Genero', filter: textFilter() }, 
+                { dataField: 'category', text : 'Categoria', filter: textFilter() }, 
+                { dataField: 'license', text : 'Licencia' }, 
+                { dataField: 'dorsal', text : 'Dorsal'}
+            ],
+            scheduleId : 0,
+            schedule : ''
         };
+        this.handleGroupInputChange = this.handleGroupInputChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSubmitQuery = this.handleSubmitQuery.bind(this);
         this.handleMultipleSelectChange = this.handleMultipleSelectChange.bind(this);
     }
 
@@ -33,12 +53,12 @@ class CreateGroup extends Component {
             fetch(process.env.REACT_APP_SERVER_URL + "/trainers/all",  { headers })
                 .then(res => res.json())
                 .then(data => {
-                    this.setState({ schedules : data})
+                    this.setState({ trainers : data})
                     resolve()
                 });
         })
 
-        .then((v) => {
+        Promise.all([schedulesPromise, trainersPromise]).then((v) => {
             if (this.props.match.params) {
                 let id = this.props.match.params.id
                 if (id){
@@ -64,7 +84,7 @@ class CreateGroup extends Component {
             .then(data => this.setState(data));
     }
 
-    handleInputChange(event) {
+    handleGroupInputChange(event) {
 
         event.preventDefault();
 
@@ -77,6 +97,19 @@ class CreateGroup extends Component {
 
         this.setState({
             group : group
+        });
+    }
+
+    handleInputChange(event) {
+
+        event.preventDefault();
+
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+
+        this.setState({
+            [name] : value
         });
     }
 
@@ -99,37 +132,113 @@ class CreateGroup extends Component {
         });
     }
 
+    handleSubmitQuery(event) {
+
+        event.preventDefault()
+
+        this.setState({
+            entityName2 : "groups/" + this.state.group.id + "/schedules/" + this.state.scheduleId + "/athletes"
+        });
+    }
+
+    athleteDataConversor(d) {
+        return {
+            id : d.id,
+            name : d.name, 
+            birthDate: new Intl.DateTimeFormat('sq-AL').format(new Date(d.birthDate)), 
+            gender: d.gender === 'male' ? 'Masculino' : 'Femenino',
+            category : d.category,
+            license : d.license,
+            dorsal : d.dorsalNumber
+        }
+    }
+
     render() {
         return (
-            <Form onSubmit={this.handleSubmit}>
+            <Container>
                 <Row>
-                    <Col>
-                        <InputGroup>
-                            <InputGroup.Prepend>
-                                <InputGroup.Text>Nombre</InputGroup.Text>
-                            </InputGroup.Prepend>
-                            <Form.Control key="name" id='name' name="name" type="text" value={this.state.group.name} onChange={this.handleInputChange}/>
-                        </InputGroup>
-                    </Col>
-                    <Col>
-                        <InputGroup>
-                            <InputGroup.Prepend>
-                              <InputGroup.Text>Horario</InputGroup.Text>
-                            </InputGroup.Prepend>
-                            <Form.Control name="schedules" value={this.state.group.scheduleIds} as="select" multiple onChange={this.handleMultipleSelectChange}>
-                                {
-                                    this.state.schedules.map(sch => {
-                                        return <option key={sch.id} value={sch.id}>{sch.day} {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}</option>
-                                    })
-                                }
-                            </Form.Control>
-                        </InputGroup>
-                    </Col>
+                    <Form onSubmit={this.handleSubmit}>
+                        <Row>
+                            <Col>
+                                <InputGroup>
+                                    <InputGroup.Prepend>
+                                        <InputGroup.Text>Nombre</InputGroup.Text>
+                                    </InputGroup.Prepend>
+                                    <Form.Control key="name" id='name' name="name" type="text" value={this.state.group.name} onChange={this.handleInputChange}/>
+                                </InputGroup>
+                            </Col>
+                            <Col>
+                                <InputGroup>
+                                    <InputGroup.Prepend>
+                                      <InputGroup.Text>Horario</InputGroup.Text>
+                                    </InputGroup.Prepend>
+                                    <Form.Control name="scheduleIds" value={this.state.group.scheduleIds} as="select" multiple onChange={this.handleMultipleSelectChange}>
+                                        {
+                                            this.state.schedules.map(sch => {
+                                                return <option key={sch.id} value={sch.id}>{sch.day} {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}</option>
+                                            })
+                                        }
+                                    </Form.Control>
+                                </InputGroup>
+                            </Col>
+                            <Col>
+                                <InputGroup>
+                                    <InputGroup.Prepend>
+                                      <InputGroup.Text>Entrenador</InputGroup.Text>
+                                    </InputGroup.Prepend>
+                                    <Form.Control name="trainerId" value={this.state.group.trainerId} as="select" onChange={this.handleGroupInputChange}>
+                                        <option key="blank_trainer">-</option>
+                                        {
+                                            this.state.trainers.map(tr => {
+                                                return <option key={tr.id} value={tr.id}>{tr.name}</option>
+                                            })
+                                        }
+                                    </Form.Control>
+                                </InputGroup>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Button type="submit">Submit</Button>
+                            </Col>
+                        </Row>
+                    </Form>
                 </Row>
                 <Row>
-                    <Button type="submit">Submit</Button>
+                    <Form onSubmit={this.handleSubmitQuery}>
+                        <Row>
+                            <Col>
+                                <InputGroup>
+                                    <InputGroup.Prepend>
+                                      <InputGroup.Text>Horarios</InputGroup.Text>
+                                    </InputGroup.Prepend>
+                                    <Form.Control name="scheduleId" value={this.state.scheduleId} as="select" onChange={this.handleInputChange}>
+                                        <option key="blank_schedule">-</option>
+                                        {
+                                            this.state.schedules.map(sch => {
+                                                return <option key={sch.id} value={sch.id}>{sch.day} {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}</option>
+                                            })
+                                        }
+                                    </Form.Control>
+                                </InputGroup>
+                            </Col>
+                            <Col>
+                                <Button type="submit">Submit</Button>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Table 
+                                    columns={this.state.columnsAthlete} 
+                                    entityName={this.state.entityName2}
+                                    dataConversor={this.athleteDataConversor}>
+                                </Table>
+                            </Col>
+                        </Row>
+                    </Form>
                 </Row>
-            </Form>
+        </Container>
+            
         );
     }
 }

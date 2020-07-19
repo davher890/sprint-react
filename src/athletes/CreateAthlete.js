@@ -6,6 +6,7 @@ import {
 } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "react-datepicker/dist/react-datepicker.css";
 
 class CreateAthlete extends Component {
     constructor(props) {
@@ -157,7 +158,6 @@ class CreateAthlete extends Component {
         this.setState({
             athlete : athlete
         });
-
     }
 
     ageCalculator(birth){
@@ -177,7 +177,7 @@ class CreateAthlete extends Component {
                                     <InputGroup.Prepend>
                                       <InputGroup.Text>Escuala Deportiva</InputGroup.Text>
                                     </InputGroup.Prepend>
-                                    <Form.Control name="sportSchools" value={this.state.athlete.sportSchoolId} as="select" custom onChange={this.handleInputChange}>
+                                    <Form.Control name="sportSchoolId" value={this.state.athlete.sportSchoolId} as="select" custom onChange={this.handleInputChange}>
                                         {
                                             this.state.sportSchools.map(spe => {
                                                 return (<option key={`spe${spe.id}`} value={spe.id}>{spe.name}</option>)
@@ -207,7 +207,7 @@ class CreateAthlete extends Component {
                                     <InputGroup.Prepend>
                                       <InputGroup.Text>Familia</InputGroup.Text>
                                     </InputGroup.Prepend>
-                                    <Form.Control name="family" value={this.state.athlete.familyId} as="select" custom onChange={this.handleInputChange}>
+                                    <Form.Control name="familyId" value={this.state.athlete.familyId} as="select" custom onChange={this.handleInputChange}>
                                         {
                                             this.state.families.map(family => {
                                                 return (<option key={`family${family.id}`} value={family.id}>{family.firstSurname}</option>)
@@ -226,9 +226,10 @@ class CreateAthlete extends Component {
                                       <InputGroup.Text>Fecha de nacimiento</InputGroup.Text>
                                     </InputGroup.Prepend>
                                     <DatePicker id="birthDate" 
+                                        dateFormat="yyyy-MM-dd"
                                         name="birthDate"
-                                        value = {this.state.athlete.birthDate} 
-                                        onChange={date => this.handleInputDateChange(date)} 
+                                        selected = {this.state.athlete.birthDate} 
+                                        onChange = {this.handleInputDateChange} 
                                     />
                                 </InputGroup>
                             </Col>
