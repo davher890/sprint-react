@@ -14,7 +14,7 @@ class TableAthletes extends Component {
 	        	{ dataField: 'gender', text : 'Genero', filter: textFilter() }, 
 	        	{ dataField: 'category', text : 'Categoria', filter: textFilter() }, 
 	        	{ dataField: 'license', text : 'Licencia' }, 
-	        	{ dataField: 'dorsalNumber', text : 'Dorsal'}
+	        	{ dataField: 'dorsal', text : 'Dorsal'}
         	],
         	entityName : 'athletes',
         }
@@ -24,8 +24,8 @@ class TableAthletes extends Component {
     	return {
 			id : d.id,
 			name : d.name, 
-			birth_date: d.birthDate, 
-			gender: d.gender,
+			birthDate: new Intl.DateTimeFormat('sq-AL').format(new Date(d.birthDate)), 
+			gender: d.gender === 'male' ? 'Masculino' : 'Femenino',
 			category : d.category,
 			license : d.license,
 			dorsal : d.dorsalNumber

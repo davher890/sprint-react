@@ -9,7 +9,8 @@ import {
 } from 'react-bootstrap';
 import BootstrapTable  from 'react-bootstrap-table-next';
 import Paginator from 'react-bootstrap-table2-paginator'
-import Filter, { textFilter } from 'react-bootstrap-table2-filter';
+import Filter from 'react-bootstrap-table2-filter';
+import ToolkitProvider, { CSVExport } from 'react-bootstrap-table2-toolkit';
 
 class Table extends Component {
     constructor(props) {
@@ -25,34 +26,46 @@ class Table extends Component {
     	}
 		this.fetchData = this.fetchData.bind(this)
         this.handleTableChange = this.handleTableChange.bind(this)
+        this.downloadData = this.downloadData.bind(this)
     }
 
     async componentDidMount() {
     	await this.fetchData()
     }
 
-    async fetchData (){
-		const headers = { 'Content-Type': 'application/json' }
-		const response = await fetch(process.env.REACT_APP_SERVER_URL + "/" + this.props.entityName + "?page=" + (this.state.page-1) + "&size=" + this.state.size + this.state.urlParams,  { headers })
-		const data = await response.json();	
+    async componentDidUpdate(prevProps) {
 
-		let items = []
-		if (data.content && data.content.length > 0){
-			items = data.content.map(d => {
-				return this.props.dataConversor(d)
+    	if (this.props.entityName && this.props.entityName !== this.state.entityName){
+    		await this.setState({
+    			entityName : this.props.entityName
+    		})
+    		this.fetchData()
+    	}
+	}
+
+    async fetchData(){
+
+    	if (this.state.entityName && this.state.entityName != ""){
+			const headers = { 'Content-Type': 'application/json' }
+			const response = await fetch(process.env.REACT_APP_SERVER_URL + "/" + this.props.entityName + "?page=" + (this.state.page-1) + "&size=" + this.state.size + this.state.urlParams,  { headers })
+			const data = await response.json();	
+
+			let items = []
+			if (data.content && data.content.length > 0){
+				items = data.content.map(d => {
+					return this.props.dataConversor(d)
+				})
+			}
+			this.setState({
+				data: items,
+				total : data.totalElements,
+				page : data.number+1
 			})
 		}
-		this.setState({
-			data: items,
-			total : data.totalElements,
-			page : data.number+1
-		})
 	}
 	
 	async handleTableChange(type, pageProp){
-
-		console.log(type, pageProp)
-
+		
 		if (type === 'pagination'){
 			let page = pageProp.page;
 			let size = pageProp.sizePerPage;
@@ -86,6 +99,23 @@ class Table extends Component {
 		this.fetchData()
 	}
 
+	downloadData(){
+
+		fetch(process.env.REACT_APP_SERVER_URL + "/" + this.props.entityName + "/excel")
+			.then(response => {
+				response.blob().then(blob => {
+					let url = window.URL.createObjectURL(blob);
+					let a = document.createElement('a');
+					a.href = url;
+					a.download = 'table.xlsx';
+					a.click();
+				})
+			})
+			.catch(function() {
+		        console.log("error");
+		    });
+	}
+
 	rowEvents = {
 		onClick: (e, row, rowIndex) => {
 			window.open("/" + this.props.entityName + "/" + row.id, "_self");
@@ -98,6 +128,9 @@ class Table extends Component {
 				<Row>
 					<Col>
 						<Button href={`/${this.state.entityName}`}>Crear</Button>
+					</Col>
+					<Col>
+						<Button onClick={this.downloadData}>Descargar Excel</Button>
 					</Col>
 				</Row>
 				<Row>
