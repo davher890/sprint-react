@@ -8,6 +8,7 @@ bin
 */.class
 *.log
 node_modules
+.env
 
 ### STS ###
 .apt_generated

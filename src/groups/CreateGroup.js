@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import { 
-    Form, InputGroup,
-    Container, 
-    Row, Col,
-    Button
+    InputGroup, Container, Row, Col, Button, Form, Card
 } from 'react-bootstrap';
 import Table from "../utils/Table";
 import { textFilter } from 'react-bootstrap-table2-filter';
+import { Formik, Field } from 'formik';
 
 class CreateGroup extends Component {
     constructor(props) {
@@ -31,7 +29,6 @@ class CreateGroup extends Component {
             schedule : ''
         };
         this.handleGroupInputChange = this.handleGroupInputChange.bind(this);
-        this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleSubmitQuery = this.handleSubmitQuery.bind(this);
         this.handleMultipleSelectChange = this.handleMultipleSelectChange.bind(this);
@@ -100,19 +97,6 @@ class CreateGroup extends Component {
         });
     }
 
-    handleInputChange(event) {
-
-        event.preventDefault();
-
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-
-        this.setState({
-            [name] : value
-        });
-    }
-
     handleMultipleSelectChange(event){
 
         event.preventDefault();
@@ -155,87 +139,178 @@ class CreateGroup extends Component {
 
     render() {
         return (
+
             <Container>
                 <Row>
-                    <Form onSubmit={this.handleSubmit}>
-                        <Row>
-                            <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                        <InputGroup.Text>Nombre</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control key="name" id='name' name="name" type="text" value={this.state.group.name} onChange={this.handleInputChange}/>
-                                </InputGroup>
-                            </Col>
-                            <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                      <InputGroup.Text>Horario</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="scheduleIds" value={this.state.group.scheduleIds} as="select" multiple onChange={this.handleMultipleSelectChange}>
-                                        {
-                                            this.state.schedules.map(sch => {
-                                                return <option key={sch.id} value={sch.id}>{sch.day} {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}</option>
-                                            })
-                                        }
-                                    </Form.Control>
-                                </InputGroup>
-                            </Col>
-                            <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                      <InputGroup.Text>Entrenador</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="trainerId" value={this.state.group.trainerId} as="select" onChange={this.handleGroupInputChange}>
-                                        <option key="blank_trainer">-</option>
-                                        {
-                                            this.state.trainers.map(tr => {
-                                                return <option key={tr.id} value={tr.id}>{tr.name}</option>
-                                            })
-                                        }
-                                    </Form.Control>
-                                </InputGroup>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <Button type="submit">Submit</Button>
-                            </Col>
-                        </Row>
-                    </Form>
+                    <Formik enableReinitialize 
+                        initialValues={{
+                            name: this.state.group.name || '',
+                            scheduleIds: this.state.group.scheduleIds || [],
+                            specialization: this.state.group.specialization || '',
+                            trainerId: this.state.group.trainerId || ''
+                        }}
+                        validate={(values) => {
+                            let errors = {};
+
+                            Object.keys(values).forEach(value => {
+                                if(values[value] === ''){
+                                    errors[value] = 'Valid ' + value + ' Required'; 
+                                }
+                            })
+
+                            //check if my values have errors
+                            return errors;
+                        }}
+                        onSubmit={(values, { setSubmitting }) => {
+                            alert("Form is validated! Submitting the form...");
+                            setSubmitting(false);
+                            this.handleSubmit()
+                        }}
+                        >
+                        {({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, setValues, errors }) => (
+
+            
+                            <Form onSubmit={this.handleSubmit}>
+                                <Card>
+                                    <Card.Body>
+                                        <Card.Title>Datos Personales</Card.Title>
+                                        
+                                        <Form.Group><Row>
+
+                                            <Col>
+                                                <Form.Group>
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                        <InputGroup.Text>Nombre</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="name" type="text" value={values.name} className='form-control'/>
+                                                </InputGroup>
+                                                </Form.Group><Form.Group>
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                        <InputGroup.Text>Especialización</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="specialization" value={values.specialization} as="select" className='form-control'
+                                                        onChange={e => {
+                                                            setFieldValue('specialization', e.target.value);
+                                                            this.fillGroups(e.target.value)
+                                                        }}>
+                                                        <option></option>
+                                                        <option value={true}>Si</option>
+                                                        <option value={false}>No</option>
+                                                    </Field>
+                                                </InputGroup>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col>
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                      <InputGroup.Text>Horario</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="scheduleIds" value={values.scheduleIds} as="select" multiple className='form-control'>
+                                                        {
+                                                            this.state.schedules.map(sch => {
+                                                                return <option key={sch.id} value={sch.id}>{sch.day} {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}</option>
+                                                            })
+                                                        }
+                                                    </Field>
+                                                </InputGroup>
+                                            </Col>
+                                            <Col>
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                      <InputGroup.Text>Entrenador</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="trainerId" value={values.trainerId} as="select" className='form-control'>
+                                                        <option key="blank_trainer">-</option>
+                                                        {
+                                                            this.state.trainers.map(tr => {
+                                                                return <option key={tr.id} value={tr.id}>{tr.name}</option>
+                                                            })
+                                                        }
+                                                    </Field>
+                                                </InputGroup>
+                                            </Col>
+                                        </Row></Form.Group>
+                                        <Form.Group><Row>
+                                            <Col>
+                                                <Button type="submit">Submit</Button>
+                                            </Col>
+                                        </Row></Form.Group>
+                                    </Card.Body>
+                                </Card>
+                            </Form>
+                        )}
+                    </Formik>
                 </Row>
                 <Row>
-                    <Form onSubmit={this.handleSubmitQuery}>
-                        <Row>
-                            <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                      <InputGroup.Text>Horarios</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="scheduleId" value={this.state.scheduleId} as="select" onChange={this.handleInputChange}>
-                                        <option key="blank_schedule">-</option>
-                                        {
-                                            this.state.schedules.map(sch => {
-                                                return <option key={sch.id} value={sch.id}>{sch.day} {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}</option>
-                                            })
-                                        }
-                                    </Form.Control>
-                                </InputGroup>
-                            </Col>
-                            <Col>
-                                <Button type="submit">Submit</Button>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <Table 
-                                    columns={this.state.columnsAthlete} 
-                                    entityName={this.state.entityName2}
-                                    dataConversor={this.athleteDataConversor}>
-                                </Table>
-                            </Col>
-                        </Row>
-                    </Form>
+                    <Formik enableReinitialize 
+                        initialValues={{
+                            scheduleId: this.state.scheduleId || '', 
+                            schedules: this.state.schedules || [],
+
+                        }}
+                        validate={(values) => {
+                            let errors = {};
+
+                            Object.keys(values).forEach(value => {
+                                if(values[value] === ''){
+                                    errors[value] = 'Valid ' + value + ' Required'; 
+                                }
+                            })
+
+                            //check if my values have errors
+                            return errors;
+                        }}
+                        onSubmit={(values, { setSubmitting }) => {
+                            alert("Form is validated! Submitting the form...");
+                            setSubmitting(false);
+                            this.handleSubmit()
+                        }}
+                        >
+                        {({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, setValues, errors }) => (
+
+                            <Form onSubmit={this.handleSubmit}>
+                                <Form.Group><Row>
+                                    <Col>
+                                        <Card>
+                                            <Card.Body>
+                                                <Form.Group><Row>
+                                                    <Col>
+                                                        <InputGroup>
+                                                            <InputGroup.Prepend>
+                                                              <InputGroup.Text>Horarios</InputGroup.Text>
+                                                            </InputGroup.Prepend>
+                                                            <Field name="scheduleId" value={values.scheduleId} as="select" className='form-control'>
+                                                                <option></option>
+                                                                {
+                                                                    values.schedules.map(sch => {
+                                                                        return <option key={sch.id} value={sch.id}>{sch.day} {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}</option>
+                                                                    })
+                                                                }
+                                                            </Field>
+                                                        </InputGroup>
+                                                    </Col>
+                                                    <Col>
+                                                        <Button type="submit">Submit</Button>
+                                                    </Col>
+                                                </Row></Form.Group>
+                                                <Form.Group><Row>
+                                                    <Col>
+                                                        <Table 
+                                                            columns={this.state.columnsAthlete} 
+                                                            entityName={this.state.entityName2}
+                                                            dataConversor={this.athleteDataConversor}>
+                                                        </Table>
+                                                    </Col>
+                                                </Row></Form.Group>
+                                            </Card.Body>
+                                        </Card>
+                                    </Col>
+                                </Row></Form.Group>
+                            </Form>
+                        )}
+                    </Formik>
                 </Row>
         </Container>
             

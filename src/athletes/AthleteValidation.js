@@ -1,0 +1,5 @@
+const athlete = {
+	validation: function(){
+
+	}
+}
