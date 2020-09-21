@@ -4,13 +4,11 @@ import {
 	Button, 
 	Container, 
 	Row, 
-	Form, 
 	Col 
 } from 'react-bootstrap';
 import BootstrapTable  from 'react-bootstrap-table-next';
 import Paginator from 'react-bootstrap-table2-paginator'
 import Filter from 'react-bootstrap-table2-filter';
-import ToolkitProvider, { CSVExport } from 'react-bootstrap-table2-toolkit';
 
 class Table extends Component {
     constructor(props) {
@@ -45,7 +43,7 @@ class Table extends Component {
 
     async fetchData(){
 
-    	if (this.state.entityName && this.state.entityName != ""){
+    	if (this.state.entityName && this.state.entityName !== ""){
 			const headers = { 'Content-Type': 'application/json' }
 			const response = await fetch(process.env.REACT_APP_SERVER_URL + "/" + this.props.entityName + "?page=" + (this.state.page-1) + "&size=" + this.state.size + this.state.urlParams,  { headers })
 			const data = await response.json();	
@@ -84,6 +82,9 @@ class Table extends Component {
 
 				if (value.length > 0){
 					return field + "__" + operator + "__" + value
+				}
+				else {
+					return null
 				}
 			}).filter(x => x)
 

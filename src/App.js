@@ -48,7 +48,7 @@ return (
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-        <Container>
+        <Container fluid>
           <Switch>
             <Route exact path="/sport_schools/list" component={TableSportSchools}/>
             <Route exact path="/sport_schools/:id" component={CreateSportSchool} />
@@ -78,9 +78,6 @@ return (
           </Switch>
         </Container>
       </Router>
-    
-
-
   );
 }
 

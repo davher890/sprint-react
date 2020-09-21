@@ -1,144 +1,173 @@
 import React, { Component } from "react";
 import { 
-    Form, InputGroup,
-    Button, Container,
-    Col, Row
+    InputGroup,
+    Button, Col, 
+    Row, Card, Form
 } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-datepicker/dist/react-datepicker.css";
+import "../App.css";
+import utils from "../functions/Utils.js"
+import { Formik, Field } from 'formik';
 
 class CreateAthlete extends Component {
+    
     constructor(props) {
         super(props);
-        this.state = {
-            athlete : {},
-            groups : [],
-            families : [],
-            schedules : [],
-            sportSchools : []
-        };
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleInputDateChange = this.handleInputDateChange.bind(this);
+        this.state = {};
+
+        this.handleFormSubmit = this.handleFormSubmit.bind(this);
+        this.getSportSchoolFeeType = this.getSportSchoolFeeType.bind(this);
         this.handleMultipleSelectChange = this.handleMultipleSelectChange.bind(this);
-        this.handleGroupChange = this.handleGroupChange.bind(this);
         this.fillSchedules = this.fillSchedules.bind(this)
+
+        // Santa Ana
+        this.feeType1 = [
+            { id : '', name : ''},
+            { id : 'CLUB', name : 'Club'},
+            { id : 'PISTAS', name : 'Pistas'},
+            { id : 'LIC_PISTAS', name : 'Licencia/Pistas'},
+            { id : 'ENTRENADOR', name : 'Entrenadores'},
+        ]
+
+        // Paracuellos
+        this.feeType2 = [
+            { id : '', name : ''},
+            { id : 'club', name : 'Club'}
+        ]
+
+        // Externos
+        this.feeType3 = [
+            { id : '', name : ''},
+            { id : 'licencia', name : 'Licencia'},
+            { id : 'socio', name : 'Socio'},
+            { id : 'entrenadores', name : 'Entrenadores'},
+        ]
+
+        this.feeTypes = []
+        // Groups
+        this.specializedGroups = []
+        this.notSpecializedGroups = []
+        this.groups = []
+
+        this.schedules = []
+        this.sportSchools = []
+        this.showSportData = false
     }
 
     componentDidMount(){
         const headers = { 'Content-Type': 'application/json' }
 
-        let groupsPromise = new Promise((resolve, reject) => {
-            fetch(process.env.REACT_APP_SERVER_URL + "/groups/all",  { headers })
-                .then(res => res.json())
-                .then(data => {
-                    this.setState({ groups : data})
-                    resolve()
-                });
-            })
-
-        let familiesPromise = new Promise((resolve, reject) => {
-            fetch(process.env.REACT_APP_SERVER_URL + "/families/all",  { headers })
-                .then(res => res.json())
-                .then(data => {
-                    this.setState({ families : data})
-                    resolve()
-                });
-            })
-
         let schoolsPromise = new Promise((resolve, reject) => {
             fetch(process.env.REACT_APP_SERVER_URL + "/sport_schools/all",  { headers })
                 .then(res => res.json())
                 .then(data => {
-                    this.setState({ sportSchools : data})
+                    data.push({id:'', name:''})
+                    this.sportSchools = data
+                    resolve()
+                });
+            })
+        let spGroupsPromise = new Promise((resolve, reject) => {
+            fetch(process.env.REACT_APP_SERVER_URL + "/groups/all?specialization=true",  { headers })
+                .then(res => res.json())
+                .then(data => {
+                    this.specializedGroups = data
+                    resolve()
+                });
+            })
+        let noSpGroupsPromise = new Promise((resolve, reject) => {
+            fetch(process.env.REACT_APP_SERVER_URL + "/groups/all?specialization=false",  { headers })
+                .then(res => res.json())
+                .then(data => {
+                    this.notSpecializedGroups = data
                     resolve()
                 });
             })
 
-        Promise.all([groupsPromise, familiesPromise, schoolsPromise]).then(values => {
+        Promise.all([schoolsPromise, spGroupsPromise, noSpGroupsPromise]).then(values => {
             if (this.props.match.params.id) {
                 let id = this.props.match.params.id
-                if (id){
-                    fetch(process.env.REACT_APP_SERVER_URL + "/athletes/" + id,  { headers })
-                    .then(res => res.json())
-                    .then(data => {
-                        data.age = this.ageCalculator(Date.parse(data.birthDate));
+                fetch(process.env.REACT_APP_SERVER_URL + "/athletes/" + id,  { headers })
+                .then(res => res.json())
+                .then(data => {
+                    data.age = utils.ageCalculator(Date.parse(data.birthDate));
 
-                        if (data.groupId){
-                            this.fillSchedules(data.groupId)
+                    this.showSportData = data.feeType !== 'socio'
+                    if (data.sportSchoolId === 1){
+                        this.feeTypes = this.feeType1
+                    }
+                    else if (data.sportSchoolId === 2){
+                        this.feeTypes = this.feeType2
+                    }
+                    else {
+                        this.feeTypes = this.feeType3
+                    }
+                    if (data.specialization){
+                        this.groups = this.specializedGroups
+                    }
+                    else {
+                        this.groups = this.notSpecializedGroups
+                    }
+                    this.setState(data, () => {
+                        if (data.groupId && data.groupId > 0){
+                            fetch(process.env.REACT_APP_SERVER_URL + "/groups/" + data.groupId + "/schedules",  { headers })
+                                .then(res => res.json())
+                                .then(data => {
+                                    this.schedules = data
+                                    this.setState(data)
+                                });
                         }
-                        this.setState({ athlete : data})
-                    });
-                }
+                    })
+                });
+            }
+            else {
+                this.setState({})
             }
         })
     }
 
-    handleSubmit(event) {
-
-        event.preventDefault();
+    handleFormSubmit() {
 
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(this.state.athlete)
+            body: JSON.stringify(this.state)
         }
 
         fetch(process.env.REACT_APP_SERVER_URL + "/athletes", requestOptions)
             .then(res => res.json())
             .then(data => {
-                data.age = this.ageCalculator(Date.parse(data.birthDate));
-                this.setState({ athlete : data})
+                data.age = utils.ageCalculator(Date.parse(data.birthDate));
+                this.setState(data)
             });
     }
 
-    fillSchedules(groupId){
+    fillSchedules(groupId, setFieldValue){
         const headers = { 'Content-Type': 'application/json' }
         fetch(process.env.REACT_APP_SERVER_URL + "/groups/" + groupId + "/schedules",  { headers })
             .then(res => res.json())
             .then(data => {
-                this.setState({ schedules : data})
+                this.schedules = data
+                setFieldValue('schedules', this.schedules)
             });
     }
 
-    handleGroupChange(event) {
-
-        this.handleInputChange(event)
-        event.preventDefault();
-
-        const target = event.target;
-        const value = target.value;
-
-        this.fillSchedules(value)
+    getSportSchoolFeeType(value) {
         
-    }
+        // Santa Ana
+        if (value === '1'){
+            return this.feeType1
+        }
 
-    handleInputChange(event) {
+        // Paracuellos
+        else if (value === '2'){
+            return this.feeType2
+        }
 
-        event.preventDefault();
-
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-
-        let athlete = this.state.athlete
-        athlete[name] = value
-
-        this.setState({
-            athlete : athlete
-        });
-    }
-
-    handleInputDateChange(date){
-
-        let athlete = this.state.athlete
-        athlete.birthDate = date
-        athlete.age = this.ageCalculator(date)
-
-        this.setState({
-            athlete : athlete
-        })
+        else {
+            return this.feeType3
+        } 
     }
 
     handleMultipleSelectChange(event){
@@ -152,317 +181,620 @@ class CreateAthlete extends Component {
                 value.push(options[i].value);
             }
         }
-        let athlete = this.state.athlete
-        athlete.scheduleIds = value
 
         this.setState({
-            athlete : athlete
+            scheduleIds : value
         });
     }
 
-    ageCalculator(birth){
-        var curr  = new Date();
-        var diff = curr.getTime() - birth;
-        return Math.max(Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25)), 0)
-    }
-
     render() {
+    
         return (
-            <Form onSubmit={this.handleSubmit}>
-                <Container fluid>
-                    <Form.Group>
-                        <Row>
+
+            <Formik enableReinitialize
+                initialValues={{
+                    id : this.state.id,
+                    code: this.state.code,
+                    familyCode: this.state.familyCode,
+                    // Extra fields
+                    groups: this.groups || [],
+                    schedules: this.schedules || [],
+                    sportSchools: this.sportSchools || [],
+                    feeTypes: this.feeTypes,
+                    showSportData: this.showSportData,
+                    age : this.state.age || 0,
+                    // Personal info
+                    sportSchoolId: this.state.sportSchoolId || '',
+                    imageAuth: this.state.imageAuth,
+                    name: this.state.name || '',
+                    firstSurname: this.state.firstSurname || '',
+                    secondSurname: this.state.secondSurname || '',
+                    birthDate: this.state.birthDate || '',
+                    dni: this.state.dni || '',
+                    gender: this.state.gender || '',
+                    // Familiar info
+                    familiarOneName: this.state.familiarOneName || '',
+                    familiarOneFirstSurname: this.state.familiarOneFirstSurname || '',
+                    familiarOneSecondSurname: this.state.familiarOneSecondSurname || '',
+                    familiarOneDni: this.state.familiarOneDni || '',
+                    familiarOneMail: this.state.familiarOneMail || '',
+                    familiarTwoName: this.state.familiarTwoName || '',
+                    familiarTwoFirstSurname: this.state.familiarTwoFirstSurname || '',
+                    familiarTwoSecondSurname: this.state.familiarTwoSecondSurname || '',
+                    familiarTwoDni: this.state.familiarTwoDni || '',
+                    familiarTwoMail: this.state.familiarTwoMail || '',
+                    // Sport info
+                    category:  this.state.category || '',
+                    dorsalCategory: this.state.dorsalCategory || '',
+                    dorsalNumber: this.state.dorsalNumber || '',
+                    license: this.state.license || '',
+                    licenseType: this.state.licenseType || '',
+                    specialization: this.state.specialization,
+                    groupId: this.state.groupId || '',
+                    scheduleIds: this.state.scheduleIds || [],
+                    // Contact info
+                    mail: this.state.mail || '',
+                    phone1: this.state.phone1 || '',
+                    phone2: this.state.phone2 || '',
+                    phone3: this.state.phone3 || '',
+                    municipality: this.state.municipality || '',
+                    postalCode: this.state.postalCode || '',
+                    address: this.state.address || '',
+                    // Bank info
+                    iban: this.state.iban || '',
+                    paymentType: this.state.paymentType || '',
+                    feeType: this.state.feeType || '',
+                    holderName: this.state.holderName || '',
+                    holderFirstSurname: this.state.holderFirstSurname || '',
+                    holderSecondSurname: this.state.holderSecondSurname || '',
+                    holderDni: this.state.holderDni || '',
+                    required :[
+                        'sportSchoolId',
+                        'imageAuth',
+                        'name',
+                        'firstSurname',
+                        'secondSurname',
+                        'birthDate',
+                        'dni',
+                        'gender',
+                        'category',
+                        'dorsalCategory',
+                        'dorsalNumber',
+                        'license',
+                        'licenseType',
+                        'specialization',
+                        'mail',
+                        'phone1',
+                        'phone2',
+                        'phone3',
+                        'municipality',
+                        'postalCode',
+                        'address',
+                        'iban',
+                        'paymentType',
+                        'feeType',
+                        'holderName',
+                        'holderFirstSurname',
+                        'holderSecondSurname',
+                        'holderDni',
+                        'groupId',
+                        'scheduleIds'
+                    ]
+                }}
+                validate={(values) => {
+                    let errors = {};
+
+                    Object.keys(values).forEach(value => {
+                        if((values[value] === '') && values.required.includes(value)){
+                            errors[value] = 'Campo obligatorio'; 
+                        }
+                    })
+
+                    //check if my values have errors
+                    return errors;
+                }}
+                onSubmit={(values, { setSubmitting }) => {
+                    alert("Guardando...");
+                    this.setState(values)
+                    setSubmitting(false);
+                    this.handleFormSubmit()
+                    
+                }}
+                >
+                {({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, setValues, errors }) => (
+
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group><Row>
                             <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                      <InputGroup.Text>Escuala Deportiva</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="sportSchoolId" value={this.state.athlete.sportSchoolId} as="select" custom onChange={this.handleInputChange}>
-                                        {
-                                            this.state.sportSchools.map(spe => {
-                                                return (<option key={`spe${spe.id}`} value={spe.id}>{spe.name}</option>)
-                                            })
-                                        }
-                                    </Form.Control>
-                                </InputGroup>
+                                <Card>
+                                    <Card.Body>
+                                        <Row>
+                                            <Col md="auto">
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                      <InputGroup.Text>Escuala Deportiva</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="sportSchoolId" value={values.sportSchoolId} as="select" className={`form-control ${touched.sportSchoolId && errors.sportSchoolId ? "is-invalid" : ""}`}
+                                                        onChange={e => {
+                                                            values.feeTypes = this.getSportSchoolFeeType(e.target.value)
+                                                            setFieldValue('sportSchoolId', e.target.value);
+                                                            if (values.feeType){
+                                                                setFieldValue('feeType', values.feeType);
+                                                                setFieldValue('showSportData', values.feeType !== 'socio')
+                                                            }
+                                                        }}
+                                                        >
+                                                        {
+                                                            values.sportSchools.map(spe => {
+                                                                return (<option key={`spe${spe.id}`} value={spe.id}>{spe.name}</option>)
+                                                            })
+                                                        }
+                                                    </Field>
+                                                </InputGroup>
+                                            </Col> 
+                                        </Row>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        </Row></Form.Group>
+                        <Form.Group><Row>
+                            <Col>
+                                <Card>
+                                    <Card.Body>
+                                        <Card.Title>Datos Personales</Card.Title>
+                                        <Form.Group><Row>
+                                            <Col>
+                                                <Field name="name" type="text" placeholder="Nombre" value={values.name} 
+                                                    className={`form-control ${touched.name && errors.name ? "is-invalid" : ""}`}
+                                                    onBlur={e => {
+                                                        if (values.holderName === ''){
+                                                            setFieldValue('holderName', e.target.value);
+                                                        }
+                                                    }}
+                                                />
+                                            </Col>
+                                            <Col>
+                                                <Field name="firstSurname" type="text" placeholder="Primer Apellido" value={values.firstSurname} 
+                                                    className={`form-control ${touched.firstSurname && errors.firstSurname ? "is-invalid" : ""}`}
+                                                    onBlur={e => {
+                                                        if (values.holderFirstSurname === ''){
+                                                            setFieldValue('holderFirstSurname', e.target.value);
+                                                        }
+                                                        if (values.familiarOneFirstSurname === ''){
+                                                            setFieldValue('familiarOneFirstSurname', e.target.value);
+                                                        }
+                                                    }}
+                                                />
+                                            </Col>
+                                            <Col>
+                                                <Field name="secondSurname" type="text" placeholder="Segundo Appellido" value={values.secondSurname} 
+                                                    className={`form-control ${touched.secondSurname && errors.secondSurname ? "is-invalid" : ""}`}
+                                                    onBlur={e => {
+                                                        if (values.holderSecondSurname === ''){
+                                                            setFieldValue('holderSecondSurname', e.target.value);
+                                                        }
+                                                        if (values.familiarTwoFirstSurname === ''){
+                                                            setFieldValue('familiarTwoFirstSurname', e.target.value);
+                                                        }
+                                                    }}
+                                                />
+                                            </Col>
+                                        </Row></Form.Group>
+                                        <Form.Group><Row>
+                                            <Col >
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                      <InputGroup.Text>Fecha de nacimiento</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <DatePicker autoComplete="off" id="birthDate" dateFormat="yyyy-MM-dd" name="birthDate" value={values.birthDate}
+                                                        selected = {values.birthDate}
+                                                        showMonthDropdown
+                                                        showYearDropdown
+                                                        dropdownMode="select"
+                                                        className={`${touched.birthDate && errors.birthDate ? "is-invalid" : ""}`}
+                                                        onChange={e => {
+                                                            values.age = utils.ageCalculator(e)
+                                                            setFieldValue('birthDate', e);
+                                                        }}
+                                                    />
+                                                </InputGroup>
+                                            </Col>
+                                            <Col>
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                        <InputGroup.Text>Edad</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="age" type="number" disabled value={values.age}/>
+                                                </InputGroup>
+                                            </Col>
+                                        </Row></Form.Group>
+                                        <Form.Group><Row>
+                                            <Col>
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                      <InputGroup.Text>Dni</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="dni" type="text" value={values.dni} 
+                                                        className={`form-control ${touched.dni && errors.dni ? "is-invalid" : ""}`}
+                                                        onBlur={e => {
+                                                            if (values.holderDni === ''){
+                                                                setFieldValue('holderDni', e.target.value);
+                                                            }
+                                                        }}
+                                                    />
+                                                </InputGroup>
+                                            </Col>
+                                            <Col>
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                      <InputGroup.Text>Género</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="gender" value={values.gender} as="select"
+                                                        className={`form-control ${touched.gender && errors.gender ? "is-invalid" : ""}`}>
+                                                        <option></option>
+                                                        <option value="male">Hombre</option>
+                                                        <option value="female">Mujer</option>
+                                                    </Field>
+                                                </InputGroup>
+                                            </Col>
+                                        </Row></Form.Group>
+                                    </Card.Body>
+                                </Card>
+                            </Col>                  
+                            <Col>
+                                <Card>
+                                    <Card.Body>
+                                        <Card.Title>Datos Familiares</Card.Title>
+                                        <Card.Subtitle className="mb-2 text-muted">Familiar 1</Card.Subtitle>
+                                        <Form.Group><Row>
+                                            <Col>
+                                                <Field name="familiarOneName" type="text" placeholder="Nombre" value={values.familiarOneName} 
+                                                    className='form-control'/>
+                                            </Col>
+                                            <Col>
+                                                <Field name="familiarOneFirstSurname" type="text" placeholder="Primer Apellido" value={values.familiarOneFirstSurname} 
+                                                    className='form-control'/>
+                                            </Col>
+                                            <Col>
+                                                <Field name="familiarOneSecondSurname" type="text" placeholder="Segundo Apellido" value={values.familiarOneSecondSurname} 
+                                                    className='form-control'/>
+                                            </Col>
+                                        </Row></Form.Group>
+                                        <Form.Group><Row>
+                                            <Col>
+                                                <Field name="familiarOneDni" type="text" placeholder="Dni" value={values.familiarOneDni} 
+                                                    className='form-control'/>
+                                            </Col>
+                                            <Col>
+                                                <Field name="familiarOneMail" type="text" placeholder="Email" value={values.familiarOneMail} 
+                                                    className='form-control'/>
+                                            </Col>
+                                        </Row></Form.Group>
+                                        
+                                        <Card.Subtitle className="mb-2 text-muted">Familiar 2</Card.Subtitle>
+                                        <Form.Group><Row>
+                                            <Col>
+                                                <Field name="familiarTwoName" type="text" placeholder="Nombre" value={values.familiarTwoName} 
+                                                    className='form-control'/>
+                                            </Col>
+                                            <Col>
+                                                <Field name="familiarTwoFirstSurname" type="text" placeholder="Primer Apellido" value={values.familiarTwoFirstSurname} 
+                                                    className='form-control'/>
+                                            </Col>
+                                            <Col>
+                                                <Field name="familiarTwoSecondSurname" type="text" placeholder="Segundo Apellido" value={values.familiarTwoSecondSurname} 
+                                                    className='form-control'/>
+                                            </Col>
+                                        </Row></Form.Group>
+                                        <Form.Group><Row>
+                                            <Col>
+                                                <Field name="familiarTwoDni" type="text" placeholder="Dni" value={values.familiarTwoDni} 
+                                                    className='form-control'/>
+                                            </Col>
+                                            <Col>
+                                                <Field name="familiarTwoMail" type="text" placeholder="Email" value={values.familiarTwoMail} 
+                                                    className='form-control'/>
+                                            </Col>
+                                        </Row></Form.Group>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        </Row></Form.Group>
+                        <Form.Group><Row>
+                            <Col>
+                                <Card>
+                                    <Card.Body>
+                                        <Card.Title>Datos de Cotacto</Card.Title>
+                                        <Form.Group><Row>
+                                            <Col>
+                                                <InputGroup>
+                                                    <Field name="mail" placeholder="Email" type="email" value={values.mail} 
+                                                        className={`form-control ${touched.mail && errors.mail ? "is-invalid" : ""}`}
+                                                    />
+                                                </InputGroup>
+                                            </Col>
+                                        </Row></Form.Group>
+                                        <Form.Group><Row>
+                                            <Col>
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                        <InputGroup.Text>Teléfonos</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="phone1" type="tel" value={values.phone1} placeholder="Teléfono 1"
+                                                        className={`form-control ${touched.phone1 && errors.phone1 ? "is-invalid" : ""}`}
+                                                    />
+                                                    <Field name="phone2" type="tel" value={values.phone2} placeholder="Teléfono 2"
+                                                        className={`form-control ${touched.phone2 && errors.phone2 ? "is-invalid" : ""}`}
+                                                    />
+                                                    <Field name="phone3" type="tel" value={values.phone3} placeholder="Teléfono 3"
+                                                        className={`form-control ${touched.phone3 && errors.phone3 ? "is-invalid" : ""}`}
+                                                    />
+                                                </InputGroup>
+                                            </Col>
+                                        </Row></Form.Group>
+                                        <Form.Group><Row>
+                                            <Col>
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                        <InputGroup.Text>Municipio</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="municipality" type="text" value={values.municipality} 
+                                                        className={`form-control ${touched.municipality && errors.municipality ? "is-invalid" : ""}`}/>
+                                                </InputGroup>
+                                            </Col>
+                                            <Col>
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                        <InputGroup.Text>C.P.</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="postalCode" type="text" value={values.postalCode} 
+                                                        className={`form-control ${touched.postalCode && errors.postalCode ? "is-invalid" : ""}`}/>
+                                                </InputGroup>
+                                            </Col>
+                                        </Row></Form.Group>
+                                        <Form.Group><Row>
+                                            <Col>
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                        <InputGroup.Text>Dirección</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="address" type="text" value={values.address || ''} 
+                                                        className={`form-control ${touched.address && errors.address ? "is-invalid" : ""}`}/>
+                                                </InputGroup>
+                                            </Col>
+                                        </Row></Form.Group>
+                                    </Card.Body>
+                                </Card>
                             </Col>
                             <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                      <InputGroup.Text>Nombre</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="name" type="text" value={this.state.athlete.name} onChange={this.handleInputChange}/>
-                                </InputGroup>
+                                <Card>
+                                    <Card.Body>
+                                        <Card.Title>Datos Bancarios</Card.Title>
+                                        <Form.Group><Row>
+                                            <Col>
+                                                <InputGroup>
+                                                    <Field name="iban" placeholder="Iban" type="iban" value={values.iban} onChange={handleChange} 
+                                                        className={`form-control ${touched.iban && errors.iban ? "is-invalid" : ""}`}
+                                                    />
+                                                </InputGroup>
+                                            </Col>
+                                        </Row></Form.Group>
+                                        <Form.Group><Row>
+                                            <Col>
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                      <InputGroup.Text>Forma de pago</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="paymentType" value={values.paymentType} as="select"
+                                                        className='form-control'>
+                                                        {
+                                                            utils.getPaymentTypes().map(pt => {
+                                                                return (<option key={`pt${pt.id}`} value={pt.id}>{pt.name}</option>)
+                                                            })
+                                                        }
+                                                    </Field>
+                                                </InputGroup>
+                                            </Col>
+                                            <Col>
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                      <InputGroup.Text>Tipo de cuota</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="feeType" value={values.feeType} as="select" 
+                                                        onChange={(e) => {
+                                                            setFieldValue('showSportData', e.target.value !== 'socio')
+                                                            setFieldValue('feeType', e.target.value)
+                                                        }}
+                                                        className='form-control'>
+                                                        {
+                                                            values.feeTypes.map(ft => {
+                                                                return (<option key={`fet${ft.id}`} value={ft.id}>{ft.name}</option>)
+                                                            })
+                                                        }
+                                                    </Field>
+                                                </InputGroup>
+                                            </Col>
+                                        </Row></Form.Group>
+                                        <Card.Subtitle className="mb-2 text-muted">Titular de la cuenta</Card.Subtitle>
+                                        <Form.Group><Row>
+                                            <Col>
+                                                <Field name="holderName" type="text" placeholder="Nombre" value={values.holderName} 
+                                                    className={`form-control ${touched.holderName && errors.holderName ? "is-invalid" : ""}`}
+                                                />
+                                            </Col>
+                                            <Col>
+                                                <Field name="holderFirstSurname" type="text" placeholder="Primer Apellido" value={values.holderFirstSurname || ''} 
+                                                    className={`form-control ${touched.holderFirstSurname && errors.holderFirstSurname ? "is-invalid" : ""}`}
+                                                />
+                                            </Col>
+                                            <Col>
+                                                <Field name="holderSecondSurname" type="text" placeholder="Segundo Appellido" value={values.holderSecondSurname || ''} 
+                                                    className={`form-control ${touched.holderSecondSurname && errors.holderSecondSurname ? "is-invalid" : ""}`}
+                                                />
+                                            </Col>
+                                        </Row></Form.Group>
+                                        <Form.Group><Row>
+                                            <Col>
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                      <InputGroup.Text>Dni</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="dni" type="text" value={values.holderDni} 
+                                                        className={`form-control ${touched.holderDni && errors.holderDni ? "is-invalid" : ""}`}
+                                                    />
+                                                </InputGroup>
+                                            </Col>
+                                        </Row></Form.Group>
+                                    </Card.Body>
+                                </Card>
                             </Col>
+                        </Row></Form.Group>
+                        <Form.Group><Row style={{ display: values.showSportData ? "block" : "none" }}>
                             <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                      <InputGroup.Text>Dni</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="dni" type="text" value={this.state.athlete.dni} onChange={this.handleInputChange}/>
-                                </InputGroup>
+                                <Card>
+                                    <Card.Body>
+                                        <Card.Title>Datos Deportivos</Card.Title>
+                                        <Form.Group><Row>
+                                            <Col md="auto"> 
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                        <InputGroup.Text>Categoria</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="category" value={values.category} as="select" className='form-control'>
+                                                        {
+                                                            utils.getCategories().map(c => {
+                                                                return (<option key={`cat${c.id}`} value={c.id}>{c.name}</option>)
+                                                            })
+                                                        }
+                                                    </Field>
+                                                </InputGroup>
+                                            </Col>
+                                            <Col md="auto">
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                        <InputGroup.Text>Categoria Dorsal</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="dorsalCategory" value={values.dorsalCategory} as="select" className='form-control'>
+                                                        {
+                                                            utils.getDorsalCategories().map(dc => {
+                                                                return (<option key={`dc${dc.id}`} value={dc.id}>{dc.name}</option>)
+                                                            })
+                                                        }
+                                                    </Field>                              
+                                                </InputGroup>
+                                            </Col>
+                                            <Col md="auto">
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                        <InputGroup.Text>Dorsal</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="dorsalNumber" type="number" value={values.dorsalNumber} className='form-control'/>
+                                                </InputGroup>
+                                            </Col>
+                                            <Col md="auto">
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                        <InputGroup.Text>Tipo de Licencia</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="licenseType" value={values.licenseType} as="select" className='form-control'>
+                                                        <option></option>
+                                                        <option value="N">Nacional</option>
+                                                        <option value="T">Territorial</option>
+                                                    </Field>
+                                                </InputGroup>
+                                            </Col>
+                                            <Col md="auto">
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                        <InputGroup.Text>Licencia</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="license" type="text" value={values.license} className='form-control'/>
+                                                </InputGroup>
+                                            </Col>
+                                        </Row></Form.Group>
+                                        <Form.Group><Row>
+                                            <Col md="auto">
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                        <InputGroup.Text>Especialización</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="specialization" value={values.specialization} as="select" className='form-control'
+                                                        onChange={e => {
+                                                            setFieldValue('specialization', e.target.value);
+                                                            if (e.target.value === true){
+                                                                setFieldValue('groups', this.specializedGroups)
+                                                            }
+                                                            else {
+                                                                setFieldValue('groups', this.notSpecializedGroups)
+                                                            }
+                                                        }}>
+                                                        <option></option>
+                                                        <option value={true}>Si</option>
+                                                        <option value={false}>No</option>
+                                                    </Field>
+                                                </InputGroup>
+                                            </Col>
+                                            <Col md="auto">
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                      <InputGroup.Text>Grupos</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="groupId" value={values.groupId} as="select" className='form-control'
+                                                        onChange={e => {
+                                                            
+                                                            this.fillSchedules(e.target.value, setFieldValue)
+                                                            setFieldValue('groupId', e.target.value)
+                                                        }}>
+                                                        {
+                                                            values.groups.map(group => {
+                                                                return (<option key={group.id} value={group.id}>{group.name}</option>)
+                                                            })
+                                                        }
+                                                    </Field>
+                                                </InputGroup>
+                                            </Col>
+                                            <Col>
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                      <InputGroup.Text>Horarios</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="scheduleIds" value={values.scheduleIds} as="select" multiple className='form-control'>
+                                                        {
+                                                            values.schedules.map(sch => {
+                                                                return (<option key={sch.id} value={sch.id}>{sch.day} - {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}</option>)
+                                                            })
+                                                        }
+                                                    </Field>
+                                                </InputGroup>
+                                            </Col>
+                                        </Row></Form.Group>
+                                    </Card.Body>
+                                </Card>
                             </Col>
-                            <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                      <InputGroup.Text>Familia</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="familyId" value={this.state.athlete.familyId} as="select" custom onChange={this.handleInputChange}>
-                                        {
-                                            this.state.families.map(family => {
-                                                return (<option key={`family${family.id}`} value={family.id}>{family.firstSurname}</option>)
-                                            })
-                                        }
-                                    </Form.Control>
-                                </InputGroup>
-                            </Col>
-                        </Row>
-                    </Form.Group>
-                    <Form.Group>
-                        <Row>
-                            <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                      <InputGroup.Text>Fecha de nacimiento</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <DatePicker id="birthDate" 
-                                        dateFormat="yyyy-MM-dd"
-                                        name="birthDate"
-                                        selected = {this.state.athlete.birthDate} 
-                                        onChange = {this.handleInputDateChange} 
-                                    />
-                                </InputGroup>
-                            </Col>
+                        </Row></Form.Group>
+                        <Form.Group><Row>
                             <Col md="auto">
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                        <InputGroup.Text>Edad</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="age" type="number" disabled value={this.state.athlete.age} onChange={this.handleInputChange} />
-                                </InputGroup>
-                            </Col>
-                            <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                      <InputGroup.Text>Género</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="gender" value={this.state.athlete.gender} as="select" placeholder="Género" custom onChange={this.handleInputChange}>
-                                        <option></option>
-                                        <option value="male">Hombre</option>
-                                        <option value="female">Mujer</option>
-                                    </Form.Control>
-                                </InputGroup>
-                            </Col>
-                        </Row>
-                    </Form.Group>
-                    <Form.Group>
-                        <Row>
-                            <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                        <InputGroup.Text>Categoria</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="category" value={this.state.athlete.category} as="select" onChange={this.handleInputChange}>
-                                        <option value="SENIOR">MASTER</option>
-                                        <option value="SENIOR">SENIOR</option>
-                                        <option value="SUB23">SUB23</option>
-                                        <option value="SUB20">SUB20</option>
-                                        <option value="SUB18">SUB18</option>
-                                        <option value="SUB16">SUB16</option>
-                                        <option value="SUB14">SUB14</option>
-                                        <option value="ALEVIN">ALEVIN</option>
-                                        <option value="BENJAMIN">BENJAMIN</option>
-                                        <option value="MINI">MINI</option>
-                                    </Form.Control>
-                                </InputGroup>
-                            </Col>
-                            <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                        <InputGroup.Text>Categoria Dorsal</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="dorsalCategory" value={this.state.athlete.dorsalCategory} as="select" onChange={this.handleInputChange} >
-                                        <option value="SM">SM</option>
-                                        <option value="SF">SF</option>
-                                        <option value="U23M">U23M</option>
-                                        <option value="U20F">U20F</option>
-                                        <option value="U18F">U18F</option>
-                                        <option value="U20M">U20M</option>
-                                        <option value="U16M">U16M</option>
-                                        <option value="U23F">U23F</option>
-                                        <option value="U14M">U14M</option>
-                                        <option value="U10M">U10M</option>
-                                        <option value="U14F">U14F</option>
-                                        <option value="U10F">U10F</option>
-                                        <option value="U18M">U18M</option>
-                                        <option value="U12M">U12M</option>
-                                    </Form.Control>                              
-                                </InputGroup>
-                            </Col>
-                            <Col md="auto">
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                        <InputGroup.Text>Dorsal</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="dorsalNumber" type="number" value={this.state.athlete.dorsalNumber} onChange={this.handleInputChange} />
-                                </InputGroup>
-                            </Col>
-                        </Row>
-                    <Form.Group>
-                    </Form.Group>
-                        <Row>
-                            <Col md="auto">
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                        <InputGroup.Text>Tipo de Licencia</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="licenseType" value={this.state.athlete.licenseType} as="select" onChange={this.handleInputChange}>
-                                        <option></option>
-                                        <option value="National">Nacional</option>
-                                        <option value="Territorial">Territorial</option>
-                                    </Form.Control>
-                                </InputGroup>
-                            </Col>
-                            <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                        <InputGroup.Text>Licencia</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="license" type="text" value={this.state.athlete.license} onChange={this.handleInputChange} />
-                                </InputGroup>
-                            </Col>
-                            <Col md="auto">
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                        <InputGroup.Text>Tipo de Cuota</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="feeType" value={this.state.athlete.feeType} as="select" onChange={this.handleInputChange}>
-                                        <option></option>
-                                        <option value="CLUB">Club</option>
-                                        <option value="PISTAS">Pistas</option>
-                                        <option value="LICENCIA">Licencia</option>
-                                        <option value="LIC/PISTAS">Lic. Pistas</option>
-                                        <option value="ENTRENADOR">Entrandor</option>
-                                    </Form.Control>
-                                </InputGroup>
-                            </Col>
-                        </Row>
-                    </Form.Group>
-                    <Form.Group>
-                        <Row>
-                            <Col>
                                 <InputGroup>
                                     <InputGroup.Prepend>
                                       <InputGroup.Text>Aut. Imágenes</InputGroup.Text>
                                     </InputGroup.Prepend>
-                                    <Form.Control name="imageAuth" value={this.state.athlete.imageAuth} as="select" custom onChange={this.handleInputChange}>
+                                    <Field name="imageAuth" value={values.imageAuth} as="select" 
+                                        className={`form-control ${touched.gender && errors.gender ? "is-invalid" : ""}`}>
                                         <option></option>
-                                        <option value="false">No</option>
-                                        <option value="true">Si</option>
-                                    </Form.Control>
+                                        <option value={true}>Si</option>
+                                        <option value={false}>No</option>
+                                    </Field>
                                 </InputGroup>
                             </Col>
-                            <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                        <InputGroup.Text>Mail</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="mail" type="email" value={this.state.athlete.mail} onChange={this.handleInputChange} />
-                                </InputGroup>
+                        </Row></Form.Group>
+                        <Form.Group><Row>
+                            <Col md="auto">
+                                <Button type="submit">Submit</Button>
                             </Col>
-                            <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                        <InputGroup.Text>Teléfono</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="phone1" type="tel" value={this.state.athlete.phone1} onChange={this.handleInputChange} />
-                                </InputGroup>
-                            </Col>
-                            <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                        <InputGroup.Text>Teléfono 2</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="phone2" type="tel" value={this.state.athlete.phone2} onChange={this.handleInputChange} />
-                                </InputGroup>
-                            </Col>
-                            <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                        <InputGroup.Text>Teléfono 3</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="phone3" type="tel" value={this.state.athlete.phone3} onChange={this.handleInputChange} />
-                                </InputGroup>
-                            </Col>
-                        </Row>
-                    </Form.Group>
-                    <Form.Group>
-                        <Row>
-                            <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                        <InputGroup.Text>Municipio</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="municipality" type="text" value={this.state.athlete.municipality} onChange={this.handleInputChange} />
-                                </InputGroup>
-                            </Col>
-                            <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                        <InputGroup.Text>Código Postal</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="postalCode" type="text" value={this.state.athlete.postalCode} onChange={this.handleInputChange} />
-                                </InputGroup>
-                            </Col>
-                            <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                        <InputGroup.Text>Dirección</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="address" type="text" value={this.state.athlete.address} onChange={this.handleInputChange} />
-                                </InputGroup>
-                            </Col>
-                        </Row>
-                    </Form.Group>
-                    <Form.Group>
-                        <Row>
-                            <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                      <InputGroup.Text>Grupos</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="groupId" value={this.state.athlete.groupId} as="select" onChange={this.handleGroupChange}>
-                                        {
-                                            this.state.groups.map(group => {
-                                                return (<option key={group.id} value={group.id}>{group.name}</option>)
-                                            })
-                                        }
-                                    </Form.Control>
-                                </InputGroup>
-                            </Col>
-                            <Col>
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                      <InputGroup.Text>Horarios</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Form.Control name="scheduleIds" value={this.state.athlete.scheduleIds} as="select" multiple onChange={this.handleMultipleSelectChange}>
-                                        {
-                                            this.state.schedules.map(sch => {
-                                                return (<option key={sch.id} value={sch.id}>{sch.day} - {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}</option>)
-                                            })
-                                        }
-                                    </Form.Control>
-                                </InputGroup>
-                            </Col>
-                        </Row>
-                    </Form.Group>
-                    <Form.Group>
-                        <Row>
-                            <Button type="submit">Submit</Button>
-                        </Row>
-                    </Form.Group>
-                </Container>
-            </Form>
+                        </Row></Form.Group>
+                    </Form>
+                )}
+            </Formik>
         );
     }
 }
