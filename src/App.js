@@ -37,7 +37,6 @@ return (
             <Nav className="mr-auto">
               <Nav.Link href="/sport_schools/list">Escuelas</Nav.Link>
               <Nav.Link href="/athletes/list">Atletas</Nav.Link>
-              <Nav.Link href="/families/list">Familias</Nav.Link>
               <NavDropdown title="Entrenadores" id="collasible-nav-dropdown">
                 <NavDropdown.Item href="/trainers/list">Listado</NavDropdown.Item>
                 <NavDropdown.Divider />

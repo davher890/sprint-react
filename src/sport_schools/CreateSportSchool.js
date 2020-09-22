@@ -9,10 +9,8 @@ import { Formik, Field } from 'formik';
 class CreateSportSchool extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-        	sportSchool : {}
-        };
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.state = {};
+        this.handleFormSubmit = this.handleFormSubmit.bind(this);
     }
 
     componentDidMount(){
@@ -22,23 +20,21 @@ class CreateSportSchool extends Component {
                 const headers = { 'Content-Type': 'application/json' }
                 fetch(process.env.REACT_APP_SERVER_URL + "/sport_schools/" + id,  { headers })
                     .then(res => res.json())
-                    .then(data => this.setState({ sportSchool : data}));
+                    .then(data => this.setState(data));
             }
         }
     }
 
-    handleSubmit(event) {
-
-        event.preventDefault();
+    handleFormSubmit(event) {
 
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(this.state.sportSchool)
+            body: JSON.stringify(this.state)
         }
 
         fetch(process.env.REACT_APP_SERVER_URL + "/sport_schools", requestOptions)
-            .then(response => console.log(response))
+            .then(res => res.json())
             .then(data => this.setState(data));
     }
 
@@ -47,9 +43,9 @@ class CreateSportSchool extends Component {
 
             <Formik enableReinitialize 
                 initialValues={{
-                    name: this.state.sportSchool.name || '',
-                    municipality: this.state.sportSchool.municipality || '',
-                    address: this.state.sportSchool.address || '',
+                    name: this.state.name || '',
+                    municipality: this.state.municipality || '',
+                    address: this.state.address || '',
                 }}
                 validate={(values) => {
                     let errors = {};
@@ -64,9 +60,10 @@ class CreateSportSchool extends Component {
                     return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                    alert("Form is validated! Submitting the form...");
+                    alert("Guardando...");
+                    this.setState(values)
                     setSubmitting(false);
-                    this.handleSubmit()
+                    this.handleFormSubmit()
                 }}
             >
                 {({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, errors }) => (
@@ -83,7 +80,7 @@ class CreateSportSchool extends Component {
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Nombre</InputGroup.Text>
                                                     </InputGroup.Prepend>
-                                                    <Form.Control key="name" id='name' name="name" type="text" value={values.name}
+                                                    <Field key="name" id='name' name="name" type="text" value={values.name}
                                                         className={`form-control ${touched.name && errors.name ? "is-invalid" : ""}`}/>
                                                 </InputGroup>
                                             </Col>
@@ -92,7 +89,7 @@ class CreateSportSchool extends Component {
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Municipio</InputGroup.Text>
                                                     </InputGroup.Prepend>
-                                                    <Form.Control key="municipality" id='municipality' name="municipality" type="text" value={values.municipality}
+                                                    <Field key="municipality" id='municipality' name="municipality" type="text" value={values.municipality}
                                                         className={`form-control ${touched.municipality && errors.municipality ? "is-invalid" : ""}`}/>
                                                 </InputGroup>
                                             </Col>
@@ -101,7 +98,7 @@ class CreateSportSchool extends Component {
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Dirección</InputGroup.Text>
                                                     </InputGroup.Prepend>
-                                                    <Form.Control key="address" id='address' name="address" type="text" value={values.address}
+                                                    <Field key="address" id='address' name="address" type="text" value={values.address}
                                                         className={`form-control ${touched.address && errors.address ? "is-invalid" : ""}`}/>
                                                 </InputGroup>
                                             </Col>
