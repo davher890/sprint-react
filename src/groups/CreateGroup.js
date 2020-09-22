@@ -9,29 +9,26 @@ import { Formik, Field } from 'formik';
 class CreateGroup extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-        	group : {},
-            schedules : [],
-            trainers : [],
-            entityName2 : "",
-            columns : [
-                { dataField: 'name', text: 'Nombre', filter: textFilter() }
-            ],
-            columnsAthlete : [
-                { dataField: 'name', text : 'Nombre', filter: textFilter() }, 
-                { dataField: 'birthDate', text : 'Fecha de Nacimiento' }, 
-                { dataField: 'gender', text : 'Genero', filter: textFilter() }, 
-                { dataField: 'category', text : 'Categoria', filter: textFilter() }, 
-                { dataField: 'license', text : 'Licencia' }, 
-                { dataField: 'dorsal', text : 'Dorsal'}
-            ],
-            scheduleId : 0,
-            schedule : ''
-        };
-        this.handleGroupInputChange = this.handleGroupInputChange.bind(this);
+        this.state = {}
+        this.schedules = []
+        this.trainers = []
+        this.entityName2 = ""
+        this.columns = [
+            { dataField: 'name', text: 'Nombre', filter: textFilter() }
+        ]
+        this.columnsAthlete = [
+            { dataField: 'name', text : 'Nombre', filter: textFilter() }, 
+            { dataField: 'birthDate', text : 'Fecha de Nacimiento' }, 
+            { dataField: 'gender', text : 'Genero', filter: textFilter() }, 
+            { dataField: 'category', text : 'Categoria', filter: textFilter() }, 
+            { dataField: 'license', text : 'Licencia' }, 
+            { dataField: 'dorsal', text : 'Dorsal'}
+        ]
+        this.scheduleId = 0
+        this.schedule = ''
+        
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleSubmitQuery = this.handleSubmitQuery.bind(this);
-        this.handleMultipleSelectChange = this.handleMultipleSelectChange.bind(this);
     }
 
     componentDidMount(){
@@ -41,7 +38,8 @@ class CreateGroup extends Component {
             fetch(process.env.REACT_APP_SERVER_URL + "/schedules/all",  { headers })
                 .then(res => res.json())
                 .then(data => {
-                    this.setState({ schedules : data})
+                    this.schedules = data
+                    this.setState({schedules : data})
                     resolve()
                 });
         })
@@ -50,7 +48,8 @@ class CreateGroup extends Component {
             fetch(process.env.REACT_APP_SERVER_URL + "/trainers/all",  { headers })
                 .then(res => res.json())
                 .then(data => {
-                    this.setState({ trainers : data})
+                    this.trainers = data
+                    this.setState({trainers : data})
                     resolve()
                 });
         })
@@ -61,7 +60,7 @@ class CreateGroup extends Component {
                 if (id){
                     fetch(process.env.REACT_APP_SERVER_URL + "/groups/" + id,  { headers })
                         .then(res => res.json())
-                        .then(data => this.setState({ group : data}));
+                        .then(data => this.setState(data));
                 }
             }
         })
@@ -77,51 +76,15 @@ class CreateGroup extends Component {
         }
 
         fetch(process.env.REACT_APP_SERVER_URL + "/groups", requestOptions)
-            .then(response => console.log(response))
+            .then(res => res.json())
             .then(data => this.setState(data));
     }
 
-    handleGroupInputChange(event) {
+    handleSubmitQuery(values) {
 
-        event.preventDefault();
-
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-
-        let group = this.state.group
-        group[name] = value
 
         this.setState({
-            group : group
-        });
-    }
-
-    handleMultipleSelectChange(event){
-
-        event.preventDefault();
-
-        var options = event.target.options;
-        var value = [];
-        for (var i = 0, l = options.length; i < l; i++) {
-            if (options[i].selected) {
-                value.push(options[i].value);
-            }
-        }
-        let group = this.state.group
-        group.scheduleIds = value
-
-        this.setState({
-            group : group
-        });
-    }
-
-    handleSubmitQuery(event) {
-
-        event.preventDefault()
-
-        this.setState({
-            entityName2 : "groups/" + this.state.group.id + "/schedules/" + this.state.scheduleId + "/athletes"
+            entityName2 : "groups/" + this.state.id + "/schedules/" + values.scheduleId + "/athletes"
         });
     }
 
@@ -141,65 +104,67 @@ class CreateGroup extends Component {
         return (
 
             <Container>
-                <Row>
-                    <Formik enableReinitialize 
-                        initialValues={{
-                            name: this.state.group.name || '',
-                            scheduleIds: this.state.group.scheduleIds || [],
-                            specialization: this.state.group.specialization || '',
-                            trainerId: this.state.group.trainerId || ''
-                        }}
-                        validate={(values) => {
-                            let errors = {};
+            <Form.Group><Row>
+                <Formik enableReinitialize 
+                    initialValues={{
+                        // Other
+                        schedules : this.schedules,
+                        trainers: this.trainers,
+                        // Group data
+                        name: this.state.name || '',
+                        scheduleIds: this.state.scheduleIds || [],
+                        specialization: this.state.specialization,
+                        trainerId: this.state.trainerId || ''
+                    }}
+                    validate={(values) => {
+                        let errors = {};
 
-                            Object.keys(values).forEach(value => {
-                                if(values[value] === ''){
-                                    errors[value] = 'Valid ' + value + ' Required'; 
-                                }
-                            })
+                        Object.keys(values).forEach(value => {
+                            if(values[value] === ''){
+                                errors[value] = 'Campo obligatorio'; 
+                            }
+                        })
 
-                            //check if my values have errors
-                            return errors;
-                        }}
-                        onSubmit={(values, { setSubmitting }) => {
-                            alert("Form is validated! Submitting the form...");
-                            setSubmitting(false);
-                            this.handleSubmit()
-                        }}
-                        >
-                        {({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, setValues, errors }) => (
+                        //check if my values have errors
+                        return errors;
+                    }}
+                    onSubmit={(values, { setSubmitting }) => {
+                        alert("Guardando...");
+                        this.setState({ group : values })
+                        setSubmitting(false);
+                        this.handleSubmit()
+                    }}
+                    >
+                    {({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, setValues, errors }) => (
 
-            
-                            <Form onSubmit={this.handleSubmit}>
+        
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group><Row>
                                 <Card>
                                     <Card.Body>
                                         <Card.Title>Datos Personales</Card.Title>
-                                        
                                         <Form.Group><Row>
-
                                             <Col>
                                                 <Form.Group>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text>Nombre</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="name" type="text" value={values.name} className='form-control'/>
-                                                </InputGroup>
-                                                </Form.Group><Form.Group>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text>Especialización</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="specialization" value={values.specialization} as="select" className='form-control'
-                                                        onChange={e => {
-                                                            setFieldValue('specialization', e.target.value);
-                                                            this.fillGroups(e.target.value)
-                                                        }}>
-                                                        <option></option>
-                                                        <option value={true}>Si</option>
-                                                        <option value={false}>No</option>
-                                                    </Field>
-                                                </InputGroup>
+                                                    <InputGroup>
+                                                        <InputGroup.Prepend>
+                                                            <InputGroup.Text>Nombre</InputGroup.Text>
+                                                        </InputGroup.Prepend>
+                                                        <Field name="name" type="text" value={values.name} className='form-control'/>
+                                                    </InputGroup>
+                                                </Form.Group>
+                                                <Form.Group>
+                                                    <InputGroup>
+                                                        <InputGroup.Prepend>
+                                                            <InputGroup.Text>Especialización</InputGroup.Text>
+                                                        </InputGroup.Prepend>
+                                                        <Field name="specialization" value={values.specialization} as="select" 
+                                                            className={`form-control ${touched.specialization && errors.specialization ? "is-invalid" : ""}`}>
+                                                            <option></option>
+                                                            <option value={true}>Si</option>
+                                                            <option value={false}>No</option>
+                                                        </Field>
+                                                    </InputGroup>
                                                 </Form.Group>
                                             </Col>
                                             <Col>
@@ -209,7 +174,7 @@ class CreateGroup extends Component {
                                                     </InputGroup.Prepend>
                                                     <Field name="scheduleIds" value={values.scheduleIds} as="select" multiple className='form-control'>
                                                         {
-                                                            this.state.schedules.map(sch => {
+                                                            values.schedules.map(sch => {
                                                                 return <option key={sch.id} value={sch.id}>{sch.day} {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}</option>
                                                             })
                                                         }
@@ -224,7 +189,7 @@ class CreateGroup extends Component {
                                                     <Field name="trainerId" value={values.trainerId} as="select" className='form-control'>
                                                         <option key="blank_trainer">-</option>
                                                         {
-                                                            this.state.trainers.map(tr => {
+                                                            values.trainers.map(tr => {
                                                                 return <option key={tr.id} value={tr.id}>{tr.name}</option>
                                                             })
                                                         }
@@ -239,80 +204,70 @@ class CreateGroup extends Component {
                                         </Row></Form.Group>
                                     </Card.Body>
                                 </Card>
-                            </Form>
-                        )}
-                    </Formik>
-                </Row>
-                <Row>
-                    <Formik enableReinitialize 
-                        initialValues={{
-                            scheduleId: this.state.scheduleId || '', 
-                            schedules: this.state.schedules || [],
+                            </Row></Form.Group>
+                        </Form>
+                    )}
+                </Formik>
+            </Row>
+            <Row>
+                <Formik enableReinitialize 
+                    initialValues={{
+                        scheduleId: this.state.scheduleId || '', 
+                        schedules: this.state.schedules || [],
+                        columnsAthlete: this.columnsAthlete,
+                        entityName2: this.state.entityName2
+                    }}
+                    onSubmit={(values, { setSubmitting }) => {
+                        alert("Consultando...");
+                        setSubmitting(false);
+                        this.handleSubmitQuery(values)
+                    }}
+                    >
+                    {({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, setValues, errors }) => (
 
-                        }}
-                        validate={(values) => {
-                            let errors = {};
-
-                            Object.keys(values).forEach(value => {
-                                if(values[value] === ''){
-                                    errors[value] = 'Valid ' + value + ' Required'; 
-                                }
-                            })
-
-                            //check if my values have errors
-                            return errors;
-                        }}
-                        onSubmit={(values, { setSubmitting }) => {
-                            alert("Form is validated! Submitting the form...");
-                            setSubmitting(false);
-                            this.handleSubmit()
-                        }}
-                        >
-                        {({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, setValues, errors }) => (
-
-                            <Form onSubmit={this.handleSubmit}>
-                                <Form.Group><Row>
-                                    <Col>
-                                        <Card>
-                                            <Card.Body>
-                                                <Form.Group><Row>
-                                                    <Col>
-                                                        <InputGroup>
-                                                            <InputGroup.Prepend>
-                                                              <InputGroup.Text>Horarios</InputGroup.Text>
-                                                            </InputGroup.Prepend>
-                                                            <Field name="scheduleId" value={values.scheduleId} as="select" className='form-control'>
-                                                                <option></option>
-                                                                {
-                                                                    values.schedules.map(sch => {
-                                                                        return <option key={sch.id} value={sch.id}>{sch.day} {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}</option>
-                                                                    })
-                                                                }
-                                                            </Field>
-                                                        </InputGroup>
-                                                    </Col>
-                                                    <Col>
-                                                        <Button type="submit">Submit</Button>
-                                                    </Col>
-                                                </Row></Form.Group>
-                                                <Form.Group><Row>
-                                                    <Col>
-                                                        <Table 
-                                                            columns={this.state.columnsAthlete} 
-                                                            entityName={this.state.entityName2}
-                                                            dataConversor={this.athleteDataConversor}>
-                                                        </Table>
-                                                    </Col>
-                                                </Row></Form.Group>
-                                            </Card.Body>
-                                        </Card>
-                                    </Col>
-                                </Row></Form.Group>
-                            </Form>
-                        )}
-                    </Formik>
-                </Row>
-        </Container>
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group><Row>
+                                <Card>
+                                    <Card.Body>
+                                        <Form.Group><Row>
+                                            <Col>
+                                                <Form.Group>
+                                                    <InputGroup>
+                                                        <InputGroup.Prepend>
+                                                          <InputGroup.Text>Horarios</InputGroup.Text>
+                                                        </InputGroup.Prepend>
+                                                        <Field name="scheduleId" value={values.scheduleId} as="select" className='form-control'>
+                                                            <option></option>
+                                                            {
+                                                                values.schedules.map(sch => {
+                                                                    return <option key={sch.id} value={sch.id}>{sch.day} {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}</option>
+                                                                })
+                                                            }
+                                                        </Field>
+                                                    </InputGroup>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col>
+                                                <Button type="submit">Submit</Button>
+                                            </Col>
+                                        </Row></Form.Group>
+                                        <Form.Group><Row>
+                                            <Col>
+                                                <Table 
+                                                    columns={values.columnsAthlete} 
+                                                    entityName={values.entityName2}
+                                                    dataConversor={this.athleteDataConversor}>
+                                                </Table>
+                                            </Col>
+                                        </Row></Form.Group>
+                                    </Card.Body>
+                                </Card>
+                            </Row></Form.Group>
+                        </Form>
+                    )}
+                </Formik>    
+            </Row></Form.Group>
+            </Container>
             
         );
     }

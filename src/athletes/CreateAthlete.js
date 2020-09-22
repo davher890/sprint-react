@@ -558,7 +558,7 @@ class CreateAthlete extends Component {
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Dirección</InputGroup.Text>
                                                     </InputGroup.Prepend>
-                                                    <Field name="address" type="text" value={values.address || ''} 
+                                                    <Field name="address" type="text" value={values.address} 
                                                         className={`form-control ${touched.address && errors.address ? "is-invalid" : ""}`}/>
                                                 </InputGroup>
                                             </Col>
@@ -583,7 +583,7 @@ class CreateAthlete extends Component {
                                             <Col>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
-                                                      <InputGroup.Text>Forma de pago</InputGroup.Text>
+                                                        <InputGroup.Text>Forma de pago</InputGroup.Text>
                                                     </InputGroup.Prepend>
                                                     <Field name="paymentType" value={values.paymentType} as="select"
                                                         className='form-control'>
@@ -623,12 +623,12 @@ class CreateAthlete extends Component {
                                                 />
                                             </Col>
                                             <Col>
-                                                <Field name="holderFirstSurname" type="text" placeholder="Primer Apellido" value={values.holderFirstSurname || ''} 
+                                                <Field name="holderFirstSurname" type="text" placeholder="Primer Apellido" value={values.holderFirstSurname} 
                                                     className={`form-control ${touched.holderFirstSurname && errors.holderFirstSurname ? "is-invalid" : ""}`}
                                                 />
                                             </Col>
                                             <Col>
-                                                <Field name="holderSecondSurname" type="text" placeholder="Segundo Appellido" value={values.holderSecondSurname || ''} 
+                                                <Field name="holderSecondSurname" type="text" placeholder="Segundo Appellido" value={values.holderSecondSurname} 
                                                     className={`form-control ${touched.holderSecondSurname && errors.holderSecondSurname ? "is-invalid" : ""}`}
                                                 />
                                             </Col>
@@ -639,7 +639,7 @@ class CreateAthlete extends Component {
                                                     <InputGroup.Prepend>
                                                       <InputGroup.Text>Dni</InputGroup.Text>
                                                     </InputGroup.Prepend>
-                                                    <Field name="dni" type="text" value={values.holderDni} 
+                                                    <Field name="holderDni" type="text" value={values.holderDni} 
                                                         className={`form-control ${touched.holderDni && errors.holderDni ? "is-invalid" : ""}`}
                                                     />
                                                 </InputGroup>
@@ -779,7 +779,7 @@ class CreateAthlete extends Component {
                                       <InputGroup.Text>Aut. Imágenes</InputGroup.Text>
                                     </InputGroup.Prepend>
                                     <Field name="imageAuth" value={values.imageAuth} as="select" 
-                                        className={`form-control ${touched.gender && errors.gender ? "is-invalid" : ""}`}>
+                                        className={`form-control ${touched.imageAuth && errors.imageAuth ? "is-invalid" : ""}`}>
                                         <option></option>
                                         <option value={true}>Si</option>
                                         <option value={false}>No</option>
