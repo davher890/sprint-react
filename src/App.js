@@ -2,7 +2,6 @@ import React from "react";
 import "./App.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CreateAthlete from './athletes/CreateAthlete';
-import TableAthletes from './athletes/TableAthletes';
 import CreateFamily from './families/CreateFamily';
 import TableFamilies from './families/TableFamilies';
 import CreateGroup from './groups/CreateGroup';
@@ -13,6 +12,8 @@ import CreateSchedule from './schedules/CreateSchedule';
 import TableSchedules from './schedules/TableSchedules';
 import CreateSportSchool from './sport_schools/CreateSportSchool';
 import TableSportSchools from './sport_schools/TableSportSchools';
+
+import { TableAthletes } from './athletes/TableAthletes';
 
 import { 
   Navbar, Nav, NavDropdown, Container 
@@ -53,7 +54,10 @@ return (
             <Route exact path="/sport_schools/:id" component={CreateSportSchool} />
             <Route exact path="/sport_schools" component={CreateSportSchool}/>
 
-            <Route exact path="/athletes/list" component={TableAthletes}/>
+            <Route path="/athletes/list">
+              <TableAthletes/>
+            </Route>
+
             <Route exact path="/athletes/:id" component={CreateAthlete} />
             <Route exact path="/athletes" component={CreateAthlete}/>
             

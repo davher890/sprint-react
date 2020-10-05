@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { 
 	Button, 
-	Container, 
 	Row, 
-	Col 
+	Col,
+	Form
 } from 'react-bootstrap';
 import BootstrapTable  from 'react-bootstrap-table-next';
 import Paginator from 'react-bootstrap-table2-paginator'
@@ -125,7 +125,7 @@ class Table extends Component {
 
     render() {
 		return (
-			<Container>
+			<Form.Group>
 				<Row>
 					<Col>
 						<Button href={`/${this.state.entityName}`}>Crear</Button>
@@ -150,7 +150,7 @@ class Table extends Component {
 						</BootstrapTable>
 					</Col>
 				</Row>
-			</Container>
+			</Form.Group>
 		)
 	}
 }

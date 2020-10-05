@@ -72,6 +72,7 @@ class CreateAthlete extends Component {
             fetch(process.env.REACT_APP_SERVER_URL + "/groups/all?specialization=true",  { headers })
                 .then(res => res.json())
                 .then(data => {
+                    data.push({id:'', name:''})
                     this.specializedGroups = data
                     resolve()
                 });
@@ -80,6 +81,7 @@ class CreateAthlete extends Component {
             fetch(process.env.REACT_APP_SERVER_URL + "/groups/all?specialization=false",  { headers })
                 .then(res => res.json())
                 .then(data => {
+                    data.push({id:'', name:''})
                     this.notSpecializedGroups = data
                     resolve()
                 });
@@ -91,7 +93,7 @@ class CreateAthlete extends Component {
                 fetch(process.env.REACT_APP_SERVER_URL + "/athletes/" + id,  { headers })
                 .then(res => res.json())
                 .then(data => {
-                    data.age = utils.ageCalculator(Date.parse(data.birthDate));
+                    data.age = utils.ageCalculator(new Date(data.birthDate));
 
                     this.showSportData = data.feeType !== 'socio'
                     if (data.sportSchoolId === 1){
@@ -225,6 +227,7 @@ class CreateAthlete extends Component {
                     familiarTwoMail: this.state.familiarTwoMail || '',
                     // Sport info
                     category:  this.state.category || '',
+                    nextCategory: this.state.nextCategory || '',
                     dorsalCategory: this.state.dorsalCategory || '',
                     dorsalNumber: this.state.dorsalNumber || '',
                     license: this.state.license || '',
@@ -658,9 +661,23 @@ class CreateAthlete extends Component {
                                             <Col md="auto"> 
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
-                                                        <InputGroup.Text>Categoria</InputGroup.Text>
+                                                        <InputGroup.Text>Categoría</InputGroup.Text>
                                                     </InputGroup.Prepend>
                                                     <Field name="category" value={values.category} as="select" className='form-control'>
+                                                        {
+                                                            utils.getCategories().map(c => {
+                                                                return (<option key={`cat${c.id}`} value={c.id}>{c.name}</option>)
+                                                            })
+                                                        }
+                                                    </Field>
+                                                </InputGroup>
+                                            </Col>
+                                            <Col md="auto"> 
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                        <InputGroup.Text>Siguiente Categoría</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="nextCategory" value={values.nextCategory} as="select" className='form-control'>
                                                         {
                                                             utils.getCategories().map(c => {
                                                                 return (<option key={`cat${c.id}`} value={c.id}>{c.name}</option>)
@@ -691,6 +708,8 @@ class CreateAthlete extends Component {
                                                     <Field name="dorsalNumber" type="number" value={values.dorsalNumber} className='form-control'/>
                                                 </InputGroup>
                                             </Col>
+                                        </Row></Form.Group>
+                                        <Form.Group><Row>
                                             <Col md="auto">
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
