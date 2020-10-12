@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { 
     InputGroup, Row, Col, Button, Form, Card
 } from 'react-bootstrap';
-import Table from "../utils/Table";
+import Table from "./Table";
 import { textFilter } from 'react-bootstrap-table2-filter';
 import { Formik, Field } from 'formik';
 
-class GroupAthletesTableComponent extends Component {
+class GroupAthletesTable extends Component {
 
 	constructor(props) {
 		super(props);
@@ -147,4 +147,4 @@ class GroupAthletesTableComponent extends Component {
 	}
 }
 
-export default GroupAthletesTableComponent
+export default GroupAthletesTable

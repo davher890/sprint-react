@@ -1,28 +1,24 @@
 import React, { Component } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container } from 'react-bootstrap';
-import Table from "../utils/Table";
+import Table from "./Table";
+import { textFilter } from 'react-bootstrap-table2-filter';
 
-
-class TableSchedules extends Component {
+class TableTrainers extends Component {
     constructor(props) {
         super(props);
         this.state = {
-        	columns : [ 
-        		{ dataField: 'day', text : 'Día'} , 
-        		{ dataField: 'start', text : 'Inicio' }, 
-        		{ dataField: 'end', text : 'Fin' }
+        	columns : [
+        		{ dataField: 'name', text: 'Nombre', filter: textFilter() }
     		],
-        	entityName : 'schedules'
+    		entityName : 'trainers'
         }
     }
 
     dataConversor(d){
     	return {
 			id : d.id, 
-			day: d.day, 
-			start: d.startHour + ':' + d.startMinute,
-			end: d.endHour + ':' + d.endMinute
+			name: d.name
 		}
     }
 
@@ -39,6 +35,6 @@ class TableSchedules extends Component {
 	}
 }
 
-export default TableSchedules;
+export default TableTrainers;
 
 

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container } from 'react-bootstrap';
-import Table from "../utils/Table";
+import Table from "./Table";
 import { textFilter } from 'react-bootstrap-table2-filter';
 
 class TableGroups extends Component {

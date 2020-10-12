@@ -2,21 +2,27 @@ import React, { Suspense } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row } from 'react-bootstrap';
 
-import AthletesTableComponent from "./AthletesTableComponent";
-import GroupAthletesTableComponent from "../groups/GroupAthletesTableComponent";
+import SchedulesTable from "../../components/TableSchedules";
+import CreateSchedule from "../../components/CreateSchedule";
 
-
-export function TableAthletes() {
+export function Schedules() {
   return (
   	<Container>
 	    <Row>
 	    	<Suspense fallback={<div>Cargando...</div>}>
-				<AthletesTableComponent/>
+				<SchedulesTable/>
 			</Suspense>
 	    </Row>
+	</Container>
+  );
+}
+
+export function NewSchedule() {
+  return (
+  	<Container>
 	    <Row>
 	    	<Suspense fallback={<div>Cargando...</div>}>
-				<GroupAthletesTableComponent/>
+				<CreateSchedule/>
 			</Suspense>
 	    </Row>
 	</Container>
