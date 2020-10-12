@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Card, Row, Form } from 'react-bootstrap';
-import Table from "../utils/Table";
+import Table from "./Table";
 import { textFilter } from 'react-bootstrap-table2-filter';
 
 class AthletesTableComponent extends Component {
@@ -16,7 +16,7 @@ class AthletesTableComponent extends Component {
 	        	{ dataField: 'license', text : 'Licencia' }, 
 	        	{ dataField: 'dorsal', text : 'Dorsal'}
         	],
-        	entityName : 'athletes',
+        	entityName : 'athletes'
         }
     }
 

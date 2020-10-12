@@ -88,8 +88,8 @@ class CreateAthlete extends Component {
             })
 
         Promise.all([schoolsPromise, spGroupsPromise, noSpGroupsPromise]).then(values => {
-            if (this.props.match.params.id) {
-                let id = this.props.match.params.id
+            if (this.props.id) {
+                let id = this.props.id
                 fetch(process.env.REACT_APP_SERVER_URL + "/athletes/" + id,  { headers })
                 .then(res => res.json())
                 .then(data => {
@@ -208,6 +208,7 @@ class CreateAthlete extends Component {
                     // Personal info
                     sportSchoolId: this.state.sportSchoolId || '',
                     imageAuth: this.state.imageAuth,
+                    observations: this.state.observations || '',
                     name: this.state.name || '',
                     firstSurname: this.state.firstSurname || '',
                     secondSurname: this.state.secondSurname || '',
@@ -739,13 +740,17 @@ class CreateAthlete extends Component {
                                                     </InputGroup.Prepend>
                                                     <Field name="specialization" value={values.specialization} as="select" className='form-control'
                                                         onChange={e => {
-                                                            setFieldValue('specialization', e.target.value);
-                                                            if (e.target.value === true){
+                                                            
+                                                            if (e.target.value === 'true'){
                                                                 setFieldValue('groups', this.specializedGroups)
                                                             }
-                                                            else {
+                                                            else if (e.target.value === 'false'){
                                                                 setFieldValue('groups', this.notSpecializedGroups)
                                                             }
+                                                            else {
+                                                                setFieldValue('groups', [])
+                                                            }
+                                                            setFieldValue('specialization', e.target.value);
                                                         }}>
                                                         <option></option>
                                                         <option value={true}>Si</option>
@@ -773,17 +778,103 @@ class CreateAthlete extends Component {
                                                 </InputGroup>
                                             </Col>
                                             <Col>
+                                                <Card>
+                                                    <Card.Body>
+                                                        <Card.Title>Horarios</Card.Title>
+                                                           
+                                                        <Form.Group>  
+                                                            {
+                                                                values.schedules.map(sch => {
+                                                                    return (
+                                                                        <Row><Col><label><Field 
+                                                                            type="checkbox" 
+                                                                            name="scheduleIds" 
+                                                                            key={`sch{sch.id}`} 
+                                                                            checked={values.scheduleIds.includes(sch.id)}
+                                                                            onChange={e => {
+                                                                                if (e.target.checked) {
+                                                                                    values.scheduleIds.push(sch.id)
+                                                                                } else {
+                                                                                    const idx = values.scheduleIds.indexOf(sch.id);
+                                                                                    values.scheduleIds.splice(idx, 1);
+                                                                                }
+                                                                                setFieldValue('scheduleIds', values.scheduleIds)
+                                                                            }}/>
+
+                                                                            {sch.day} - {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}
+                                                                        </label></Col></Row> 
+                                                                    )
+                                                                })
+                                                            }
+                                                        </Form.Group>
+                                                    </Card.Body>
+                                                </Card>
+                                            </Col>
+                                        </Row></Form.Group>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        </Row></Form.Group>
+                        <Form.Group><Row style={{ display: values.showSportData ? "block" : "none" }}>
+                            <Col>
+                                <Card>
+                                    <Card.Body>
+                                        <Card.Title>Calculo de cuota</Card.Title>
+                                        <Form.Group><Row>
+                                            <Col md="auto">
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
-                                                      <InputGroup.Text>Horarios</InputGroup.Text>
+                                                        <InputGroup.Text>Cuota de socio</InputGroup.Text>
                                                     </InputGroup.Prepend>
-                                                    <Field name="scheduleIds" value={values.scheduleIds} as="select" multiple className='form-control'>
-                                                        {
-                                                            values.schedules.map(sch => {
-                                                                return (<option key={sch.id} value={sch.id}>{sch.day} - {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}</option>)
-                                                            })
-                                                        }
+                                                    <Field name="age" type="number" disabled value={values.age}/>
+                                                </InputGroup>
+                                            </Col>
+                                            <Col md="auto">
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                        <InputGroup.Text>Matricula</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="age" type="number" disabled value={values.age}/>
+                                                </InputGroup>
+                                            </Col>
+                                            <Col md="auto">
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                        <InputGroup.Text>Mensualidad</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="age" type="number" disabled value={values.age}/>
+                                                </InputGroup>
+                                            </Col>
+                                        </Row></Form.Group>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        </Row></Form.Group>    
+                        <Form.Group><Row>
+                            <Col>
+                                <Card>
+                                    <Card.Body>
+                                        <Card.Title>Calculo de cuota</Card.Title>
+                                        <Form.Group><Row>
+                                            <Col md={4}>
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                      <InputGroup.Text>Aut. Imágenes</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="imageAuth" value={values.imageAuth} as="select" 
+                                                        className={`form-control ${touched.imageAuth && errors.imageAuth ? "is-invalid" : ""}`}>
+                                                        <option></option>
+                                                        <option value={true}>Si</option>
+                                                        <option value={false}>No</option>
                                                     </Field>
+                                                </InputGroup>
+                                            </Col>
+                                            <Col md={8}>
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                      <InputGroup.Text>Observaciones</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="observations" value={values.observations} as="textarea" className='form-control'></Field>
                                                 </InputGroup>
                                             </Col>
                                         </Row></Form.Group>
@@ -793,24 +884,10 @@ class CreateAthlete extends Component {
                         </Row></Form.Group>
                         <Form.Group><Row>
                             <Col md="auto">
-                                <InputGroup>
-                                    <InputGroup.Prepend>
-                                      <InputGroup.Text>Aut. Imágenes</InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <Field name="imageAuth" value={values.imageAuth} as="select" 
-                                        className={`form-control ${touched.imageAuth && errors.imageAuth ? "is-invalid" : ""}`}>
-                                        <option></option>
-                                        <option value={true}>Si</option>
-                                        <option value={false}>No</option>
-                                    </Field>
-                                </InputGroup>
-                            </Col>
-                        </Row></Form.Group>
-                        <Form.Group><Row>
-                            <Col md="auto">
                                 <Button type="submit">Submit</Button>
                             </Col>
                         </Row></Form.Group>
+
                     </Form>
                 )}
             </Formik>

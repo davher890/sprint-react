@@ -16,8 +16,8 @@ class CreateTrainer extends Component {
     }
 
     componentDidMount(){
-        if (this.props.match.params) {
-            let id = this.props.match.params.id
+        if (this.props.id) {
+            let id = this.props.id
             this.setState({ id : id})
 
             const headers = { 'Content-Type': 'application/json' }
