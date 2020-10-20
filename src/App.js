@@ -8,6 +8,8 @@ import { NewSportSchool, SportSchools } from './pages/sport_schools/SportSchools
 import { NewGroup, Groups } from './pages/groups/Groups';
 import { NewFamily, Families } from './pages/families/Families';
 import { NewAthlete, Athletes } from './pages/athletes/Athletes';
+import { GroupListing } from './pages/listings/Listings';
+
 
 import { 
   Navbar, Nav, NavDropdown, Container 
@@ -38,6 +40,10 @@ return (
                 <NavDropdown.Item href="/groups/list">Grupos</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item href="/schedules/list">Horarios</NavDropdown.Item>
+              </NavDropdown>
+              <NavDropdown title="Listados" id="collasible-nav-dropdown">
+                <NavDropdown.Item href="/groups/attendance">Asistencia</NavDropdown.Item>
+                <NavDropdown.Divider />
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>
@@ -79,6 +85,10 @@ return (
             <Route path="/families">
               <NewFamily/>
             </Route>
+
+            <Route path="/groups/attendance">
+              <GroupListing/>
+            </Route>
             
             <Route path="/groups/list">
               <Groups/>
@@ -115,8 +125,6 @@ return (
             <Route path="/trainers">
               <NewTrainer/>
             </Route>
-
-            
 
           </Switch>
         </Container>

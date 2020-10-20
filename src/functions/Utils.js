@@ -49,6 +49,43 @@ const utils = {
 			{ id : "DOM", name : "Domiciliación Bancaria"},
 			{ id : "SUBV", name : "Subvencionado"},
 		]
+	},
+
+	getFeeTypes: function(sportSchoolId){
+		if (sportSchoolId === 1){
+
+			// Santa Ana
+			return [
+	            { id : '', name : ''},
+	            { id : 'CLUB', name : 'Club'},
+	            { id : 'PISTAS', name : 'Pistas'},
+	            { id : 'LIC_PISTAS', name : 'Licencia/Pistas'},
+	            { id : 'ENTRENADOR', name : 'Entrenadores'},
+	        ]
+	    }
+
+	    else if (sportSchoolId === 2){
+
+	        // Paracuellos
+	        return [
+	            { id : '', name : ''},
+	            { id : 'CLLUB', name : 'Club'}
+	        ]
+	    }
+
+	    else if (sportSchoolId === 3){
+
+	        // Externos
+	        return [
+	            { id : '', name : ''},
+	            { id : 'LICENCIA', name : 'Licencia'},
+	            { id : 'SOCIO', name : 'Socio'},
+	            { id : 'ENTRENADOR', name : 'Entrenadores'},
+	        ]
+	    }
+	    else {
+	    	return []
+    	}
 	}
 }
 

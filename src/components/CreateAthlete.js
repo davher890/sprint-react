@@ -22,29 +22,6 @@ class CreateAthlete extends Component {
         this.handleMultipleSelectChange = this.handleMultipleSelectChange.bind(this);
         this.fillSchedules = this.fillSchedules.bind(this)
 
-        // Santa Ana
-        this.feeType1 = [
-            { id : '', name : ''},
-            { id : 'CLUB', name : 'Club'},
-            { id : 'PISTAS', name : 'Pistas'},
-            { id : 'LIC_PISTAS', name : 'Licencia/Pistas'},
-            { id : 'ENTRENADOR', name : 'Entrenadores'},
-        ]
-
-        // Paracuellos
-        this.feeType2 = [
-            { id : '', name : ''},
-            { id : 'club', name : 'Club'}
-        ]
-
-        // Externos
-        this.feeType3 = [
-            { id : '', name : ''},
-            { id : 'licencia', name : 'Licencia'},
-            { id : 'socio', name : 'Socio'},
-            { id : 'entrenadores', name : 'Entrenadores'},
-        ]
-
         this.feeTypes = []
         // Groups
         this.specializedGroups = []
@@ -96,15 +73,8 @@ class CreateAthlete extends Component {
                     data.age = utils.ageCalculator(new Date(data.birthDate));
 
                     this.showSportData = data.feeType !== 'socio'
-                    if (data.sportSchoolId === 1){
-                        this.feeTypes = this.feeType1
-                    }
-                    else if (data.sportSchoolId === 2){
-                        this.feeTypes = this.feeType2
-                    }
-                    else {
-                        this.feeTypes = this.feeType3
-                    }
+                    this.feeTypes = utils.getFeeTypes(data.sportSchoolId === 1)
+
                     if (data.specialization){
                         this.groups = this.specializedGroups
                     }
@@ -142,6 +112,22 @@ class CreateAthlete extends Component {
             .then(data => {
                 data.age = utils.ageCalculator(Date.parse(data.birthDate));
                 this.setState(data)
+            });
+    }
+
+    fillFee(values, setFieldValue){
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(values)
+        }
+
+        fetch(process.env.REACT_APP_SERVER_URL + "/athletes/fee", requestOptions)
+            .then(res => res.json())
+            .then(data => {
+                setFieldValue('enrollmentFee', data.enrollmentFee)
+                setFieldValue('membershipFee', data.membershipFee)
+                setFieldValue('monthlyFee', data.monthlyFee)
             });
     }
 
@@ -767,6 +753,7 @@ class CreateAthlete extends Component {
                                                         onChange={e => {
                                                             
                                                             this.fillSchedules(e.target.value, setFieldValue)
+                                                            this.fillFee(values, setFieldValue)
                                                             setFieldValue('groupId', e.target.value)
                                                         }}>
                                                         {
@@ -826,7 +813,7 @@ class CreateAthlete extends Component {
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Cuota de socio</InputGroup.Text>
                                                     </InputGroup.Prepend>
-                                                    <Field name="age" type="number" disabled value={values.age}/>
+                                                    <Field name="membershipFee" type="number" disabled value={values.age}/>
                                                 </InputGroup>
                                             </Col>
                                             <Col md="auto">
@@ -834,7 +821,7 @@ class CreateAthlete extends Component {
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Matricula</InputGroup.Text>
                                                     </InputGroup.Prepend>
-                                                    <Field name="age" type="number" disabled value={values.age}/>
+                                                    <Field name="enrollmentFee" type="number" disabled value={values.age}/>
                                                 </InputGroup>
                                             </Col>
                                             <Col md="auto">
@@ -842,7 +829,7 @@ class CreateAthlete extends Component {
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Mensualidad</InputGroup.Text>
                                                     </InputGroup.Prepend>
-                                                    <Field name="age" type="number" disabled value={values.age}/>
+                                                    <Field name="monthlyFee" type="number" disabled value={values.age}/>
                                                 </InputGroup>
                                             </Col>
                                         </Row></Form.Group>
