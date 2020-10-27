@@ -13,12 +13,12 @@ class GroupAthletesTable extends Component {
 		this.state = {}
 
 		this.columns = [
-            { dataField: 'name', text : 'Nombre', filter: textFilter() }, 
-            { dataField: 'birthDate', text : 'Fecha de Nacimiento' }, 
-            { dataField: 'gender', text : 'Genero', filter: textFilter() }, 
-            { dataField: 'category', text : 'Categoria', filter: textFilter() }, 
-            { dataField: 'license', text : 'Licencia' }, 
-            { dataField: 'dorsal', text : 'Dorsal'}
+            { dataField: 'name', text : 'Nombre', filter: textFilter(), type: 1 }, 
+            { dataField: 'birthDate', text : 'Fecha de Nacimiento', type: 1 }, 
+            { dataField: 'gender', text : 'Genero', filter: textFilter(), type: 1 }, 
+            { dataField: 'category', text : 'Categoria', filter: textFilter(), type: 1 }, 
+            { dataField: 'license', text : 'Licencia', type: 1}, 
+            { dataField: 'dorsalNumber', text : 'Dorsal', type: 0}
         ]
 
         this.handleSubmitQuery = this.handleSubmitQuery.bind(this);
@@ -51,7 +51,7 @@ class GroupAthletesTable extends Component {
             gender: d.gender === 'male' ? 'Masculino' : 'Femenino',
             category : d.category,
             license : d.license,
-            dorsal : d.dorsalNumber
+            dorsalNumber : d.dorsalNumber
         }
     }
 
@@ -77,7 +77,6 @@ class GroupAthletesTable extends Component {
                     entityName: this.state.entityName || ''
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                    alert("Consultando...");
                     setSubmitting(false);
                     this.handleSubmitQuery(values)
                 }}
@@ -132,7 +131,8 @@ class GroupAthletesTable extends Component {
                                             <Table 
                                                 columns={values.columns} 
                                                 entityName={values.entityName}
-                                                dataConversor={this.athleteDataConversor}>
+                                                dataConversor={this.athleteDataConversor}
+                                                showExcel={true}>
                                             </Table>
                                         </Col>
                                     </Row></Form.Group>

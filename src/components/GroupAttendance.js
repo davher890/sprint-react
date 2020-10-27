@@ -19,7 +19,7 @@ class GroupAttendance extends Component {
 		fetch(process.env.REACT_APP_SERVER_URL + "/groups/all",  { headers })
             .then(res => res.json())
             .then(data => {
-                data.push({id:'', name:''})
+                data.push({id:0, name:'Todos'})
                 this.setState({ groups : data})
             });
 	}
@@ -53,7 +53,6 @@ class GroupAttendance extends Component {
                 	return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                    alert("Guardando...");
                     this.setState(values)
                     setSubmitting(false);
                     this.handleFormSubmit()

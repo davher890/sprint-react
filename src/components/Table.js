@@ -21,7 +21,8 @@ class Table extends Component {
         	urlParams : '',
         	size : 10,
         	page : 1,
-        	total : 0
+        	total : 0,
+        	showExcel : props.showExcel || false
     	}
 		this.fetchData = this.fetchData.bind(this)
         this.handleTableChange = this.handleTableChange.bind(this)
@@ -103,7 +104,13 @@ class Table extends Component {
 
 	downloadData(){
 
-		fetch(process.env.REACT_APP_SERVER_URL + "/" + this.props.entityName + "/excel")
+		const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(this.state.columns)
+        }
+
+		fetch(process.env.REACT_APP_SERVER_URL + "/" + this.props.entityName + "/excel", requestOptions)
 			.then(response => {
 				response.blob().then(blob => {
 					let url = window.URL.createObjectURL(blob);
@@ -133,7 +140,8 @@ class Table extends Component {
                 	page : this.state.page,
                 	size : this.state.size,
                 	total : this.state.total,
-                	entityName: this.state.entityName
+                	entityName: this.state.entityName,
+                	showExcel: this.state.showExcel || false
                 }}
                 validate={(values) => {
                     let errors = {};
@@ -156,7 +164,7 @@ class Table extends Component {
 								<Col md="auto">
 									<Button href={`/${values.entityName}`}>Crear</Button>
 								</Col>
-								<Col md="auto">
+								<Col md="auto" style={{ display: values.showExcel ? "block" : "none" }}>
 									<Button onClick={this.downloadData}>Descargar Excel</Button>
 								</Col>
 								<Col md="auto">

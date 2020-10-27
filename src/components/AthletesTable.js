@@ -28,7 +28,7 @@ class AthletesTableComponent extends Component {
 			gender: d.gender === 'male' ? 'Masculino' : 'Femenino',
 			category : d.category,
 			license : d.license,
-			dorsal : d.dorsalNumber
+			dorsalNumber : d.dorsalNumber
 		}
     }
 
