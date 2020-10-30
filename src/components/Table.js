@@ -29,53 +29,55 @@ class Table extends Component {
         this.downloadData = this.downloadData.bind(this)
     }
 
-    async componentDidMount() {
-    	await this.fetchData()
+    componentDidMount(prevProps, nextProps){
+        if(prevProps !== this.props){
+			this.fetchData()
+    	}
     }
 
-    async componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps) {
 
     	if (this.props.entityName && this.props.entityName !== this.state.entityName){
-    		await this.setState({
+    		this.setState({
     			entityName : this.props.entityName
     		})
     		this.fetchData()
     	}
 	}
 
-    async fetchData(){
-
+    fetchData(){
     	if (this.state.entityName && this.state.entityName !== ""){
 			const headers = { 'Content-Type': 'application/json' }
-			const response = await fetch(process.env.REACT_APP_SERVER_URL + "/" + this.props.entityName + "?page=" + (this.state.page-1) + "&size=" + this.state.size + this.state.urlParams,  { headers })
-			const data = await response.json();	
-
-			let items = []
-			if (data.content && data.content.length > 0){
-				items = data.content.map(d => {
-					return this.props.dataConversor(d)
+			fetch(process.env.REACT_APP_SERVER_URL + "/" + this.props.entityName + "?page=" + (this.state.page-1) + "&size=" + this.state.size + this.state.urlParams,  { headers })
+				.then(response => response.json())
+				.then(data => {
+					let items = []
+					if (data.content && data.content.length > 0){
+						items = data.content.map(d => {
+							return this.props.dataConversor(d)
+						})
+					}
+					this.setState({
+						data: items,
+						total : data.totalElements,
+						page : data.number+1
+					})
 				})
-			}
-			this.setState({
-				data: items,
-				total : data.totalElements,
-				page : data.number+1
-			})
 		}
 	}
 	
-	async handleTableChange(type, pageProp){
+	handleTableChange(type, pageProp){
 		
 		if (type === 'pagination'){
 			let page = pageProp.page;
 			let size = pageProp.sizePerPage;
 			
-		    await this.setState({
+		    this.setState({
 	        	page : page,
 	        	size : size
 	        })
 		}
-		if (type === 'filter'){
+		else if (type === 'filter'){
 
 			let filterParams = Object.keys(pageProp.filters).map(field => {
 
@@ -94,7 +96,7 @@ class Table extends Component {
 			if (filterParams.length > 0){
 				urlParams = '&filters=' + filterParams.reduce((accumulator, currentValue) => accumulator + ',' + currentValue)
 			}
-			await this.setState({
+			this.setState({
 	        	urlParams : urlParams
 	        })
 		}
@@ -172,11 +174,11 @@ class Table extends Component {
 		                                {
 		                                    values.columns.map(c => {
 		                                        return (
-		                                            <Row><Col><label>
+		                                            <Row key={`row${c.text}`}><Col>
 		                                            	<Field 
 			                                                type="checkbox" 
 			                                                name="selectedColumns" 
-			                                                key={`c{c.text}`} 
+			                                                key={`column${c.text}`} 
 			                                                checked={values.columns.some(column => column.text === c.text && column.show === true)}
 			                                                onChange={e => {
 			                                                    const idx = values.columns.findIndex(column => column.text === c.text);
@@ -189,7 +191,7 @@ class Table extends Component {
 			                                                }}
 		                                                />
 		                                                {c.text}
-		                                            </label></Col></Row> 
+		                                            </Col></Row> 
 		                                        )
 		                                    })
 		                                }
