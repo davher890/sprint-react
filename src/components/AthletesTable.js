@@ -23,7 +23,7 @@ class AthletesTableComponent extends Component {
     dataConversor(d) {
     	return {
 			id : d.id,
-			name : d.name, 
+			name : d.name || '', 
 			birthDate: new Intl.DateTimeFormat('sq-AL').format(new Date(d.birthDate)), 
 			gender: d.gender === 'male' ? 'Masculino' : 'Femenino',
 			category : d.category,

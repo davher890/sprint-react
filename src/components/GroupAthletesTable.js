@@ -13,25 +13,27 @@ class GroupAthletesTable extends Component {
 		this.state = {}
 
 		this.columns = [
-            { dataField: 'name', text : 'Nombre', filter: textFilter(), type: 1 }, 
-            { dataField: 'birthDate', text : 'Fecha de Nacimiento', type: 1 }, 
-            { dataField: 'gender', text : 'Genero', filter: textFilter(), type: 1 }, 
-            { dataField: 'category', text : 'Categoria', filter: textFilter(), type: 1 }, 
-            { dataField: 'license', text : 'Licencia', type: 1}, 
-            { dataField: 'dorsalNumber', text : 'Dorsal', type: 0}
+            { dataField: 'name', text : 'Nombre', filter: textFilter(), type: 'string' }, 
+            { dataField: 'birthDate', text : 'Fecha de Nacimiento', type: 'date' }, 
+            { dataField: 'gender', text : 'Genero', filter: textFilter(), type: 'string' }, 
+            { dataField: 'category', text : 'Categoria', filter: textFilter(), type: 'string' }, 
+            { dataField: 'license', text : 'Licencia', type: 'string'}, 
+            { dataField: 'dorsalNumber', text : 'Dorsal', type: 'number'}
         ]
 
         this.handleSubmitQuery = this.handleSubmitQuery.bind(this);
 	}
 
-	componentDidMount(){
-	    const headers = { 'Content-Type': 'application/json' }
-		fetch(process.env.REACT_APP_SERVER_URL + "/groups/all",  { headers })
-            .then(res => res.json())
-            .then(data => {
-                data.push({id:'', name:''})
-                this.setState({ groups : data})
-            });
+	componentDidMount(prevProps, nextProps){
+        if(prevProps !== this.props){
+    	    const headers = { 'Content-Type': 'application/json' }
+    		fetch(process.env.REACT_APP_SERVER_URL + "/groups/all",  { headers })
+                .then(res => res.json())
+                .then(data => {
+                    data.push({id:'', name:''})
+                    this.setState({ groups : data})
+                });
+        }
 	}
 
 	handleSubmitQuery(values) {
@@ -46,7 +48,7 @@ class GroupAthletesTable extends Component {
     athleteDataConversor(d) {
         return {
             id : d.id,
-            name : d.name, 
+            name : d.name || '', 
             birthDate: new Intl.DateTimeFormat('sq-AL').format(new Date(d.birthDate)), 
             gender: d.gender === 'male' ? 'Masculino' : 'Femenino',
             category : d.category,
