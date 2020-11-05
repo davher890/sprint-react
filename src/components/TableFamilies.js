@@ -2,15 +2,14 @@ import React, { Component } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container } from 'react-bootstrap';
 import Table from "./Table";
-import { textFilter } from 'react-bootstrap-table2-filter';
+import { numberFilter } from 'react-bootstrap-table2-filter';
 
 class TableFamilies extends Component {
     constructor(props) {
         super(props);
         this.state = {
         	columns : [
-	        	{ dataField: 'firstSurname', text : 'Primer Apellido', filter: textFilter() }, 
-	        	{ dataField: 'secondSurname', text : 'Segundo Apellido',filter: textFilter() },
+	        	{ dataField: 'code', text : 'Código', filter: numberFilter() },
 	        	{ dataField: 'count', text : 'Número de familiares' }
         	],
         	entityName : 'families',
@@ -20,8 +19,7 @@ class TableFamilies extends Component {
     dataConversor(d) {
     	return {
 			id : d.id,
-			firstSurname : d.firstSurname, 
-			secondSurname : d.secondSurname,
+			code : d.code, 
 			count : d.count
 		}
     }

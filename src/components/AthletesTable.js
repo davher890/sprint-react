@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Card, Row, Form } from 'react-bootstrap';
 import Table from "./Table";
-import { textFilter } from 'react-bootstrap-table2-filter';
+import { textFilter, selectFilter, numberFilter } from 'react-bootstrap-table2-filter';
 
 class AthletesTableComponent extends Component {
     constructor(props) {
@@ -11,10 +11,15 @@ class AthletesTableComponent extends Component {
         	columns : [
 	        	{ dataField: 'name', text : 'Nombre', filter: textFilter() }, 
 	        	{ dataField: 'birthDate', text : 'Fecha de Nacimiento' }, 
-	        	{ dataField: 'gender', text : 'Genero', filter: textFilter() }, 
+	        	{ dataField: 'gender', text : 'Genero', filter: selectFilter({
+	        		options : {
+	        			'male' : 'Masculino',
+	        			'female' : 'Femenino'
+	        		}
+	        	}) }, 
 	        	{ dataField: 'category', text : 'Categoria', filter: textFilter() }, 
 	        	{ dataField: 'license', text : 'Licencia' }, 
-	        	{ dataField: 'dorsal', text : 'Dorsal'}
+	        	{ dataField: 'dorsalNumber', text : 'Dorsal', filter: numberFilter()}
         	],
         	entityName : 'athletes'
         }
@@ -39,7 +44,8 @@ class AthletesTableComponent extends Component {
 					<Table 
 						columns={this.state.columns} 
 						entityName={this.state.entityName}
-						dataConversor={this.dataConversor} >
+						dataConversor={this.dataConversor}
+						filter={this.props.filter} >
 					</Table>
 				</Card.Body>
             </Card></Row></Form.Group>
