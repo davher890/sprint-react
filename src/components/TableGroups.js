@@ -28,7 +28,8 @@ class TableGroups extends Component {
 				<Table 
 					columns={this.state.columns} 
 					entityName={this.state.entityName}
-					dataConversor={this.dataConversor}>
+					dataConversor={this.dataConversor}
+					showCreate={true}>
 				</Table>
 			</Container>
 		)

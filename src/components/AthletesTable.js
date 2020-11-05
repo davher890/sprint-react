@@ -45,7 +45,8 @@ class AthletesTableComponent extends Component {
 						columns={this.state.columns} 
 						entityName={this.state.entityName}
 						dataConversor={this.dataConversor}
-						filter={this.props.filter} >
+						filter={this.props.filter}
+						showCreate={true} >
 					</Table>
 				</Card.Body>
             </Card></Row></Form.Group>
