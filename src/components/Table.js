@@ -23,7 +23,7 @@ class Table extends Component {
         	page : 1,
         	total : 0,
         	showExcel : props.showExcel || false,
-        	showCreate : props.showCreate ||false,
+        	showCreate : props.showCreate || false,
         	fixedFilters : props.filter ? props.filter.split(",") : [],
         	filters : []
     	}
@@ -173,7 +173,8 @@ class Table extends Component {
                 	size : this.state.size,
                 	total : this.state.total,
                 	entityName: this.state.entityName,
-                	showExcel: this.state.showExcel || false
+                	showExcel: this.state.showExcel || false,
+                	showCreate: this.state.showCreate || false
                 }}
                 validate={(values) => {
                     let errors = {};
