@@ -22,7 +22,10 @@ class Table extends Component {
         	size : 10,
         	page : 1,
         	total : 0,
-        	showExcel : props.showExcel || false
+        	showExcel : props.showExcel || false,
+        	showCreate : props.showCreate ||false,
+        	fixedFilters : props.filter ? props.filter.split(",") : [],
+        	filters : []
     	}
 		this.fetchData = this.fetchData.bind(this)
         this.handleTableChange = this.handleTableChange.bind(this)
@@ -35,10 +38,10 @@ class Table extends Component {
     	}
     }
 
-    componentDidUpdate(prevProps) {
+    async componentDidUpdate(prevProps) {
 
     	if (this.props.entityName && this.props.entityName !== this.state.entityName){
-    		this.setState({
+    		await this.setState({
     			entityName : this.props.entityName
     		})
     		this.fetchData()
@@ -48,7 +51,21 @@ class Table extends Component {
     fetchData(){
     	if (this.state.entityName && this.state.entityName !== ""){
 			const headers = { 'Content-Type': 'application/json' }
-			fetch(process.env.REACT_APP_SERVER_URL + "/" + this.props.entityName + "?page=" + (this.state.page-1) + "&size=" + this.state.size + this.state.urlParams,  { headers })
+			
+			let url = process.env.REACT_APP_SERVER_URL + "/" + this.props.entityName + "?page=" + (this.state.page-1) + "&size=" + this.state.size
+			let totalFilter = []
+
+			if (this.state.filters && this.state.filters.length > 0){
+				totalFilter.push(this.state.filters)
+			}
+			if (this.state.fixedFilters && this.state.fixedFilters.length > 0){
+				totalFilter.push(this.state.fixedFilters)
+			}
+			if (totalFilter.length > 0){
+				console.log(totalFilter)
+				url = url + '&filters=' + totalFilter.reduce((accumulator, currentValue) => accumulator + ',' + currentValue)
+			}
+			fetch(url,  { headers })
 				.then(response => response.json())
 				.then(data => {
 					let items = []
@@ -66,13 +83,13 @@ class Table extends Component {
 		}
 	}
 	
-	handleTableChange(type, pageProp){
+	async handleTableChange(type, pageProp){
 		
 		if (type === 'pagination'){
 			let page = pageProp.page;
 			let size = pageProp.sizePerPage;
 			
-		    this.setState({
+		    await this.setState({
 	        	page : page,
 	        	size : size
 	        })
@@ -81,10 +98,27 @@ class Table extends Component {
 
 			let filterParams = Object.keys(pageProp.filters).map(field => {
 
-				let value = pageProp.filters[field].filterVal.trim()
-				let operator = pageProp.filters[field].comparator
+				let f = pageProp.filters[field]
 
-				if (value.length > 0){
+				let filterVal = f.filterVal
+				let operator
+				if (filterVal.comparator !== undefined){
+					operator = filterVal.comparator
+				}
+				else {
+					operator = f.comparator
+				}
+
+				let value
+				if (filterVal.number !== undefined){
+					value = filterVal.number
+				}
+				else {
+					value = filterVal.trim()
+				}
+				
+
+				if (value && value.length > 0 && operator && operator.length > 0){
 					return field + "__" + operator + "__" + value
 				}
 				else {
@@ -92,12 +126,8 @@ class Table extends Component {
 				}
 			}).filter(x => x)
 
-			let urlParams = ''
-			if (filterParams.length > 0){
-				urlParams = '&filters=' + filterParams.reduce((accumulator, currentValue) => accumulator + ',' + currentValue)
-			}
-			this.setState({
-	        	urlParams : urlParams
+			await this.setState({
+				filters : filterParams
 	        })
 		}
 
@@ -163,7 +193,7 @@ class Table extends Component {
                     <Form>
 						<Form.Group>
 							<Row>
-								<Col md="auto">
+								<Col md="auto" style={{ display: values.showCreate ? "block" : "none" }}>
 									<Button href={`/${values.entityName}`}>Crear</Button>
 								</Col>
 								<Col md="auto" style={{ display: values.showExcel ? "block" : "none" }}>

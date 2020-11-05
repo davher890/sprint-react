@@ -37,12 +37,22 @@ class GroupAthletesTable extends Component {
 	}
 
 	handleSubmitQuery(values) {
-        this.setState({
-            groupId: values.groupId,
-            schedules: values.schedules,
-            scheduleId: values.scheduleId,
-            entityName: "groups/" + values.groupId + "/schedules/" + values.scheduleId + "/athletes"
-        });
+
+        if (values.scheduleId){
+            this.setState({
+                groupId: values.groupId,
+                schedules: values.schedules,
+                scheduleId: values.scheduleId,
+                entityName: "groups/" + values.groupId + "/schedules/" + values.scheduleId + "/athletes"
+            });
+        }
+        else {
+            this.setState({
+                groupId: values.groupId,
+                schedules: values.schedules,
+                entityName: "groups/" + values.groupId + "/athletes"
+            });
+        }
     }
 
     athleteDataConversor(d) {
@@ -83,7 +93,7 @@ class GroupAthletesTable extends Component {
                     this.handleSubmitQuery(values)
                 }}
                 >
-                {({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, setValues, errors }) => (
+                {({ handleSubmit, values, setFieldValue }) => (
 
                     <Form onSubmit={handleSubmit}>
                         <Form.Group><Row>

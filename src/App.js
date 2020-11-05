@@ -45,6 +45,7 @@ return (
                 <NavDropdown.Item href="/groups/attendance">Asistencia</NavDropdown.Item>
                 <NavDropdown.Divider />
               </NavDropdown>
+              <Nav.Link href="/families/list">Familias</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
@@ -60,6 +61,18 @@ return (
 
             <Route path="/sport_schools">
               <NewSportSchool/>
+            </Route>
+
+            <Route path="/families/list">
+              <Families/>
+            </Route>
+
+            <Route path="/families/:id">
+              <NewFamily/>
+            </Route>
+
+            <Route path="/families">
+              <NewFamily/>
             </Route>
 
             <Route path="/athletes/list">

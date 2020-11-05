@@ -18,7 +18,6 @@ class CreateAthlete extends Component {
         this.state = {};
 
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
-        this.getSportSchoolFeeType = this.getSportSchoolFeeType.bind(this);
         this.handleMultipleSelectChange = this.handleMultipleSelectChange.bind(this);
         this.fillSchedules = this.fillSchedules.bind(this)
 
@@ -73,7 +72,7 @@ class CreateAthlete extends Component {
                     data.age = utils.ageCalculator(new Date(data.birthDate));
 
                     this.showSportData = data.feeType !== 'socio'
-                    this.feeTypes = utils.getFeeTypes(data.sportSchoolId === 1)
+                    this.feeTypes = utils.getFeeTypes(data.sportSchoolId)
 
                     if (data.specialization){
                         this.groups = this.specializedGroups
@@ -141,23 +140,6 @@ class CreateAthlete extends Component {
             });
     }
 
-    getSportSchoolFeeType(value) {
-        
-        // Santa Ana
-        if (value === '1'){
-            return this.feeType1
-        }
-
-        // Paracuellos
-        else if (value === '2'){
-            return this.feeType2
-        }
-
-        else {
-            return this.feeType3
-        } 
-    }
-
     handleMultipleSelectChange(event){
 
         event.preventDefault();
@@ -182,23 +164,23 @@ class CreateAthlete extends Component {
             <Formik enableReinitialize
                 initialValues={{
                     id : this.state.id,
-                    code: this.state.code,
-                    familyCode: this.state.familyCode,
+                    code: this.state.code || 0,
+                    familyCode: this.state.familyCode || 0,
                     // Extra fields
                     groups: this.groups || [],
                     schedules: this.schedules || [],
                     sportSchools: this.sportSchools || [],
-                    feeTypes: this.feeTypes,
+                    feeTypes: this.feeTypes || [],
                     showSportData: this.showSportData,
                     age : this.state.age || 0,
                     // Personal info
                     sportSchoolId: this.state.sportSchoolId || '',
-                    imageAuth: this.state.imageAuth,
+                    imageAuth: this.state.imageAuth || '',
                     observations: this.state.observations || '',
                     name: this.state.name || '',
                     firstSurname: this.state.firstSurname || '',
                     secondSurname: this.state.secondSurname || '',
-                    birthDate: this.state.birthDate || '',
+                    birthDate: Date.parse(this.state.birthDate) || '',
                     dni: this.state.dni || '',
                     gender: this.state.gender || '',
                     // Familiar info
@@ -247,12 +229,6 @@ class CreateAthlete extends Component {
                         'birthDate',
                         'dni',
                         'gender',
-                        'category',
-                        'dorsalCategory',
-                        'dorsalNumber',
-                        'license',
-                        'licenseType',
-                        'specialization',
                         'mail',
                         'phone1',
                         'phone2',
@@ -266,9 +242,7 @@ class CreateAthlete extends Component {
                         'holderName',
                         'holderFirstSurname',
                         'holderSecondSurname',
-                        'holderDni',
-                        'groupId',
-                        'scheduleIds'
+                        'holderDni'
                     ]
                 }}
                 validate={(values) => {
@@ -291,7 +265,7 @@ class CreateAthlete extends Component {
                     
                 }}
                 >
-                {({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, setValues, errors }) => (
+                {({ handleSubmit, values, touched, setFieldValue, errors }) => (
 
                     <Form onSubmit={handleSubmit}>
                         <Form.Group><Row>
@@ -306,7 +280,7 @@ class CreateAthlete extends Component {
                                                     </InputGroup.Prepend>
                                                     <Field name="sportSchoolId" value={values.sportSchoolId} as="select" className={`form-control ${touched.sportSchoolId && errors.sportSchoolId ? "is-invalid" : ""}`}
                                                         onChange={e => {
-                                                            values.feeTypes = this.getSportSchoolFeeType(e.target.value)
+                                                            values.feeTypes = utils.getFeeTypes(parseInt(e.target.value))
                                                             setFieldValue('sportSchoolId', e.target.value);
                                                             if (values.feeType){
                                                                 setFieldValue('feeType', values.feeType);
@@ -322,6 +296,22 @@ class CreateAthlete extends Component {
                                                     </Field>
                                                 </InputGroup>
                                             </Col> 
+                                            <Col md="auto">
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                        <InputGroup.Text>Código de atleta</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="code" type="number" disabled value={values.code}/>
+                                                </InputGroup>
+                                            </Col>
+                                            <Col md="auto">
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                        <InputGroup.Text>Código de familia</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <Field name="familyCode" type="number" disabled value={values.familyCode}/>
+                                                </InputGroup>
+                                            </Col>
                                         </Row>
                                     </Card.Body>
                                 </Card>
@@ -563,7 +553,7 @@ class CreateAthlete extends Component {
                                         <Form.Group><Row>
                                             <Col>
                                                 <InputGroup>
-                                                    <Field name="iban" placeholder="Iban" type="iban" value={values.iban} onChange={handleChange} 
+                                                    <Field name="iban" placeholder="Iban" type="iban" value={values.iban} 
                                                         className={`form-control ${touched.iban && errors.iban ? "is-invalid" : ""}`}
                                                     />
                                                 </InputGroup>
@@ -576,7 +566,7 @@ class CreateAthlete extends Component {
                                                         <InputGroup.Text>Forma de pago</InputGroup.Text>
                                                     </InputGroup.Prepend>
                                                     <Field name="paymentType" value={values.paymentType} as="select"
-                                                        className='form-control'>
+                                                        className={`form-control ${touched.paymentType && errors.paymentType ? "is-invalid" : ""}`}>
                                                         {
                                                             utils.getPaymentTypes().map(pt => {
                                                                 return (<option key={`pt${pt.id}`} value={pt.id}>{pt.name}</option>)
@@ -595,7 +585,7 @@ class CreateAthlete extends Component {
                                                             setFieldValue('showSportData', e.target.value !== 'socio')
                                                             setFieldValue('feeType', e.target.value)
                                                         }}
-                                                        className='form-control'>
+                                                        className={`form-control ${touched.feeType && errors.feeType ? "is-invalid" : ""}`}>
                                                         {
                                                             values.feeTypes.map(ft => {
                                                                 return (<option key={`fet${ft.id}`} value={ft.id}>{ft.name}</option>)
@@ -667,7 +657,7 @@ class CreateAthlete extends Component {
                                                     <Field name="nextCategory" value={values.nextCategory} as="select" className='form-control'>
                                                         {
                                                             utils.getCategories().map(c => {
-                                                                return (<option key={`cat${c.id}`} value={c.id}>{c.name}</option>)
+                                                                return (<option key={`nextcat${c.id}`} value={c.id}>{c.name}</option>)
                                                             })
                                                         }
                                                     </Field>
@@ -773,10 +763,10 @@ class CreateAthlete extends Component {
                                                             {
                                                                 values.schedules.map(sch => {
                                                                     return (
-                                                                        <Row><Col><label><Field 
+                                                                        <Row key={`row_sch${sch.id}`} ><Col><label><Field 
                                                                             type="checkbox" 
                                                                             name="scheduleIds" 
-                                                                            key={`sch{sch.id}`} 
+                                                                            key={`sch${sch.id}`} 
                                                                             checked={values.scheduleIds.includes(sch.id)}
                                                                             onChange={e => {
                                                                                 if (e.target.checked) {
