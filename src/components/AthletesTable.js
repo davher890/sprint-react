@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Table from "./Table";
 import { textFilter, selectFilter, numberFilter } from 'react-bootstrap-table2-filter';
-
-import Fab from '@material-ui/core/Fab';
-import NavigationIcon from '@material-ui/icons/Navigation';
+import SprintButton from './buttons/SprintButton'
 import Grid from '@material-ui/core/Grid';
 
 class AthletesTableComponent extends Component {
@@ -43,13 +41,7 @@ class AthletesTableComponent extends Component {
 	render() {
 		return (
 			<div>
-				<Grid container spacing={1}>
-					<Grid item xs>
-						<Fab variant="extended" size="medium" color="secondary" aria-label="add" href={`/${this.entityName}`}>
-				          <NavigationIcon/>Nuevo Atleta
-				        </Fab>
-					</Grid>
-				</Grid>
+				<SprintButton text="Nuevo Atleta"/>
 				<Grid container spacing={1}>
 					<Grid item xs>
 						<Table 
