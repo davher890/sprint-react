@@ -41,7 +41,7 @@ class AthletesTableComponent extends Component {
 	render() {
 		return (
 			<div>
-				<SprintButton text="Nuevo Atleta"/>
+				<SprintButton text="Nuevo Atleta" href={`/${this.state.entityName}`}/>
 				<Grid container spacing={1}>
 					<Grid item xs>
 						<Table 
