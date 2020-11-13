@@ -14,8 +14,8 @@ class CreateSportSchool extends Component {
     }
 
     componentDidMount(){
-        if (this.props.match.params) {
-            let id = this.props.match.params.id
+        if (this.props.id) {
+            let id = this.props.id
             if (id){
                 const headers = { 'Content-Type': 'application/json' }
                 fetch(process.env.REACT_APP_SERVER_URL + "/sport_schools/" + id,  { headers })
@@ -60,7 +60,6 @@ class CreateSportSchool extends Component {
                     return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                    alert("Guardando...");
                     this.setState(values)
                     setSubmitting(false);
                     this.handleFormSubmit()

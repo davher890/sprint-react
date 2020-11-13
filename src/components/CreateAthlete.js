@@ -666,7 +666,7 @@ class CreateAthlete extends Component {
                                             <Col md="auto">
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
-                                                        <InputGroup.Text>Categoria Dorsal</InputGroup.Text>
+                                                        <InputGroup.Text>Categoría Dorsal</InputGroup.Text>
                                                     </InputGroup.Prepend>
                                                     <Field name="dorsalCategory" value={values.dorsalCategory} as="select" className='form-control'>
                                                         {
