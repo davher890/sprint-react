@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { 
-	Button, 
-	Row, 
-	Col,
-	Form
-} from 'react-bootstrap';
 import BootstrapTable  from 'react-bootstrap-table-next';
 import Paginator from 'react-bootstrap-table2-paginator'
 import Filter from 'react-bootstrap-table2-filter';
-import { Formik, Field } from 'formik';
+import { Formik } from 'formik';
+
+import Fab from '@material-ui/core/Fab';
+import NavigationIcon from '@material-ui/icons/Navigation';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Grid from '@material-ui/core/Grid';
 
 class Table extends Component {
     constructor(props) {
@@ -173,45 +174,23 @@ class Table extends Component {
                 	size : this.state.size,
                 	total : this.state.total,
                 	entityName: this.state.entityName,
-                	showExcel: this.state.showExcel || false,
-                	showCreate: this.state.showCreate || false
-                }}
-                validate={(values) => {
-                    let errors = {};
-
-                    Object.keys(values).forEach(value => {
-                        if((values[value] === '') && values.required.includes(value)){
-                            errors[value] = 'Campo obligatorio'; 
-                        }
-                    })
-
-                    //check if my values have errors
-                    return errors;
+                	showExcel: this.state.showExcel || false
                 }}
                 >
-                {({ handleChange, values, touched, setFieldValue, setFieldTouched, setValues, errors }) => (
+                {({ handleChange, values, setFieldValue }) => (
 
-                    <Form>
-						<Form.Group>
-							<Row>
-								<Col md="auto" style={{ display: values.showCreate ? "block" : "none" }}>
-									<Button href={`/${values.entityName}`}>Crear</Button>
-								</Col>
-								<Col md="auto" style={{ display: values.showExcel ? "block" : "none" }}>
-									<Button onClick={this.downloadData}>Descargar Excel</Button>
-								</Col>
-								<Col md="auto">
-									<Form.Group>  
-		                                {
-		                                    values.columns.map(c => {
-		                                        return (
-		                                            <Row key={`row${c.text}`}><Col>
-		                                            	<Field 
-			                                                type="checkbox" 
-			                                                name="selectedColumns" 
-			                                                key={`column${c.text}`} 
-			                                                checked={values.columns.some(column => column.text === c.text && column.show === true)}
-			                                                onChange={e => {
+                    <div>
+						<Grid container spacing={1}>
+								{
+	                                values.columns.map(c => {
+	                                    return (
+	                                    	<Grid item xs>
+	                                		<FormGroup row key={`row${c.text}`}>
+	                                			<FormControlLabel
+													control={
+														<Checkbox 
+															checked={values.columns.some(column => column.text === c.text && column.show === true)} 
+															onChange={e => {
 			                                                    const idx = values.columns.findIndex(column => column.text === c.text);
 			                                                    if (e.target.checked) {
 			                                                        values.columns[idx].show = true
@@ -220,33 +199,40 @@ class Table extends Component {
 			                                                    }
 			                                                    setFieldValue('columns', values.columns)
 			                                                }}
-		                                                />
-		                                                {c.text}
-		                                            </Col></Row> 
-		                                        )
-		                                    })
-		                                }
-		                            </Form.Group>
-								</Col>
-							</Row>
-							<Row>
-								<Col>
-									<BootstrapTable striped bordered hover 
-										remote
-										keyField="id" 
-										data={values.data}
-										columns={values.columns.filter(c => c.show === true)}
-										onTableChange={ this.handleTableChange }
-										filter={ Filter() }
-										pagination={Paginator({page : values.page, sizePerPage: values.size, totalSize : values.total })}
-										noDataIndication="Sin Datos"
-										rowEvents={ this.rowEvents }
-									>
-									</BootstrapTable>
-								</Col>
-							</Row>
-						</Form.Group>
-					</Form>
+															name="selectedColumns" 
+														/>
+													}
+													label={c.text} 
+												/>
+	                                    	</FormGroup>
+	                                    	</Grid>
+
+	                                    )
+	                                })
+	                            }
+                            <Grid item xs>
+								<Fab variant="extended" size="big" color="secondary" aria-label="add" onClick={this.downloadData}>
+						          <NavigationIcon/>Descargar Excel
+						        </Fab>
+							</Grid>
+                       	</Grid>
+						<Grid container spacing={1}>
+							<Grid item xs>
+								<BootstrapTable striped bordered hover 
+									remote
+									keyField="id" 
+									data={values.data}
+									columns={values.columns.filter(c => c.show === true)}
+									onTableChange={ this.handleTableChange }
+									filter={ Filter() }
+									pagination={Paginator({page : values.page, sizePerPage: values.size, totalSize : values.total })}
+									noDataIndication="Sin Datos"
+									rowEvents={ this.rowEvents }
+								>
+								</BootstrapTable>
+							</Grid>
+						</Grid>
+					</div>
                 )}
             </Formik>
 		)

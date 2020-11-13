@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Card, Row, Form } from 'react-bootstrap';
 import Table from "./Table";
 import { textFilter, selectFilter, numberFilter } from 'react-bootstrap-table2-filter';
+
+import Fab from '@material-ui/core/Fab';
+import NavigationIcon from '@material-ui/icons/Navigation';
+import Grid from '@material-ui/core/Grid';
 
 class AthletesTableComponent extends Component {
     constructor(props) {
@@ -11,13 +14,13 @@ class AthletesTableComponent extends Component {
         	columns : [
 	        	{ dataField: 'name', text : 'Nombre', filter: textFilter() }, 
 	        	{ dataField: 'birthDate', text : 'Fecha de Nacimiento' }, 
-	        	{ dataField: 'gender', text : 'Genero', filter: selectFilter({
+	        	{ dataField: 'gender', text : 'Género', filter: selectFilter({
 	        		options : {
 	        			'male' : 'Masculino',
 	        			'female' : 'Femenino'
 	        		}
 	        	}) }, 
-	        	{ dataField: 'category', text : 'Categoria', filter: textFilter() }, 
+	        	{ dataField: 'category', text : 'Categoría', filter: textFilter() }, 
 	        	{ dataField: 'license', text : 'Licencia' }, 
 	        	{ dataField: 'dorsalNumber', text : 'Dorsal', filter: numberFilter()}
         	],
@@ -39,17 +42,26 @@ class AthletesTableComponent extends Component {
 
 	render() {
 		return (
-			<Form.Group><Row><Card>
-                <Card.Body>
-					<Table 
-						columns={this.state.columns} 
-						entityName={this.state.entityName}
-						dataConversor={this.dataConversor}
-						filter={this.props.filter}
-						showCreate={true} >
-					</Table>
-				</Card.Body>
-            </Card></Row></Form.Group>
+			<div>
+				<Grid container spacing={1}>
+					<Grid item xs>
+						<Fab variant="extended" size="medium" color="secondary" aria-label="add" href={`/${this.entityName}`}>
+				          <NavigationIcon/>Nuevo Atleta
+				        </Fab>
+					</Grid>
+				</Grid>
+				<Grid container spacing={1}>
+					<Grid item xs>
+						<Table 
+							columns={this.state.columns} 
+							entityName={this.state.entityName}
+							dataConversor={this.dataConversor}
+							filter={this.props.filter}
+							showCreate={true} >
+						</Table>
+					</Grid>
+				</Grid>
+			</div>
 		)
 	}
 }

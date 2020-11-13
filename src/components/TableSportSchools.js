@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container } from 'react-bootstrap';
+import { Container, Button } from 'react-bootstrap';
 import Table from "./Table";
 import { textFilter } from 'react-bootstrap-table2-filter';
 
@@ -29,6 +29,8 @@ class TableSportSchools extends Component {
     render() {
 		return (
 			<Container>
+				<Button href={`/${this.entityName}`}>Nueva Escuela Deportiva</Button>
+				
 				<Table 
 					columns={this.state.columns} 
 					entityName={this.state.entityName}
