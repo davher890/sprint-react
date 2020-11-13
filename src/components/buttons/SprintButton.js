@@ -7,9 +7,8 @@ import Grid from '@material-ui/core/Grid';
 class SprintButton extends Component {
 	constructor(props) {
         super(props);
-        this.state = {
-        	text : props.text
-       }
+
+        console.log(props)
    }
 
    render() {
@@ -17,8 +16,8 @@ class SprintButton extends Component {
 			<div>
 				<Grid container spacing={1}>
 			 		<Grid item xs>
-						<Fab variant="extended" size="big" color="secondary" aria-label="add" onClick={this.downloadData}>
-				          <NavigationIcon/>{this.state.text}
+						<Fab variant="extended" size="big" color="secondary" aria-label="add" href={this.props.href} onClick={this.props.onClick}>
+				          <NavigationIcon/>{this.props.text}
 				        </Fab>
 					</Grid>
 				</Grid>

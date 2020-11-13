@@ -5,6 +5,7 @@ import {
 import Table from "./Table";
 import { textFilter } from 'react-bootstrap-table2-filter';
 import { Formik, Field } from 'formik';
+import SprintButton from './buttons/SprintButton'
 
 class GroupAthletesTable extends Component {
 
