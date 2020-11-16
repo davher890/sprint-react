@@ -1,11 +1,18 @@
 import React, { Component } from "react";
 import { 
-    InputGroup, Row, Col, Button, Form, Card
+    InputGroup, Row, Col, Form
 } from 'react-bootstrap';
 import Table from "./Table";
 import { textFilter } from 'react-bootstrap-table2-filter';
 import { Formik, Field } from 'formik';
 import SprintButton from './buttons/SprintButton'
+
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Grid from '@material-ui/core/Grid';
+import Fab from '@material-ui/core/Fab';
+import NavigationIcon from '@material-ui/icons/Navigation';
+import Button from '@material-ui/core/Button';
 
 class GroupAthletesTable extends Component {
 
@@ -97,61 +104,62 @@ class GroupAthletesTable extends Component {
                 {({ handleSubmit, values, setFieldValue }) => (
 
                     <Form onSubmit={handleSubmit}>
-                        <Form.Group><Row>
-                            <Card>
-                                <Card.Body>
-                                    <Form.Group><Row>
-                                    	<Col md="auto">
-                                            <InputGroup>
-                                                <InputGroup.Prepend>
-                                                  <InputGroup.Text>Grupos</InputGroup.Text>
-                                                </InputGroup.Prepend>
-                                                <Field name="groupId" value={values.groupId} as="select" className='form-control'
-                                                    onChange={e => {
-                                                        
-                                                        this.fillSchedules(e.target.value, setFieldValue)
-                                                        setFieldValue('groupId', e.target.value)
-                                                    }}>
-                                                    {
-                                                        values.groups.map(group => {
-                                                            return (<option key={group.id} value={group.id}>{group.name}</option>)
-                                                        })
-                                                    }
-                                                </Field>
-                                            </InputGroup>
-                                            </Col>
-                                        <Col>
-                                            <InputGroup>
-                                                <InputGroup.Prepend>
-                                                  <InputGroup.Text>Horarios</InputGroup.Text>
-                                                </InputGroup.Prepend>
-                                                <Field name="scheduleId" value={values.scheduleId} as="select" className='form-control'>
-                                                    <option></option>
-                                                    {
-                                                        values.schedules.map(sch => {
-                                                            return <option key={sch.id} value={sch.id}>{sch.day} {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}</option>
-                                                        })
-                                                    }
-                                                </Field>
-                                            </InputGroup>
-                                        </Col>
-                                        <Col>
-                                            <Button type="submit">Submit</Button>
-                                        </Col>
-                                    </Row></Form.Group>
-                                    <Form.Group><Row>
-                                        <Col>
-                                            <Table 
-                                                columns={values.columns} 
-                                                entityName={values.entityName}
-                                                dataConversor={this.athleteDataConversor}
-                                                showExcel={true}>
-                                            </Table>
-                                        </Col>
-                                    </Row></Form.Group>
-                                </Card.Body>
-                            </Card>
-                        </Row></Form.Group>
+                        <Grid container>
+                            <Card><CardContent>
+                                <Grid container>
+                                    <Grid item xs>
+                                        <InputGroup>
+                                            <InputGroup.Prepend>
+                                              <InputGroup.Text>Grupos</InputGroup.Text>
+                                            </InputGroup.Prepend>
+                                            <Field name="groupId" value={values.groupId} as="select" className='form-control'
+                                                onChange={e => {
+                                                    
+                                                    this.fillSchedules(e.target.value, setFieldValue)
+                                                    setFieldValue('groupId', e.target.value)
+                                                }}>
+                                                {
+                                                    values.groups.map(group => {
+                                                        return (<option key={group.id} value={group.id}>{group.name}</option>)
+                                                    })
+                                                }
+                                            </Field>
+                                        </InputGroup>
+                                    </Grid>
+                                    <Grid item xs>
+                                        <InputGroup>
+                                            <InputGroup.Prepend>
+                                              <InputGroup.Text>Horarios</InputGroup.Text>
+                                            </InputGroup.Prepend>
+                                            <Field name="scheduleId" value={values.scheduleId} as="select" className='form-control'>
+                                                <option></option>
+                                                {
+                                                    values.schedules.map(sch => {
+                                                        return <option key={sch.id} value={sch.id}>{sch.day} {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}</option>
+                                                    })
+                                                }
+                                            </Field>
+                                        </InputGroup>
+                                    </Grid>
+                                    <Grid item xs>
+                                        <Fab variant="extended" size="big" color="secondary" aria-label="add" href={this.props.href} onClick={this.props.onClick}>
+                                            <NavigationIcon/>{this.props.text}
+                                        </Fab>
+                                        <Button type="submit">Submit</Button>
+                                    </Grid>
+                                </Grid>
+                                <Grid container>
+                                    <Grid item xs>
+                                        <Table 
+                                            columns={values.columns} 
+                                            entityName={values.entityName}
+                                            dataConversor={this.athleteDataConversor}
+                                            showExcel={true}>
+                                        </Table>
+                                    </Grid>
+                                </Grid>
+                            </CardContent></Card>
+                        </Grid>
                     </Form>
                 )}
             </Formik>
