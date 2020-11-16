@@ -7,10 +7,16 @@ import { Formik } from 'formik';
 
 import Fab from '@material-ui/core/Fab';
 import NavigationIcon from '@material-ui/icons/Navigation';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import CardHeader from '@material-ui/core/CardHeader';
 
 class Table extends Component {
     constructor(props) {
@@ -180,41 +186,40 @@ class Table extends Component {
                 {({ handleChange, values, setFieldValue }) => (
 
                     <div>
-						<Grid container spacing={1}>
-								{
-	                                values.columns.map(c => {
-	                                    return (
-	                                    	<Grid item xs>
-	                                		<FormGroup row key={`row${c.text}`}>
-	                                			<FormControlLabel
-													control={
-														<Checkbox 
-															checked={values.columns.some(column => column.text === c.text && column.show === true)} 
+                    	<Grid container direction="row" spacing={0} justify="flex-start" alignItems="flex-start">
+							<Grid item xs>
+								<Card>
+									<CardHeader title="Selecciona las columnas" />
+									<CardContent>
+										<Grid container direction="row" spacing={0} justify="flex-start" alignItems="flex-start">
+							
+										{
+			                                values.columns.map(c => {
+			                                    return (
+			                                    	<Grid item>
+														<ToggleButton key={`column_${c.text}`} value={values.columns.some(column => column.text === c.text && column.show === true)} 
+															aria-label="bold" 
 															onChange={e => {
 			                                                    const idx = values.columns.findIndex(column => column.text === c.text);
-			                                                    if (e.target.checked) {
-			                                                        values.columns[idx].show = true
-			                                                    } else {
-			                                                        values.columns[idx].show = false
-			                                                    }
+			                                                    values.columns[idx].show = !values.columns[idx].show
 			                                                    setFieldValue('columns', values.columns)
 			                                                }}
-															name="selectedColumns" 
-														/>
-													}
-													label={c.text} 
-												/>
-	                                    	</FormGroup>
-	                                    	</Grid>
-
-	                                    )
-	                                })
-	                            }
-                            <Grid item xs>
-								<Fab variant="extended" size="big" color="secondary" aria-label="add" onClick={this.downloadData}>
-						          <NavigationIcon/>Descargar Excel
-						        </Fab>
-							</Grid>
+			                                            >{c.text}
+														</ToggleButton>
+													</Grid>
+			                                    )
+			                                })
+			                            }
+			                            	<Grid item xs>
+												<Fab variant="extended" size="big" color="secondary" aria-label="add" onClick={this.downloadData}>
+										          <NavigationIcon/>Descargar Excel
+										        </Fab>
+											</Grid>
+			                            </Grid>
+		                            </CardContent>
+	                            </Card>
+                            </Grid>
+                            
                        	</Grid>
 						<Grid container spacing={1}>
 							<Grid item xs>
