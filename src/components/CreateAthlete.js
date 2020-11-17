@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { 
-    InputGroup,
-    Button, Col, 
-    Row, Card, Form
+    InputGroup, Form
 } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -10,6 +8,15 @@ import "react-datepicker/dist/react-datepicker.css";
 import "../App.css";
 import utils from "../functions/Utils.js"
 import { Formik, Field } from 'formik';
+
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import Grid from '@material-ui/core/Grid';
+import Fab from '@material-ui/core/Fab';
+import NavigationIcon from '@material-ui/icons/Navigation';
+import Button from '@material-ui/core/Button';
+import SubmitButton from './buttons/SubmitButton'
 
 class CreateAthlete extends Component {
     
@@ -258,22 +265,21 @@ class CreateAthlete extends Component {
                     return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                    alert("Guardando...");
                     this.setState(values)
                     setSubmitting(false);
-                    this.handleFormSubmit()
-                    
+                    this.handleFormSubmit()  
                 }}
                 >
                 {({ handleSubmit, values, touched, setFieldValue, errors }) => (
 
                     <Form onSubmit={handleSubmit}>
-                        <Form.Group><Row>
-                            <Col>
+                    <Grid container spacing={3}>
+                        <Grid container item spacing={1}>
+                            <Grid item>
                                 <Card>
-                                    <Card.Body>
-                                        <Row>
-                                            <Col md="auto">
+                                    <CardContent>
+                                        <Grid container spacing={3}>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                       <InputGroup.Text>Escuala Deportiva</InputGroup.Text>
@@ -295,35 +301,34 @@ class CreateAthlete extends Component {
                                                         }
                                                     </Field>
                                                 </InputGroup>
-                                            </Col> 
-                                            <Col md="auto">
+                                            </Grid>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Código de atleta</InputGroup.Text>
                                                     </InputGroup.Prepend>
                                                     <Field name="code" type="number" disabled value={values.code}/>
                                                 </InputGroup>
-                                            </Col>
-                                            <Col md="auto">
+                                            </Grid>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Código de familia</InputGroup.Text>
                                                     </InputGroup.Prepend>
                                                     <Field name="familyCode" type="number" disabled value={values.familyCode}/>
                                                 </InputGroup>
-                                            </Col>
-                                        </Row>
-                                    </Card.Body>
+                                            </Grid>
+                                        </Grid>
+                                    </CardContent>
                                 </Card>
-                            </Col>
-                        </Row></Form.Group>
-                        <Form.Group><Row>
-                            <Col>
-                                <Card>
-                                    <Card.Body>
-                                        <Card.Title>Datos Personales</Card.Title>
-                                        <Form.Group><Row>
-                                            <Col>
+                            </Grid>
+                        </Grid>
+                        <Grid container item spacing={1}>
+                            <Grid item>
+                                <Card><CardHeader title="Datos Personales"/>
+                                    <CardContent>
+                                        <Grid container spacing={1}>
+                                            <Grid item>
                                                 <Field name="name" type="text" placeholder="Nombre" value={values.name} 
                                                     className={`form-control ${touched.name && errors.name ? "is-invalid" : ""}`}
                                                     onBlur={e => {
@@ -332,8 +337,8 @@ class CreateAthlete extends Component {
                                                         }
                                                     }}
                                                 />
-                                            </Col>
-                                            <Col>
+                                            </Grid>
+                                            <Grid item>
                                                 <Field name="firstSurname" type="text" placeholder="Primer Apellido" value={values.firstSurname} 
                                                     className={`form-control ${touched.firstSurname && errors.firstSurname ? "is-invalid" : ""}`}
                                                     onBlur={e => {
@@ -345,8 +350,8 @@ class CreateAthlete extends Component {
                                                         }
                                                     }}
                                                 />
-                                            </Col>
-                                            <Col>
+                                            </Grid>
+                                            <Grid item>
                                                 <Field name="secondSurname" type="text" placeholder="Segundo Appellido" value={values.secondSurname} 
                                                     className={`form-control ${touched.secondSurname && errors.secondSurname ? "is-invalid" : ""}`}
                                                     onBlur={e => {
@@ -358,10 +363,10 @@ class CreateAthlete extends Component {
                                                         }
                                                     }}
                                                 />
-                                            </Col>
-                                        </Row></Form.Group>
-                                        <Form.Group><Row>
-                                            <Col >
+                                            </Grid>
+                                        </Grid>
+                                        <Grid container spacing={1}>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                       <InputGroup.Text>Fecha de nacimiento</InputGroup.Text>
@@ -378,18 +383,18 @@ class CreateAthlete extends Component {
                                                         }}
                                                     />
                                                 </InputGroup>
-                                            </Col>
-                                            <Col>
+                                            </Grid>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Edad</InputGroup.Text>
                                                     </InputGroup.Prepend>
                                                     <Field name="age" type="number" disabled value={values.age}/>
                                                 </InputGroup>
-                                            </Col>
-                                        </Row></Form.Group>
-                                        <Form.Group><Row>
-                                            <Col>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid container spacing={1}>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                       <InputGroup.Text>Dni</InputGroup.Text>
@@ -403,8 +408,8 @@ class CreateAthlete extends Component {
                                                         }}
                                                     />
                                                 </InputGroup>
-                                            </Col>
-                                            <Col>
+                                            </Grid>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                       <InputGroup.Text>Género</InputGroup.Text>
@@ -416,86 +421,84 @@ class CreateAthlete extends Component {
                                                         <option value="female">Mujer</option>
                                                     </Field>
                                                 </InputGroup>
-                                            </Col>
-                                        </Row></Form.Group>
-                                    </Card.Body>
+                                            </Grid>
+                                        </Grid>
+                                    </CardContent>
                                 </Card>
-                            </Col>                  
-                            <Col>
-                                <Card>
-                                    <Card.Body>
-                                        <Card.Title>Datos Familiares</Card.Title>
-                                        <Card.Subtitle className="mb-2 text-muted">Familiar 1</Card.Subtitle>
-                                        <Form.Group><Row>
-                                            <Col>
+                            </Grid>                  
+                            <Grid item>
+                                <Card><CardHeader title="Datos Familiares"/>
+                                    <CardContent>
+                                        <CardHeader subheader="Familiar 1"/>
+                                        <Grid container spacing={1}>
+                                            <Grid item>
                                                 <Field name="familiarOneName" type="text" placeholder="Nombre" value={values.familiarOneName} 
                                                     className='form-control'/>
-                                            </Col>
-                                            <Col>
+                                            </Grid>
+                                            <Grid item>
                                                 <Field name="familiarOneFirstSurname" type="text" placeholder="Primer Apellido" value={values.familiarOneFirstSurname} 
                                                     className='form-control'/>
-                                            </Col>
-                                            <Col>
+                                            </Grid>
+                                            <Grid item>
                                                 <Field name="familiarOneSecondSurname" type="text" placeholder="Segundo Apellido" value={values.familiarOneSecondSurname} 
                                                     className='form-control'/>
-                                            </Col>
-                                        </Row></Form.Group>
-                                        <Form.Group><Row>
-                                            <Col>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid container spacing={1}>
+                                            <Grid item>
                                                 <Field name="familiarOneDni" type="text" placeholder="Dni" value={values.familiarOneDni} 
                                                     className='form-control'/>
-                                            </Col>
-                                            <Col>
+                                            </Grid>
+                                            <Grid item>
                                                 <Field name="familiarOneMail" type="text" placeholder="Email" value={values.familiarOneMail} 
                                                     className='form-control'/>
-                                            </Col>
-                                        </Row></Form.Group>
-                                        
-                                        <Card.Subtitle className="mb-2 text-muted">Familiar 2</Card.Subtitle>
-                                        <Form.Group><Row>
-                                            <Col>
+                                            </Grid>
+                                        </Grid>
+                                        <CardHeader subheader="Familiar 2"/>
+                                        <Grid container spacing={1}>
+                                            
+                                            <Grid item>
                                                 <Field name="familiarTwoName" type="text" placeholder="Nombre" value={values.familiarTwoName} 
                                                     className='form-control'/>
-                                            </Col>
-                                            <Col>
+                                            </Grid>
+                                            <Grid item>
                                                 <Field name="familiarTwoFirstSurname" type="text" placeholder="Primer Apellido" value={values.familiarTwoFirstSurname} 
                                                     className='form-control'/>
-                                            </Col>
-                                            <Col>
+                                            </Grid>
+                                            <Grid item>
                                                 <Field name="familiarTwoSecondSurname" type="text" placeholder="Segundo Apellido" value={values.familiarTwoSecondSurname} 
                                                     className='form-control'/>
-                                            </Col>
-                                        </Row></Form.Group>
-                                        <Form.Group><Row>
-                                            <Col>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid container spacing={1}>
+                                            <Grid item>
                                                 <Field name="familiarTwoDni" type="text" placeholder="Dni" value={values.familiarTwoDni} 
                                                     className='form-control'/>
-                                            </Col>
-                                            <Col>
+                                            </Grid>
+                                            <Grid item>
                                                 <Field name="familiarTwoMail" type="text" placeholder="Email" value={values.familiarTwoMail} 
                                                     className='form-control'/>
-                                            </Col>
-                                        </Row></Form.Group>
-                                    </Card.Body>
+                                            </Grid>
+                                        </Grid>
+                                    </CardContent>
                                 </Card>
-                            </Col>
-                        </Row></Form.Group>
-                        <Form.Group><Row>
-                            <Col>
-                                <Card>
-                                    <Card.Body>
-                                        <Card.Title>Datos de Cotacto</Card.Title>
-                                        <Form.Group><Row>
-                                            <Col>
+                            </Grid>
+                        </Grid>
+                        <Grid container item spacing={1}>
+                            <Grid item>
+                                <Card><CardHeader title="Datos de Cotacto"/>
+                                    <CardContent>
+                                        <Grid container spacing={1}>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <Field name="mail" placeholder="Email" type="email" value={values.mail} 
                                                         className={`form-control ${touched.mail && errors.mail ? "is-invalid" : ""}`}
                                                     />
                                                 </InputGroup>
-                                            </Col>
-                                        </Row></Form.Group>
-                                        <Form.Group><Row>
-                                            <Col>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid container spacing={1}>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Teléfonos</InputGroup.Text>
@@ -510,10 +513,10 @@ class CreateAthlete extends Component {
                                                         className={`form-control ${touched.phone3 && errors.phone3 ? "is-invalid" : ""}`}
                                                     />
                                                 </InputGroup>
-                                            </Col>
-                                        </Row></Form.Group>
-                                        <Form.Group><Row>
-                                            <Col>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid container spacing={1}>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Municipio</InputGroup.Text>
@@ -521,8 +524,8 @@ class CreateAthlete extends Component {
                                                     <Field name="municipality" type="text" value={values.municipality} 
                                                         className={`form-control ${touched.municipality && errors.municipality ? "is-invalid" : ""}`}/>
                                                 </InputGroup>
-                                            </Col>
-                                            <Col>
+                                            </Grid>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>C.P.</InputGroup.Text>
@@ -530,10 +533,10 @@ class CreateAthlete extends Component {
                                                     <Field name="postalCode" type="text" value={values.postalCode} 
                                                         className={`form-control ${touched.postalCode && errors.postalCode ? "is-invalid" : ""}`}/>
                                                 </InputGroup>
-                                            </Col>
-                                        </Row></Form.Group>
-                                        <Form.Group><Row>
-                                            <Col>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid container spacing={1}>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Dirección</InputGroup.Text>
@@ -541,26 +544,23 @@ class CreateAthlete extends Component {
                                                     <Field name="address" type="text" value={values.address} 
                                                         className={`form-control ${touched.address && errors.address ? "is-invalid" : ""}`}/>
                                                 </InputGroup>
-                                            </Col>
-                                        </Row></Form.Group>
-                                    </Card.Body>
+                                            </Grid>
+                                        </Grid>
+                                    </CardContent>
                                 </Card>
-                            </Col>
-                            <Col>
-                                <Card>
-                                    <Card.Body>
-                                        <Card.Title>Datos Bancarios</Card.Title>
-                                        <Form.Group><Row>
-                                            <Col>
+                            </Grid>
+                            <Grid item>
+                                <Card><CardHeader title="Datos Bancarios"/>
+                                    <CardContent>
+                                        <Grid container spacing={1}>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <Field name="iban" placeholder="Iban" type="iban" value={values.iban} 
                                                         className={`form-control ${touched.iban && errors.iban ? "is-invalid" : ""}`}
                                                     />
                                                 </InputGroup>
-                                            </Col>
-                                        </Row></Form.Group>
-                                        <Form.Group><Row>
-                                            <Col>
+                                            </Grid>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Forma de pago</InputGroup.Text>
@@ -574,8 +574,10 @@ class CreateAthlete extends Component {
                                                         }
                                                     </Field>
                                                 </InputGroup>
-                                            </Col>
-                                            <Col>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid container spacing={1}>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                       <InputGroup.Text>Tipo de cuota</InputGroup.Text>
@@ -593,28 +595,28 @@ class CreateAthlete extends Component {
                                                         }
                                                     </Field>
                                                 </InputGroup>
-                                            </Col>
-                                        </Row></Form.Group>
-                                        <Card.Subtitle className="mb-2 text-muted">Titular de la cuenta</Card.Subtitle>
-                                        <Form.Group><Row>
-                                            <Col>
+                                            </Grid>
+                                        </Grid>
+                                        <CardHeader subheader="Titular de la cuenta"/>
+                                        <Grid container spacing={1}>
+                                            <Grid item>
                                                 <Field name="holderName" type="text" placeholder="Nombre" value={values.holderName} 
                                                     className={`form-control ${touched.holderName && errors.holderName ? "is-invalid" : ""}`}
                                                 />
-                                            </Col>
-                                            <Col>
+                                            </Grid>
+                                            <Grid item>
                                                 <Field name="holderFirstSurname" type="text" placeholder="Primer Apellido" value={values.holderFirstSurname} 
                                                     className={`form-control ${touched.holderFirstSurname && errors.holderFirstSurname ? "is-invalid" : ""}`}
                                                 />
-                                            </Col>
-                                            <Col>
+                                            </Grid>
+                                            <Grid item>
                                                 <Field name="holderSecondSurname" type="text" placeholder="Segundo Appellido" value={values.holderSecondSurname} 
                                                     className={`form-control ${touched.holderSecondSurname && errors.holderSecondSurname ? "is-invalid" : ""}`}
                                                 />
-                                            </Col>
-                                        </Row></Form.Group>
-                                        <Form.Group><Row>
-                                            <Col>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid container spacing={1}>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                       <InputGroup.Text>Dni</InputGroup.Text>
@@ -623,19 +625,18 @@ class CreateAthlete extends Component {
                                                         className={`form-control ${touched.holderDni && errors.holderDni ? "is-invalid" : ""}`}
                                                     />
                                                 </InputGroup>
-                                            </Col>
-                                        </Row></Form.Group>
-                                    </Card.Body>
+                                            </Grid>
+                                        </Grid>
+                                    </CardContent>
                                 </Card>
-                            </Col>
-                        </Row></Form.Group>
-                        <Form.Group><Row style={{ display: values.showSportData ? "block" : "none" }}>
-                            <Col>
-                                <Card>
-                                    <Card.Body>
-                                        <Card.Title>Datos Deportivos</Card.Title>
-                                        <Form.Group><Row>
-                                            <Col md="auto"> 
+                            </Grid>
+                        </Grid>
+                        <Grid container item style={{ display: values.showSportData ? "block" : "none" }}>
+                            <Grid item>
+                                <Card><CardHeader title="Datos Deportivos"/>
+                                    <CardContent>
+                                        <Grid container spacing={1}>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Categoría</InputGroup.Text>
@@ -648,8 +649,8 @@ class CreateAthlete extends Component {
                                                         }
                                                     </Field>
                                                 </InputGroup>
-                                            </Col>
-                                            <Col md="auto"> 
+                                            </Grid>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Siguiente Categoría</InputGroup.Text>
@@ -662,8 +663,8 @@ class CreateAthlete extends Component {
                                                         }
                                                     </Field>
                                                 </InputGroup>
-                                            </Col>
-                                            <Col md="auto">
+                                            </Grid>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Categoría Dorsal</InputGroup.Text>
@@ -676,18 +677,18 @@ class CreateAthlete extends Component {
                                                         }
                                                     </Field>                              
                                                 </InputGroup>
-                                            </Col>
-                                            <Col md="auto">
+                                            </Grid>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Dorsal</InputGroup.Text>
                                                     </InputGroup.Prepend>
                                                     <Field name="dorsalNumber" type="number" value={values.dorsalNumber} className='form-control'/>
                                                 </InputGroup>
-                                            </Col>
-                                        </Row></Form.Group>
-                                        <Form.Group><Row>
-                                            <Col md="auto">
+                                            </Grid>
+                                        </Grid>
+                                        <Grid container spacing={1}>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Tipo de Licencia</InputGroup.Text>
@@ -698,18 +699,18 @@ class CreateAthlete extends Component {
                                                         <option value="T">Territorial</option>
                                                     </Field>
                                                 </InputGroup>
-                                            </Col>
-                                            <Col md="auto">
+                                            </Grid>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Licencia</InputGroup.Text>
                                                     </InputGroup.Prepend>
                                                     <Field name="license" type="text" value={values.license} className='form-control'/>
                                                 </InputGroup>
-                                            </Col>
-                                        </Row></Form.Group>
-                                        <Form.Group><Row>
-                                            <Col md="auto">
+                                            </Grid>
+                                        </Grid>
+                                        <Grid container spacing={1}>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Especialización</InputGroup.Text>
@@ -733,8 +734,8 @@ class CreateAthlete extends Component {
                                                         <option value={false}>No</option>
                                                     </Field>
                                                 </InputGroup>
-                                            </Col>
-                                            <Col md="auto">
+                                            </Grid>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                       <InputGroup.Text>Grupos</InputGroup.Text>
@@ -753,87 +754,82 @@ class CreateAthlete extends Component {
                                                         }
                                                     </Field>
                                                 </InputGroup>
-                                            </Col>
-                                            <Col>
-                                                <Card>
-                                                    <Card.Body>
-                                                        <Card.Title>Horarios</Card.Title>
-                                                           
-                                                        <Form.Group>  
+                                            </Grid>
+                                            <Grid item>
+                                                <Card><CardHeader title="Horarios"/>
+                                                    <CardContent>  
                                                             {
                                                                 values.schedules.map(sch => {
                                                                     return (
-                                                                        <Row key={`row_sch${sch.id}`} ><Col><label><Field 
-                                                                            type="checkbox" 
-                                                                            name="scheduleIds" 
-                                                                            key={`sch${sch.id}`} 
-                                                                            checked={values.scheduleIds.includes(sch.id)}
-                                                                            onChange={e => {
-                                                                                if (e.target.checked) {
-                                                                                    values.scheduleIds.push(sch.id)
-                                                                                } else {
-                                                                                    const idx = values.scheduleIds.indexOf(sch.id);
-                                                                                    values.scheduleIds.splice(idx, 1);
-                                                                                }
-                                                                                setFieldValue('scheduleIds', values.scheduleIds)
-                                                                            }}/>
-
+                                                                        <Grid item key={`row_sch${sch.id}`} >
+                                                                            <Field 
+                                                                                type="checkbox" 
+                                                                                name="scheduleIds" 
+                                                                                key={`sch${sch.id}`} 
+                                                                                checked={values.scheduleIds.includes(sch.id)}
+                                                                                onChange={e => {
+                                                                                    if (e.target.checked) {
+                                                                                        values.scheduleIds.push(sch.id)
+                                                                                    } else {
+                                                                                        const idx = values.scheduleIds.indexOf(sch.id);
+                                                                                        values.scheduleIds.splice(idx, 1);
+                                                                                    }
+                                                                                    setFieldValue('scheduleIds', values.scheduleIds)
+                                                                                }}
+                                                                            />
                                                                             {sch.day} - {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}
-                                                                        </label></Col></Row> 
+                                                                        </Grid> 
                                                                     )
                                                                 })
                                                             }
-                                                        </Form.Group>
-                                                    </Card.Body>
+                                                    </CardContent>
                                                 </Card>
-                                            </Col>
-                                        </Row></Form.Group>
-                                    </Card.Body>
+                                            </Grid>
+                                        </Grid>
+                                    </CardContent>
                                 </Card>
-                            </Col>
-                        </Row></Form.Group>
-                        <Form.Group><Row style={{ display: values.showSportData ? "block" : "none" }}>
-                            <Col>
-                                <Card>
-                                    <Card.Body>
-                                        <Card.Title>Calculo de cuota</Card.Title>
-                                        <Form.Group><Row>
-                                            <Col md="auto">
+                            </Grid>
+                        </Grid>
+                        <Grid container item style={{ display: values.showSportData ? "block" : "none" }}>
+                            <Grid item>
+                                <Card><CardHeader title="Calculo de cuota"/>
+                                    <CardContent>
+                                        <Grid container spacing={1}>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Cuota de socio</InputGroup.Text>
                                                     </InputGroup.Prepend>
                                                     <Field name="membershipFee" type="number" disabled value={values.age}/>
                                                 </InputGroup>
-                                            </Col>
-                                            <Col md="auto">
+                                            </Grid>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Matricula</InputGroup.Text>
                                                     </InputGroup.Prepend>
                                                     <Field name="enrollmentFee" type="number" disabled value={values.age}/>
                                                 </InputGroup>
-                                            </Col>
-                                            <Col md="auto">
+                                            </Grid>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Mensualidad</InputGroup.Text>
                                                     </InputGroup.Prepend>
                                                     <Field name="monthlyFee" type="number" disabled value={values.age}/>
                                                 </InputGroup>
-                                            </Col>
-                                        </Row></Form.Group>
-                                    </Card.Body>
+                                            </Grid>
+                                        </Grid>
+                                    </CardContent>
                                 </Card>
-                            </Col>
-                        </Row></Form.Group>    
-                        <Form.Group><Row>
-                            <Col>
+                            </Grid>
+                        </Grid>
+                        <Grid container item spacing={1}>
+                            <Grid item>
                                 <Card>
-                                    <Card.Body>
-                                        <Card.Title>Calculo de cuota</Card.Title>
-                                        <Form.Group><Row>
-                                            <Col md={4}>
+                                    <CardContent>
+                                        <Grid container spacing={1}>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                       <InputGroup.Text>Aut. Imágenes</InputGroup.Text>
@@ -845,26 +841,26 @@ class CreateAthlete extends Component {
                                                         <option value={false}>No</option>
                                                     </Field>
                                                 </InputGroup>
-                                            </Col>
-                                            <Col md={8}>
+                                            </Grid>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                       <InputGroup.Text>Observaciones</InputGroup.Text>
                                                     </InputGroup.Prepend>
                                                     <Field name="observations" value={values.observations} as="textarea" className='form-control'></Field>
                                                 </InputGroup>
-                                            </Col>
-                                        </Row></Form.Group>
-                                    </Card.Body>
+                                            </Grid>
+                                        </Grid>
+                                    </CardContent>
                                 </Card>
-                            </Col>
-                        </Row></Form.Group>
-                        <Form.Group><Row>
-                            <Col md="auto">
-                                <Button type="submit">Submit</Button>
-                            </Col>
-                        </Row></Form.Group>
-
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid container item spacing={5}>
+                        <Grid item>
+                            <SubmitButton/>
+                        </Grid>
+                    </Grid>
                     </Form>
                 )}
             </Formik>

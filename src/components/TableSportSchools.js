@@ -30,7 +30,7 @@ class TableSportSchools extends Component {
     render() {
 		return (
 			<div>
-				<SprintButton text="Nueva Escuela Deportiva"/>
+				<SprintButton text="Nueva Escuela Deportiva" href={`/${this.state.entityName}`}/>
 				<Grid container spacing={1}>
 					<Grid item xs>
 						<Table 
