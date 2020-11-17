@@ -1,10 +1,17 @@
 import React, { Component } from "react";
 import { 
-    Form, InputGroup,
-    Button,
-    Col, Row, Card
+    Form, InputGroup
 } from 'react-bootstrap';
 import { Formik, Field } from 'formik';
+
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+
+import Grid from '@material-ui/core/Grid';
+import Fab from '@material-ui/core/Fab';
+import NavigationIcon from '@material-ui/icons/Navigation';
+import Button from '@material-ui/core/Button';
 
 class CreateSportSchool extends Component {
     constructor(props) {
@@ -68,13 +75,13 @@ class CreateSportSchool extends Component {
                 {({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, errors }) => (
 
                     <Form onSubmit={handleSubmit}>
-                        <Form.Group><Row>
-                            <Col>
+                        <Grid container>
+                            <Grid item xs>
                                 <Card>
-                                    <Card.Body>
-                                        <Card.Title>Datos de la Escuale Deportiva</Card.Title>
-                                        <Form.Group><Row>
-                                            <Col>
+                                    <CardHeader title="Datos de la Escuale Deportiva" />
+                                    <CardContent>
+                                        <Grid container spacing={1}>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Nombre</InputGroup.Text>
@@ -82,8 +89,8 @@ class CreateSportSchool extends Component {
                                                     <Field key="name" id='name' name="name" type="text" value={values.name}
                                                         className={`form-control ${touched.name && errors.name ? "is-invalid" : ""}`}/>
                                                 </InputGroup>
-                                            </Col>
-                                            <Col>
+                                            </Grid>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Municipio</InputGroup.Text>
@@ -91,8 +98,8 @@ class CreateSportSchool extends Component {
                                                     <Field key="municipality" id='municipality' name="municipality" type="text" value={values.municipality}
                                                         className={`form-control ${touched.municipality && errors.municipality ? "is-invalid" : ""}`}/>
                                                 </InputGroup>
-                                            </Col>
-                                            <Col>
+                                            </Grid>
+                                            <Grid item>
                                                 <InputGroup>
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text>Dirección</InputGroup.Text>
@@ -100,17 +107,15 @@ class CreateSportSchool extends Component {
                                                     <Field key="address" id='address' name="address" type="text" value={values.address}
                                                         className={`form-control ${touched.address && errors.address ? "is-invalid" : ""}`}/>
                                                 </InputGroup>
-                                            </Col>
-                                        </Row></Form.Group>
-                                    </Card.Body>
+                                            </Grid>
+                                        </Grid>
+                                    </CardContent>
                                 </Card>
-                            </Col>
-                        </Row></Form.Group>
-                        <Form.Group><Row>
-                            <Col md="auto">
-                                <Button type="submit">Submit</Button>
-                            </Col>
-                        </Row></Form.Group>
+                            </Grid>
+                        </Grid>
+                        <Grid container>
+                            <Button type="submit" variant="contained" color="primary">Submit</Button>
+                        </Grid>
                     </Form>
                 )}
             </Formik>

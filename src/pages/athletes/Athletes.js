@@ -1,6 +1,5 @@
 import React, { Suspense } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Row } from 'react-bootstrap';
 
 import {
   useParams
@@ -10,21 +9,22 @@ import AthletesTable from "../../components/AthletesTable";
 import GroupAthletesTable from "../../components/GroupAthletesTable";
 import CreateAthlete from "../../components/CreateAthlete";
 
+import Grid from '@material-ui/core/Grid';
 
 export function Athletes() {
   return (
-  	<Container>
-	    <Row>
+  	<Grid container column>
+	    <Grid item>
 	    	<Suspense fallback={<div>Cargando...</div>}>
 				<AthletesTable/>
 			</Suspense>
-	    </Row>
-	    <Row>
+	    </Grid>
+	    <Grid item>
 	    	<Suspense fallback={<div>Cargando...</div>}>
 				<GroupAthletesTable/>
 			</Suspense>
-	    </Row>
-	</Container>
+	    </Grid>
+	</Grid>
   );
 }
 
@@ -32,12 +32,10 @@ export function NewAthlete() {
 
 	let { id } = useParams();
 	return (
-  	<Container>
-	    <Row>
-	    	<Suspense fallback={<div>Cargando...</div>}>
-				<CreateAthlete id={id}/>
-			</Suspense>
-	    </Row>
-	</Container>
+  	<Grid container>
+    	<Suspense fallback={<div>Cargando...</div>}>
+			<CreateAthlete id={id}/>
+		</Suspense>
+	</Grid>
   );
 }

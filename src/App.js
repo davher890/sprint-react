@@ -10,9 +10,10 @@ import { NewFamily, Families } from './pages/families/Families';
 import { NewAthlete, Athletes } from './pages/athletes/Athletes';
 import { GroupListing } from './pages/listings/Listings';
 
+import Grid from '@material-ui/core/Grid';
 
 import { 
-  Navbar, Nav, NavDropdown, Container 
+  Navbar, Nav, NavDropdown 
 } from 'react-bootstrap';
 
 import {
@@ -49,7 +50,7 @@ return (
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-        <Container fluid>
+        <Grid container>
           <Switch>
             <Route path="/sport_schools/list">
               <SportSchools/>
@@ -140,7 +141,7 @@ return (
             </Route>
 
           </Switch>
-        </Container>
+        </Grid>
       </Router>
   );
 }
