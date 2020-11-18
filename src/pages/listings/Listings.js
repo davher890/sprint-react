@@ -1,15 +1,16 @@
 import React, { Suspense } from "react";
-import { Container, Row } from 'react-bootstrap';
 import GroupAttendance from "../../components/GroupAttendance";
+
+import Grid from '@material-ui/core/Grid';
 
 export function GroupListing() {
   return (
-  	<Container>
-	    <Row>
+  	<Grid container>
+	    <Grid item>
 	    	<Suspense fallback={<div>Cargando...</div>}>
 				<GroupAttendance/>
 			</Suspense>
-	    </Row>
-	</Container>
+	    </Grid>
+	</Grid>
   );
 }

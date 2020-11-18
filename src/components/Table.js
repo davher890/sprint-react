@@ -10,11 +10,7 @@ import NavigationIcon from '@material-ui/icons/Navigation';
 import Grid from '@material-ui/core/Grid';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
 import CardHeader from '@material-ui/core/CardHeader';
 
 class Table extends Component {
@@ -185,7 +181,7 @@ class Table extends Component {
                 {({ handleChange, values, setFieldValue }) => (
 
                     <div>
-                    	<Grid container direction="row" spacing={0} justify="flex-start" alignItems="flex-start">
+                    	<Grid container direction="row" spacing={2} justify="flex-start" alignItems="flex-start">
 							<Grid item xs>
 								<Card>
 									<CardHeader title="Selecciona las columnas" />
@@ -195,7 +191,7 @@ class Table extends Component {
 										{
 			                                values.columns.map(c => {
 			                                    return (
-			                                    	<Grid item>
+			                                    	<Grid key={`grid_col_${c.text}`} item>
 														<ToggleButton key={`column_${c.text}`} value={values.columns.some(column => column.text === c.text && column.show === true)} 
 															aria-label="bold" 
 															onChange={e => {
@@ -210,7 +206,7 @@ class Table extends Component {
 			                                })
 			                            }
 			                            	<Grid item xs>
-												<Fab variant="extended" size="big" color="secondary" aria-label="add" onClick={this.downloadData}>
+												<Fab variant="extended" size="large" color="secondary" aria-label="add" onClick={this.downloadData}>
 										          <NavigationIcon/>Descargar Excel
 										        </Fab>
 											</Grid>

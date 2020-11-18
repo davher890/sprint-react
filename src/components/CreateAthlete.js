@@ -1,22 +1,20 @@
 import React, { Component } from "react";
-import { 
-    InputGroup, Form
-} from 'react-bootstrap';
-import DatePicker from "react-datepicker";
+import moment from 'moment'
+
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "react-datepicker/dist/react-datepicker.css";
 import "../App.css";
 import utils from "../functions/Utils.js"
-import { Formik, Field } from 'formik';
+import { Formik } from 'formik';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
-import Fab from '@material-ui/core/Fab';
-import NavigationIcon from '@material-ui/icons/Navigation';
-import Button from '@material-ui/core/Button';
 import SubmitButton from './buttons/SubmitButton'
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
+import Typography from '@material-ui/core/Typography';
+import Checkbox from '@material-ui/core/Checkbox';
 
 class CreateAthlete extends Component {
     
@@ -25,7 +23,6 @@ class CreateAthlete extends Component {
         this.state = {};
 
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
-        this.handleMultipleSelectChange = this.handleMultipleSelectChange.bind(this);
         this.fillSchedules = this.fillSchedules.bind(this)
 
         this.feeTypes = []
@@ -77,7 +74,7 @@ class CreateAthlete extends Component {
                 .then(res => res.json())
                 .then(data => {
                     data.age = utils.ageCalculator(new Date(data.birthDate));
-
+                    data.birthDate = moment(new Date(data.birthDate)).format("YYYY-MM-DD")
                     this.showSportData = data.feeType !== 'socio'
                     this.feeTypes = utils.getFeeTypes(data.sportSchoolId)
 
@@ -119,6 +116,7 @@ class CreateAthlete extends Component {
                 data.age = utils.ageCalculator(Date.parse(data.birthDate));
                 this.setState(data)
             });
+            alert("Guardado")
     }
 
     fillFee(values, setFieldValue){
@@ -147,23 +145,6 @@ class CreateAthlete extends Component {
             });
     }
 
-    handleMultipleSelectChange(event){
-
-        event.preventDefault();
-
-        var options = event.target.options;
-        var value = [];
-        for (var i = 0, l = options.length; i < l; i++) {
-            if (options[i].selected) {
-                value.push(options[i].value);
-            }
-        }
-
-        this.setState({
-            scheduleIds : value
-        });
-    }
-
     render() {
     
         return (
@@ -187,7 +168,7 @@ class CreateAthlete extends Component {
                     name: this.state.name || '',
                     firstSurname: this.state.firstSurname || '',
                     secondSurname: this.state.secondSurname || '',
-                    birthDate: Date.parse(this.state.birthDate) || '',
+                    birthDate: this.state.birthDate || '',
                     dni: this.state.dni || '',
                     gender: this.state.gender || '',
                     // Familiar info
@@ -208,7 +189,7 @@ class CreateAthlete extends Component {
                     dorsalNumber: this.state.dorsalNumber || '',
                     license: this.state.license || '',
                     licenseType: this.state.licenseType || '',
-                    specialization: this.state.specialization,
+                    specialization: this.state.specialization || '',
                     groupId: this.state.groupId || '',
                     scheduleIds: this.state.scheduleIds || [],
                     // Contact info
@@ -267,455 +248,336 @@ class CreateAthlete extends Component {
                 onSubmit={(values, { setSubmitting }) => {
                     this.setState(values)
                     setSubmitting(false);
-                    this.handleFormSubmit()  
+                    this.handleFormSubmit()
+                    alert("Guardado")
                 }}
                 >
-                {({ handleSubmit, values, touched, setFieldValue, errors }) => (
+                {({ handleSubmit, values, touched, setFieldValue, errors, handleChange }) => (
 
-                    <Form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit}>
                     <Grid container spacing={3}>
-                        <Grid container item spacing={1}>
-                            <Grid item>
-                                <Card>
-                                    <CardContent>
-                                        <Grid container spacing={3}>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                      <InputGroup.Text>Escuala Deportiva</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="sportSchoolId" value={values.sportSchoolId} as="select" className={`form-control ${touched.sportSchoolId && errors.sportSchoolId ? "is-invalid" : ""}`}
-                                                        onChange={e => {
-                                                            values.feeTypes = utils.getFeeTypes(parseInt(e.target.value))
-                                                            setFieldValue('sportSchoolId', e.target.value);
-                                                            if (values.feeType){
-                                                                setFieldValue('feeType', values.feeType);
-                                                                setFieldValue('showSportData', values.feeType !== 'socio')
+                        <Grid container item spacing={3}>
+                            <Grid container item spacing={1}>
+                                <Grid item>
+                                    <Card><CardContent>
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={5}>
+                                                <TextField select fullWidth name="sportSchoolId" label="Escuela Deportiva" value={values.sportSchoolId} error={touched.sportSchoolId && errors.sportSchoolId}
+                                                    onChange={e => {
+                                                        values.feeTypes = utils.getFeeTypes(parseInt(e.target.value))
+                                                        setFieldValue('sportSchoolId', e.target.value);
+                                                        if (values.feeType){
+                                                            setFieldValue('feeType', values.feeType);
+                                                            setFieldValue('showSportData', values.feeType !== 'socio')
+                                                        }
+                                                    }}
+                                                    >
+                                                    {
+                                                        values.sportSchools.map(spe => {
+                                                            return (<MenuItem key={`spe${spe.id}`} value={spe.id}>{spe.name}</MenuItem>)
+                                                        })
+                                                    }
+                                                </TextField>
+                                            </Grid>
+                                            <Grid item xs={3}>
+                                                <TextField name="code" label="Código de atleta" type="number" disabled value={values.code}/>
+                                            </Grid>
+                                            <Grid item xs={3}>
+                                                <TextField name="familyCode" label="Código de familia" type="number" disabled value={values.familyCode}/>
+                                            </Grid>
+                                        </Grid>
+                                    </CardContent></Card>
+                                </Grid>
+                            </Grid>
+                            <Grid container item spacing={1}>
+                                <Grid item>
+                                    <Card><CardHeader title="Datos Personales"/>
+                                        <CardContent>
+                                            <Grid container spacing={1}>
+                                                <Grid item>
+                                                    <TextField name="name" label="Nombre" value={values.name} margin="dense" 
+                                                        error={touched.name && errors.name}
+                                                        onBlur={e => {
+                                                            if (values.holderName === ''){
+                                                                setFieldValue('holderName', e.target.value);
                                                             }
                                                         }}
-                                                        >
-                                                        {
-                                                            values.sportSchools.map(spe => {
-                                                                return (<option key={`spe${spe.id}`} value={spe.id}>{spe.name}</option>)
-                                                            })
-                                                        }
-                                                    </Field>
-                                                </InputGroup>
+                                                        onChange={handleChange}
+                                                    />
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField name="firstSurname" label="Primer Apellido" value={values.firstSurname} margin="dense" 
+                                                        error={touched.firstSurname && errors.firstSurname}
+                                                        onBlur={e => {
+                                                            if (values.holderFirstSurname === ''){
+                                                                setFieldValue('holderFirstSurname', e.target.value);
+                                                            }
+                                                            if (values.familiarOneFirstSurname === ''){
+                                                                setFieldValue('familiarOneFirstSurname', e.target.value);
+                                                            }
+                                                        }}
+                                                        onChange={handleChange}
+                                                    />
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField name="secondSurname" label="Segundo Appellido" value={values.secondSurname} margin="dense" 
+                                                        error={touched.secondSurname && errors.secondSurname}
+                                                        onBlur={e => {
+                                                            if (values.holderSecondSurname === ''){
+                                                                setFieldValue('holderSecondSurname', e.target.value);
+                                                            }
+                                                            if (values.familiarTwoFirstSurname === ''){
+                                                                setFieldValue('familiarTwoFirstSurname', e.target.value);
+                                                            }
+                                                        }}
+                                                        onChange={handleChange}
+                                                    />
+                                                </Grid>
                                             </Grid>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text>Código de atleta</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="code" type="number" disabled value={values.code}/>
-                                                </InputGroup>
-                                            </Grid>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text>Código de familia</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="familyCode" type="number" disabled value={values.familyCode}/>
-                                                </InputGroup>
-                                            </Grid>
-                                        </Grid>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                        </Grid>
-                        <Grid container item spacing={1}>
-                            <Grid item>
-                                <Card><CardHeader title="Datos Personales"/>
-                                    <CardContent>
-                                        <Grid container spacing={1}>
-                                            <Grid item>
-                                                <Field name="name" type="text" placeholder="Nombre" value={values.name} 
-                                                    className={`form-control ${touched.name && errors.name ? "is-invalid" : ""}`}
-                                                    onBlur={e => {
-                                                        if (values.holderName === ''){
-                                                            setFieldValue('holderName', e.target.value);
-                                                        }
-                                                    }}
-                                                />
-                                            </Grid>
-                                            <Grid item>
-                                                <Field name="firstSurname" type="text" placeholder="Primer Apellido" value={values.firstSurname} 
-                                                    className={`form-control ${touched.firstSurname && errors.firstSurname ? "is-invalid" : ""}`}
-                                                    onBlur={e => {
-                                                        if (values.holderFirstSurname === ''){
-                                                            setFieldValue('holderFirstSurname', e.target.value);
-                                                        }
-                                                        if (values.familiarOneFirstSurname === ''){
-                                                            setFieldValue('familiarOneFirstSurname', e.target.value);
-                                                        }
-                                                    }}
-                                                />
-                                            </Grid>
-                                            <Grid item>
-                                                <Field name="secondSurname" type="text" placeholder="Segundo Appellido" value={values.secondSurname} 
-                                                    className={`form-control ${touched.secondSurname && errors.secondSurname ? "is-invalid" : ""}`}
-                                                    onBlur={e => {
-                                                        if (values.holderSecondSurname === ''){
-                                                            setFieldValue('holderSecondSurname', e.target.value);
-                                                        }
-                                                        if (values.familiarTwoFirstSurname === ''){
-                                                            setFieldValue('familiarTwoFirstSurname', e.target.value);
-                                                        }
-                                                    }}
-                                                />
-                                            </Grid>
-                                        </Grid>
-                                        <Grid container spacing={1}>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                      <InputGroup.Text>Fecha de nacimiento</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <DatePicker autoComplete="off" id="birthDate" dateFormat="yyyy-MM-dd" name="birthDate" value={values.birthDate}
-                                                        selected = {values.birthDate}
-                                                        showMonthDropdown
-                                                        showYearDropdown
-                                                        dropdownMode="select"
-                                                        className={`${touched.birthDate && errors.birthDate ? "is-invalid" : ""}`}
+                                            <Grid container spacing={1}>
+                                                <Grid item>
+                                                    <TextField id="birthDate" name="birthDate" value={values.birthDate} margin="dense"
+                                                        label="Fecha de nacimiento" type="date"
+                                                        error={touched.birthDate && errors.birthDate}
                                                         onChange={e => {
-                                                            values.age = utils.ageCalculator(e)
-                                                            setFieldValue('birthDate', e);
+                                                            let d = moment(e.target.value, "YYYY-MM-DD")
+                                                            values.age = utils.ageCalculator(d)
+                                                            setFieldValue('birthDate', e.target.value);
                                                         }}
                                                     />
-                                                </InputGroup>
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField name="age" label="Edad" type="number" disabled value={values.age} margin="dense"/>
+                                                </Grid>
                                             </Grid>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text>Edad</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="age" type="number" disabled value={values.age}/>
-                                                </InputGroup>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid container spacing={1}>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                      <InputGroup.Text>Dni</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="dni" type="text" value={values.dni} 
-                                                        className={`form-control ${touched.dni && errors.dni ? "is-invalid" : ""}`}
+                                            <Grid container spacing={1}>
+                                                <Grid item>
+                                                    <TextField name="dni" label="Dni/Nie" type="text" value={values.dni} margin="dense"
+                                                        error={touched.dni && errors.dni}
                                                         onBlur={e => {
                                                             if (values.holderDni === ''){
                                                                 setFieldValue('holderDni', e.target.value);
                                                             }
                                                         }}
+                                                        onChange={handleChange}
                                                     />
-                                                </InputGroup>
-                                            </Grid>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                      <InputGroup.Text>Género</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="gender" value={values.gender} as="select"
-                                                        className={`form-control ${touched.gender && errors.gender ? "is-invalid" : ""}`}>
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField select name="gender" value={values.gender} label="Género" margin="dense" 
+                                                        onChange={handleChange} error={touched.gender && errors.gender}>
                                                         <option></option>
-                                                        <option value="male">Hombre</option>
-                                                        <option value="female">Mujer</option>
-                                                    </Field>
-                                                </InputGroup>
+                                                        <MenuItem value="male">Hombre</MenuItem>
+                                                        <MenuItem value="female">Mujer</MenuItem>
+                                                    </TextField>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                    </CardContent>
-                                </Card>
-                            </Grid>                  
-                            <Grid item>
-                                <Card><CardHeader title="Datos Familiares"/>
-                                    <CardContent>
-                                        <CardHeader subheader="Familiar 1"/>
-                                        <Grid container spacing={1}>
-                                            <Grid item>
-                                                <Field name="familiarOneName" type="text" placeholder="Nombre" value={values.familiarOneName} 
-                                                    className='form-control'/>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>                  
+                                <Grid item>
+                                    <Card><CardHeader title="Datos Familiares"/>
+                                        <CardContent>
+                                            <Typography color="textSecondary">Familiar 1</Typography>
+                                            <Grid container spacing={1}>
+                                                <Grid item>
+                                                    <TextField name="familiarOneName" label="Nombre" value={values.familiarOneName} margin="dense" onChange={handleChange}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField name="familiarOneFirstSurname" label="Primer Apellido" value={values.familiarOneFirstSurname} margin="dense" onChange={handleChange}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField name="familiarOneSecondSurname" label="Segundo Apellido" value={values.familiarOneSecondSurname} margin="dense" onChange={handleChange}/>
+                                                </Grid>
                                             </Grid>
-                                            <Grid item>
-                                                <Field name="familiarOneFirstSurname" type="text" placeholder="Primer Apellido" value={values.familiarOneFirstSurname} 
-                                                    className='form-control'/>
+                                            <Grid container spacing={1}>
+                                                <Grid item>
+                                                    <TextField name="familiarOneDni" type="text" label="Dni" value={values.familiarOneDni} margin="dense" onChange={handleChange}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField name="familiarOneMail" type="text" label="Email" value={values.familiarOneMail} margin="dense" onChange={handleChange}/>
+                                                </Grid>
                                             </Grid>
-                                            <Grid item>
-                                                <Field name="familiarOneSecondSurname" type="text" placeholder="Segundo Apellido" value={values.familiarOneSecondSurname} 
-                                                    className='form-control'/>
+                                            <Typography color="textSecondary">Familiar 2</Typography>
+                                            <Grid container spacing={1}>
+                                                <Grid item>
+                                                    <TextField name="familiarTwoName" type="text" label="Nombre" value={values.familiarTwoName} margin="dense" onChange={handleChange}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField name="familiarTwoFirstSurname" type="text" label="Primer Apellido" value={values.familiarTwoFirstSurname} margin="dense" onChange={handleChange}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField name="familiarTwoSecondSurname" type="text" label="Segundo Apellido" value={values.familiarTwoSecondSurname} margin="dense" onChange={handleChange}/>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                        <Grid container spacing={1}>
-                                            <Grid item>
-                                                <Field name="familiarOneDni" type="text" placeholder="Dni" value={values.familiarOneDni} 
-                                                    className='form-control'/>
+                                            <Grid container spacing={1}>
+                                                <Grid item>
+                                                    <TextField name="familiarTwoDni" type="text" label="Dni" value={values.familiarTwoDni} margin="dense" onChange={handleChange}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField name="familiarTwoMail" type="text" label="Email" value={values.familiarTwoMail} margin="dense" onChange={handleChange}/>
+                                                </Grid>
                                             </Grid>
-                                            <Grid item>
-                                                <Field name="familiarOneMail" type="text" placeholder="Email" value={values.familiarOneMail} 
-                                                    className='form-control'/>
-                                            </Grid>
-                                        </Grid>
-                                        <CardHeader subheader="Familiar 2"/>
-                                        <Grid container spacing={1}>
-                                            
-                                            <Grid item>
-                                                <Field name="familiarTwoName" type="text" placeholder="Nombre" value={values.familiarTwoName} 
-                                                    className='form-control'/>
-                                            </Grid>
-                                            <Grid item>
-                                                <Field name="familiarTwoFirstSurname" type="text" placeholder="Primer Apellido" value={values.familiarTwoFirstSurname} 
-                                                    className='form-control'/>
-                                            </Grid>
-                                            <Grid item>
-                                                <Field name="familiarTwoSecondSurname" type="text" placeholder="Segundo Apellido" value={values.familiarTwoSecondSurname} 
-                                                    className='form-control'/>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid container spacing={1}>
-                                            <Grid item>
-                                                <Field name="familiarTwoDni" type="text" placeholder="Dni" value={values.familiarTwoDni} 
-                                                    className='form-control'/>
-                                            </Grid>
-                                            <Grid item>
-                                                <Field name="familiarTwoMail" type="text" placeholder="Email" value={values.familiarTwoMail} 
-                                                    className='form-control'/>
-                                            </Grid>
-                                        </Grid>
-                                    </CardContent>
-                                </Card>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
                             </Grid>
-                        </Grid>
-                        <Grid container item spacing={1}>
-                            <Grid item>
-                                <Card><CardHeader title="Datos de Cotacto"/>
-                                    <CardContent>
-                                        <Grid container spacing={1}>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <Field name="mail" placeholder="Email" type="email" value={values.mail} 
-                                                        className={`form-control ${touched.mail && errors.mail ? "is-invalid" : ""}`}
+                            <Grid container item spacing={1}>
+                                <Grid item>
+                                    <Card><CardHeader title="Datos de contacto"/>
+                                        <CardContent>
+                                            <Grid container spacing={1}>
+                                                <Grid container item>
+                                                    <TextField name="mail" label="Email" type="email" fullWidth value={values.mail} onChange={handleChange} 
+                                                        error={touched.mail && errors.mail}/>
+                                                </Grid>
+                                            </Grid>
+                                            <Grid container spacing={1}>
+                                                <Grid item>
+                                                    <TextField name="phone1" type="tel" value={values.phone1} label="Teléfono 1" onChange={handleChange} 
+                                                        error={touched.phone1 && errors.phone1}
                                                     />
-                                                </InputGroup>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid container spacing={1}>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text>Teléfonos</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="phone1" type="tel" value={values.phone1} placeholder="Teléfono 1"
-                                                        className={`form-control ${touched.phone1 && errors.phone1 ? "is-invalid" : ""}`}
+                                                    <TextField name="phone2" type="tel" value={values.phone2} label="Teléfono 2" onChange={handleChange} 
+                                                        error={touched.phone2 && errors.phone2}
                                                     />
-                                                    <Field name="phone2" type="tel" value={values.phone2} placeholder="Teléfono 2"
-                                                        className={`form-control ${touched.phone2 && errors.phone2 ? "is-invalid" : ""}`}
+                                                    <TextField name="phone3" type="tel" value={values.phone3} label="Teléfono 3" onChange={handleChange} 
+                                                        error={touched.phone3 && errors.phone3}
                                                     />
-                                                    <Field name="phone3" type="tel" value={values.phone3} placeholder="Teléfono 3"
-                                                        className={`form-control ${touched.phone3 && errors.phone3 ? "is-invalid" : ""}`}
-                                                    />
-                                                </InputGroup>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                        <Grid container spacing={1}>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text>Municipio</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="municipality" type="text" value={values.municipality} 
-                                                        className={`form-control ${touched.municipality && errors.municipality ? "is-invalid" : ""}`}/>
-                                                </InputGroup>
+                                            <Grid container spacing={1}>
+                                                <Grid item xs>
+                                                    <TextField fullWidth name="municipality" label="Municipio" value={values.municipality} onChange={handleChange}
+                                                            error={touched.municipality && errors.municipality}/>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <TextField fullWidth name="postalCode" label="C.P." value={values.postalCode} onChange={handleChange} 
+                                                        error={touched.postalCode && errors.postalCode}/>
+                                                </Grid>
                                             </Grid>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text>C.P.</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="postalCode" type="text" value={values.postalCode} 
-                                                        className={`form-control ${touched.postalCode && errors.postalCode ? "is-invalid" : ""}`}/>
-                                                </InputGroup>
+                                            <Grid container spacing={1}>
+                                                <Grid container item>
+                                                    <TextField name="address" label="Dirección" fullWidth value={values.address} onChange={handleChange} 
+                                                        error={touched.address && errors.address}/>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                        <Grid container spacing={1}>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text>Dirección</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="address" type="text" value={values.address} 
-                                                        className={`form-control ${touched.address && errors.address ? "is-invalid" : ""}`}/>
-                                                </InputGroup>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                                <Grid item>
+                                    <Card><CardHeader title="Datos Bancarios"/>
+                                        <CardContent>
+                                            <Grid container spacing={1}>
+                                                <Grid container item>
+                                                    <TextField name="iban" label="Iban" type="iban" fullWidth value={values.iban} onChange={handleChange}
+                                                        error={touched.iban && errors.iban}/>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                            <Grid item>
-                                <Card><CardHeader title="Datos Bancarios"/>
-                                    <CardContent>
-                                        <Grid container spacing={1}>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <Field name="iban" placeholder="Iban" type="iban" value={values.iban} 
-                                                        className={`form-control ${touched.iban && errors.iban ? "is-invalid" : ""}`}
-                                                    />
-                                                </InputGroup>
-                                            </Grid>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text>Forma de pago</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="paymentType" value={values.paymentType} as="select"
-                                                        className={`form-control ${touched.paymentType && errors.paymentType ? "is-invalid" : ""}`}>
+                                            <Grid container spacing={1}>
+                                               <Grid item xs>
+                                                    <TextField select fullWidth name="paymentType" label="Forma de pago" value={values.paymentType} onChange={handleChange}
+                                                        error={touched.paymentType && errors.paymentType}>
                                                         {
                                                             utils.getPaymentTypes().map(pt => {
-                                                                return (<option key={`pt${pt.id}`} value={pt.id}>{pt.name}</option>)
+                                                                return (<MenuItem key={`pt${pt.id}`} value={pt.id}>{pt.name}</MenuItem>)
                                                             })
                                                         }
-                                                    </Field>
-                                                </InputGroup>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid container spacing={1}>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                      <InputGroup.Text>Tipo de cuota</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="feeType" value={values.feeType} as="select" 
+                                                    </TextField>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <TextField select fullWidth name="feeType" label="Tipo de cuota" value={values.feeType} error={touched.feeType && errors.feeType}
                                                         onChange={(e) => {
                                                             setFieldValue('showSportData', e.target.value !== 'socio')
                                                             setFieldValue('feeType', e.target.value)
                                                         }}
-                                                        className={`form-control ${touched.feeType && errors.feeType ? "is-invalid" : ""}`}>
+                                                        >
                                                         {
                                                             values.feeTypes.map(ft => {
-                                                                return (<option key={`fet${ft.id}`} value={ft.id}>{ft.name}</option>)
+                                                                return (<MenuItem key={`fet${ft.id}`} value={ft.id}>{ft.name}</MenuItem>)
                                                             })
                                                         }
-                                                    </Field>
-                                                </InputGroup>
+                                                    </TextField>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                        <CardHeader subheader="Titular de la cuenta"/>
-                                        <Grid container spacing={1}>
-                                            <Grid item>
-                                                <Field name="holderName" type="text" placeholder="Nombre" value={values.holderName} 
-                                                    className={`form-control ${touched.holderName && errors.holderName ? "is-invalid" : ""}`}
-                                                />
-                                            </Grid>
-                                            <Grid item>
-                                                <Field name="holderFirstSurname" type="text" placeholder="Primer Apellido" value={values.holderFirstSurname} 
-                                                    className={`form-control ${touched.holderFirstSurname && errors.holderFirstSurname ? "is-invalid" : ""}`}
-                                                />
-                                            </Grid>
-                                            <Grid item>
-                                                <Field name="holderSecondSurname" type="text" placeholder="Segundo Appellido" value={values.holderSecondSurname} 
-                                                    className={`form-control ${touched.holderSecondSurname && errors.holderSecondSurname ? "is-invalid" : ""}`}
-                                                />
-                                            </Grid>
-                                        </Grid>
-                                        <Grid container spacing={1}>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                      <InputGroup.Text>Dni</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="holderDni" type="text" value={values.holderDni} 
-                                                        className={`form-control ${touched.holderDni && errors.holderDni ? "is-invalid" : ""}`}
+                                            <CardHeader subheader="Titular de la cuenta"/>
+                                            <Grid container spacing={1}>
+                                                <Grid item>
+                                                    <TextField name="holderName" label="Nombre" value={values.holderName} onChange={handleChange} 
+                                                        error={touched.holderName && errors.holderName}
                                                     />
-                                                </InputGroup>
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField name="holderFirstSurname" label="Primer apellido" value={values.holderFirstSurname} onChange={handleChange} 
+                                                        error={touched.holderFirstSurname && errors.holderFirstSurname}
+                                                    />
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField name="holderSecondSurname" label="Segundo apellido" value={values.holderSecondSurname} onChange={handleChange}
+                                                        error={touched.holderSecondSurname && errors.holderSecondSurname}
+                                                    />
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                    </CardContent>
-                                </Card>
+                                            <Grid container spacing={1}>
+                                                <Grid item xs>
+                                                    <TextField fullWidth name="holderDni" label="Dni/Nie" value={values.holderDni} onChange={handleChange}
+                                                        error={touched.holderDni && errors.holderDni}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
                             </Grid>
-                        </Grid>
-                        <Grid container item style={{ display: values.showSportData ? "block" : "none" }}>
-                            <Grid item>
-                                <Card><CardHeader title="Datos Deportivos"/>
-                                    <CardContent>
-                                        <Grid container spacing={1}>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text>Categoría</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="category" value={values.category} as="select" className='form-control'>
+                            <Grid container item style={{ display: values.showSportData ? "block" : "none" }}>
+                                <Grid item>
+                                    <Card><CardHeader title="Datos Deportivos"/>
+                                        <CardContent>
+                                            <Grid container spacing={1}>
+                                                <Grid item xs={2}>
+                                                    <TextField select fullWidth name="category" label="Categoría" value={values.category} onChange={handleChange}>
                                                         {
                                                             utils.getCategories().map(c => {
-                                                                return (<option key={`cat${c.id}`} value={c.id}>{c.name}</option>)
+                                                                return (<MenuItem key={`cat${c.id}`} value={c.id}>{c.name}</MenuItem>)
                                                             })
                                                         }
-                                                    </Field>
-                                                </InputGroup>
-                                            </Grid>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text>Siguiente Categoría</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="nextCategory" value={values.nextCategory} as="select" className='form-control'>
+                                                    </TextField>
+                                                </Grid>
+                                                <Grid item xs={2}>
+                                                    <TextField select fullWidth name="nextCategory" label="Siguiente categoría" value={values.nextCategory} onChange={handleChange}>
                                                         {
                                                             utils.getCategories().map(c => {
-                                                                return (<option key={`nextcat${c.id}`} value={c.id}>{c.name}</option>)
+                                                                return (<MenuItem key={`nextcat${c.id}`} value={c.id}>{c.name}</MenuItem>)
                                                             })
                                                         }
-                                                    </Field>
-                                                </InputGroup>
-                                            </Grid>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text>Categoría Dorsal</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="dorsalCategory" value={values.dorsalCategory} as="select" className='form-control'>
+                                                    </TextField>
+                                                </Grid>
+                                                <Grid item xs={2}>
+                                                    <TextField select fullWidth name="dorsalCategory" label="Categoría dorsal" value={values.dorsalCategory} onChange={handleChange}>
                                                         {
                                                             utils.getDorsalCategories().map(dc => {
-                                                                return (<option key={`dc${dc.id}`} value={dc.id}>{dc.name}</option>)
+                                                                return (<MenuItem key={`dc${dc.id}`} value={dc.id}>{dc.name}</MenuItem>)
                                                             })
                                                         }
-                                                    </Field>                              
-                                                </InputGroup>
+                                                    </TextField>
+                                                </Grid>
+                                                <Grid item xs={2}>
+                                                    <TextField fullWidth name="dorsalNumber" label="Dorsal" type="number" value={values.dorsalNumber} onChange={handleChange}/>
+                                                </Grid>
                                             </Grid>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text>Dorsal</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="dorsalNumber" type="number" value={values.dorsalNumber} className='form-control'/>
-                                                </InputGroup>
+                                            <Grid container spacing={1}>
+                                                <Grid item xs={2}>
+                                                    <TextField select fullWidth name="licenseType" label="Tipo de Licencia" value={values.licenseType} onChange={handleChange}>
+                                                        <MenuItem></MenuItem>
+                                                        <MenuItem value="N">Nacional</MenuItem>
+                                                        <MenuItem value="T">Territorial</MenuItem>
+                                                    </TextField>
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField fullWidth name="license" label="Licencia" value={values.license} onChange={handleChange}/>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                        <Grid container spacing={1}>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text>Tipo de Licencia</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="licenseType" value={values.licenseType} as="select" className='form-control'>
-                                                        <option></option>
-                                                        <option value="N">Nacional</option>
-                                                        <option value="T">Territorial</option>
-                                                    </Field>
-                                                </InputGroup>
-                                            </Grid>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text>Licencia</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="license" type="text" value={values.license} className='form-control'/>
-                                                </InputGroup>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid container spacing={1}>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text>Especialización</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="specialization" value={values.specialization} as="select" className='form-control'
+                                            <Grid container spacing={1}>
+                                                <Grid item xs={2}>
+                                                    <TextField select fullWidth name="specialization" label="Especialización" value={values.specialization}
                                                         onChange={e => {
                                                             
                                                             if (e.target.value === 'true'){
@@ -729,18 +591,13 @@ class CreateAthlete extends Component {
                                                             }
                                                             setFieldValue('specialization', e.target.value);
                                                         }}>
-                                                        <option></option>
-                                                        <option value={true}>Si</option>
-                                                        <option value={false}>No</option>
-                                                    </Field>
-                                                </InputGroup>
-                                            </Grid>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                      <InputGroup.Text>Grupos</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="groupId" value={values.groupId} as="select" className='form-control'
+                                                        <MenuItem></MenuItem>
+                                                        <MenuItem value={true}>Si</MenuItem>
+                                                        <MenuItem value={false}>No</MenuItem>
+                                                    </TextField>
+                                                </Grid>
+                                                <Grid item xs={2}>
+                                                    <TextField select fullWidth name="groupId" label="Grupos" value={values.groupId} as="TextField select"
                                                         onChange={e => {
                                                             
                                                             this.fillSchedules(e.target.value, setFieldValue)
@@ -749,121 +606,97 @@ class CreateAthlete extends Component {
                                                         }}>
                                                         {
                                                             values.groups.map(group => {
-                                                                return (<option key={group.id} value={group.id}>{group.name}</option>)
+                                                                return (<MenuItem key={group.id} value={group.id}>{group.name}</MenuItem>)
                                                             })
                                                         }
-                                                    </Field>
-                                                </InputGroup>
+                                                    </TextField>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Card><CardHeader title="Horarios"/>
+                                                        <CardContent>  
+                                                                {
+                                                                    values.schedules.map(sch => {
+                                                                        return (
+                                                                            <Grid item key={`row_sch${sch.id}`} >
+                                                                                <Checkbox
+                                                                                    name="scheduleIds" 
+                                                                                    key={`sch${sch.id}`} 
+                                                                                    checked={values.scheduleIds.includes(sch.id)}
+                                                                                    onChange={e => {
+                                                                                        if (e.target.checked) {
+                                                                                            values.scheduleIds.push(sch.id)
+                                                                                        } else {
+                                                                                            const idx = values.scheduleIds.indexOf(sch.id);
+                                                                                            values.scheduleIds.splice(idx, 1);
+                                                                                        }
+                                                                                        setFieldValue('scheduleIds', values.scheduleIds)
+                                                                                    }}
+                                                                                />
+                                                                                {sch.day} - {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}
+                                                                            </Grid> 
+                                                                        )
+                                                                    })
+                                                                }
+                                                        </CardContent>
+                                                    </Card>
+                                                </Grid>
                                             </Grid>
-                                            <Grid item>
-                                                <Card><CardHeader title="Horarios"/>
-                                                    <CardContent>  
-                                                            {
-                                                                values.schedules.map(sch => {
-                                                                    return (
-                                                                        <Grid item key={`row_sch${sch.id}`} >
-                                                                            <Field 
-                                                                                type="checkbox" 
-                                                                                name="scheduleIds" 
-                                                                                key={`sch${sch.id}`} 
-                                                                                checked={values.scheduleIds.includes(sch.id)}
-                                                                                onChange={e => {
-                                                                                    if (e.target.checked) {
-                                                                                        values.scheduleIds.push(sch.id)
-                                                                                    } else {
-                                                                                        const idx = values.scheduleIds.indexOf(sch.id);
-                                                                                        values.scheduleIds.splice(idx, 1);
-                                                                                    }
-                                                                                    setFieldValue('scheduleIds', values.scheduleIds)
-                                                                                }}
-                                                                            />
-                                                                            {sch.day} - {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}
-                                                                        </Grid> 
-                                                                    )
-                                                                })
-                                                            }
-                                                    </CardContent>
-                                                </Card>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            </Grid>
+                            <Grid container item style={{ display: values.showSportData ? "block" : "none" }}>
+                                <Grid item>
+                                    <Card><CardHeader title="Calculo de cuota"/>
+                                        <CardContent>
+                                            <Grid container spacing={1}>
+                                                <Grid item>
+                                                    <TextField name="membershipFee" label="Cuota de socio" type="number" disabled value={values.age}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField name="enrollmentFee" label="Matricula" type="number" disabled value={values.age}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField name="monthlyFee" label="Mensualidad" type="number" disabled value={values.age}/>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                    </CardContent>
-                                </Card>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            </Grid>
+                            <Grid container item spacing={1}>
+                                <Grid item>
+                                    <Card>
+                                        <CardContent>
+                                            <Grid container spacing={1}>
+                                                <Grid item xs>
+                                                    <TextField select fullWidth name="imageAuth" label="Aut. Imágenes" value={values.imageAuth}
+                                                        error={touched.imageAuth && errors.imageAuth} onChange={handleChange}>
+                                                        <MenuItem></MenuItem>
+                                                        <MenuItem value={true}>Si</MenuItem>
+                                                        <MenuItem value={false}>No</MenuItem>
+                                                    </TextField>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <TextField fullWidth name="observations" label="Observaciones" multiline
+                                                        value={values.observations} onChange={handleChange}/>
+                                                </Grid>
+                                            </Grid>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
                             </Grid>
                         </Grid>
-                        <Grid container item style={{ display: values.showSportData ? "block" : "none" }}>
+                        <Grid container item spacing={3}>
                             <Grid item>
-                                <Card><CardHeader title="Calculo de cuota"/>
-                                    <CardContent>
-                                        <Grid container spacing={1}>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text>Cuota de socio</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="membershipFee" type="number" disabled value={values.age}/>
-                                                </InputGroup>
-                                            </Grid>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text>Matricula</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="enrollmentFee" type="number" disabled value={values.age}/>
-                                                </InputGroup>
-                                            </Grid>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text>Mensualidad</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="monthlyFee" type="number" disabled value={values.age}/>
-                                                </InputGroup>
-                                            </Grid>
-                                        </Grid>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                        </Grid>
-                        <Grid container item spacing={1}>
-                            <Grid item>
-                                <Card>
-                                    <CardContent>
-                                        <Grid container spacing={1}>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                      <InputGroup.Text>Aut. Imágenes</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="imageAuth" value={values.imageAuth} as="select" 
-                                                        className={`form-control ${touched.imageAuth && errors.imageAuth ? "is-invalid" : ""}`}>
-                                                        <option></option>
-                                                        <option value={true}>Si</option>
-                                                        <option value={false}>No</option>
-                                                    </Field>
-                                                </InputGroup>
-                                            </Grid>
-                                            <Grid item>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend>
-                                                      <InputGroup.Text>Observaciones</InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <Field name="observations" value={values.observations} as="textarea" className='form-control'></Field>
-                                                </InputGroup>
-                                            </Grid>
-                                        </Grid>
-                                    </CardContent>
-                                </Card>
+                                <SubmitButton/>
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid container item spacing={5}>
-                        <Grid item>
-                            <SubmitButton/>
-                        </Grid>
-                    </Grid>
-                    </Form>
-                )}
-            </Formik>
+                </form>
+            )}
+        </Formik>
+        
         );
     }
 }

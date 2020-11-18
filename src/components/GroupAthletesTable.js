@@ -1,17 +1,17 @@
 import React, { Component } from "react";
 import { 
-    InputGroup, Form
+    Form
 } from 'react-bootstrap';
 import Table from "./Table";
 import { textFilter } from 'react-bootstrap-table2-filter';
-import { Formik, Field } from 'formik';
+import { Formik } from 'formik';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
-import Fab from '@material-ui/core/Fab';
-import NavigationIcon from '@material-ui/icons/Navigation';
-import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
+import SubmitButton from './buttons/SubmitButton'
 
 class GroupAthletesTable extends Component {
 
@@ -100,51 +100,38 @@ class GroupAthletesTable extends Component {
                     this.handleSubmitQuery(values)
                 }}
                 >
-                {({ handleSubmit, values, setFieldValue }) => (
+                {({ handleSubmit, handleChange, values, setFieldValue }) => (
 
                     <Form onSubmit={handleSubmit}>
                         <Grid container>
                             <Card><CardContent>
-                                <Grid container>
-                                    <Grid item xs>
-                                        <InputGroup>
-                                            <InputGroup.Prepend>
-                                              <InputGroup.Text>Grupos</InputGroup.Text>
-                                            </InputGroup.Prepend>
-                                            <Field name="groupId" value={values.groupId} as="select" className='form-control'
-                                                onChange={e => {
-                                                    
-                                                    this.fillSchedules(e.target.value, setFieldValue)
-                                                    setFieldValue('groupId', e.target.value)
-                                                }}>
-                                                {
-                                                    values.groups.map(group => {
-                                                        return (<option key={group.id} value={group.id}>{group.name}</option>)
-                                                    })
-                                                }
-                                            </Field>
-                                        </InputGroup>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={2}>
+                                        <TextField select fullWidth name="groupId" value={values.groupId} label="Grupos"
+                                            onChange={e => {
+                                                
+                                                this.fillSchedules(e.target.value, setFieldValue)
+                                                setFieldValue('groupId', e.target.value)
+                                            }}>
+                                            {
+                                                values.groups.map(group => {
+                                                    return (<MenuItem key={group.id} value={group.id}>{group.name}</MenuItem>)
+                                                })
+                                            }
+                                        </TextField>
                                     </Grid>
-                                    <Grid item xs>
-                                        <InputGroup>
-                                            <InputGroup.Prepend>
-                                              <InputGroup.Text>Horarios</InputGroup.Text>
-                                            </InputGroup.Prepend>
-                                            <Field name="scheduleId" value={values.scheduleId} as="select" className='form-control'>
-                                                <option></option>
-                                                {
-                                                    values.schedules.map(sch => {
-                                                        return <option key={sch.id} value={sch.id}>{sch.day} {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}</option>
-                                                    })
-                                                }
-                                            </Field>
-                                        </InputGroup>
+                                    <Grid item xs={2}>
+                                        <TextField select fullWidth name="scheduleId" value={values.scheduleId} label="Horarios" onChange={handleChange}>
+                                            <MenuItem></MenuItem>
+                                            {
+                                                values.schedules.map(sch => {
+                                                    return <MenuItem key={sch.id} value={sch.id}>{sch.day} {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}</MenuItem>
+                                                })
+                                            }
+                                        </TextField>
                                     </Grid>
-                                    <Grid item xs>
-                                        <Fab variant="extended" size="big" color="secondary" aria-label="add" href={this.props.href} onClick={this.props.onClick}>
-                                            <NavigationIcon/>{this.props.text}
-                                        </Fab>
-                                        <Button type="submit">Submit</Button>
+                                    <Grid item xs={2}>
+                                        <SubmitButton/>
                                     </Grid>
                                 </Grid>
                                 <Grid container>
@@ -162,7 +149,6 @@ class GroupAthletesTable extends Component {
                     </Form>
                 )}
             </Formik>
-
 		)
 	}
 }

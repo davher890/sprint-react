@@ -10,7 +10,7 @@ class SubmitButton extends Component {
 			<div>
 				<Grid container spacing={1}>
 			 		<Grid item xs>
-						<Button type="submit" variant="contained" color="primary">Confirmar</Button>
+						<Button type="submit" variant="contained" color="primary">Guardar</Button>
 					</Grid>
 				</Grid>
 			</div>

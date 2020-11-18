@@ -1,11 +1,16 @@
 import React, { Component } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { 
-    InputGroup,
-    Button, Col, 
-    Row, Card, Form
+    Form
 } from 'react-bootstrap';
-import { Formik, Field } from 'formik';
+import { Formik } from 'formik';
+
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
+import SubmitButton from './buttons/SubmitButton'
 
 class GroupAttendance extends Component {
 
@@ -60,36 +65,22 @@ class GroupAttendance extends Component {
                 >
             	{({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, setValues, errors }) => (
             		<Form onSubmit={handleSubmit}>
-						<Form.Group><Row>
-							<Card>
-								<Card.Body>
-									<Form.Group>
-										<Row>
-											<Col>
-												<InputGroup>
-				                                    <InputGroup.Prepend>
-				                                      <InputGroup.Text>Grupos</InputGroup.Text>
-				                                    </InputGroup.Prepend>
-				                                    <Field name="groupId" value={values.groupId} as="select" className='form-control'>
-				                                        {
-				                                            values.groups.map(group => {
-				                                                return (<option key={group.id} value={group.id}>{group.name}</option>)
-				                                            })
-				                                        }
-				                                    </Field>
-				                                </InputGroup>
-			                                </Col>
-			                                <Col>
-	                                            <Button type="submit">Submit</Button>
-	                                        </Col>
-			                            </Row>
-			                        </Form.Group>
-
-                                        
-                                    
-			                    </Card.Body>
-			                </Card>
-			            </Row></Form.Group>
+						<Grid container>
+	            			<Grid item xs>
+	            				<Card><CardContent>
+									<TextField select fullWidth name="groupId" value={values.groupId} label="Grupos" onChange={handleChange}>
+                                        {
+                                            values.groups.map(group => {
+                                                return (<MenuItem key={group.id} value={group.id}>{group.name}</MenuItem>)
+                                            })
+                                        }
+                                    </TextField>
+                            	</CardContent></Card>
+                            </Grid>
+                            <Grid container>
+	                            <SubmitButton/>
+	                        </Grid>
+                        </Grid>
 		           	</Form>
                 )}
             </Formik>
