@@ -4,6 +4,8 @@ import Table from "./Table";
 import { textFilter, selectFilter, numberFilter } from 'react-bootstrap-table2-filter';
 import SprintButton from './buttons/SprintButton'
 import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 
 class AthletesTableComponent extends Component {
     constructor(props) {
@@ -40,20 +42,24 @@ class AthletesTableComponent extends Component {
 
 	render() {
 		return (
-			<div>
-				<SprintButton text="Nuevo Atleta" href={`/${this.state.entityName}`}/>
-				<Grid container spacing={1}>
-					<Grid item xs>
-						<Table 
-							columns={this.state.columns} 
-							entityName={this.state.entityName}
-							dataConversor={this.dataConversor}
-							filter={this.props.filter}
-							showCreate={true} >
-						</Table>
+			<Grid container>
+	            <Card><CardContent>
+	                <Grid container>
+						<SprintButton text="Nuevo Atleta" href={`/${this.state.entityName}`}/>
+						<Grid container spacing={1}>
+							<Grid item xs>
+								<Table 
+									columns={this.state.columns} 
+									entityName={this.state.entityName}
+									dataConversor={this.dataConversor}
+									filter={this.props.filter}
+									showCreate={true} >
+								</Table>
+							</Grid>
+						</Grid>
 					</Grid>
-				</Grid>
-			</div>
+				</CardContent></Card>
+			</Grid>
 		)
 	}
 }

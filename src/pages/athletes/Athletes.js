@@ -32,7 +32,7 @@ export function NewAthlete() {
 
 	let { id } = useParams();
 	return (
-  	<Grid container>
+  	<Grid container spacing={1}>
     	<Suspense fallback={<div>Cargando...</div>}>
 			<CreateAthlete id={id}/>
 		</Suspense>

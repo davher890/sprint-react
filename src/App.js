@@ -9,8 +9,7 @@ import { NewGroup, Groups } from './pages/groups/Groups';
 import { NewFamily, Families } from './pages/families/Families';
 import { NewAthlete, Athletes } from './pages/athletes/Athletes';
 import { GroupListing } from './pages/listings/Listings';
-
-import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
 
 import { 
   Navbar, Nav, NavDropdown 
@@ -50,7 +49,7 @@ return (
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-        <Grid container>
+        <Box display="flex" m={2}>
           <Switch>
             <Route path="/sport_schools/list">
               <SportSchools/>
@@ -141,7 +140,7 @@ return (
             </Route>
 
           </Switch>
-        </Grid>
+        </Box>
       </Router>
   );
 }
