@@ -206,7 +206,7 @@ class Table extends Component {
 			                                })
 			                            }
 			                            	<Grid item xs>
-												<Fab variant="extended" size="large" color="secondary" aria-label="add" onClick={this.downloadData}>
+												<Fab variant="extended" size="large" color="primary" aria-label="add" onClick={this.downloadData}>
 										          <NavigationIcon/>Descargar Excel
 										        </Fab>
 											</Grid>

@@ -86,6 +86,11 @@ const utils = {
 	    else {
 	    	return []
     	}
+	},
+
+	leftPadding: function(str, max,c) {
+		str = str.toString();
+		return str.length < max ? utils.leftPadding(c + str, max) : str;
 	}
 }
 

@@ -84,16 +84,29 @@ class CreateAthlete extends Component {
                     else {
                         this.groups = this.notSpecializedGroups
                     }
-                    this.setState(data, () => {
-                        if (data.groupId && data.groupId > 0){
-                            fetch(process.env.REACT_APP_SERVER_URL + "/groups/" + data.groupId + "/schedules",  { headers })
-                                .then(res => res.json())
-                                .then(data => {
-                                    this.schedules = data
-                                    this.setState(data)
-                                });
-                        }
-                    })
+
+                    const requestOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    }
+                    fetch(process.env.REACT_APP_SERVER_URL + "/athletes/fee", requestOptions)
+                        .then(res => res.json())
+                        .then(feeData => {
+                            data.enrollmentFee = feeData.enrollmentFee
+                            data.membershipFee = feeData.membershipFee
+                            data.monthlyFee = feeData.monthlyFee
+                            this.setState(data, () => {
+                                if (data.groupId && data.groupId > 0){
+                                    fetch(process.env.REACT_APP_SERVER_URL + "/groups/" + data.groupId + "/schedules",  { headers })
+                                        .then(res => res.json())
+                                        .then(schData => {
+                                            this.schedules = schData
+                                            this.setState(data)
+                                        });
+                                }
+                            })
+                        });
                 });
             }
             else {
@@ -116,7 +129,6 @@ class CreateAthlete extends Component {
                 data.age = utils.ageCalculator(Date.parse(data.birthDate));
                 this.setState(data)
             });
-            alert("Guardado")
     }
 
     fillFee(values, setFieldValue){
@@ -125,7 +137,6 @@ class CreateAthlete extends Component {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(values)
         }
-
         fetch(process.env.REACT_APP_SERVER_URL + "/athletes/fee", requestOptions)
             .then(res => res.json())
             .then(data => {
@@ -163,7 +174,7 @@ class CreateAthlete extends Component {
                     age : this.state.age || 0,
                     // Personal info
                     sportSchoolId: this.state.sportSchoolId || '',
-                    imageAuth: this.state.imageAuth || '',
+                    imageAuth: this.state.imageAuth || false,
                     observations: this.state.observations || '',
                     name: this.state.name || '',
                     firstSurname: this.state.firstSurname || '',
@@ -189,7 +200,7 @@ class CreateAthlete extends Component {
                     dorsalNumber: this.state.dorsalNumber || '',
                     license: this.state.license || '',
                     licenseType: this.state.licenseType || '',
-                    specialization: this.state.specialization || '',
+                    specialization: this.state.specialization || false,
                     groupId: this.state.groupId || '',
                     scheduleIds: this.state.scheduleIds || [],
                     // Contact info
@@ -208,6 +219,10 @@ class CreateAthlete extends Component {
                     holderFirstSurname: this.state.holderFirstSurname || '',
                     holderSecondSurname: this.state.holderSecondSurname || '',
                     holderDni: this.state.holderDni || '',
+                    //Calculated Fee
+                    enrollmentFee: this.state.enrollmentFee || 0,
+                    membershipFee: this.state.membershipFee || 0,
+                    monthlyFee: this.state.monthlyFee || 0,
                     required :[
                         'sportSchoolId',
                         'imageAuth',
@@ -580,33 +595,33 @@ class CreateAthlete extends Component {
                                                     <TextField select fullWidth name="specialization" label="Especialización" value={values.specialization}
                                                         onChange={e => {
                                                             
-                                                            if (e.target.value === 'true'){
+                                                            if (e.target.value === true){
                                                                 setFieldValue('groups', this.specializedGroups)
                                                             }
-                                                            else if (e.target.value === 'false'){
+                                                            else if (e.target.value === false){
                                                                 setFieldValue('groups', this.notSpecializedGroups)
                                                             }
                                                             else {
                                                                 setFieldValue('groups', [])
                                                             }
+                                                            this.fillFee(values, setFieldValue)
                                                             setFieldValue('specialization', e.target.value);
                                                         }}>
-                                                        <MenuItem></MenuItem>
                                                         <MenuItem value={true}>Si</MenuItem>
                                                         <MenuItem value={false}>No</MenuItem>
                                                     </TextField>
                                                 </Grid>
                                                 <Grid item xs={2}>
-                                                    <TextField select fullWidth name="groupId" label="Grupos" value={values.groupId} as="TextField select"
+                                                    <TextField select fullWidth name="groupId" label="Grupos" value={values.groupId} type="number"
                                                         onChange={e => {
-                                                            
                                                             this.fillSchedules(e.target.value, setFieldValue)
-                                                            this.fillFee(values, setFieldValue)
                                                             setFieldValue('groupId', e.target.value)
+                                                            setFieldValue('scheduleIds', [])
+                                                            this.fillFee(values, setFieldValue)
                                                         }}>
                                                         {
                                                             values.groups.map(group => {
-                                                                return (<MenuItem key={group.id} value={group.id}>{group.name}</MenuItem>)
+                                                                return (<MenuItem key={`gr${group.id}`} value={group.id}>{group.name}</MenuItem>)
                                                             })
                                                         }
                                                     </TextField>
@@ -630,9 +645,10 @@ class CreateAthlete extends Component {
                                                                                             values.scheduleIds.splice(idx, 1);
                                                                                         }
                                                                                         setFieldValue('scheduleIds', values.scheduleIds)
+                                                                                        this.fillFee(values, setFieldValue)
                                                                                     }}
                                                                                 />
-                                                                                {sch.day} - {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}
+                                                                                {sch.dayTranslate} - {utils.leftPadding(sch.startHour, 2,"0")}:{utils.leftPadding(sch.startMinute, 2,"0")} - {utils.leftPadding(sch.endHour, 2,"0")}:{utils.leftPadding(sch.endMinute, 2,"0")}
                                                                             </Grid> 
                                                                         )
                                                                     })
@@ -651,13 +667,13 @@ class CreateAthlete extends Component {
                                         <CardContent>
                                             <Grid container spacing={1}>
                                                 <Grid item>
-                                                    <TextField name="membershipFee" label="Cuota de socio" type="number" disabled value={values.age}/>
+                                                    <TextField name="membershipFee" label="Cuota de socio" type="number" disabled value={values.membershipFee}/>
                                                 </Grid>
                                                 <Grid item>
-                                                    <TextField name="enrollmentFee" label="Matricula" type="number" disabled value={values.age}/>
+                                                    <TextField name="enrollmentFee" label="Matricula" type="number" disabled value={values.enrollmentFee}/>
                                                 </Grid>
                                                 <Grid item>
-                                                    <TextField name="monthlyFee" label="Mensualidad" type="number" disabled value={values.age}/>
+                                                    <TextField name="monthlyFee" label="Mensualidad" type="number" disabled value={values.monthlyFee}/>
                                                 </Grid>
                                             </Grid>
                                         </CardContent>
