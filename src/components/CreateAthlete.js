@@ -10,11 +10,14 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
-import SubmitButton from './buttons/SubmitButton'
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
+import AppBar from '@material-ui/core/AppBar';
+
+import SubmitButton from './buttons/SubmitButton'
+import Select from './buttons/Select'
 
 class CreateAthlete extends Component {
     
@@ -126,7 +129,8 @@ class CreateAthlete extends Component {
         fetch(process.env.REACT_APP_SERVER_URL + "/athletes", requestOptions)
             .then(res => res.json())
             .then(data => {
-                data.age = utils.ageCalculator(Date.parse(data.birthDate));
+                data.age = utils.ageCalculator(new Date(data.birthDate));
+                data.birthDate = moment(new Date(data.birthDate)).format("YYYY-MM-DD")
                 this.setState(data)
             });
     }
@@ -232,14 +236,10 @@ class CreateAthlete extends Component {
                         'birthDate',
                         'dni',
                         'gender',
-                        'mail',
                         'phone1',
-                        'phone2',
-                        'phone3',
                         'municipality',
                         'postalCode',
                         'address',
-                        'iban',
                         'paymentType',
                         'feeType',
                         'holderName',
@@ -252,8 +252,13 @@ class CreateAthlete extends Component {
                     let errors = {};
 
                     Object.keys(values).forEach(value => {
-                        if((values[value] === '') && values.required.includes(value)){
-                            errors[value] = 'Campo obligatorio'; 
+                        if (value === 'iban'){
+                            if (values.iban === '' && values.paymentType === "DOM"){
+                                errors.iban = true;
+                            }
+                        }
+                        else if((values[value] === '') && values.required.includes(value)){
+                            errors[value] = true;
                         }
                     })
 
@@ -270,6 +275,7 @@ class CreateAthlete extends Component {
                 {({ handleSubmit, values, touched, setFieldValue, errors, handleChange }) => (
 
                     <form onSubmit={handleSubmit}>
+                        
                     <Grid container spacing={3}>
                         <Grid container item spacing={3}>
                             <Grid container item spacing={1}>
@@ -277,22 +283,17 @@ class CreateAthlete extends Component {
                                     <Card><CardContent>
                                         <Grid container spacing={2}>
                                             <Grid item xs={5}>
-                                                <TextField select fullWidth name="sportSchoolId" label="Escuela Deportiva" value={values.sportSchoolId} error={touched.sportSchoolId && errors.sportSchoolId}
-                                                    onChange={e => {
-                                                        values.feeTypes = utils.getFeeTypes(parseInt(e.target.value))
-                                                        setFieldValue('sportSchoolId', e.target.value);
+                                                <Select name="sportSchoolId" label="Escuela Deportiva" options={values.sportSchools}
+                                                    value={values.sportSchoolId} error={touched.sportSchoolId && errors.sportSchoolId} 
+                                                    onChange={(e, value) => {
+                                                        values.feeTypes = utils.getFeeTypes(parseInt(value.id))
+                                                        setFieldValue('sportSchoolId', value.id);
                                                         if (values.feeType){
                                                             setFieldValue('feeType', values.feeType);
                                                             setFieldValue('showSportData', values.feeType !== 'socio')
                                                         }
                                                     }}
-                                                    >
-                                                    {
-                                                        values.sportSchools.map(spe => {
-                                                            return (<MenuItem key={`spe${spe.id}`} value={spe.id}>{spe.name}</MenuItem>)
-                                                        })
-                                                    }
-                                                </TextField>
+                                                />
                                             </Grid>
                                             <Grid item xs={3}>
                                                 <TextField name="code" label="Código de atleta" type="number" disabled value={values.code}/>
@@ -356,7 +357,7 @@ class CreateAthlete extends Component {
                                                         error={touched.birthDate && errors.birthDate}
                                                         onChange={e => {
                                                             let d = moment(e.target.value, "YYYY-MM-DD")
-                                                            values.age = utils.ageCalculator(d)
+                                                            setFieldValue('age', utils.ageCalculator(d));
                                                             setFieldValue('birthDate', e.target.value);
                                                         }}
                                                     />
@@ -366,8 +367,8 @@ class CreateAthlete extends Component {
                                                 </Grid>
                                             </Grid>
                                             <Grid container spacing={1}>
-                                                <Grid item>
-                                                    <TextField name="dni" label="Dni/Nie" type="text" value={values.dni} margin="dense"
+                                                <Grid item xs>
+                                                    <TextField fullWidth name="dni" label="Dni/Nie" type="text" value={values.dni}
                                                         error={touched.dni && errors.dni}
                                                         onBlur={e => {
                                                             if (values.holderDni === ''){
@@ -377,13 +378,11 @@ class CreateAthlete extends Component {
                                                         onChange={handleChange}
                                                     />
                                                 </Grid>
-                                                <Grid item>
-                                                    <TextField select name="gender" value={values.gender} label="Género" margin="dense" 
-                                                        onChange={handleChange} error={touched.gender && errors.gender}>
-                                                        <option></option>
-                                                        <MenuItem value="male">Hombre</MenuItem>
-                                                        <MenuItem value="female">Mujer</MenuItem>
-                                                    </TextField>
+                                                <Grid item xs>
+                                                    <Select fullWidth name="gender" label="Género" error={touched.gender && errors.gender}
+                                                        options={[{id:"male", name:"Hombre"},{id:"female", name:"Mujer"}]} value={values.gender}
+                                                        onChange={(e, value) => setFieldValue('gender', value.id)} 
+                                                    />
                                                 </Grid>
                                             </Grid>
                                         </CardContent>
@@ -482,35 +481,29 @@ class CreateAthlete extends Component {
                                     <Card><CardHeader title="Datos Bancarios"/>
                                         <CardContent>
                                             <Grid container spacing={1}>
-                                                <Grid container item>
-                                                    <TextField name="iban" label="Iban" type="iban" fullWidth value={values.iban} onChange={handleChange}
-                                                        error={touched.iban && errors.iban}/>
+                                                <Grid item xs>
+                                                    <Select fullWidth name="paymentType" label="Forma de pago" 
+                                                        options={utils.getPaymentTypes()} value={values.paymentType} error={touched.paymentType && errors.paymentType}
+                                                        onChange={(e, value) => {
+                                                            setFieldValue('paymentType', value.id)
+                                                        }}
+                                                    />
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <Select fullWidth name="feeType" label="Tipo de cuota" 
+                                                        options={values.feeTypes} value={values.feeType} error={touched.feeType && errors.feeType}
+                                                        onChange={(e, value) => {
+                                                            setFieldValue('showSportData', value.id !== 'socio')
+                                                            setFieldValue('feeType', value.id)
+                                                        }}
+                                                    />
                                                 </Grid>
                                             </Grid>
                                             <Grid container spacing={1}>
-                                               <Grid item xs>
-                                                    <TextField select fullWidth name="paymentType" label="Forma de pago" value={values.paymentType} onChange={handleChange}
-                                                        error={touched.paymentType && errors.paymentType}>
-                                                        {
-                                                            utils.getPaymentTypes().map(pt => {
-                                                                return (<MenuItem key={`pt${pt.id}`} value={pt.id}>{pt.name}</MenuItem>)
-                                                            })
-                                                        }
-                                                    </TextField>
-                                                </Grid>
-                                                <Grid item xs>
-                                                    <TextField select fullWidth name="feeType" label="Tipo de cuota" value={values.feeType} error={touched.feeType && errors.feeType}
-                                                        onChange={(e) => {
-                                                            setFieldValue('showSportData', e.target.value !== 'socio')
-                                                            setFieldValue('feeType', e.target.value)
-                                                        }}
-                                                        >
-                                                        {
-                                                            values.feeTypes.map(ft => {
-                                                                return (<MenuItem key={`fet${ft.id}`} value={ft.id}>{ft.name}</MenuItem>)
-                                                            })
-                                                        }
-                                                    </TextField>
+                                                <Grid container item>
+                                                    <TextField name="iban" label="Iban" fullWidth value={values.iban} onChange={handleChange}
+                                                        error={touched.iban && errors.iban}
+                                                    />
                                                 </Grid>
                                             </Grid>
                                             <CardHeader subheader="Titular de la cuenta"/>
@@ -548,31 +541,22 @@ class CreateAthlete extends Component {
                                         <CardContent>
                                             <Grid container spacing={1}>
                                                 <Grid item xs={2}>
-                                                    <TextField select fullWidth name="category" label="Categoría" value={values.category} onChange={handleChange}>
-                                                        {
-                                                            utils.getCategories().map(c => {
-                                                                return (<MenuItem key={`cat${c.id}`} value={c.id}>{c.name}</MenuItem>)
-                                                            })
-                                                        }
-                                                    </TextField>
+                                                    <Select fullWidth name="category" label="Categoría"
+                                                        options={utils.getCategories()} value={values.category}
+                                                        onChange={(e, value) => setFieldValue('category', value.id) }
+                                                    />
                                                 </Grid>
                                                 <Grid item xs={2}>
-                                                    <TextField select fullWidth name="nextCategory" label="Siguiente categoría" value={values.nextCategory} onChange={handleChange}>
-                                                        {
-                                                            utils.getCategories().map(c => {
-                                                                return (<MenuItem key={`nextcat${c.id}`} value={c.id}>{c.name}</MenuItem>)
-                                                            })
-                                                        }
-                                                    </TextField>
+                                                    <Select fullWidth name="nextCategory" label="Siguiente categoría" 
+                                                        options={utils.getCategories()} value={values.nextCategory}
+                                                        onChange={(e, value) => setFieldValue('nextCategory', value.id) }
+                                                    />
                                                 </Grid>
                                                 <Grid item xs={2}>
-                                                    <TextField select fullWidth name="dorsalCategory" label="Categoría dorsal" value={values.dorsalCategory} onChange={handleChange}>
-                                                        {
-                                                            utils.getDorsalCategories().map(dc => {
-                                                                return (<MenuItem key={`dc${dc.id}`} value={dc.id}>{dc.name}</MenuItem>)
-                                                            })
-                                                        }
-                                                    </TextField>
+                                                    <Select fullWidth name="dorsalCategory" label="Categoría dorsal" 
+                                                        options={utils.getDorsalCategories()} value={values.dorsalCategory} 
+                                                        onChange={(e, value) => setFieldValue('dorsalCategory', value.id) }
+                                                    />
                                                 </Grid>
                                                 <Grid item xs={2}>
                                                     <TextField fullWidth name="dorsalNumber" label="Dorsal" type="number" value={values.dorsalNumber} onChange={handleChange}/>
@@ -580,11 +564,10 @@ class CreateAthlete extends Component {
                                             </Grid>
                                             <Grid container spacing={1}>
                                                 <Grid item xs={2}>
-                                                    <TextField select fullWidth name="licenseType" label="Tipo de Licencia" value={values.licenseType} onChange={handleChange}>
-                                                        <MenuItem></MenuItem>
-                                                        <MenuItem value="N">Nacional</MenuItem>
-                                                        <MenuItem value="T">Territorial</MenuItem>
-                                                    </TextField>
+                                                    <Select fullWidth name="licenseType" label="Tipo de Licencia"
+                                                        value={values.licenseType} options={[{id:"N", name:"Nacional"},{id:"T", name:"Territorial"}]}
+                                                        onChange={(e, value) => setFieldValue('licenseType', value.id) }
+                                                    />
                                                 </Grid>
                                                 <Grid item>
                                                     <TextField fullWidth name="license" label="Licencia" value={values.license} onChange={handleChange}/>
@@ -592,39 +575,34 @@ class CreateAthlete extends Component {
                                             </Grid>
                                             <Grid container spacing={1}>
                                                 <Grid item xs={2}>
-                                                    <TextField select fullWidth name="specialization" label="Especialización" value={values.specialization}
-                                                        onChange={e => {
+                                                    <Select fullWidth name="specialization" label="Especialización" 
+                                                        value={values.specialization} options={[{id:true, name:"Si"},{id:false, name:"No"}]}
+                                                        onChange={(e, value) => {
                                                             
-                                                            if (e.target.value === true){
+                                                            if (value.id === true){
                                                                 setFieldValue('groups', this.specializedGroups)
                                                             }
-                                                            else if (e.target.value === false){
+                                                            else if (value.id === false){
                                                                 setFieldValue('groups', this.notSpecializedGroups)
                                                             }
                                                             else {
                                                                 setFieldValue('groups', [])
                                                             }
                                                             this.fillFee(values, setFieldValue)
-                                                            setFieldValue('specialization', e.target.value);
-                                                        }}>
-                                                        <MenuItem value={true}>Si</MenuItem>
-                                                        <MenuItem value={false}>No</MenuItem>
-                                                    </TextField>
+                                                            setFieldValue('specialization', value.id);
+                                                        }}
+                                                    />
                                                 </Grid>
                                                 <Grid item xs={2}>
-                                                    <TextField select fullWidth name="groupId" label="Grupos" value={values.groupId} type="number"
-                                                        onChange={e => {
-                                                            this.fillSchedules(e.target.value, setFieldValue)
-                                                            setFieldValue('groupId', e.target.value)
+                                                    <Select fullWidth name="groupId" label="Grupos" type="number"
+                                                        value={values.groupId} options={values.groups}
+                                                        onChange={(e, value) => {
+                                                            this.fillSchedules(value.id, setFieldValue)
+                                                            setFieldValue('groupId', value.id)
                                                             setFieldValue('scheduleIds', [])
                                                             this.fillFee(values, setFieldValue)
-                                                        }}>
-                                                        {
-                                                            values.groups.map(group => {
-                                                                return (<MenuItem key={`gr${group.id}`} value={group.id}>{group.name}</MenuItem>)
-                                                            })
-                                                        }
-                                                    </TextField>
+                                                        }}
+                                                    />
                                                 </Grid>
                                                 <Grid item>
                                                     <Card><CardHeader title="Horarios"/>
@@ -703,12 +681,10 @@ class CreateAthlete extends Component {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid container item spacing={3}>
-                            <Grid item>
-                                <SubmitButton/>
-                            </Grid>
-                        </Grid>
                     </Grid>
+                    <AppBar position="fixed" style={{ bottom : 0, top: 'auto'}}>
+                        <SubmitButton/>
+                    </AppBar>
                 </form>
             )}
         </Formik>
