@@ -8,7 +8,7 @@ const utils = {
 
 	getCategories: function(){
 		return [
-			{ id : "", name : ""},
+			// { id : "", name : ""},
 			{ id : "SENIOR", name : "SENIOR"},
 			{ id : "SUB23", name : "SUB23"},
 			{ id : "SUB20", name : "SUB20"},
@@ -23,7 +23,7 @@ const utils = {
 
 	getDorsalCategories: function(){
 		return [
-			{ id : "", name : ""},
+			// { id : "", name : ""},
 			{ id : "SM", name : "SM" },
 			{ id : "SF", name : "SF" },
 			{ id : "U23M", name : "U23M" },
@@ -43,7 +43,7 @@ const utils = {
 
 	getPaymentTypes: function(){
 		return [
-			{ id : "", name : ""},
+			// { id : "", name : ""},
 			{ id : "CASH", name : "Efectivo"},
 			{ id : "TRANSFER", name : "Transferencia"},
 			{ id : "DOM", name : "Domiciliación Bancaria"},
@@ -56,7 +56,7 @@ const utils = {
 
 			// Santa Ana
 			return [
-	            { id : '', name : ''},
+	            // { id : '', name : ''},
 	            { id : 'CLUB', name : 'Club'},
 	            { id : 'PISTAS', name : 'Pistas'},
 	            { id : 'LIC_PISTAS', name : 'Licencia/Pistas'},
@@ -68,7 +68,7 @@ const utils = {
 
 	        // Paracuellos
 	        return [
-	            { id : '', name : ''},
+	            // { id : '', name : ''},
 	            { id : 'CLLUB', name : 'Club'}
 	        ]
 	    }
@@ -77,7 +77,7 @@ const utils = {
 
 	        // Externos
 	        return [
-	            { id : '', name : ''},
+	            // { id : '', name : ''},
 	            { id : 'LICENCIA', name : 'Licencia'},
 	            { id : 'SOCIO', name : 'Socio'},
 	            { id : 'ENTRENADOR', name : 'Entrenadores'},
