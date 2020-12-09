@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Table from "./Table";
+import Table from "./custom/Table";
 import { textFilter } from 'react-bootstrap-table2-filter';
 import SprintButton from './buttons/SprintButton'
 import Grid from '@material-ui/core/Grid';
@@ -10,7 +10,7 @@ class TableSportSchools extends Component {
         super(props);
         this.state = { 
         	columns : [
-        		{ dataField: 'name', text: 'Nombre', filter: textFilter() },
+        		{ dataField: 'name', text: 'Nombre', filter: textFilter(), show: true },
         		{ dataField: 'municipality', text: 'Municipio', filter: textFilter() },
         		{ dataField: 'address', text: 'Dirección', filter: textFilter() }
     		],

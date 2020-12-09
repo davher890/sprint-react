@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Table from "./Table";
+import Table from "./custom/Table";
 import { textFilter, selectFilter, numberFilter } from 'react-bootstrap-table2-filter';
 import SprintButton from './buttons/SprintButton'
 import Grid from '@material-ui/core/Grid';
@@ -12,14 +12,14 @@ class AthletesTableComponent extends Component {
         super(props);
         this.state = {
         	columns : [
-	        	{ dataField: 'name', text : 'Nombre', filter: textFilter() }, 
-	        	{ dataField: 'birthDate', text : 'Fecha de Nacimiento' }, 
+	        	{ dataField: 'name', text : 'Nombre', filter: textFilter(), show: true }, 
+	        	{ dataField: 'birthDate', text : 'Fecha de Nacimiento', show: true }, 
 	        	{ dataField: 'gender', text : 'Género', filter: selectFilter({
 	        		options : {
 	        			'male' : 'Masculino',
 	        			'female' : 'Femenino'
 	        		}
-	        	}) }, 
+	        	})  }, 
 	        	{ dataField: 'category', text : 'Categoría', filter: textFilter() }, 
 	        	{ dataField: 'license', text : 'Licencia' }, 
 	        	{ dataField: 'dorsalNumber', text : 'Dorsal', filter: numberFilter()}

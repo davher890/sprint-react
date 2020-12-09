@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { 
     Form
 } from 'react-bootstrap';
-import Table from "./Table";
+import Table from "./custom/Table";
 import { textFilter } from 'react-bootstrap-table2-filter';
 import { Formik } from 'formik';
 
@@ -20,7 +20,7 @@ class GroupAthletesTable extends Component {
 		this.state = {}
 
 		this.columns = [
-            { dataField: 'name', text : 'Nombre', filter: textFilter(), type: 'string' }, 
+            { dataField: 'name', text : 'Nombre', filter: textFilter(), type: 'string', show: true  }, 
             { dataField: 'birthDate', text : 'Fecha de Nacimiento', type: 'date' }, 
             { dataField: 'gender', text : 'Genero', filter: textFilter(), type: 'string' }, 
             { dataField: 'category', text : 'Categoria', filter: textFilter(), type: 'string' }, 
