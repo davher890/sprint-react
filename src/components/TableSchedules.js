@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container } from 'react-bootstrap';
-import Table from "./Table";
+import Table from "./custom/Table";
 
 
 class TableSchedules extends Component {

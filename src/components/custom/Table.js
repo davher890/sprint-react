@@ -5,10 +5,10 @@ import Paginator from 'react-bootstrap-table2-paginator'
 import Filter from 'react-bootstrap-table2-filter';
 import { Formik } from 'formik';
 
+import MultiSelect from './MultiSelect'
 import Fab from '@material-ui/core/Fab';
 import NavigationIcon from '@material-ui/icons/Navigation';
 import Grid from '@material-ui/core/Grid';
-import ToggleButton from '@material-ui/lab/ToggleButton';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -17,7 +17,7 @@ class Table extends Component {
     constructor(props) {
         super(props);
         this.state = {
-        	columns : props.columns.map(c => { c.show = true; return c; }),
+        	columns : props.columns,//.map(c => { c.show = true; return c; }),
         	entityName : props.entityName,
         	data : [],
         	urlParams : '',
@@ -186,26 +186,13 @@ class Table extends Component {
 								<Card>
 									<CardHeader title="Selecciona las columnas" />
 									<CardContent>
+
 										<Grid container direction="row" spacing={0} justify="flex-start" alignItems="flex-start">
-							
-										{
-			                                values.columns.map(c => {
-			                                    return (
-			                                    	<Grid key={`grid_col_${c.text}`} item>
-														<ToggleButton key={`column_${c.text}`} value={values.columns.some(column => column.text === c.text && column.show === true)} 
-															aria-label="bold" 
-															onChange={e => {
-			                                                    const idx = values.columns.findIndex(column => column.text === c.text);
-			                                                    values.columns[idx].show = !values.columns[idx].show
-			                                                    setFieldValue('columns', values.columns)
-			                                                }}
-			                                            >{c.text}
-														</ToggleButton>
-													</Grid>
-			                                    )
-			                                })
-			                            }
-			                            	<Grid item xs>
+											
+											<Grid item>
+												<MultiSelect columns={values.columns} changeEvent={(cols) => { setFieldValue("columns", cols) }}/>
+											</Grid>
+			                            	<Grid item>
 												<Fab variant="extended" size="large" color="primary" aria-label="add" onClick={this.downloadData}>
 										          <NavigationIcon/>Descargar Excel
 										        </Fab>
