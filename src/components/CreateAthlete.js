@@ -16,8 +16,8 @@ import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import AppBar from '@material-ui/core/AppBar';
 
-import SubmitButton from './buttons/SubmitButton'
-import Select from './buttons/Select'
+import SubmitButton from './custom/SubmitButton'
+import Select from './custom/Select'
 
 class CreateAthlete extends Component {
     
