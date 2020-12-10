@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Table from "./custom/Table";
 import { textFilter } from 'react-bootstrap-table2-filter';
-import SprintButton from './buttons/SprintButton'
+import SprintButton from './custom/SprintButton'
 import Grid from '@material-ui/core/Grid';
 
 class TableSportSchools extends Component {

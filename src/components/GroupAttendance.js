@@ -10,7 +10,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
-import SubmitButton from './buttons/SubmitButton'
+import SubmitButton from './custom/SubmitButton'
 
 class GroupAttendance extends Component {
 
