@@ -13,6 +13,8 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 
+import Button from './Button'
+
 class Table extends Component {
     constructor(props) {
         super(props);
@@ -193,9 +195,7 @@ class Table extends Component {
 												<MultiSelect columns={values.columns} changeEvent={(cols) => { setFieldValue("columns", cols) }}/>
 											</Grid>
 			                            	<Grid item>
-												<Fab variant="extended" size="large" color="primary" aria-label="add" onClick={this.downloadData}>
-										          <NavigationIcon/>Descargar Excel
-										        </Fab>
+			                            		<Button text="Descargar Excel" onClick={this.downloadData}/>
 											</Grid>
 			                            </Grid>
 		                            </CardContent>

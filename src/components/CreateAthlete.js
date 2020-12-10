@@ -16,8 +16,15 @@ import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import AppBar from '@material-ui/core/AppBar';
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 import SubmitButton from './custom/SubmitButton'
 import Select from './custom/Select'
+import Button from './custom/Button'
 
 class CreateAthlete extends Component {
     
@@ -73,49 +80,54 @@ class CreateAthlete extends Component {
         Promise.all([schoolsPromise, spGroupsPromise, noSpGroupsPromise]).then(values => {
             if (this.props.id) {
                 let id = this.props.id
-                fetch(process.env.REACT_APP_SERVER_URL + "/athletes/" + id,  { headers })
-                .then(res => res.json())
-                .then(data => {
-                    data.age = utils.ageCalculator(new Date(data.birthDate));
-                    data.birthDate = moment(new Date(data.birthDate)).format("YYYY-MM-DD")
-                    this.showSportData = data.feeType !== 'socio'
-                    this.feeTypes = utils.getFeeTypes(data.sportSchoolId)
-
-                    if (data.specialization){
-                        this.groups = this.specializedGroups
-                    }
-                    else {
-                        this.groups = this.notSpecializedGroups
-                    }
-
-                    const requestOptions = {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(data)
-                    }
-                    fetch(process.env.REACT_APP_SERVER_URL + "/athletes/fee", requestOptions)
-                        .then(res => res.json())
-                        .then(feeData => {
-                            data.enrollmentFee = feeData.enrollmentFee
-                            data.membershipFee = feeData.membershipFee
-                            data.monthlyFee = feeData.monthlyFee
-                            this.setState(data, () => {
-                                if (data.groupId && data.groupId > 0){
-                                    fetch(process.env.REACT_APP_SERVER_URL + "/groups/" + data.groupId + "/schedules",  { headers })
-                                        .then(res => res.json())
-                                        .then(schData => {
-                                            this.schedules = schData
-                                            this.setState(data)
-                                        });
-                                }
-                            })
-                        });
-                });
+                this.getAthlete(id)
             }
             else {
                 this.setState({})
             }
         })
+    }
+
+    getAthlete(id) {
+        const headers = { 'Content-Type': 'application/json' }
+        fetch(process.env.REACT_APP_SERVER_URL + "/athletes/" + id,  { headers })
+        .then(res => res.json())
+        .then(data => {
+            data.age = utils.ageCalculator(new Date(data.birthDate));
+            data.birthDate = moment(new Date(data.birthDate)).format("YYYY-MM-DD")
+            this.showSportData = data.feeType !== 'socio'
+            this.feeTypes = utils.getFeeTypes(data.sportSchoolId)
+
+            if (data.specialization){
+                this.groups = this.specializedGroups
+            }
+            else {
+                this.groups = this.notSpecializedGroups
+            }
+
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }
+            fetch(process.env.REACT_APP_SERVER_URL + "/athletes/fee", requestOptions)
+                .then(res => res.json())
+                .then(feeData => {
+                    data.enrollmentFee = feeData.enrollmentFee
+                    data.membershipFee = feeData.membershipFee
+                    data.monthlyFee = feeData.monthlyFee
+                    this.setState(data, () => {
+                        if (data.groupId && data.groupId > 0){
+                            fetch(process.env.REACT_APP_SERVER_URL + "/groups/" + data.groupId + "/schedules",  { headers })
+                                .then(res => res.json())
+                                .then(schData => {
+                                    this.schedules = schData
+                                    this.setState(data)
+                                });
+                        }
+                    })
+                });
+        });
     }
 
     handleFormSubmit() {
@@ -227,6 +239,11 @@ class CreateAthlete extends Component {
                     enrollmentFee: this.state.enrollmentFee || 0,
                     membershipFee: this.state.membershipFee || 0,
                     monthlyFee: this.state.monthlyFee || 0,
+                    // Dialogs
+                    historic: this.state.historic || [],
+                    registered: this.state.registered || false,
+                    registerDate: moment(new Date()).format("YYYY-MM-DD"),
+                    openRegisterDialog: false,
                     required :[
                         'sportSchoolId',
                         'imageAuth',
@@ -303,6 +320,44 @@ class CreateAthlete extends Component {
                                             </Grid>
                                         </Grid>
                                     </CardContent></Card>
+                                </Grid>
+                                <Grid item>
+                                    <Button text={values.registered ? 'Dar de baja' : 'Dar de alta' } onClick={() => {
+                                        setFieldValue('openRegisterDialog', true)
+                                    }} />
+                                    <Dialog open={values.openRegisterDialog} aria-labelledby="form-dialog-title"
+                                        onClose={() => {
+                                            setFieldValue('openRegisterDialog', false)
+                                        }} 
+                                    >
+                                        <DialogTitle id="form-dialog-title">Fecha de {values.registered ? 'baja' : 'alta' }</DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText>
+                                                Introduce la fecha de {values.registered ? 'baja' : 'alta' }.
+                                            </DialogContentText>
+                                            <TextField id="registerDate" name="registerDate" value={values.registerDate} margin="dense" onChange={handleChange}
+                                                type="date"/>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={() => { 
+                                                const requestOptions = {
+                                                    method: 'POST',
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    body: JSON.stringify({ date : values.registerDate })
+                                                }
+
+                                                fetch(process.env.REACT_APP_SERVER_URL + "/athletes/" + values.id + (values.registered ? "/unregister" : "/register"), requestOptions)
+                                                    .then(res => res.json())
+                                                    .then(data => {
+                                                        setFieldValue('openRegisterDialog', false)
+                                                        this.getAthlete(values.id)
+                                                    });
+                                            }} color="primary"
+                                                text={values.registered ? 'Dar de baja' : 'Dar de alta' }/>
+                                            <Button onClick={() => { setFieldValue('openRegisterDialog', false) }} color="secondary"
+                                                text="Cancelar"/>
+                                        </DialogActions>
+                                    </Dialog>
                                 </Grid>
                             </Grid>
                             <Grid container item spacing={1}>
