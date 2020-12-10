@@ -52,15 +52,15 @@ class MultiSelect extends Component {
 
 		// Checked in Right
 		const inRight = this.state.right.filter(d => d.dataField === value.dataField)
-		if (inRight.length > 0){
+		if (inRight.length > 0 && this.state.right.length > 1){
 			this.toggleRightChange(inRight)
 		}	
 	}
 
  	async handleAllLeft(){
 		await this.setState({ 
-			left : this.state.left.concat(this.state.right),
-			right : []
+			left : this.state.left.concat(this.state.right.splice(1)),
+			right : this.state.right.splice(0, 1)
 		})
 		this.fireChange()
 	};
