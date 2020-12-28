@@ -6,8 +6,6 @@ import Table from "./custom/Table";
 import { textFilter } from 'react-bootstrap-table2-filter';
 import { Formik } from 'formik';
 
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -103,48 +101,46 @@ class GroupAthletesTable extends Component {
                 {({ handleSubmit, handleChange, values, setFieldValue }) => (
 
                     <Form onSubmit={handleSubmit}>
-                        <Grid container>
-                            <Card><CardContent>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={2}>
-                                        <TextField select fullWidth name="groupId" value={values.groupId} label="Grupos"
-                                            onChange={e => {
-                                                
-                                                this.fillSchedules(e.target.value, setFieldValue)
-                                                setFieldValue('groupId', e.target.value)
-                                            }}>
-                                            {
-                                                values.groups.map(group => {
-                                                    return (<MenuItem key={group.id} value={group.id}>{group.name}</MenuItem>)
-                                                })
-                                            }
-                                        </TextField>
-                                    </Grid>
-                                    <Grid item xs={2}>
-                                        <TextField select fullWidth name="scheduleId" value={values.scheduleId} label="Horarios" onChange={handleChange}>
-                                            <MenuItem></MenuItem>
-                                            {
-                                                values.schedules.map(sch => {
-                                                    return <MenuItem key={sch.id} value={sch.id}>{sch.day} {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}</MenuItem>
-                                                })
-                                            }
-                                        </TextField>
-                                    </Grid>
-                                    <Grid item xs={2}>
-                                        <SubmitButton/>
-                                    </Grid>
+                        <Grid container direction="column">
+                            <Grid item xs container spacing={1}>
+                                <Grid item xs>
+                                    <TextField select fullWidth name="groupId" value={values.groupId} label="Grupos"
+                                        onChange={e => {
+                                            
+                                            this.fillSchedules(e.target.value, setFieldValue)
+                                            setFieldValue('groupId', e.target.value)
+                                        }}>
+                                        {
+                                            values.groups.map(group => {
+                                                return (<MenuItem key={group.id} value={group.id}>{group.name}</MenuItem>)
+                                            })
+                                        }
+                                    </TextField>
                                 </Grid>
-                                <Grid container>
-                                    <Grid item xs>
-                                        <Table 
-                                            columns={values.columns} 
-                                            entityName={values.entityName}
-                                            dataConversor={this.athleteDataConversor}
-                                            showExcel={true}>
-                                        </Table>
-                                    </Grid>
+                                <Grid item xs>
+                                    <TextField select fullWidth name="scheduleId" value={values.scheduleId} label="Horarios" onChange={handleChange}>
+                                        <MenuItem></MenuItem>
+                                        {
+                                            values.schedules.map(sch => {
+                                                return <MenuItem key={sch.id} value={sch.id}>{sch.day} {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}</MenuItem>
+                                            })
+                                        }
+                                    </TextField>
                                 </Grid>
-                            </CardContent></Card>
+                                <Grid item xs>
+                                    <SubmitButton/>
+                                </Grid>
+                            </Grid>
+                            <Grid container>
+                                <Grid item xs spacing={1}>
+                                    <Table 
+                                        columns={values.columns} 
+                                        entityName={values.entityName}
+                                        dataConversor={this.athleteDataConversor}
+                                        showExcel={true}>
+                                    </Table>
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Form>
                 )}

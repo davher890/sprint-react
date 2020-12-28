@@ -10,10 +10,11 @@ import GroupAthletesTable from "../../components/GroupAthletesTable";
 import CreateAthlete from "../../components/CreateAthlete";
 
 import Grid from '@material-ui/core/Grid';
+import Container from '@material-ui/core/Container';
 
 export function Athletes() {
   return (
-  	<Grid container column>
+  	<Container fixed>
 	    <Grid item>
 	    	<Suspense fallback={<div>Cargando...</div>}>
 				<AthletesTable/>
@@ -24,7 +25,7 @@ export function Athletes() {
 				<GroupAthletesTable/>
 			</Suspense>
 	    </Grid>
-	</Grid>
+	</Container>
   );
 }
 
@@ -32,10 +33,10 @@ export function NewAthlete() {
 
 	let { id } = useParams();
 	return (
-  	<Grid container spacing={1}>
+  	<Container fixed>
     	<Suspense fallback={<div>Cargando...</div>}>
 			<CreateAthlete id={id}/>
 		</Suspense>
-	</Grid>
+	</Container>
   );
 }

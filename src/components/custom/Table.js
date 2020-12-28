@@ -6,8 +6,6 @@ import Filter from 'react-bootstrap-table2-filter';
 import { Formik } from 'formik';
 
 import MultiSelect from './MultiSelect'
-import Fab from '@material-ui/core/Fab';
-import NavigationIcon from '@material-ui/icons/Navigation';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';

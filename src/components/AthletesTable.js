@@ -4,8 +4,6 @@ import Table from "./custom/Table";
 import { textFilter, selectFilter, numberFilter } from 'react-bootstrap-table2-filter';
 import Button from './custom/Button'
 import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 
 class AthletesTableComponent extends Component {
     constructor(props) {
@@ -42,23 +40,17 @@ class AthletesTableComponent extends Component {
 
 	render() {
 		return (
-			<Grid container>
-	            <Card><CardContent>
-	                <Grid container>
-						<Button text="Nuevo Atleta" href={`/${this.state.entityName}`}/>
-						<Grid container spacing={1}>
-							<Grid item xs>
-								<Table 
-									columns={this.state.columns} 
-									entityName={this.state.entityName}
-									dataConversor={this.dataConversor}
-									filter={this.props.filter}
-									showCreate={true} >
-								</Table>
-							</Grid>
-						</Grid>
-					</Grid>
-				</CardContent></Card>
+			<Grid container direction="column">
+                <Button text="Nuevo Atleta" href={`/${this.state.entityName}`}/>
+				<Grid item xs spacing={1}>
+					<Table 
+						columns={this.state.columns} 
+						entityName={this.state.entityName}
+						dataConversor={this.dataConversor}
+						filter={this.props.filter}
+						showCreate={true} >
+					</Table>
+				</Grid>
 			</Grid>
 		)
 	}

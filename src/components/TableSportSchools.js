@@ -29,19 +29,17 @@ class TableSportSchools extends Component {
 
     render() {
 		return (
-			<div>
+			<Grid container direction="column">
 				<Button text="Nueva Escuela Deportiva" href={`/${this.state.entityName}`}/>
-				<Grid container spacing={1}>
-					<Grid item xs>
-						<Table 
-							columns={this.state.columns} 
-							entityName={this.state.entityName}
-							dataConversor={this.dataConversor}
-							showCreate={true}>
-						</Table>
-					</Grid>
+				<Grid item xs spacing={1}>
+					<Table 
+						columns={this.state.columns} 
+						entityName={this.state.entityName}
+						dataConversor={this.dataConversor}
+						showCreate={true}>
+					</Table>
 				</Grid>
-			</div>
+			</Grid>
 		)
 	}
 }
