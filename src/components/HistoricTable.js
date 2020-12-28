@@ -5,7 +5,7 @@ import { textFilter, selectFilter, numberFilter } from 'react-bootstrap-table2-f
 import Button from './custom/Button'
 import Grid from '@material-ui/core/Grid';
 
-class AthletesTableComponent extends Component {
+class HistoricTableComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -22,7 +22,7 @@ class AthletesTableComponent extends Component {
 	        	{ dataField: 'license', text : 'Licencia' }, 
 	        	{ dataField: 'dorsalNumber', text : 'Dorsal', filter: numberFilter()}
         	],
-        	entityName : 'athletes'
+        	entityName : 'athletes/historic'
         }
     }
 
@@ -40,9 +40,8 @@ class AthletesTableComponent extends Component {
 
 	render() {
 		return (
-			<Grid container direction="column">
-                <Button text="Nuevo Atleta" href={`/${this.state.entityName}`}/>
-				<Grid item xs spacing={1}>
+            <Grid container direction="column">
+           		<Grid item xs spacing={1}>
 					<Table 
 						columns={this.state.columns} 
 						entityName={this.state.entityName}
@@ -56,6 +55,6 @@ class AthletesTableComponent extends Component {
 	}
 }
 
-export default AthletesTableComponent;
+export default HistoricTableComponent;
 
 

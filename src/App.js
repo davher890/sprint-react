@@ -8,6 +8,7 @@ import { NewSportSchool, SportSchools } from './pages/sport_schools/SportSchools
 import { NewGroup, Groups } from './pages/groups/Groups';
 import { NewFamily, Families } from './pages/families/Families';
 import { NewAthlete, Athletes } from './pages/athletes/Athletes';
+import { AthletesHistoric } from './pages/athletes/Historic';
 import { GroupListing } from './pages/listings/Listings';
 import Box from '@material-ui/core/Box';
 
@@ -43,6 +44,7 @@ return (
               </NavDropdown>
               <NavDropdown title="Listados" id="collasible-nav-dropdown">
                 <NavDropdown.Item href="/groups/attendance">Asistencia</NavDropdown.Item>
+                <NavDropdown.Item href="/athletes/historic">Histórico</NavDropdown.Item>
                 <NavDropdown.Divider />
               </NavDropdown>
               <Nav.Link href="/families/list">Familias</Nav.Link>
@@ -77,6 +79,14 @@ return (
 
             <Route path="/athletes/list">
               <Athletes/>
+            </Route>
+
+            <Route path="/athletes/historic/:id">
+              <NewAthlete/>
+            </Route>
+            
+            <Route path="/athletes/historic">
+              <AthletesHistoric/>
             </Route>
 
             <Route path="/athletes/:id">

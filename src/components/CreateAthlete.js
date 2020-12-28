@@ -240,7 +240,6 @@ class CreateAthlete extends Component {
                     membershipFee: this.state.membershipFee || 0,
                     monthlyFee: this.state.monthlyFee || 0,
                     // Dialogs
-                    historic: this.state.historic || [],
                     registered: this.state.registered || false,
                     registerDate: moment(new Date()).format("YYYY-MM-DD"),
                     openRegisterDialog: false,
