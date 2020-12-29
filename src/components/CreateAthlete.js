@@ -712,20 +712,18 @@ class CreateAthlete extends Component {
                                     </Card>
                                 </Grid>
                             </Grid>
-                            <Grid container item spacing={1}>
+                            <Grid container item style={{ display: "block" }}>
                                 <Grid item>
                                     <Card>
                                         <CardContent>
                                             <Grid container spacing={1}>
-                                                <Grid item xs>
-                                                    <TextField select fullWidth name="imageAuth" label="Aut. Imágenes" value={values.imageAuth}
-                                                        error={touched.imageAuth && errors.imageAuth} onChange={handleChange}>
-                                                        <MenuItem></MenuItem>
-                                                        <MenuItem value={true}>Si</MenuItem>
-                                                        <MenuItem value={false}>No</MenuItem>
-                                                    </TextField>
+                                                <Grid item xs={3}>
+                                                    <Select fullWidth name="imageAuth" label="Aut. Imágenes" value={values.imageAuth}
+                                                        error={touched.imageAuth && errors.imageAuth} onChange={handleChange}
+                                                        options={[{id: true, name: 'Si'}, {id: false, name: 'No'}]}
+                                                    />
                                                 </Grid>
-                                                <Grid item xs>
+                                                <Grid item xs={9}>
                                                     <TextField fullWidth name="observations" label="Observaciones" multiline
                                                         value={values.observations} onChange={handleChange}/>
                                                 </Grid>
