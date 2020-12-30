@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Table from "./custom/Table";
 import { textFilter, selectFilter, numberFilter } from 'react-bootstrap-table2-filter';
-import Button from './custom/Button'
 import Grid from '@material-ui/core/Grid';
 
 class HistoricTableComponent extends Component {
