@@ -11,10 +11,11 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import AppBar from '@material-ui/core/AppBar';
+import { Alert, AlertTitle } from '@material-ui/lab';
+import Snackbar from '@material-ui/core/Snackbar';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -126,7 +127,7 @@ class CreateAthlete extends Component {
                                 });
                         }
                     })
-                });
+                })
         });
     }
 
@@ -141,10 +142,13 @@ class CreateAthlete extends Component {
         fetch(process.env.REACT_APP_SERVER_URL + "/athletes", requestOptions)
             .then(res => res.json())
             .then(data => {
+                if (!data.errorMessage){
+                    data.successMessage = "Atleta guardado!"
+                }
                 data.age = utils.ageCalculator(new Date(data.birthDate));
                 data.birthDate = moment(new Date(data.birthDate)).format("YYYY-MM-DD")
                 this.setState(data)
-            });
+            })
     }
 
     fillFee(values, setFieldValue){
@@ -197,7 +201,7 @@ class CreateAthlete extends Component {
                     secondSurname: this.state.secondSurname || '',
                     birthDate: this.state.birthDate || '',
                     dni: this.state.dni || '',
-                    gender: this.state.gender || '',
+                    gender: this.state.gender || 'male',
                     // Familiar info
                     familiarOneName: this.state.familiarOneName || '',
                     familiarOneFirstSurname: this.state.familiarOneFirstSurname || '',
@@ -243,6 +247,9 @@ class CreateAthlete extends Component {
                     registered: this.state.registered || false,
                     registerDate: moment(new Date()).format("YYYY-MM-DD"),
                     openRegisterDialog: false,
+
+                    errorMessage: this.state.errorMessage || '',
+                    successMessage: this.state.successMessage || '',
                     required :[
                         'sportSchoolId',
                         'imageAuth',
@@ -285,12 +292,26 @@ class CreateAthlete extends Component {
                     this.setState(values)
                     setSubmitting(false);
                     this.handleFormSubmit()
-                    alert("Guardado")
                 }}
                 >
                 {({ handleSubmit, values, touched, setFieldValue, errors, handleChange }) => (
 
                     <form onSubmit={handleSubmit}>
+
+                    <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''} 
+                        anchorOrigin={{ vertical:'top', horizontal:'center' }} autoHideDuration={6000}>
+                        <Alert severity="error" onClose={() => { setFieldValue("errorMessage", "")}}>
+                            <AlertTitle>Error</AlertTitle>
+                                <strong>{values.errorMessage}</strong>
+                        </Alert>
+                    </Snackbar>
+                    <Snackbar open={values.successMessage !== undefined && values.successMessage !== ''} 
+                        anchorOrigin={{ vertical:'top', horizontal:'center' }} autoHideDuration={6000}>
+                        <Alert severity="success" onClose={() => { setFieldValue("successMessage", "")}}>
+                            <AlertTitle>Ok!</AlertTitle>
+                                <strong>{values.successMessage}</strong>
+                        </Alert>
+                    </Snackbar>
                         
                     <Grid container spacing={3}>
                         <Grid container item spacing={3}>
