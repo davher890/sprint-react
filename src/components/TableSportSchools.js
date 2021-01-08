@@ -10,9 +10,10 @@ class TableSportSchools extends Component {
         super(props);
         this.state = { 
         	columns : [
-        		{ dataField: 'name', text: 'Nombre', filter: textFilter(), show: true },
-        		{ dataField: 'municipality', text: 'Municipio', filter: textFilter() },
-        		{ dataField: 'address', text: 'Dirección', filter: textFilter() }
+        		{ dataField: 'id', text: 'Id', hide: true },
+	        	{ dataField: 'name', text: 'Nombre', filter: textFilter(), show: true, width : 300 },
+        		{ dataField: 'municipality', text: 'Municipio', filter: textFilter(), width : 400},
+        		{ dataField: 'address', text: 'Dirección', filter: textFilter(), width : 1300 }
     		],
     		entityName : 'sport_schools'
         };
@@ -31,7 +32,7 @@ class TableSportSchools extends Component {
 		return (
 			<Grid container direction="column">
 				<Button text="Nueva Escuela Deportiva" href={`/${this.state.entityName}`}/>
-				<Grid item xs spacing={1}>
+				<Grid item xs>
 					<Table 
 						columns={this.state.columns} 
 						entityName={this.state.entityName}

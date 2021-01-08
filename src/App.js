@@ -7,9 +7,9 @@ import { NewSchedule, Schedules } from './pages/schedules/Schedules';
 import { NewSportSchool, SportSchools } from './pages/sport_schools/SportSchools';
 import { NewGroup, Groups } from './pages/groups/Groups';
 import { NewFamily, Families } from './pages/families/Families';
-import { NewAthlete, Athletes } from './pages/athletes/Athletes';
+import { NewAthlete, Athletes, Sportdata } from './pages/athletes/Athletes';
 import { AthletesHistoric } from './pages/athletes/Historic';
-import { GroupListing } from './pages/listings/Listings';
+import { GroupListing, GroupAthletes } from './pages/listings/Listings';
 import Box from '@material-ui/core/Box';
 
 import { 
@@ -45,6 +45,7 @@ return (
               <NavDropdown title="Listados" id="collasible-nav-dropdown">
                 <NavDropdown.Item href="/groups/attendance">Asistencia</NavDropdown.Item>
                 <NavDropdown.Item href="/athletes/historic">Histórico</NavDropdown.Item>
+                <NavDropdown.Item href="/groups/athletes">Atlelas-Groups</NavDropdown.Item>
                 <NavDropdown.Divider />
               </NavDropdown>
               <Nav.Link href="/families/list">Familias</Nav.Link>
@@ -84,6 +85,10 @@ return (
             <Route path="/athletes/historic/:id">
               <NewAthlete/>
             </Route>
+
+            <Route path="/athletes/:id/sport_data">
+              <Sportdata/>
+            </Route>
             
             <Route path="/athletes/historic">
               <AthletesHistoric/>
@@ -111,6 +116,10 @@ return (
 
             <Route path="/groups/attendance">
               <GroupListing/>
+            </Route>
+
+            <Route path="/groups/athletes">
+              <GroupAthletes/>
             </Route>
             
             <Route path="/groups/list">
