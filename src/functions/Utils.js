@@ -1,5 +1,12 @@
 
+const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ];
+
 const utils = {
+
+	getMonth: function(month){
+		return monthNames[month]
+	},
+
 	ageCalculator: function(birth){
 	    var curr  = new Date();
 	    var diff = curr.getTime() - birth;
