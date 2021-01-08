@@ -8,15 +8,28 @@ import { Formik } from 'formik';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
 import SubmitButton from './custom/SubmitButton'
+import Select from './custom/Select'
+
+import utils from "../functions/Utils.js"
 
 class GroupAttendance extends Component {
 
 	constructor(props) {
-		super(props);
-		this.state = {}
+		super(props)
+
+        let d = new Date()
+        let previousMonth = (d.getMonth()-1 + 12) % 12
+        let nextMonth = (d.getMonth()+1 + 12) % 12
+        console.log(previousMonth, nextMonth)
+		this.state = {
+            months : [
+                { id : previousMonth, name: utils.getMonth(previousMonth)},
+                { id : d.getMonth(), name: utils.getMonth(d.getMonth())},
+                { id : nextMonth, name: utils.getMonth(nextMonth)}
+            ],
+            month: utils.getMonth(d.getMonth),
+        }
 	}
 
 	componentDidMount(){
@@ -31,7 +44,7 @@ class GroupAttendance extends Component {
 
 	handleFormSubmit() {
 
-        fetch(process.env.REACT_APP_SERVER_URL + "/groups/" + this.state.groupId + "/attendance")
+        fetch(process.env.REACT_APP_SERVER_URL + "/groups/" + this.state.groupId + "/attendance?month=" + this.state.month)
             .then(response => {
 				response.blob().then(blob => {
 					let url = window.URL.createObjectURL(blob);
@@ -51,7 +64,9 @@ class GroupAttendance extends Component {
 			<Formik enableReinitialize
                 initialValues={{
                     groups : this.state.groups || [],
-                    groupId: this.state.groupId || ''
+                    groupId : this.state.groupId || '',
+                    month : this.state.month,
+                    months : this.state.months
                 }}
                 validate={(values) => {
                 	let errors = {};
@@ -67,14 +82,15 @@ class GroupAttendance extends Component {
             		<Form onSubmit={handleSubmit}>
 						<Grid container>
 	            			<Grid item xs>
+                                <Card><CardContent>
+                                    <Select name="month" value={values.month} label="Mes" 
+                                        options={values.months} onChange={(e, value) => setFieldValue('month', value.id)} />
+                                </CardContent></Card>
+                            </Grid>
+                            <Grid item xs>
 	            				<Card><CardContent>
-									<TextField select fullWidth name="groupId" value={values.groupId} label="Grupos" onChange={handleChange}>
-                                        {
-                                            values.groups.map(group => {
-                                                return (<MenuItem key={group.id} value={group.id}>{group.name}</MenuItem>)
-                                            })
-                                        }
-                                    </TextField>
+									<Select name="groupId" value={values.groupId} label="Grupos" 
+                                        options={values.groups} onChange={(e, value) => setFieldValue('groupId', value.id)}/>
                             	</CardContent></Card>
                             </Grid>
                             <Grid container>
