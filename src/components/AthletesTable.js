@@ -10,17 +10,18 @@ class AthletesTableComponent extends Component {
         super(props);
         this.state = {
         	columns : [
-	        	{ dataField: 'name', text : 'Nombre', filter: textFilter(), show: true }, 
-	        	{ dataField: 'birthDate', text : 'Fecha de Nacimiento', show: true }, 
+        		{ dataField: 'id', text: 'Id', hide: true },
+	        	{ dataField: 'name', text : 'Nombre', filter: textFilter(), show: true, width : 150 }, 
+	        	{ dataField: 'birthDate', text : 'Fecha de Nacimiento', show: true, width : 200, type: 'dateTime' }, 
 	        	{ dataField: 'gender', text : 'Género', filter: selectFilter({
 	        		options : {
 	        			'male' : 'Masculino',
 	        			'female' : 'Femenino'
 	        		}
-	        	})  }, 
-	        	{ dataField: 'category', text : 'Categoría', filter: textFilter() }, 
-	        	{ dataField: 'license', text : 'Licencia' }, 
-	        	{ dataField: 'dorsalNumber', text : 'Dorsal', filter: numberFilter()}
+	        	}), width : 150 }, 
+	        	{ dataField: 'category', text : 'Categoría', filter: textFilter(), width : 150 }, 
+	        	{ dataField: 'license', text : 'Licencia', width : 150 }, 
+	        	{ dataField: 'dorsalNumber', text : 'Dorsal', filter: numberFilter(), width : 150 }
         	],
         	entityName : 'athletes'
         }
@@ -41,14 +42,15 @@ class AthletesTableComponent extends Component {
 	render() {
 		return (
 			<Grid container direction="column">
-                <Button text="Nuevo Atleta" href={`/${this.state.entityName}`}/>
-				<Grid item xs spacing={1}>
+                <Grid item xs>
+                	<Button text="Nuevo Atleta" href={`/${this.state.entityName}`}/>
+				</Grid>
+				<Grid item xs>
 					<Table 
 						columns={this.state.columns} 
 						entityName={this.state.entityName}
 						dataConversor={this.dataConversor}
-						filter={this.props.filter}
-						showCreate={true} >
+						filter={this.props.filter}>
 					</Table>
 				</Grid>
 			</Grid>

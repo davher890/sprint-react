@@ -7,9 +7,9 @@ import { textFilter } from 'react-bootstrap-table2-filter';
 import { Formik } from 'formik';
 
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
 import SubmitButton from './custom/SubmitButton'
+
+import Select from './custom/Select'
 
 class GroupAthletesTable extends Component {
 
@@ -18,12 +18,13 @@ class GroupAthletesTable extends Component {
 		this.state = {}
 
 		this.columns = [
-            { dataField: 'name', text : 'Nombre', filter: textFilter(), type: 'string', show: true  }, 
-            { dataField: 'birthDate', text : 'Fecha de Nacimiento', type: 'date' }, 
-            { dataField: 'gender', text : 'Genero', filter: textFilter(), type: 'string' }, 
-            { dataField: 'category', text : 'Categoria', filter: textFilter(), type: 'string' }, 
-            { dataField: 'license', text : 'Licencia', type: 'string'}, 
-            { dataField: 'dorsalNumber', text : 'Dorsal', type: 'number'}
+            { dataField: 'id', text: 'Id', hide: true, width : 80 },
+            { dataField: 'name', text : 'Nombre', filter: textFilter(), type: 'string', show: true, width : 80 }, 
+            { dataField: 'birthDate', text : 'Fecha de Nacimiento', type: 'date', width : 80 }, 
+            { dataField: 'gender', text : 'Genero', filter: textFilter(), type: 'string', width : 80 }, 
+            { dataField: 'category', text : 'Categoria', filter: textFilter(), type: 'string', width : 80 }, 
+            { dataField: 'license', text : 'Licencia', type: 'string', width : 80 }, 
+            { dataField: 'dorsalNumber', text : 'Dorsal', type: 'number', width : 80 }
         ]
 
         this.handleSubmitQuery = this.handleSubmitQuery.bind(this);
@@ -77,7 +78,9 @@ class GroupAthletesTable extends Component {
         fetch(process.env.REACT_APP_SERVER_URL + "/groups/" + groupId + "/schedules",  { headers })
             .then(res => res.json())
             .then(data => {
-                this.schedules = data
+                this.schedules = data.map(sch => { 
+                    return {id : sch.id, name: sch.day + " " + sch.startHour + ":" + sch.startMinute + " - " + sch.endHour + ":" + sch.endMinute}
+                })
                 setFieldValue('schedules', this.schedules)
             });
     }
@@ -104,35 +107,26 @@ class GroupAthletesTable extends Component {
                         <Grid container direction="column">
                             <Grid item xs container spacing={1}>
                                 <Grid item xs>
-                                    <TextField select fullWidth name="groupId" value={values.groupId} label="Grupos"
-                                        onChange={e => {
-                                            
-                                            this.fillSchedules(e.target.value, setFieldValue)
-                                            setFieldValue('groupId', e.target.value)
-                                        }}>
-                                        {
-                                            values.groups.map(group => {
-                                                return (<MenuItem key={group.id} value={group.id}>{group.name}</MenuItem>)
-                                            })
-                                        }
-                                    </TextField>
+                                    <Select name="groupId" value={values.groupId} label="Grupos"
+                                        onChange={(e, value) => {
+                                            this.fillSchedules(value.id, setFieldValue)
+                                            setFieldValue('groupId', value.id)
+                                        }} options={values.groups} 
+                                    />
                                 </Grid>
                                 <Grid item xs>
-                                    <TextField select fullWidth name="scheduleId" value={values.scheduleId} label="Horarios" onChange={handleChange}>
-                                        <MenuItem></MenuItem>
-                                        {
-                                            values.schedules.map(sch => {
-                                                return <MenuItem key={sch.id} value={sch.id}>{sch.day} {sch.startHour}:{sch.startMinute} - {sch.endHour}:{sch.endMinute}</MenuItem>
-                                            })
-                                        }
-                                    </TextField>
+                                    <Select name="scheduleId" value={values.scheduleId} label="Horarios" 
+                                        onChange={(e, value) => { 
+                                            setFieldValue('scheduleId', value.id) 
+                                        }} options={values.schedules}
+                                    />
                                 </Grid>
                                 <Grid item xs>
                                     <SubmitButton/>
                                 </Grid>
                             </Grid>
                             <Grid container>
-                                <Grid item xs spacing={1}>
+                                <Grid item xs>
                                     <Table 
                                         columns={values.columns} 
                                         entityName={values.entityName}

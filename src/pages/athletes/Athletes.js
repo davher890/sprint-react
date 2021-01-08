@@ -6,26 +6,18 @@ import {
 } from "react-router-dom";
 
 import AthletesTable from "../../components/AthletesTable";
-import GroupAthletesTable from "../../components/GroupAthletesTable";
+import AthleteSportdata from "../../components/AthleteSportdata";
 import CreateAthlete from "../../components/CreateAthlete";
 
 import Grid from '@material-ui/core/Grid';
-import Container from '@material-ui/core/Container';
 
 export function Athletes() {
   return (
-  	<Container fixed>
-	    <Grid item>
-	    	<Suspense fallback={<div>Cargando...</div>}>
-				<AthletesTable/>
-			</Suspense>
-	    </Grid>
-	    <Grid item>
-	    	<Suspense fallback={<div>Cargando...</div>}>
-				<GroupAthletesTable/>
-			</Suspense>
-	    </Grid>
-	</Container>
+  	<Grid container>
+    	<Suspense fallback={<div>Cargando...</div>}>
+			<AthletesTable/>
+		</Suspense>
+	</Grid>
   );
 }
 
@@ -33,10 +25,22 @@ export function NewAthlete() {
 
 	let { id } = useParams();
 	return (
-  	<Container fixed>
+  	<Grid container>
     	<Suspense fallback={<div>Cargando...</div>}>
 			<CreateAthlete id={id}/>
 		</Suspense>
-	</Container>
+	</Grid>
+  );
+}
+
+export function Sportdata() {
+
+	let { id } = useParams();
+	return (
+  	<Grid container>
+    	<Suspense fallback={<div>Cargando...</div>}>
+			<AthleteSportdata id={id}/>
+		</Suspense>
+	</Grid>
   );
 }

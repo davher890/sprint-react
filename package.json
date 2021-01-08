@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.0",
+    "@material-ui/data-grid": "^4.0.0-alpha.15",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@material-ui/pickers": "^3.2.10",
@@ -49,7 +50,7 @@
       "last 1 safari version"
     ]
   },
-  "engines" : {
-    "node" : "10.15.3" 
+  "engines": {
+    "node": "10.15.3"
   }
 }
