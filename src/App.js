@@ -45,7 +45,7 @@ return (
               <NavDropdown title="Listados" id="collasible-nav-dropdown">
                 <NavDropdown.Item href="/groups/attendance">Asistencia</NavDropdown.Item>
                 <NavDropdown.Item href="/athletes/historic">Histórico</NavDropdown.Item>
-                <NavDropdown.Item href="/groups/athletes">Atlelas-Groups</NavDropdown.Item>
+                <NavDropdown.Item href="/groups/athletes">Atletas-Groups</NavDropdown.Item>
                 <NavDropdown.Divider />
               </NavDropdown>
               <Nav.Link href="/families/list">Familias</Nav.Link>
@@ -82,7 +82,7 @@ return (
               <Athletes/>
             </Route>
 
-            <Route path="/athletes/historic/:id">
+            <Route path="/athletes/:id/historic">
               <NewAthlete/>
             </Route>
 
