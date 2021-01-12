@@ -1,4 +1,8 @@
 import React, { Component } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import BootstrapTable  from 'react-bootstrap-table-next';
+import Paginator from 'react-bootstrap-table2-paginator'
+import Filter from 'react-bootstrap-table2-filter';
 import { Formik } from 'formik';
 
 import MultiSelect from './MultiSelect'
@@ -6,7 +10,6 @@ import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
-import { DataGrid } from '@material-ui/data-grid'
 
 import Button from './Button'
 
@@ -14,42 +17,41 @@ class Table extends Component {
     constructor(props) {
         super(props);
         this.state = {
-        	columns : props.columns.map(c => {
-        		c.field = c.dataField
-        		c.headerName = c.text
-        		return c
-        	}),
+        	columns : props.columns,//.map(c => { c.show = true; return c; }),
         	entityName : props.entityName,
         	data : [],
         	urlParams : '',
         	size : 10,
         	page : 1,
         	total : 0,
-        	showExcel : props.showExcel || false,
+        	showColumns : props.showColumns !== undefined ? props.showColumns : true,
         	fixedFilters : props.filter ? props.filter.split(",") : [],
         	filters : []
     	}
-    	this.fetchData = this.fetchData.bind(this)
-        this.handleFilterChange = this.handleFilterChange.bind(this)
-        this.handlePageChange = this.handlePageChange.bind(this)
+		this.fetchData = this.fetchData.bind(this)
+        this.handleTableChange = this.handleTableChange.bind(this)
         this.downloadData = this.downloadData.bind(this)
     }
 
-   //  componentDidMount(prevProps, nextProps){
-   //      if(prevProps !== this.props){
-			// this.fetchData()
-   //  	}
-   //  }
+    refresh(){
+    	this.fetchData()
+    }
 
- //    async componentDidUpdate(prevProps) {
+    componentDidMount(prevProps, nextProps){
+        if(prevProps !== this.props){
+			this.fetchData()
+    	}
+    }
 
- //    	if (this.props.entityName && this.props.entityName !== this.state.entityName){
- //    		await this.setState({
- //    			entityName : this.props.entityName
- //    		})
- //    		this.fetchData()
- //    	}
-	// }
+    async componentDidUpdate(prevProps) {
+
+    	if (this.props.entityName && this.props.entityName !== this.state.entityName){
+    		await this.setState({
+    			entityName : this.props.entityName
+    		})
+    		this.fetchData()
+    	}
+	}
 
     fetchData(){
     	if (this.state.entityName && this.state.entityName !== ""){
@@ -73,7 +75,12 @@ class Table extends Component {
 				.then(data => {
 					let items = []
 					if (data.content && data.content.length > 0){
-						items = data.content.map(d => { return this.props.dataConversor(d) })
+						items = data.content
+						if (this.props.dataConversor){
+							items = data.content.map(d => {
+								return this.props.dataConversor(d)
+							})
+						}
 					}
 					this.setState({
 						data: items,
@@ -83,31 +90,19 @@ class Table extends Component {
 				})
 		}
 	}
-
-	handleHeaderClick(params){
-
-		console.log(params)
-
-	}
-
-	async handlePageChange(pageProp){
-
-		console.log(pageProp)
-		let page = pageProp.page;
-		let size = pageProp.pageSize;
+	
+	async handleTableChange(type, pageProp){
 		
-		if (pageProp.paginationMode === 'server'){
-			await this.setState({
-				page : page,
-				size : size
-			})
-			this.fetchData()
+		if (type === 'pagination'){
+			let page = pageProp.page;
+			let size = pageProp.sizePerPage;
+			
+		    await this.setState({
+	        	page : page,
+	        	size : size
+	        })
 		}
-	}
-
-	async handleFilterChange(filterOperators, type, pageProp){
-		
-		if (type === 'filter'){
+		else if (type === 'filter'){
 
 			let filterParams = Object.keys(pageProp.filters).map(field => {
 
@@ -172,50 +167,76 @@ class Table extends Component {
 
 	rowEvents = {
 		onClick: (e, row, rowIndex) => {
-			window.open("/" + this.props.entityName + "/" + row.id, "_self");
+			if (this.props.onRowClick){
+				this.props.onRowClick(e, row, rowIndex)
+			}
+			else if (this.props.entityName && this.props.entityName !== ""){
+				if (this.props.entityName.indexOf(":id") > 0){
+					window.open("/" + this.props.entityName.replace(":id", row.id), "_self");
+				}
+				else {
+					window.open("/" + this.props.entityName + "/" + row.id, "_self");
+				}
+			}
 		}
 	};
 
     render() {
 		return (
-			
-            <div>
-            	<Grid container direction="row" spacing={2} justify="flex-start" alignItems="flex-start">
-					<Grid item xs>
-						<Card>
-							<CardHeader title="Selecciona las columnas" />
-							<CardContent>
-								<Grid container direction="row" spacing={0} justify="flex-start" alignItems="flex-start">
-									<Grid item>
-										<MultiSelect columns={this.state.columns} 
-											changeEvent={(cols) => { 
-												//setFieldValue("columns", cols) 
-											}}/>
-									</Grid>
-	                            	<Grid item>
-	                            		<Button text="Descargar Excel" onClick={this.downloadData}/>
-									</Grid>
-	                            </Grid>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-               	</Grid>
-				<Grid container spacing={1}>
-					<Grid item xs>
-						<DataGrid
-							pagination
-							autoHeight={true}
-							columns={this.state.columns}
-							rows={this.state.data}
-							pageSize={this.state.size}
-							rowCount={this.state.total}
-							paginationMode="server"
-							onPageChange={this.handlePageChange}
-							onColumnHeaderClick={this.handleHeaderClick}
-						/>
-					</Grid>
-				</Grid>
-			</div>
+			<Formik enableReinitialize
+                initialValues={{
+                	columns : this.state.columns,
+                	data : this.state.data,
+                	page : this.state.page,
+                	size : this.state.size,
+                	total : this.state.total,
+                	entityName: this.state.entityName,
+                	showColumns: this.state.showColumns
+                }}
+                >
+                {({ handleChange, values, setFieldValue }) => (
+
+                    <div>
+                    	<Grid container direction="row" spacing={2} justify="flex-start" alignItems="flex-start"
+                    		style={{ display: values.showColumns ? "block" : "none" }}>
+							<Grid item xs>
+								<Card>
+									<CardHeader title="Selecciona las columnas" />
+									<CardContent>
+
+										<Grid container direction="row" spacing={0} justify="flex-start" alignItems="flex-start">
+											
+											<Grid item>
+												<MultiSelect columns={values.columns} changeEvent={(cols) => { setFieldValue("columns", cols) }}/>
+											</Grid>
+			                            	<Grid item>
+			                            		<Button text="Descargar Excel" onClick={this.downloadData}/>
+											</Grid>
+			                            </Grid>
+		                            </CardContent>
+	                            </Card>
+                            </Grid>
+                            
+                       	</Grid>
+						<Grid container spacing={1}>
+							<Grid item xs>
+								<BootstrapTable striped bordered hover 
+									remote
+									keyField="id" 
+									data={values.data}
+									columns={values.columns.filter(c => c.show === true)}
+									onTableChange={ this.handleTableChange }
+									filter={ Filter() }
+									pagination={Paginator({page : values.page, sizePerPage: values.size, totalSize : values.total })}
+									noDataIndication="Sin Datos"
+									rowEvents={ this.rowEvents }
+								>
+								</BootstrapTable>
+							</Grid>
+						</Grid>
+					</div>
+                )}
+            </Formik>
 		)
 	}
 }

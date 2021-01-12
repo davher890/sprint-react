@@ -26,6 +26,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import SubmitButton from './custom/SubmitButton'
 import Select from './custom/Select'
 import Button from './custom/Button'
+import AthleteSportdata from './AthleteSportdata'
 
 class CreateAthlete extends Component {
     
@@ -247,6 +248,7 @@ class CreateAthlete extends Component {
                     registered: this.state.registered || false,
                     registerDate: moment(new Date()).format("YYYY-MM-DD"),
                     openRegisterDialog: false,
+                    openSportdataDialog: false,
 
                     errorMessage: this.state.errorMessage || '',
                     successMessage: this.state.successMessage || '',
@@ -345,7 +347,7 @@ class CreateAthlete extends Component {
                                     <Button text={values.registered ? 'Dar de baja' : 'Dar de alta' } onClick={() => {
                                         setFieldValue('openRegisterDialog', true)
                                     }} />
-                                    <Dialog open={values.openRegisterDialog} aria-labelledby="form-dialog-title"
+                                    <Dialog fullWidth={true} open={values.openRegisterDialog} aria-labelledby="form-dialog-title"
                                         onClose={() => {
                                             setFieldValue('openRegisterDialog', false)
                                         }} 
@@ -376,6 +378,27 @@ class CreateAthlete extends Component {
                                                 text={values.registered ? 'Dar de baja' : 'Dar de alta' }/>
                                             <Button onClick={() => { setFieldValue('openRegisterDialog', false) }} color="secondary"
                                                 text="Cancelar"/>
+                                        </DialogActions>
+                                    </Dialog>
+                                </Grid>
+                                <Grid item>
+                                    <Button text={'Histórico deportivo'} onClick={() => {
+                                        setFieldValue('openSportdataDialog', true)
+                                    }} />
+                                    <Dialog fullWidth={true} maxWidth="xl" open={values.openSportdataDialog} aria-labelledby="form-dialog-title"
+                                        onClose={() => {
+                                            setFieldValue('openSportdataDialog', false)
+                                        }} 
+                                    >
+                                        <DialogTitle id="form-dialog-title">Histórico deportivo</DialogTitle>
+                                        <DialogContent>
+                                            <Grid container>
+                                                <AthleteSportdata id={values.id}/>
+                                            </Grid>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={() => { setFieldValue('openSportdataDialog', false) }} color="secondary"
+                                                text="Cerrar"/>
                                         </DialogActions>
                                     </Dialog>
                                 </Grid>

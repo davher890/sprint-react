@@ -21,7 +21,7 @@ class HistoricTableComponent extends Component {
 	        	{ dataField: 'license', text : 'Licencia' }, 
 	        	{ dataField: 'dorsalNumber', text : 'Dorsal', filter: numberFilter()}
         	],
-        	entityName : 'athletes/historic'
+        	entityName : 'athletes/:id/historic'
         }
     }
 
