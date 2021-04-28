@@ -11,7 +11,9 @@ class AthletesTableComponent extends Component {
         this.state = {
         	columns : [
         		{ dataField: 'id', text: 'Id', hide: true },
-	        	{ dataField: 'name', text : 'Nombre', filter: textFilter(), show: true, width : 150 }, 
+	        	{ dataField: 'name', text : 'Nombre', filter: textFilter(), show: true, width : 50 }, 
+	        	{ dataField: 'firstSurname', text : 'Primer apellido', filter: textFilter(), show: true, width : 50 }, 
+	        	{ dataField: 'secondSurname', text : 'Segundo apellido', filter: textFilter(), show: true, width : 50 }, 
 	        	{ dataField: 'birthDate', text : 'Fecha de Nacimiento', show: true, width : 200, type: 'dateTime' }, 
 	        	{ dataField: 'gender', text : 'Género', filter: selectFilter({
 	        		options : {
@@ -31,6 +33,8 @@ class AthletesTableComponent extends Component {
     	return {
 			id : d.id,
 			name : d.name || '', 
+			firstSurname : d.firstSurname || '', 
+			secondSurname : d.secondSurname || '', 
 			birthDate: new Intl.DateTimeFormat('sq-AL').format(new Date(d.birthDate)), 
 			gender: d.gender === 'male' ? 'Masculino' : 'Femenino',
 			category : d.category,

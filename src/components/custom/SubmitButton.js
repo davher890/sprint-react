@@ -11,7 +11,7 @@ class SubmitButton extends Component {
 			<div>
 				<Grid container spacing={1}>
 			 		<Grid item xs>
-						<Button type="submit" variant="contained" color="primary"><NavigationIcon/>Guardar</Button>
+						<Button type="submit" variant="contained" color="primary"><NavigationIcon/>{this.props.text || 'Guardar'}</Button>
 					</Grid>
 				</Grid>
 			</div>
