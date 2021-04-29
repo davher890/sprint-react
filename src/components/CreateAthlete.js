@@ -88,7 +88,7 @@ class CreateAthlete extends Component {
     }
 
     getAthlete(id) {
-        getAthleteById().then(data => {
+        getAthleteById(id).then(data => {
             data.age = utils.ageCalculator(new Date(data.birthDate));
             data.birthDate = moment(new Date(data.birthDate)).format("YYYY-MM-DD")
             this.showSportData = data.feeType !== 'socio'
@@ -251,7 +251,7 @@ class CreateAthlete extends Component {
                         }
                         else if (value === 'dni') {
                             // Required only if the age is above 14
-                            if (values.age >= 14) {
+                            if (values.age >= 14 && values.dni == "") {
                                 errors.dni = true;
                             }
                         }
@@ -319,9 +319,7 @@ class CreateAthlete extends Component {
                                         </CardContent></Card>
                                     </Grid>
                                     <Grid item>
-                                        <Button text={values.registered ? 'Dar de baja' : 'Dar de alta'} onClick={() => {
-                                            setFieldValue('openRegisterDialog', true)
-                                        }} />
+                                        {values.id ? <Button text={values.registered ? 'Dar de baja' : 'Dar de alta'} onClick={() => { setFieldValue('openRegisterDialog', true) }} /> : null}
                                         <Dialog fullWidth={true} open={values.openRegisterDialog} aria-labelledby="form-dialog-title"
                                             onClose={() => {
                                                 setFieldValue('openRegisterDialog', false)
@@ -357,9 +355,7 @@ class CreateAthlete extends Component {
                                         </Dialog>
                                     </Grid>
                                     <Grid item>
-                                        <Button text={'Histórico deportivo'} onClick={() => {
-                                            setFieldValue('openSportdataDialog', true)
-                                        }} />
+                                        {values.id ? <Button text={'Histórico deportivo'} onClick={() => { setFieldValue('openSportdataDialog', true) }} /> : null}
                                         <Dialog fullWidth={true} maxWidth="xl" open={values.openSportdataDialog} aria-labelledby="form-dialog-title"
                                             onClose={() => {
                                                 setFieldValue('openSportdataDialog', false)

@@ -21,7 +21,7 @@ class HistoricTableComponent extends Component {
 	        	{ dataField: 'license', text : 'Licencia' }, 
 	        	{ dataField: 'dorsalNumber', text : 'Dorsal', filter: numberFilter()}
         	],
-        	entityName : 'athletes/:id/historic'
+        	entityName : 'athletes/historic'
         }
     }
 
@@ -38,9 +38,10 @@ class HistoricTableComponent extends Component {
     }
 
 	render() {
+		console.log(this.state)
 		return (
             <Grid container direction="column">
-           		<Grid item xs spacing={1}>
+           		<Grid item xs >
 					<Table 
 						columns={this.state.columns} 
 						entityName={this.state.entityName}
