@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import moment from 'moment'
+import { Route , withRouter} from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "../App.css";
@@ -119,13 +120,21 @@ class CreateAthlete extends Component {
     }
 
     handleFormSubmit() {
+        const exit = this.state.exit;
         postAthlete(this.state).then(data => {
             if (!data.errorMessage) {
                 data.successMessage = "Atleta guardado!"
             }
             data.age = utils.ageCalculator(new Date(data.birthDate));
             data.birthDate = moment(new Date(data.birthDate)).format("YYYY-MM-DD")
-            this.setState(data)
+
+            if (this.state.exit) {
+                this.props.history.push("/athletes");
+                window.location.reload(true);
+            }
+            else {
+                this.setState(data)
+            }
         })
     }
 
@@ -218,6 +227,8 @@ class CreateAthlete extends Component {
                     registerDate: moment(new Date()).format("YYYY-MM-DD"),
                     openRegisterDialog: false,
                     openSportdataDialog: false,
+
+                    exit: false,
 
                     errorMessage: this.state.errorMessage || '',
                     successMessage: this.state.successMessage || '',
@@ -751,7 +762,11 @@ class CreateAthlete extends Component {
                         </Grid>
                         <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
                             <Toolbar>
-                                <SubmitButton text='Guardar y salir' />
+                                <SubmitButton text='Guardar y salir' onClick={() => {
+                                    values.exit = true;
+                                    console.log(values.exit)
+                                    return false;
+                                }} />
                                 <SubmitButton text='Guardar y continuar' />
                             </Toolbar>
                         </AppBar>
@@ -763,4 +778,4 @@ class CreateAthlete extends Component {
     }
 }
 
-export default CreateAthlete;
+export default withRouter(CreateAthlete)
