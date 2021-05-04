@@ -6,14 +6,18 @@ import Grid from '@material-ui/core/Grid';
 
 class Button extends Component {
 
-   render() {
+	render() {
 		return (
 			<div>
 				<Grid container spacing={1}>
-			 		<Grid item xs>
-						<Fab variant="extended" size="large" color={this.props.color || "primary"} aria-label="add" href={this.props.href} onClick={this.props.onClick}>
-				          <NavigationIcon/>{this.props.text}
-				        </Fab>
+					<Grid item xs>
+						<Fab variant="extended" size="large" aria-label="add"
+							color={this.props.color || "primary"}
+							href={this.props.href}
+							onClick={this.props.onClick}
+						>
+							<NavigationIcon />{this.props.text}
+						</Fab>
 					</Grid>
 				</Grid>
 			</div>
