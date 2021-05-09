@@ -260,12 +260,12 @@ class CreateAthlete extends Component {
                                 errors.iban = true;
                             }
                         }
-                        else if (value === 'dni') {
-                            // Required only if the age is above 14
-                            if (values.age >= 14 && values.dni == "") {
-                                errors.dni = true;
-                            }
-                        }
+                        // else if (value === 'dni') {
+                        //     // Required only if the age is above 14
+                        //     if (values.age >= 14 && values.dni == "") {
+                        //         errors.dni = true;
+                        //     }
+                        // }
                         else if ((values[value] === '') && values.required.includes(value)) {
                             errors[value] = true;
                         }
