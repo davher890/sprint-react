@@ -8,53 +8,56 @@ import SubmitButton from './custom/SubmitButton'
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
-class CreateSportSchool extends Component {
+import { connect } from "react-redux";
+import { addSportSchool, getSportSchool } from "../app/actions/sportSchools";
+
+function mapDispatchToProps(dispatch) {
+    return {
+        addSportSchool: sportSchool => dispatch(addSportSchool(sportSchool)),
+        getSportSchool: id => dispatch(getSportSchool(id))
+    }
+}
+
+const mapStateToProps = state => {
+    return { sport_school: state.sport_school_reducer.sport_school };
+};
+
+class ConnectedForm extends Component {
     constructor(props) {
         super(props);
         this.state = {};
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
     }
 
-    componentDidMount(){
+    componentDidMount() {
         if (this.props.id) {
             let id = this.props.id
-            if (id){
-                const headers = { 'Content-Type': 'application/json' }
-                fetch(process.env.REACT_APP_SERVER_URL + "/sport_schools/" + id,  { headers })
-                    .then(res => res.json())
-                    .then(data => this.setState(data));
+            if (id) {
+                this.props.getSportSchool(id)
             }
         }
     }
 
     handleFormSubmit(event) {
-
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(this.state)
-        }
-
-        fetch(process.env.REACT_APP_SERVER_URL + "/sport_schools", requestOptions)
-            .then(res => res.json())
-            .then(data => this.setState(data));
+        this.props.addSportSchool(this.state);
     }
 
     render() {
         return (
 
-            <Formik enableReinitialize 
+            <Formik enableReinitialize
                 initialValues={{
-                    name: this.state.name || '',
-                    municipality: this.state.municipality || '',
-                    address: this.state.address || '',
+                    id: this.props.sport_school.id || 0,
+                    name: this.props.sport_school.name || '',
+                    municipality: this.props.sport_school.municipality || '',
+                    address: this.props.sport_school.address || ''
                 }}
                 validate={(values) => {
                     let errors = {};
 
                     Object.keys(values).forEach(value => {
-                        if(values[value] === ''){
-                            errors[value] = 'Valid ' + value + ' Required'; 
+                        if (values[value] === '') {
+                            errors[value] = 'Valid ' + value + ' Required';
                         }
                     })
 
@@ -78,15 +81,15 @@ class CreateSportSchool extends Component {
                                         <Grid container spacing={1}>
                                             <Grid item>
                                                 <TextField key="name" id='name' name="name" label="Nombre" value={values.name} onChange={handleChange}
-                                                    className={`${touched.name && errors.name ? "is-invalid" : ""}`}/>
+                                                    className={`${touched.name && errors.name ? "is-invalid" : ""}`} />
                                             </Grid>
                                             <Grid item>
                                                 <TextField key="municipality" id='municipality' name="municipality" label="Municipio" value={values.municipality} onChange={handleChange}
-                                                    className={`${touched.municipality && errors.municipality ? "is-invalid" : ""}`}/>
+                                                    className={`${touched.municipality && errors.municipality ? "is-invalid" : ""}`} />
                                             </Grid>
                                             <Grid item>
                                                 <TextField key="address" id='address' name="address" label="Dirección" value={values.address} onChange={handleChange}
-                                                    className={`${touched.address && errors.address ? "is-invalid" : ""}`}/>
+                                                    className={`${touched.address && errors.address ? "is-invalid" : ""}`} />
                                             </Grid>
                                         </Grid>
                                     </CardContent>
@@ -94,7 +97,7 @@ class CreateSportSchool extends Component {
                             </Grid>
                         </Grid>
                         <Grid container>
-                            <SubmitButton/>
+                            <SubmitButton />
                         </Grid>
                     </form>
                 )}
@@ -103,4 +106,7 @@ class CreateSportSchool extends Component {
     }
 }
 
-export default CreateSportSchool;
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ConnectedForm);

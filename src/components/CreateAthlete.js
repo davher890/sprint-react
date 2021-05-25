@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import moment from 'moment'
-import { Route , withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "../App.css";
@@ -29,10 +29,32 @@ import Select from './custom/Select'
 import Button from './custom/Button'
 import AthleteSportdata from './AthleteSportdata'
 
-import { getSportSchools } from "../services/SportSchoolService"
-import { getAthleteById, getAthletesFee, postAthlete } from "../services/AthleteService"
-import { getSpecializationGroups, getNotSpecializationGroups, getGroupSchedules } from "../services/GroupService"
+// Redux
+import { connect } from "react-redux";
+import { addAthlete, getAthlete } from "../app/actions/athletes";
+import { getGroups } from "../app/actions/groups";
+import { getAllSportSchools } from "../app/actions/sportSchools";
 
+import { findGroupSchedules } from "../services/GroupService"
+import { findAthletesFee } from "../services/AthleteService"
+
+function mapDispatchToProps(dispatch) {
+    return {
+        getAllSportSchools: () => dispatch(getAllSportSchools()),
+        addAthlete: athlete => dispatch(addAthlete(athlete)),
+        getAthlete: id => dispatch(getAthlete(id)),
+        getGroups: specialization => dispatch(getGroups(specialization)),
+    }
+}
+
+const mapStateToProps = state => {
+    return {
+        sportSchools: state.sport_school_reducer.sport_schools,
+        athlete: state.athlete_reducer.athlete,
+        specializedGroups: state.group_reducer.specialization_groups,
+        notSpecializedGroups: state.group_reducer.no_specialization_groups,
+    };
+};
 class CreateAthlete extends Component {
 
     constructor(props) {
@@ -44,102 +66,65 @@ class CreateAthlete extends Component {
 
         this.feeTypes = []
         // Groups
-        this.specializedGroups = []
-        this.notSpecializedGroups = []
         this.groups = []
 
         this.schedules = []
         this.sportSchools = []
-        this.showSportData = false
     }
 
     componentDidMount() {
-        let schoolsPromise = new Promise((resolve, reject) => {
-            getSportSchools().then(data => {
-                data.push({ id: '', name: '' })
-                resolve(data)
-            });
-        })
-        let spGroupsPromise = new Promise((resolve, reject) => {
-            getSpecializationGroups().then(data => {
-                data.push({ id: '', name: '' })
-                resolve(data)
-            });
-        })
-        let noSpGroupsPromise = new Promise((resolve, reject) => {
-            getNotSpecializationGroups().then(data => {
-                data.push({ id: '', name: '' })
-                resolve(data)
-            });
-        })
+        // let schoolsPromise = new Promise((resolve, reject) => {
+        this.props.getAllSportSchools()
+        // .then(data => {
+        //         data.push({ id: '', name: '' })
+        //         resolve(data)
+        //     });
+        // })
+        // let spGroupsPromise = new Promise((resolve, reject) => {
+        this.props.getGroups(true)
+        // .then(data => {
+        //     data.push({ id: '', name: '' })
+        //     resolve(data)
+        // });
+        // })
+        // let noSpGroupsPromise = new Promise((resolve, reject) => {
+        this.props.getGroups(false)
+        // .then(data => {
+        //     data.push({ id: '', name: '' })
+        //     resolve(data)
+        // });
+        // })
 
-        Promise.all([schoolsPromise, spGroupsPromise, noSpGroupsPromise]).then(values => {
+        // Promise.all([schoolsPromise]).then(values => {
 
-            this.sportSchools = values[0]
-            this.specializedGroups = values[1]
-            this.notSpecializedGroups = values[2]
-            if (this.props.id) {
-                let id = this.props.id
-                this.getAthlete(id)
-            }
-            else {
-                this.setState({})
-            }
-        })
+        //     this.sportSchools = values[0]
+        //     // this.specializedGroups = values[1]
+        //     // this.notSpecializedGroups = values[2]
+        if (this.props.id) {
+            let id = this.props.id
+            this.getAthlete(id)
+        }
+        //     else {
+        //         this.setState({})
+        //     }
+        // })
     }
 
     getAthlete(id) {
-        getAthleteById(id).then(data => {
-            data.age = utils.ageCalculator(new Date(data.birthDate));
-            data.birthDate = moment(new Date(data.birthDate)).format("YYYY-MM-DD")
-            this.showSportData = data.feeType !== 'socio'
-            this.feeTypes = utils.getFeeTypes(data.sportSchoolId)
-
-            if (data.specialization) {
-                this.groups = this.specializedGroups
-            }
-            else {
-                this.groups = this.notSpecializedGroups
-            }
-
-            getAthletesFee(data).then(feeData => {
-                data.enrollmentFee = feeData.enrollmentFee
-                data.membershipFee = feeData.membershipFee
-                data.monthlyFee = feeData.monthlyFee
-                this.setState(data, () => {
-                    if (data.groupId && data.groupId > 0) {
-                        getGroupSchedules(data.groupId)
-                            .then(schData => {
-                                this.schedules = schData
-                                this.setState(data)
-                            });
-                    }
-                })
+        this.props.getAthlete(id).then(data => {
+            this.feeTypes = utils.getFeeTypes(this.props.athlete.sportSchoolId)
+            findAthletesFee(this.props.athlete).then(feeData => {
+                if (this.props.athlete.groupId && this.props.athlete.groupId > 0) {
+                    findGroupSchedules(this.props.athlete.groupId).then(schData => {
+                        this.schedules = schData
+                    });
+                }
             })
         });
     }
 
-    handleFormSubmit() {
-        const exit = this.state.exit;
-        postAthlete(this.state).then(data => {
-            if (!data.errorMessage) {
-                data.successMessage = "Atleta guardado!"
-            }
-            data.age = utils.ageCalculator(new Date(data.birthDate));
-            data.birthDate = moment(new Date(data.birthDate)).format("YYYY-MM-DD")
-
-            if (this.state.exit) {
-                this.props.history.push("/athletes");
-                window.location.reload(true);
-            }
-            else {
-                this.setState(data)
-            }
-        })
-    }
-
     fillFee(values, setFieldValue) {
-        getAthletesFee(values).then(data => {
+        findAthletesFee(values).then(data => {
             setFieldValue('enrollmentFee', data.enrollmentFee)
             setFieldValue('membershipFee', data.membershipFee)
             setFieldValue('monthlyFee', data.monthlyFee)
@@ -147,10 +132,23 @@ class CreateAthlete extends Component {
     }
 
     fillSchedules(groupId, setFieldValue) {
-        getGroupSchedules(groupId).then(data => {
+        findGroupSchedules(groupId).then(data => {
             this.schedules = data
             setFieldValue('schedules', this.schedules)
         });
+    }
+
+    handleFormSubmit() {
+        this.props.addAthlete(this.state).then(data => {
+
+            if (this.state.exit) {
+                this.props.history.push("/athletes");
+                window.location.reload(true);
+            }
+            else {
+                // this.setState(data)
+            }
+        })
     }
 
     render() {
@@ -159,79 +157,79 @@ class CreateAthlete extends Component {
 
             <Formik enableReinitialize
                 initialValues={{
-                    id: this.state.id,
-                    code: this.state.code || 0,
-                    familyCode: this.state.familyCode || 0,
+                    id: this.props.athlete.id || 0,
+                    code: this.props.athlete.code || 0,
+                    familyCode: this.props.athlete.familyCode || 0,
                     // Extra fields
-                    groups: this.groups || [],
+                    specializedGroups: this.props.specializedGroups || [],
+                    noSpecializedGroups: this.props.noSpecializedGroups || [],
                     schedules: this.schedules || [],
-                    sportSchools: this.sportSchools || [],
+                    sportSchools: this.props.sportSchools || [],
                     feeTypes: this.feeTypes || [],
-                    showSportData: this.showSportData,
-                    age: this.state.age || 0,
+                    age: this.props.athlete.age || 0,
                     // Personal info
-                    sportSchoolId: this.state.sportSchoolId || '',
-                    imageAuth: this.state.imageAuth || false,
-                    observations: this.state.observations || '',
-                    name: this.state.name || '',
-                    firstSurname: this.state.firstSurname || '',
-                    secondSurname: this.state.secondSurname || '',
-                    birthDate: this.state.birthDate || '',
-                    birthPlace: this.state.birthPlace || '',
-                    dni: this.state.dni || '',
-                    nationality: this.state.nationality || '',
-                    gender: this.state.gender || 'male',
+                    sportSchoolId: this.props.athlete.sportSchoolId || '',
+                    imageAuth: this.props.athlete.imageAuth || false,
+                    observations: this.props.athlete.observations || '',
+                    name: this.props.athlete.name || '',
+                    firstSurname: this.props.athlete.firstSurname || '',
+                    secondSurname: this.props.athlete.secondSurname || '',
+                    birthDate: this.props.athlete.birthDate || '',
+                    birthPlace: this.props.athlete.birthPlace || '',
+                    dni: this.props.athlete.dni || '',
+                    nationality: this.props.athlete.nationality || '',
+                    gender: this.props.athlete.gender || 'male',
                     // Familiar info
-                    familiarOneName: this.state.familiarOneName || '',
-                    familiarOneFirstSurname: this.state.familiarOneFirstSurname || '',
-                    familiarOneSecondSurname: this.state.familiarOneSecondSurname || '',
-                    familiarOneDni: this.state.familiarOneDni || '',
-                    familiarOneMail: this.state.familiarOneMail || '',
-                    familiarTwoName: this.state.familiarTwoName || '',
-                    familiarTwoFirstSurname: this.state.familiarTwoFirstSurname || '',
-                    familiarTwoSecondSurname: this.state.familiarTwoSecondSurname || '',
-                    familiarTwoDni: this.state.familiarTwoDni || '',
-                    familiarTwoMail: this.state.familiarTwoMail || '',
+                    familiarOneName: this.props.athlete.familiarOneName || '',
+                    familiarOneFirstSurname: this.props.athlete.familiarOneFirstSurname || '',
+                    familiarOneSecondSurname: this.props.athlete.familiarOneSecondSurname || '',
+                    familiarOneDni: this.props.athlete.familiarOneDni || '',
+                    familiarOneMail: this.props.athlete.familiarOneMail || '',
+                    familiarTwoName: this.props.athlete.familiarTwoName || '',
+                    familiarTwoFirstSurname: this.props.athlete.familiarTwoFirstSurname || '',
+                    familiarTwoSecondSurname: this.props.athlete.familiarTwoSecondSurname || '',
+                    familiarTwoDni: this.props.athlete.familiarTwoDni || '',
+                    familiarTwoMail: this.props.athlete.familiarTwoMail || '',
                     // Sport info
-                    category: this.state.category || '',
-                    nextCategory: this.state.nextCategory || '',
-                    dorsalCategory: this.state.dorsalCategory || '',
-                    dorsalNumber: this.state.dorsalNumber || '',
-                    license: this.state.license || '',
-                    licenseType: this.state.licenseType || '',
-                    specialization: this.state.specialization || false,
-                    groupId: this.state.groupId || '',
-                    scheduleIds: this.state.scheduleIds || [],
+                    category: this.props.athlete.category || '',
+                    nextCategory: this.props.athlete.nextCategory || '',
+                    dorsalCategory: this.props.athlete.dorsalCategory || '',
+                    dorsalNumber: this.props.athlete.dorsalNumber || '',
+                    license: this.props.athlete.license || '',
+                    licenseType: this.props.athlete.licenseType || '',
+                    specialization: this.props.athlete.specialization || false,
+                    groupId: this.props.athlete.groupId || '',
+                    scheduleIds: this.props.athlete.scheduleIds || [],
                     // Contact info
-                    mail: this.state.mail || '',
-                    phone1: this.state.phone1 || '',
-                    phone2: this.state.phone2 || '',
-                    phone3: this.state.phone3 || '',
-                    municipality: this.state.municipality || '',
-                    postalCode: this.state.postalCode || '',
-                    address: this.state.address || '',
+                    mail: this.props.athlete.mail || '',
+                    phone1: this.props.athlete.phone1 || '',
+                    phone2: this.props.athlete.phone2 || '',
+                    phone3: this.props.athlete.phone3 || '',
+                    municipality: this.props.athlete.municipality || '',
+                    postalCode: this.props.athlete.postalCode || '',
+                    address: this.props.athlete.address || '',
                     // Bank info
-                    iban: this.state.iban || '',
-                    paymentType: this.state.paymentType || '',
-                    feeType: this.state.feeType || '',
-                    holderName: this.state.holderName || '',
-                    holderFirstSurname: this.state.holderFirstSurname || '',
-                    holderSecondSurname: this.state.holderSecondSurname || '',
-                    holderDni: this.state.holderDni || '',
+                    iban: this.props.athlete.iban || '',
+                    paymentType: this.props.athlete.paymentType || '',
+                    feeType: this.props.athlete.feeType || '',
+                    holderName: this.props.athlete.holderName || '',
+                    holderFirstSurname: this.props.athlete.holderFirstSurname || '',
+                    holderSecondSurname: this.props.athlete.holderSecondSurname || '',
+                    holderDni: this.props.athlete.holderDni || '',
                     //Calculated Fee
-                    enrollmentFee: this.state.enrollmentFee || 0,
-                    membershipFee: this.state.membershipFee || 0,
-                    monthlyFee: this.state.monthlyFee || 0,
+                    enrollmentFee: (this.props.feeData ? this.props.feeData.enrollmentFee : 0) || 0,
+                    membershipFee: (this.props.feeData ? this.props.feeData.membershipFee : 0) || 0,
+                    monthlyFee: (this.props.feeData ? this.props.feeData.monthlyFee : 0) || 0,
                     // Dialogs
-                    registered: this.state.registered || false,
+                    registered: this.props.athlete.registered || false,
                     registerDate: moment(new Date()).format("YYYY-MM-DD"),
                     openRegisterDialog: false,
                     openSportdataDialog: false,
 
                     exit: false,
 
-                    errorMessage: this.state.errorMessage || '',
-                    successMessage: this.state.successMessage || '',
+                    errorMessage: this.props.athlete.errorMessage || '',
+                    successMessage: this.props.athlete.successMessage || '',
                     required: [
                         'sportSchoolId',
                         'imageAuth',
@@ -311,10 +309,9 @@ class CreateAthlete extends Component {
                                                         onChange={(e, value) => {
                                                             if (value) {
                                                                 values.feeTypes = utils.getFeeTypes(parseInt(value.id))
-                                                                setFieldValue('sportSchoolId', value.id);
+                                                                setFieldValue('sportSchoolId', value ? value.id : "");
                                                                 if (values.feeType) {
                                                                     setFieldValue('feeType', values.feeType);
-                                                                    setFieldValue('showSportData', values.feeType !== 'socio')
                                                                 }
                                                             }
                                                         }}
@@ -447,7 +444,7 @@ class CreateAthlete extends Component {
                                                     <Grid item xs>
                                                         <Select fullWidth name="gender" label="Género" error={touched.gender && errors.gender}
                                                             options={[{ id: "male", name: "Hombre" }, { id: "female", name: "Mujer" }]} value={values.gender}
-                                                            onChange={(e, value) => setFieldValue('gender', value.id)}
+                                                            onChange={(e, value) => setFieldValue('gender', value ? value.id : "")}
                                                         />
                                                     </Grid>
                                                 </Grid>
@@ -565,7 +562,7 @@ class CreateAthlete extends Component {
                                                         <Select fullWidth name="paymentType" label="Forma de pago"
                                                             options={utils.getPaymentTypes()} value={values.paymentType} error={touched.paymentType && errors.paymentType}
                                                             onChange={(e, value) => {
-                                                                setFieldValue('paymentType', value.id)
+                                                                setFieldValue('paymentType', value ? value.id : "")
                                                             }}
                                                         />
                                                     </Grid>
@@ -573,8 +570,7 @@ class CreateAthlete extends Component {
                                                         <Select fullWidth name="feeType" label="Tipo de cuota"
                                                             options={values.feeTypes} value={values.feeType} error={touched.feeType && errors.feeType}
                                                             onChange={(e, value) => {
-                                                                setFieldValue('showSportData', value.id !== 'socio')
-                                                                setFieldValue('feeType', value.id)
+                                                                setFieldValue('feeType', value ? value.id : "")
                                                             }}
                                                         />
                                                     </Grid>
@@ -615,27 +611,27 @@ class CreateAthlete extends Component {
                                         </Card>
                                     </Grid>
                                 </Grid>
-                                <Grid container item style={{ display: values.showSportData ? "block" : "none" }}>
+                                <Grid container item style={{ display: values.feeType !== 'SOCIO' ? "block" : "none" }}>
                                     <Grid item>
                                         <Card><CardHeader title="Datos Deportivos" />
                                             <CardContent>
                                                 <Grid container spacing={1}>
                                                     <Grid item xs={2}>
                                                         <Select fullWidth name="category" label="Categoría"
-                                                            options={utils.getCategories()} value={values.category}
-                                                            onChange={(e, value) => setFieldValue('category', value.id)}
+                                                            options={utils.getCategories()} value={utils.calculateCategory(values.age)}
+                                                            onChange={(e, value) => setFieldValue('category', value ? value.id : "")}
                                                         />
                                                     </Grid>
                                                     <Grid item xs={2}>
                                                         <Select fullWidth name="nextCategory" label="Siguiente categoría"
-                                                            options={utils.getCategories()} value={values.nextCategory}
-                                                            onChange={(e, value) => setFieldValue('nextCategory', value.id)}
+                                                            options={utils.getCategories()} value={utils.calculateCategory(values.age+1)}
+                                                            onChange={(e, value) => setFieldValue('nextCategory', value ? value.id : "")}
                                                         />
                                                     </Grid>
                                                     <Grid item xs={2}>
                                                         <Select fullWidth name="dorsalCategory" label="Categoría dorsal"
                                                             options={utils.getDorsalCategories()} value={values.dorsalCategory}
-                                                            onChange={(e, value) => setFieldValue('dorsalCategory', value.id)}
+                                                            onChange={(e, value) => setFieldValue('dorsalCategory', value ? value.id : "")}
                                                         />
                                                     </Grid>
                                                     <Grid item xs={2}>
@@ -646,7 +642,7 @@ class CreateAthlete extends Component {
                                                     <Grid item xs={2}>
                                                         <Select fullWidth name="licenseType" label="Tipo de Licencia"
                                                             value={values.licenseType} options={[{ id: "N", name: "Nacional" }, { id: "T", name: "Territorial" }]}
-                                                            onChange={(e, value) => setFieldValue('licenseType', value.id)}
+                                                            onChange={(e, value) => setFieldValue('licenseType', value ? value.id : "")}
                                                         />
                                                     </Grid>
                                                     <Grid item>
@@ -659,23 +655,22 @@ class CreateAthlete extends Component {
                                                             value={values.specialization} options={[{ id: true, name: "Si" }, { id: false, name: "No" }]}
                                                             onChange={(e, value) => {
 
-                                                                if (value.id === true) {
-                                                                    setFieldValue('groups', this.specializedGroups)
-                                                                }
-                                                                else if (value.id === false) {
-                                                                    setFieldValue('groups', this.notSpecializedGroups)
+                                                                if (value && value.id === true) {
+                                                                    this.fillFee(values, setFieldValue)
+                                                                    setFieldValue('specialization', true);
+                                                                    setFieldValue('groups', this.props.specializedGroups)
                                                                 }
                                                                 else {
-                                                                    setFieldValue('groups', [])
+                                                                    this.fillFee(values, setFieldValue)
+                                                                    setFieldValue('specialization', false);
+                                                                    setFieldValue('groups', this.props.notSpecializedGroups)
                                                                 }
-                                                                this.fillFee(values, setFieldValue)
-                                                                setFieldValue('specialization', value.id);
                                                             }}
                                                         />
                                                     </Grid>
                                                     <Grid item xs={2}>
                                                         <Select fullWidth name="groupId" label="Grupos" type="number"
-                                                            value={values.groupId} options={values.groups}
+                                                            value={values.groupId} options={values.specialization ? values.specializedGroups : values.noSpecializedGroups}
                                                             onChange={(e, value) => {
                                                                 this.fillSchedules(value.id, setFieldValue)
                                                                 setFieldValue('groupId', value.id)
@@ -689,9 +684,15 @@ class CreateAthlete extends Component {
                                                             <CardContent>
                                                                 {
                                                                     values.schedules.map(sch => {
+
+                                                                        if (values.specialization){
+                                                                            values.scheduleIds.push(sch.id)
+                                                                        }
+
                                                                         return (
                                                                             <Grid item key={`row_sch${sch.id}`} >
                                                                                 <Checkbox
+                                                                                    disabled={values.specialization}
                                                                                     name="scheduleIds"
                                                                                     key={`sch${sch.id}`}
                                                                                     checked={values.scheduleIds.includes(sch.id)}
@@ -719,7 +720,7 @@ class CreateAthlete extends Component {
                                         </Card>
                                     </Grid>
                                 </Grid>
-                                <Grid container item style={{ display: values.showSportData ? "block" : "none" }}>
+                                <Grid container item style={{ display: values.feeType !== "SOCIO" ? "block" : "none" }}>
                                     <Grid item>
                                         <Card><CardHeader title="Calculo de cuota" />
                                             <CardContent>
@@ -778,4 +779,8 @@ class CreateAthlete extends Component {
     }
 }
 
-export default withRouter(CreateAthlete)
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withRouter(CreateAthlete));
