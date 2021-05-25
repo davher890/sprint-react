@@ -63,6 +63,7 @@ class CreateAthlete extends Component {
 
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
         this.fillSchedules = this.fillSchedules.bind(this)
+        this.getAthlete = this.getAthlete.bind(this)
 
         this.feeTypes = []
         // Groups
@@ -116,7 +117,8 @@ class CreateAthlete extends Component {
             findAthletesFee(this.props.athlete).then(feeData => {
                 if (this.props.athlete.groupId && this.props.athlete.groupId > 0) {
                     findGroupSchedules(this.props.athlete.groupId).then(schData => {
-                        this.schedules = schData
+                       
+                        this.setState({ schedules: schData })
                     });
                 }
             })
@@ -163,7 +165,7 @@ class CreateAthlete extends Component {
                     // Extra fields
                     specializedGroups: this.props.specializedGroups || [],
                     noSpecializedGroups: this.props.noSpecializedGroups || [],
-                    schedules: this.schedules || [],
+                    schedules: this.state.schedules || [],
                     sportSchools: this.props.sportSchools || [],
                     feeTypes: this.feeTypes || [],
                     age: this.props.athlete.age || 0,
@@ -277,6 +279,10 @@ class CreateAthlete extends Component {
                     setSubmitting(false);
                     this.handleFormSubmit()
                 }}
+
+                validateOnBlur={true}
+                validateOnChange={true}
+                validateOnMount={true}
             >
                 {({ handleSubmit, values, touched, setFieldValue, errors, handleChange }) => (
 
@@ -655,6 +661,7 @@ class CreateAthlete extends Component {
                                                             value={values.specialization} options={[{ id: true, name: "Si" }, { id: false, name: "No" }]}
                                                             onChange={(e, value) => {
 
+                                                                console.log('Spec changed')
                                                                 if (value && value.id === true) {
                                                                     this.fillFee(values, setFieldValue)
                                                                     setFieldValue('specialization', true);
@@ -672,6 +679,7 @@ class CreateAthlete extends Component {
                                                         <Select fullWidth name="groupId" label="Grupos" type="number"
                                                             value={values.groupId} options={values.specialization ? values.specializedGroups : values.noSpecializedGroups}
                                                             onChange={(e, value) => {
+                                                                console.log('Group changed')
                                                                 this.fillSchedules(value.id, setFieldValue)
                                                                 setFieldValue('groupId', value.id)
                                                                 setFieldValue('scheduleIds', [])
