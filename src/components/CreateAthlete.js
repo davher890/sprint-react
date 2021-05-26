@@ -117,7 +117,7 @@ class CreateAthlete extends Component {
             findAthletesFee(this.props.athlete).then(feeData => {
                 if (this.props.athlete.groupId && this.props.athlete.groupId > 0) {
                     findGroupSchedules(this.props.athlete.groupId).then(schData => {
-                       
+
                         this.setState({ schedules: schData })
                     });
                 }
@@ -133,11 +133,25 @@ class CreateAthlete extends Component {
         });
     }
 
-    fillSchedules(groupId, setFieldValue) {
-        findGroupSchedules(groupId).then(data => {
-            this.schedules = data
+    fillGroups(specialization, setFieldValue) {
+
+        if (specialization) {
+            setFieldValue('groups', this.props.specializedGroups)
+        }
+        else {
+            setFieldValue('groups', this.props.notSpecializedGroups)
+        }
+        setFieldValue('scheduleIds', [])
+        setFieldValue('schedules', [])
+    }
+
+    fillSchedules(specialization, groupId, setFieldValue) {
+        let selectedGroup = specialization ? this.props.specializedGroups.find(d => d.id === groupId) : this.props.noSpecializedGroups.filter(d => d.id === groupId)
+
+        if (selectedGroup) {
+            this.schedules = selectedGroup.schedules
             setFieldValue('schedules', this.schedules)
-        });
+        }
     }
 
     handleFormSubmit() {
@@ -279,10 +293,6 @@ class CreateAthlete extends Component {
                     setSubmitting(false);
                     this.handleFormSubmit()
                 }}
-
-                validateOnBlur={true}
-                validateOnChange={true}
-                validateOnMount={true}
             >
                 {({ handleSubmit, values, touched, setFieldValue, errors, handleChange }) => (
 
@@ -630,7 +640,7 @@ class CreateAthlete extends Component {
                                                     </Grid>
                                                     <Grid item xs={2}>
                                                         <Select fullWidth name="nextCategory" label="Siguiente categoría"
-                                                            options={utils.getCategories()} value={utils.calculateCategory(values.age+1)}
+                                                            options={utils.getCategories()} value={utils.calculateCategory(values.age + 1)}
                                                             onChange={(e, value) => setFieldValue('nextCategory', value ? value.id : "")}
                                                         />
                                                     </Grid>
@@ -660,18 +670,16 @@ class CreateAthlete extends Component {
                                                         <Select fullWidth name="specialization" label="Especialización"
                                                             value={values.specialization} options={[{ id: true, name: "Si" }, { id: false, name: "No" }]}
                                                             onChange={(e, value) => {
-
-                                                                console.log('Spec changed')
                                                                 if (value && value.id === true) {
                                                                     this.fillFee(values, setFieldValue)
                                                                     setFieldValue('specialization', true);
-                                                                    setFieldValue('groups', this.props.specializedGroups)
+
                                                                 }
                                                                 else {
                                                                     this.fillFee(values, setFieldValue)
                                                                     setFieldValue('specialization', false);
-                                                                    setFieldValue('groups', this.props.notSpecializedGroups)
                                                                 }
+                                                                this.fillGroups(values.specialization, setFieldValue)
                                                             }}
                                                         />
                                                     </Grid>
@@ -679,8 +687,7 @@ class CreateAthlete extends Component {
                                                         <Select fullWidth name="groupId" label="Grupos" type="number"
                                                             value={values.groupId} options={values.specialization ? values.specializedGroups : values.noSpecializedGroups}
                                                             onChange={(e, value) => {
-                                                                console.log('Group changed')
-                                                                this.fillSchedules(value.id, setFieldValue)
+                                                                this.fillSchedules(values.specialization, value.id, setFieldValue)
                                                                 setFieldValue('groupId', value.id)
                                                                 setFieldValue('scheduleIds', [])
                                                                 this.fillFee(values, setFieldValue)
@@ -693,7 +700,7 @@ class CreateAthlete extends Component {
                                                                 {
                                                                     values.schedules.map(sch => {
 
-                                                                        if (values.specialization){
+                                                                        if (values.specialization) {
                                                                             values.scheduleIds.push(sch.id)
                                                                         }
 
