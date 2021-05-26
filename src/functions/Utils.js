@@ -1,4 +1,3 @@
-import { Category } from "@material-ui/icons";
 
 const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
@@ -14,10 +13,10 @@ const utils = {
 		return Math.max(Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25)), 0)
 	},
 
-	calculateCategory: function (age) {
+	calculateCategory: function (year) {
 		const currentYear = new Date().getFullYear()
 		let category = "MASTER"
-		switch (currentYear - age) {
+		switch (currentYear - year) {
 			case 6:
 			case 7:
 				category = "SUB8"
@@ -52,10 +51,10 @@ const utils = {
 				category = "SUB23"
 				break;
 			default:
-				if (currentYear - age < 6) {
+				if (currentYear - year < 6) {
 					category = "SUB8"
 				}
-				if (currentYear - age <= 35) {
+				if (currentYear - year <= 35) {
 					category = "SENIOR"
 				}
 				else {
