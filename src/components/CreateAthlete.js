@@ -95,6 +95,13 @@ class CreateAthlete extends Component {
                 if (this.props.athlete.groupId && this.props.athlete.groupId > 0) {
                     findGroupSchedules(this.props.athlete.groupId).then(schData => {
 
+                        // findAthletesFee(this.props.athlete).then(data => {
+                        //     this.props.feeData = {
+                        //         enrollmentFee: data.enrollmentFee,
+                        //         membershipFee: data.membershipFee,
+                        //         monthlyFee: data.monthlyFee
+                        //     }
+                        // });
                         this.setState({ schedules: schData })
                     });
                 }
