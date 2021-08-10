@@ -1,0 +1,56 @@
+import utils from '../utils/TableUtils.js'
+const headers = { 'Content-Type': 'application/json' }
+
+export const findAthleteDataPagination = (page=1, size=10, filters) => {
+    return findDataPagination("athletes", page, size, filters)
+}
+
+export const findHistoricDataPagination = (page=1, size=10, filters) => {
+    return findDataPagination("athletes/historic", page, size, filters)
+}
+
+export const findGroupDataPagination = (page=1, size=10, filters) => {
+    return findDataPagination("groups", page, size, filters)
+}
+
+export const findSportSchoolDataPagination = (page=1, size=10, filters) => {
+    return findDataPagination("sport_schools", page, size, filters)
+}
+
+export const findFamilyDataPagination = (page=1, size=10, filters) => {
+    return findDataPagination("families", page, size, filters)
+}
+
+export const findScheduleDataPagination = (page=1, size=10, filters) => {
+    return findDataPagination("schedules", page, size, filters)
+}
+
+export const findTrainerDataPagination = (page=1, size=10, filters) => {
+    return findDataPagination("trainers", page, size, filters)
+}
+
+export const findAthleteSportdataPagination = (athleteId, page=1, size=10, filters) => {
+    return findDataPagination("athletes/" + athleteId + "/sportdata", page, size, filters)
+}
+
+export const findGroupAthletesDataPagination = (groupId, scheduleIds=[], page=1, size=10, filters) => {
+
+    let endpoint = "groups/" + groupId + "/athletes"
+    if (scheduleIds && scheduleIds.length > 0){
+        endpoint = "groups/" + groupId + "/schedules/" + scheduleIds.join() + "/athletes"
+    }
+    return findDataPagination(endpoint, page, size, filters)
+}
+
+export const findDataPagination = (entity, page=1, size=10, filters) => {
+
+    let pageParams = "?page=" + (page-1)
+    let sizeParams = "&size=" + size
+    let filtersParams = '';
+    if (filters && Object.keys(filters).length > 0){
+        filtersParams = "&filters=" + utils.getFilterParams(filters)
+    }
+    let urlParams = pageParams + sizeParams + filtersParams
+    return fetch(process.env.REACT_APP_SERVER_URL + "/" + entity + urlParams, { headers })
+        .then(res => res.json())
+}
