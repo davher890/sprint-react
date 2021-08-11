@@ -65,8 +65,8 @@ const Utils = {
                 value = filterVal.trim()
             }
 
-
-            if (value && value.length > 0 && operator && operator.length > 0) {
+            // if (value && value.length > 0 && operator && operator.length > 0) {
+            if (value && operator && operator.length > 0) {
                 return field + "__" + operator + "__" + value
             }
             else {

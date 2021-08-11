@@ -20,10 +20,11 @@ import Button from '../custom/Button'
 import MemoTextField from '../custom/TextField'
 
 import AthleteSportdata from './AthleteSportdata'
+import DuplicatedAthletes from './DuplicatedAthletes'
 
 // Redux
 import { connect } from "react-redux";
-import { addAthlete, getAthlete, getAthleteFee } from "../../redux/actions/athletes";
+import { addAthlete, getAthlete, getAthleteFee, getDuplicatedAthletesTable } from "../../redux/actions/athletes";
 
 class CreateAthlete extends Component {
 
@@ -61,9 +62,6 @@ class CreateAthlete extends Component {
             if (this.state.exit) {
                 this.props.history.push("/athletes");
                 window.location.reload(true);
-            }
-            else {
-                // this.setState(data)
             }
         })
     }
@@ -139,6 +137,7 @@ class CreateAthlete extends Component {
                     registerDate: moment(new Date()).format("YYYY-MM-DD"),
                     openRegisterDialog: false,
                     openSportdataDialog: false,
+                    openDuplicatedAthletes: false,
 
                     exit: false,
 
@@ -201,7 +200,6 @@ class CreateAthlete extends Component {
                     return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                    console.log('lll')
                     this.setState(values)
                     setSubmitting(false);
                     this.handleFormSubmit()
@@ -227,6 +225,26 @@ class CreateAthlete extends Component {
                                 <strong>{values.successMessage}</strong>
                             </Alert>
                         </Snackbar>
+
+                        <Dialog fullWidth={true} maxWidth="xl" open={values.openDuplicatedAthletes} aria-labelledby="form-dialog-title"
+                            onClose={() => {
+                                setFieldValue('openDuplicatedAthletes', false)
+                            }}
+                        >
+                            <DialogTitle id="form-dialog-title">Histórico deportivo</DialogTitle>
+                            <DialogContent>
+                                <Grid container>
+                                    <DuplicatedAthletes 
+                                        id={values.id}
+                                        name={values.name}
+                                        firstSurname={values.firstSurname}
+                                        dni={values.dni} />
+                                </Grid>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => { setFieldValue('openDuplicatedAthletes', false) }} color="secondary" text="Cerrar" />
+                            </DialogActions>
+                        </Dialog>
 
                         <Box paddingBottom={7}>
                             <Grid container spacing={3}>
@@ -320,8 +338,14 @@ class CreateAthlete extends Component {
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs>
                                                             <MemoTextField name="name" label="Nombre" value={values.name} margin="dense"
-                                                                error={touched.name && errors.name}
-                                                                onChange={handleChange}
+                                                                error={touched.name && errors.name} onChange={handleChange} 
+                                                                onBlur={() => {
+                                                                    if (values.name && values.firstSurname && values.dni){
+                                                                        this.props.getDuplicatedAthletesTable(values.id, values.name, values.firstSurname, values.dni).then(d => {
+                                                                            setFieldValue('openDuplicatedAthletes', this.props.duplicated_athletes && this.props.duplicated_athletes.length > 0)
+                                                                        })
+                                                                    }
+                                                                }}
                                                             />
                                                         </Grid>
                                                         <Grid item xs>
@@ -330,6 +354,11 @@ class CreateAthlete extends Component {
                                                                 onBlur={e => {
                                                                     if (values.familiarOneFirstSurname === '') {
                                                                         setFieldValue('familiarOneFirstSurname', e.target.value);
+                                                                    }
+                                                                    if (values.name && values.firstSurname && values.dni){
+                                                                        this.props.getDuplicatedAthletesTable(values.id, values.name, values.firstSurname, values.dni).then(d => {
+                                                                            setFieldValue('openDuplicatedAthletes', this.props.duplicated_athletes && this.props.duplicated_athletes.length > 0)
+                                                                        })
                                                                     }
                                                                 }}
                                                                 onChange={handleChange}
@@ -374,6 +403,13 @@ class CreateAthlete extends Component {
                                                         <Grid item xs>
                                                             <MemoTextField name="dni" label="Dni/Nie" type="text" value={values.dni}
                                                                 error={touched.dni && errors.dni} onChange={handleChange}
+                                                                onBlur={() => {
+                                                                    if (values.name && values.firstSurname && values.dni){
+                                                                        this.props.getDuplicatedAthletesTable(values.id, values.name, values.firstSurname, values.dni).then(d => {
+                                                                            setFieldValue('openDuplicatedAthletes', this.props.duplicated_athletes && this.props.duplicated_athletes.length > 0)
+                                                                        })
+                                                                    }
+                                                                }}
                                                             />
                                                         </Grid>
                                                         <Grid item xs>
@@ -653,18 +689,18 @@ class CreateAthlete extends Component {
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        addAthlete: athlete => dispatch(addAthlete(athlete)),
-        getAthlete: id => dispatch(getAthlete(id)),
-        getAthleteFee: data => dispatch(getAthleteFee(data))
-    }
+const mapDispatchToProps = {
+    addAthlete, 
+    getAthlete, 
+    getAthleteFee, 
+    getDuplicatedAthletesTable
 }
 
 const mapStateToProps = state => {
     return {
         athlete: state.athlete_reducer.athlete,
         athlete_fee: state.athlete_reducer.athlete_fee,
+        duplicated_athletes: state.table_reducer.table_data
     };
 };
 

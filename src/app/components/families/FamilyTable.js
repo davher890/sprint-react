@@ -4,7 +4,7 @@ import { numberFilter } from 'react-bootstrap-table2-filter';
 
 import { Container, Grid } from '@material-ui/core';
 
-import Table from "../custom/Table_copy";
+import Table from "../custom/Table";
 
 import { connect } from "react-redux";
 import { getFamilyTable } from "../../redux/actions/families/index";

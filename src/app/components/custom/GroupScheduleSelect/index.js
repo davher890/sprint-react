@@ -40,7 +40,6 @@ class GroupScheduleSelect extends Component {
             groupId: groupId,
             specialization: specialization,
         })
-        console.log(groupId)
         if (groupId){
             this.props.getGroupSchedules(groupId).then(() => {
                 let scheduleIds = specialization ? this.props.group_schedules.map((d) => d.id) : (resetSchedules ? [] : this.state.scheduleIds)

@@ -1,229 +1,72 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import BootstrapTable  from 'react-bootstrap-table-next';
+import BootstrapTable from 'react-bootstrap-table-next';
 import Paginator from 'react-bootstrap-table2-paginator'
 import Filter from 'react-bootstrap-table2-filter';
-import { Formik } from 'formik';
-
-import ColumnsSelect from "../ColumnsSelect";
 
 import Grid from '@material-ui/core/Grid';
 
-class Table extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        	columns : props.columns,//.map(c => { c.show = true; return c; }),
-        	entityName : props.entityName,
-        	data : [],
-        	urlParams : '',
-        	size : 10,
-        	page : 1,
-        	total : 0,
-        	showColumns : props.showColumns !== undefined ? props.showColumns : true,
-        	fixedFilters : props.filter ? props.filter.split(",") : [],
-        	filters : []
-    	}
-		this.fetchData = this.fetchData.bind(this)
-        this.handleTableChange = this.handleTableChange.bind(this)
-        this.downloadData = this.downloadData.bind(this)
-    }
+import ColumnsSelect from "../ColumnsSelect";
 
-    refresh(){
-    	this.fetchData()
-    }
+export default (props) => {
 
-    componentDidMount(prevProps, nextProps){
-        if(prevProps !== this.props){
-			this.fetchData()
-    	}
-    }
+	const [columns, setColumns] = useState(props.columns);
 
-    async componentDidUpdate(prevProps) {
+	const handleTableChange = (type, pageProp) => {
 
-    	if (this.props.entityName && this.props.entityName !== this.state.entityName){
-    		await this.setState({
-    			entityName : this.props.entityName
-    		})
-    		this.fetchData()
-    	}
-	}
-
-    fetchData(){
-    	if (this.state.entityName && this.state.entityName !== ""){
-			const headers = { 'Content-Type': 'application/json' }
-			
-			let url = process.env.REACT_APP_SERVER_URL + "/" + this.props.entityName + "?page=" + (this.state.page-1) + "&size=" + this.state.size
-			let totalFilter = []
-
-			if (this.state.filters && this.state.filters.length > 0){
-				totalFilter.push(this.state.filters)
-			}
-			if (this.state.fixedFilters && this.state.fixedFilters.length > 0){
-				totalFilter.push(this.state.fixedFilters)
-			}
-			if (totalFilter.length > 0){
-				console.log(totalFilter)
-				url = url + '&filters=' + totalFilter.reduce((accumulator, currentValue) => accumulator + ',' + currentValue)
-			}
-			fetch(url,  { headers })
-				.then(response => response.json())
-				.then(data => {
-					let items = []
-					if (data.content && data.content.length > 0){
-						items = data.content
-						if (this.props.dataConversor){
-							items = data.content.map(d => {
-								return this.props.dataConversor(d)
-							})
-						}
-					}
-					this.setState({
-						data: items,
-						total : data.totalElements,
-						page : data.number+1
-					})
-				})
+		if (type === 'pagination' && props.onPaginationChange){
+			props.onPaginationChange(pageProp.page, pageProp.sizePerPage)
+		}
+		else if (type === 'filter' && props.onFilterChange) {
+			props.onFilterChange(pageProp.filters)
 		}
 	}
-	
-	async handleTableChange(type, pageProp){
-		
-		if (type === 'pagination'){
-			let page = pageProp.page;
-			let size = pageProp.sizePerPage;
-			
-		    await this.setState({
-	        	page : page,
-	        	size : size
-	        })
+
+	const downloadData = () => {
+		if (props.downloadData){
+			props.downloadData()
 		}
-		else if (type === 'filter'){
-
-			let filterParams = Object.keys(pageProp.filters).map(field => {
-
-				let f = pageProp.filters[field]
-
-				let filterVal = f.filterVal
-				let operator
-				if (filterVal.comparator !== undefined){
-					operator = filterVal.comparator
-				}
-				else {
-					operator = f.comparator
-				}
-
-				let value
-				if (filterVal.number !== undefined){
-					value = filterVal.number
-				}
-				else {
-					value = filterVal.trim()
-				}
-				
-
-				if (value && value.length > 0 && operator && operator.length > 0){
-					return field + "__" + operator + "__" + value
-				}
-				else {
-					return null
-				}
-			}).filter(x => x)
-
-			await this.setState({
-				filters : filterParams
-	        })
-		}
-
-		this.fetchData()
 	}
 
-	downloadData(){
-
-		const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(this.state.columns)
-        }
-
-		fetch(process.env.REACT_APP_SERVER_URL + "/" + this.props.entityName + "/excel", requestOptions)
-			.then(response => {
-				response.blob().then(blob => {
-					let url = window.URL.createObjectURL(blob);
-					let a = document.createElement('a');
-					a.href = url;
-					a.download = 'table.xlsx';
-					a.click();
-				})
-			})
-			.catch(function() {
-		        console.log("error");
-		    });
-	}
-
-	rowEvents = {
-		onClick: (e, row, rowIndex) => {
-			if (this.props.onRowClick){
-				this.props.onRowClick(e, row, rowIndex)
-			}
-			else if (this.props.entityName && this.props.entityName !== ""){
-				if (this.props.entityName.indexOf(":id") > 0){
-					window.open("/" + this.props.entityName.replace(":id", row.id), "_self");
-				}
-				else {
-					window.open("/" + this.props.entityName + "/" + row.id, "_self");
-				}
-			}
+	const onRowClick = (id, row) => {
+		if (props.onRowClick){
+			props.onRowClick(id, row)
 		}
-	};
-
-    render() {
-		return (
-			<Formik enableReinitialize
-                initialValues={{
-                	columns : this.state.columns,
-                	data : this.state.data,
-                	page : this.state.page,
-                	size : this.state.size,
-                	total : this.state.total,
-                	entityName: this.state.entityName,
-                	showColumns: this.state.showColumns
-                }}
-                >
-                {({ handleChange, values, setFieldValue }) => (
-
-                    <div>
-                    	<Grid container direction="row" spacing={2} justify="flex-start" alignItems="flex-start"
-                    		style={{ display: values.showColumns ? "block" : "none" }}>
-							<Grid item xs>
-								<ColumnsSelect 
-									columns={values.columns}
-									changeEvent={(cols) => { setFieldValue("columns", cols) }}
-									downloadData={this.props.downloadData}
-								/>
-                            </Grid>
-                       	</Grid>
-						<Grid container spacing={1}>
-							<Grid item xs>
-								<BootstrapTable striped bordered hover 
-									remote
-									keyField="id" 
-									data={values.data}
-									columns={values.columns.filter(c => c.show === true)}
-									onTableChange={ this.handleTableChange }
-									filter={ Filter() }
-									pagination={Paginator({page : values.page, sizePerPage: values.size, totalSize : values.total })}
-									noDataIndication="Sin Datos"
-									rowEvents={ this.rowEvents }
-								>
-								</BootstrapTable>
-							</Grid>
-						</Grid>
-					</div>
-                )}
-            </Formik>
-		)
 	}
+
+	return (
+		<Grid>
+			<Grid container direction="row" spacing={2} justifyContent="flex-start" alignItems="flex-start"
+				style={{ display: props.showColumns ? "block" : "none" }}>
+				<Grid item xs>
+					<ColumnsSelect 
+						columns={props.columns}
+						changeEvent={(cols) => { 
+							setColumns(cols) 
+						}}
+						downloadData={downloadData}
+					/>
+				</Grid>
+			</Grid>
+			<Grid container spacing={1}>
+				<Grid item xs>
+					<BootstrapTable striped bordered hover 
+						remote
+						keyField="id"
+						data={props.data}
+						columns={columns.filter(c => c.show === true)}
+						onTableChange={handleTableChange}
+						filter={Filter()}
+						pagination={Paginator({ page: props.page, sizePerPage: props.size, totalSize: props.total })}
+						noDataIndication="Sin Datos"
+						rowEvents={{
+							onClick: (e, row, rowIndex) => {
+								onRowClick(row.id, row)
+							}
+						}}
+					/>
+				</Grid>
+			</Grid>
+		</Grid>
+	)
 }
-
-export default Table;

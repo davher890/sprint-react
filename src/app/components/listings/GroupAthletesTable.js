@@ -1,16 +1,11 @@
 import React, { Component } from "react";
-import { 
-    Form
-} from 'react-bootstrap';
-
-import { Formik } from 'formik';
 
 import { Container, Grid } from '@material-ui/core';
 
 import SubmitButton from '../custom/SubmitButton'
-import Table from "../custom/Table_copy";
+import Table from "../custom/Table";
 import CustomCard from '../custom/Card'
-import GroupSelect from '../custom/GroupSelect'
+import GroupScheduleSelect from '../custom/GroupScheduleSelect'
 
 import Utils from "../../utils/TableUtils"
 import { connect } from "react-redux";
@@ -45,7 +40,7 @@ class GroupAthletesTable extends Component {
                         <CustomCard>
                             <Grid container direction="column" spacing={1}>
                                 <Grid item xs>
-                                    <GroupSelect
+                                    <GroupScheduleSelect
                                         groupId={this.state.groupId}
                                         scheduleIds={this.state.scheduleIds}
                                         onChange={(groupId, specialization, scheduleIds) => {
@@ -56,7 +51,7 @@ class GroupAthletesTable extends Component {
                                         }}
                                     />
                                 </Grid>
-                                <Grid item xs={1}>
+                                <Grid item xs>
                                     <SubmitButton text="Buscar"
                                         onClick={this.handleSubmitQuery}/>
                                 </Grid>

@@ -5,7 +5,7 @@ import { Container, Grid } from '@material-ui/core';
 
 import { textFilter } from 'react-bootstrap-table2-filter';
 
-import Table from "../custom/Table_copy";
+import Table from "../custom/Table";
 import Button from '../custom/Button'
 
 import { connect } from "react-redux";

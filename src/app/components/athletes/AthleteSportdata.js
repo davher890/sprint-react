@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
+import { Grid, TextField } from '@material-ui/core';
 
 import SubmitButton from '../custom/SubmitButton'
 import Button from '../custom/Button'
-import Table from "../custom/Table_copy";
+import Table from "../custom/Table";
 
 import Utils from "../../utils/TableUtils";
 

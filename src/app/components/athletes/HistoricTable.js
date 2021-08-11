@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { Container, Grid } from '@material-ui/core';
 
-import Table from "../custom/Table_copy";
+import Table from "../custom/Table";
 
 import Utils from "../../utils/TableUtils";
 

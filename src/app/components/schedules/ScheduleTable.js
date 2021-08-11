@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container } from 'react-bootstrap';
 
-import Table from "../custom/Table_copy";
+import Table from "../custom/Table";
 
 import { connect } from "react-redux";
 import { getScheduleTable } from "../../redux/actions/schedules";

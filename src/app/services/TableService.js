@@ -5,6 +5,36 @@ export const findAthleteDataPagination = (page=1, size=10, filters) => {
     return findDataPagination("athletes", page, size, filters)
 }
 
+export const findDuplicatedAthletesDataPagination = (id, name, firstSurname, dni, page=1, size=10, filters) => {
+
+    if(!filters){
+        filters = {}
+    }
+    if (id && id > 0){
+        filters.id = {
+            comparator: "LIKE",
+            filterType: "NUMBER",
+            filterVal: {
+                comparator: "!=",
+                number : id
+            },
+        }
+    }
+    filters.name = {
+        comparator: "LIKE",
+        filterVal: name
+    }
+    filters.firstSurname = {
+        comparator: "LIKE",
+        filterVal: firstSurname
+    }
+    filters.dni = {
+        comparator: "LIKE",
+        filterVal: dni
+    }
+    return findDataPagination("athletes", page, size, filters)
+}
+
 export const findHistoricDataPagination = (page=1, size=10, filters) => {
     return findDataPagination("athletes/historic", page, size, filters)
 }
