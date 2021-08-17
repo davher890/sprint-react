@@ -14,7 +14,7 @@ import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } 
 import CustomCard from '../custom/Card'
 import GroupScheduleSelect from '../custom/GroupScheduleSelect'
 import SportSchoolSelect from '../custom/SportSchoolSelect'
-import SubmitButton from '../custom/SubmitButton'
+import SaveButton from '../custom/SaveButton'
 import Select from '../custom/Select'
 import Button from '../custom/Button'
 import MemoTextField from '../custom/TextField'
@@ -420,7 +420,7 @@ class CreateAthlete extends Component {
                                                     </Grid>
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs>
-                                                            <MemoTextField name="dni" label="Dni/Nie" type="text" value={values.dni}
+                                                            <MemoTextField name="dni" label="DNI/NIE" type="text" value={values.dni}
                                                                 error={touched.dni && errors.dni} onChange={handleChange}
                                                                 onBlur={() => {
                                                                     if (values.name && values.firstSurname && values.dni){
@@ -693,12 +693,14 @@ class CreateAthlete extends Component {
                         </Box>
                         <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
                             <Toolbar>
-                                <SubmitButton text='Guardar y salir' onClick={() => {
-                                    values.exit = true;
-                                    console.log(values.exit)
-                                    return false;
-                                }} />
-                                <SubmitButton text='Guardar y continuar' />
+                                <SaveButton text='Guardar y salir' type="submit" 
+                                    onClick={() => {
+                                        values.exit = true;
+                                        console.log(values.exit)
+                                        return false;
+                                    }}
+                                />
+                                <SaveButton type="submit" text='Guardar y continuar' />
                             </Toolbar>
                         </AppBar>
                     </form>

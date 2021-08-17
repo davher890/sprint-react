@@ -41,7 +41,7 @@ class HistoricTableComponent extends Component {
 									this.props.getHistoricTable(this.props.page, this.props.size, filters);
 								}}
 								onRowClick={(id) => {
-									window.open("/athletes/historic/" + id, "_self");
+									window.open("/athletes/" + id, "_self");
 								}}>
 							</Table>
 						</Grid>

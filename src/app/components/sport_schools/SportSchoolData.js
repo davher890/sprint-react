@@ -6,7 +6,7 @@ import { Grid, Container } from '@material-ui/core';
 
 import MemoTextField from '../custom/TextField';
 import Card from '../custom/Card';
-import SubmitButton from '../custom/SubmitButton'
+import SearchButton from '../custom/SearchButton'
 
 import { connect } from "react-redux";
 import { addSportSchool, getSportSchool } from "../../redux/actions/sportSchools";
@@ -84,7 +84,7 @@ class ConnectedForm extends Component {
                                     </Card>
                                 </Grid>
                                 <Grid item xs>
-                                    <SubmitButton />
+                                    <SearchButton type="submit" />
                                 </Grid>
                             </Grid>
                         </form>

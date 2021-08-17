@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import { Container, Grid } from '@material-ui/core';
 
-import SubmitButton from '../custom/SubmitButton'
+import SearchButton from '../custom/SearchButton'
 import Table from "../custom/Table";
 import CustomCard from '../custom/Card'
 import GroupScheduleSelect from '../custom/GroupScheduleSelect'
@@ -59,7 +59,7 @@ class GroupAthletesTable extends Component {
                                     />
                                 </Grid>
                                 <Grid item xs>
-                                    <SubmitButton text="Buscar"
+                                    <SearchButton text="Buscar" type="submit"
                                         disabled={!(this.state.groupId > 0 && this.state.scheduleIds.length > 0)}
                                         onClick={this.handleSubmitQuery}/>
                                 </Grid>

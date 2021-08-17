@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 
 import Card from '../Card'
 import MultiSelect from '../MultiSelect'
-import Button from '../Button'
+import Button from '../DownloadButton'
 
 export default (props) => {
 

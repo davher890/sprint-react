@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import { Grid, TextField } from '@material-ui/core';
 
-import SubmitButton from '../custom/SubmitButton'
+import SearchButton from '../custom/SearchButton'
 import Button from '../custom/Button'
 import Table from "../custom/Table";
 
@@ -156,7 +156,7 @@ class AthleteSportdata extends Component {
                                         </Grid>
                                         <Grid container spacing={1}>
                                             <Grid item xs={3}>
-                                                <SubmitButton/>
+                                                <SearchButton type="submit"/>
                                             </Grid>
                                             <Grid item xs={3}>
                                                 <Button text="Reset" color="secondary" onClick={this.cleanForm}/>

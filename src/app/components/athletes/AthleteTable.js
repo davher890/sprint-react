@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Grid } from '@material-ui/core';
 
 import Table from "../custom/Table";
-import Button from '../custom/Button'
+import Button from '../custom/AddButton'
 
 import Utils from "../../utils/TableUtils";
 
@@ -24,8 +24,8 @@ class AthleteTable extends Component {
 		this.props.getAthleteTable();
 	}
 
-	downloadData() {
-		this.props.downloadAthletes(this.state.columns)
+	downloadData(columns) {
+		this.props.downloadAthletes(columns)
 	}
 
 	render() {
@@ -45,7 +45,6 @@ class AthleteTable extends Component {
 								columns={this.state.columns} 
 								downloadData={this.downloadData}
 								showColumns={true}
-								// filter={this.props.filter}>
 								onPaginationChange={(page, size) => {
 									this.props.getAthleteTable(page, size);
 								}}

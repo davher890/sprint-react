@@ -1,9 +1,9 @@
 import { SPECIALIZATION_GROUPS, NOT_SPECIALIZATION_GROUPS, 
     GROUP_SCHEDULES, LOAD_GROUP_TABLE, ADD_GROUP, GET_GROUP, 
     LOAD_GROUPS, LOAD_GROUP_ATHLETES_TABLE,
-    DOWNLOAD_GROUP_ATHLETES } from "../../constants/action_types";
+    DOWNLOAD_GROUP_ATHLETES, DOWNLOAD_GROUP_ATTENDANCE } from "../../constants/action_types";
 
-import { findAllGroups, findSpecializationGroups, findNotSpecializationGroups, findGroupSchedules, downloadGroupSchedulesExcel, addData, findById } from "../../../services/GroupService"
+import { findAllGroups, findSpecializationGroups, findNotSpecializationGroups, findGroupSchedules, downloadGroupSchedulesExcel, addData, findById, findGroupAttendance } from "../../../services/GroupService"
 import { findGroupDataPagination, findGroupAthletesDataPagination } from "../../../services/TableService"
 
 export function getGroupTable(page, size, filters) {
@@ -29,6 +29,16 @@ export function downloadGroupSchedulesAthletes(groupId, scheduleIds, columns) {
         });
     }
 }
+
+
+export function downloadGroupAttendance(groupId, month) {
+    return function (dispatch) {
+        return findGroupAttendance(groupId, month).then(json => {
+            dispatch({ type: DOWNLOAD_GROUP_ATTENDANCE, payload: json });
+        });
+    }
+}
+
 
 export function getAllGroups() {
     return function (dispatch) {

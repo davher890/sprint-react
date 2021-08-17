@@ -58,4 +58,16 @@ export const downloadGroupSchedulesExcel = (groupId, scheduleIds, columns) => {
 
 export const findGroupAttendance = (groupId, month) => {
     return fetch(process.env.REACT_APP_SERVER_URL + "/groups/" + groupId + "/attendance?month=" + month)
+        .then(response => {
+            response.blob().then(blob => {
+                let url = window.URL.createObjectURL(blob);
+                let a = document.createElement('a');
+                a.href = url;
+                a.download = 'athletes.xlsx';
+                a.click();
+            })
+        })
+        .catch(function () {
+            console.log("error");
+        });
 }
