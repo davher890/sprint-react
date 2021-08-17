@@ -35,6 +35,27 @@ export const findGroupSchedules = (id) => {
         .then(res => res.json())
 }
 
+export const downloadGroupSchedulesExcel = (groupId, scheduleIds, columns) => {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(columns)
+    }
+    return fetch(process.env.REACT_APP_SERVER_URL + "/groups/" + groupId + "/schedules/" + scheduleIds.join("_") + "/athletes/excel", requestOptions)
+        .then(response => {
+            response.blob().then(blob => {
+                let url = window.URL.createObjectURL(blob);
+                let a = document.createElement('a');
+                a.href = url;
+                a.download = 'athletes.xlsx';
+                a.click();
+            })
+        })
+        .catch(function (e) {
+            console.log("error", e);
+        });
+}
+
 export const findGroupAttendance = (groupId, month) => {
     return fetch(process.env.REACT_APP_SERVER_URL + "/groups/" + groupId + "/attendance?month=" + month)
 }

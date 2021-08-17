@@ -62,10 +62,8 @@ class GroupSelect extends Component {
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        getGroups: specialization => dispatch(getGroups(specialization)),
-    }
+const mapDispatchToProps = {
+    getGroups
 }
 
 const mapStateToProps = state => {

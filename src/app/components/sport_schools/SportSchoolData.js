@@ -33,7 +33,6 @@ class ConnectedForm extends Component {
 
     render() {
         return (
-
             <Container fixed>
     	        <Suspense fallback={<div>Cargando...</div>}>
 
@@ -49,7 +48,7 @@ class ConnectedForm extends Component {
 
                             Object.keys(values).forEach(value => {
                                 if (values[value] === '') {
-                                    errors[value] = 'Valid ' + value + ' Required';
+                                    errors[value] = true;
                                 }
                             })
 
@@ -65,28 +64,28 @@ class ConnectedForm extends Component {
                     {({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, errors }) => (
 
                         <form onSubmit={handleSubmit}>
-                            <Grid container>
+                            <Grid container direction="column" spacing={3}>
                                 <Grid item xs>
                                     <Card title="Datos de la Escuela deportiva">
-                                        <Grid container spacing={1}>
-                                            <Grid item>
+                                        <Grid container spacing={2}>
+                                            <Grid item xs>
                                                 <MemoTextField name="name" label="Nombre" value={values.name} onChange={handleChange}
-                                                    className={`${touched.name && errors.name ? "is-invalid" : ""}`} />
+                                                    error={touched.name && errors.name} />
                                             </Grid>
-                                            <Grid item>
+                                            <Grid item xs>
                                                 <MemoTextField name="municipality" label="Municipio" value={values.municipality} onChange={handleChange}
-                                                    className={`${touched.municipality && errors.municipality ? "is-invalid" : ""}`} />
+                                                    error={touched.municipality && errors.municipality} />
                                             </Grid>
-                                            <Grid item>
+                                            <Grid item xs>
                                                 <MemoTextField name="address" label="Dirección" value={values.address} onChange={handleChange}
-                                                    className={`${touched.address && errors.address ? "is-invalid" : ""}`} />
+                                                    error={touched.address && errors.address} />
                                             </Grid>
                                         </Grid>
                                     </Card>
                                 </Grid>
-                            </Grid>
-                            <Grid container>
-                                <SubmitButton />
+                                <Grid item xs>
+                                    <SubmitButton />
+                                </Grid>
                             </Grid>
                         </form>
                     )}

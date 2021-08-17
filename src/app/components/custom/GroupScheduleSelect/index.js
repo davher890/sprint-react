@@ -60,12 +60,11 @@ class GroupScheduleSelect extends Component {
 
     render() {
         return (
-            <Grid container direction="row" spacing={3}>
+            <Grid container direction="row" spacing={2}>
                 <Grid item xs>
                     <GroupSelect
                         groupId={this.state.groupId}
                         onChange={(groupId, specialization) => {
-                            console.log(groupId, specialization)
                             this.groupOnChange(groupId, specialization)
                         }}
                     />
@@ -85,11 +84,8 @@ class GroupScheduleSelect extends Component {
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        getGroups: specialization => dispatch(getGroups(specialization)),
-        getGroupSchedules: groupId => dispatch(getGroupSchedules(groupId))
-    }
+const mapDispatchToProps = {
+    getGroups, getGroupSchedules
 }
 
 const mapStateToProps = state => {

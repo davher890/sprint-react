@@ -66,6 +66,27 @@ class CreateAthlete extends Component {
         })
     }
 
+    isValidDni(dni) {
+        
+        const dniRegex = /^[0-9]{8,8}[A-Za-z]$/
+        
+        if(dniRegex.test(dni)){
+            var number = dni.substr(0, dni.length-1);
+            var letr = dni.substr(dni.length-1,1);
+            number = number % 23;
+            let letter = 'TRWAGMYFPDXBNJZSQVHLCKET';
+            letter = letter.substring(number, number+1);
+            if (letter !== letr.toUpperCase()) {
+                return false
+            }else{
+                return true
+            }
+        }
+        else{
+            return false
+        }
+    }
+
     render() {
 
         return (
@@ -186,9 +207,7 @@ class CreateAthlete extends Component {
                         //     }
                         // }
                         else if (value === 'dni'){
-                            const dniRegex = /^[0-9]{8,8}[A-Za-z]$/
-                            const dniMatchRegex = dniRegex.test(values[value])
-                            if (!dniMatchRegex){
+                            if (!this.isValidDni(values[value])){
                                 errors[value] = true
                             }
                         }
@@ -408,6 +427,7 @@ class CreateAthlete extends Component {
                                                                         this.props.getDuplicatedAthletesTable(values.id, values.name, values.firstSurname, values.dni).then(d => {
                                                                             setFieldValue('openDuplicatedAthletes', this.props.duplicated_athletes && this.props.duplicated_athletes.length > 0)
                                                                         })
+                                                                        
                                                                     }
                                                                 }}
                                                             />

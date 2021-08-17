@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import Grid from '@material-ui/core/Grid';
+import { Container, Grid } from '@material-ui/core';
 
 import SubmitButton from '../custom/SubmitButton'
 import GroupSelect from '../custom/GroupSelect'
@@ -42,32 +42,34 @@ export default (props) => {
     }
 
     return (
-        <CustomCard>
-            <Grid container>
-                <Grid item xs={2}>
-                    <Select label="Mes"  name="month" 
-                        value={month} 
-                        options={months} 
-                        onChange={(e, value) => {
-                            setMonth(value.id)
-                        }} 
-                    />
+        <Container fixed>
+            <CustomCard>
+                <Grid container>
+                    <Grid item xs={2}>
+                        <Select label="Mes"  name="month" 
+                            value={month} 
+                            options={months} 
+                            onChange={(e, value) => {
+                                setMonth(value.id)
+                            }} 
+                        />
+                    </Grid>
+                    <Grid item xs>
+                        <GroupSelect 
+                            groupId={groupId}
+                            onChange={(id) => {
+                                setGroupId(id)
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs>
+                        <SubmitButton 
+                            disabled={!(groupId > 0 && month > 0)}
+                            onClick={handleFormSubmit}
+                        />
+                    </Grid>
                 </Grid>
-                <Grid item xs>
-                    <GroupSelect 
-                        groupId={groupId}
-                        onChange={(id) => {
-                            setGroupId(id)
-                        }}
-                    />
-                </Grid>
-                <Grid item xs>
-                     <SubmitButton 
-                        disabled={!(groupId > 0 && month > 0)}
-                        onClick={handleFormSubmit}
-                    />
-                </Grid>
-            </Grid>
-        </CustomCard>
+            </CustomCard>
+        </Container>
     )
 }

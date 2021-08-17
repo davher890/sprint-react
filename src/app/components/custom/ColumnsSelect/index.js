@@ -10,14 +10,14 @@ export default (props) => {
 
     return (
         <Card title="Selecciona las columnas" >
-            <Grid container direction="row" spacing={0} justifyContent="flex-start" alignItems="flex-start">
-                <Grid item>
+            <Grid container direction="row" spacing={2} justifyContent="flex-start" alignItems="flex-start">
+                <Grid item xs>
                     <MultiSelect columns={props.columns} changeEvent={props.changeEvent} />
                 </Grid>
-                {props.downloadData ?
-                    <Grid item>
-                        <Button text="Descargar Excel" onClick={props.downloadData} />
-                    </Grid> : null
+                { props.downloadData ?
+                <Grid item xs>
+                    <Button text="Descargar Excel" onClick={props.downloadData} />
+                </Grid> : null
                 }
             </Grid>
         </Card>

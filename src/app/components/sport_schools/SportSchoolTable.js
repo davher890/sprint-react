@@ -36,8 +36,10 @@ class SportSchoolTable extends Component {
 		return (
 			<Container fixed>
 				<Suspense fallback={<div>Cargando...</div>}>
-					<Grid container direction="column">
-						<Button text="Nueva Escuela Deportiva" href={`/${this.state.entityName}`} />
+					<Grid container direction="column" spacing={3}>
+						<Grid item xs>
+							<Button text="Nueva Escuela Deportiva" href={'/sport_schools'} />
+						</Grid>
 						<Grid item xs>
 							<Table
 								data={this.props.table_data}

@@ -24,7 +24,7 @@ export default (props) => {
 
 	const downloadData = () => {
 		if (props.downloadData){
-			props.downloadData()
+			props.downloadData(columns)
 		}
 	}
 
@@ -35,9 +35,8 @@ export default (props) => {
 	}
 
 	return (
-		<Grid>
-			<Grid container direction="row" spacing={2} justifyContent="flex-start" alignItems="flex-start"
-				style={{ display: props.showColumns ? "block" : "none" }}>
+		<Grid container spacing={3} direction="column">
+			<Grid container item style={{ display: props.showColumns ? "block" : "none" }}>
 				<Grid item xs>
 					<ColumnsSelect 
 						columns={props.columns}
@@ -48,7 +47,7 @@ export default (props) => {
 					/>
 				</Grid>
 			</Grid>
-			<Grid container spacing={1}>
+			<Grid container item spacing={1}>
 				<Grid item xs>
 					<BootstrapTable striped bordered hover 
 						remote

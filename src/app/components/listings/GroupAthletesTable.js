@@ -9,19 +9,26 @@ import GroupScheduleSelect from '../custom/GroupScheduleSelect'
 
 import Utils from "../../utils/TableUtils"
 import { connect } from "react-redux";
-import { getAllGroups, getGroupAthleteTable, getGroupSchedules } from "../../redux/actions/groups";
+import { getAllGroups, getGroupAthleteTable, getGroupSchedules, downloadGroupSchedulesAthletes } from "../../redux/actions/groups";
 
 class GroupAthletesTable extends Component {
 
 	constructor(props) {
 
 		super(props);
-		this.state = {}
+		this.state = {
+        	columns: Utils.getAthleteColumns() 
+		}
         this.handleSubmitQuery = this.handleSubmitQuery.bind(this);
+        this.downloadData = this.downloadData.bind(this)
 	}
 
 	componentDidMount(){
         this.props.getAllGroups()
+	}
+
+    downloadData(columns) {
+		this.props.downloadGroupSchedulesAthletes(this.state.groupId, this.state.scheduleIds, columns)
 	}
 
 	handleSubmitQuery() {
@@ -53,6 +60,7 @@ class GroupAthletesTable extends Component {
                                 </Grid>
                                 <Grid item xs>
                                     <SubmitButton text="Buscar"
+                                        disabled={!(this.state.groupId > 0 && this.state.scheduleIds.length > 0)}
                                         onClick={this.handleSubmitQuery}/>
                                 </Grid>
                             </Grid>
@@ -64,13 +72,14 @@ class GroupAthletesTable extends Component {
                             page={this.props.page}
                             size={this.props.size}
                             total={this.props.total}
-                            columns={Utils.getAthleteColumns()} 
+                            columns={this.state.columns} 
+                            downloadData={this.downloadData}
                             showColumns={true}
                             onPaginationChange={(page, size) => {
                                 this.props.getGroupAthleteTable(this.state.groupId, this.state.scheduleIds, page, size);
                             }}
                             onFilterChange={(filters) => {
-                                this.props.getAthleteTable(this.state.groupId, this.state.scheduleIds, this.props.page, this.props.size, filters);
+                                this.props.getGroupAthleteTable(this.state.groupId, this.state.scheduleIds, this.props.page, this.props.size, filters);
                             }}
                             onRowClick={(id) => {
                                 window.open("/athletes/" + id, "_self");
@@ -93,12 +102,9 @@ function mapStateToProps(state) {
 	};
 }
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-        getAllGroups: () => dispatch(getAllGroups()),
-        getGroupSchedules: groupId => dispatch(getGroupSchedules(groupId)),
-        getGroupAthleteTable: (groupId, scheduleId) => dispatch(getGroupAthleteTable(groupId, scheduleId))
-    }
+const mapDispatchToProps = {
+    getAllGroups, getGroupSchedules, 
+    downloadGroupSchedulesAthletes, getGroupAthleteTable
 }
 
 export default connect(

@@ -8,8 +8,7 @@ export default (props) => (
 			<Grid item xs>
 				<Fab variant="extended" size="large" aria-label="add"
 					color={props.color || "secondary"}
-					href={props.href}
-					onClick={props.onClick}
+					{...props}
 				>
 					<NavigationIcon />{props.text}
 				</Fab>

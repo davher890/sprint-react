@@ -32,7 +32,7 @@ class AthleteTable extends Component {
 		return (
 			<Container fixed>
 				<Suspense fallback={<div>Cargando...</div>}>
-					<Grid container direction="column">
+					<Grid container direction="column" spacing={3}>
 						<Grid item xs>
 							<Button text="Nuevo Atleta" href={'/athletes'}/>
 						</Grid>
