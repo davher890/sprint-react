@@ -1,4 +1,5 @@
 import utils from '../utils/TableUtils.js'
+import { getRequest } from './ApiService.js'
 const headers = { 'Content-Type': 'application/json' }
 
 export const findAthleteDataPagination = (page=1, size=10, filters) => {
@@ -81,6 +82,5 @@ export const findDataPagination = (entity, page=1, size=10, filters) => {
         filtersParams = "&filters=" + utils.getFilterParams(filters)
     }
     let urlParams = pageParams + sizeParams + filtersParams
-    return fetch(process.env.REACT_APP_SERVER_URL + "/" + entity + urlParams, { headers })
-        .then(res => res.json())
+    return getRequest("/" + entity + urlParams)
 }

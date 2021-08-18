@@ -1,33 +1,19 @@
-const headers = { 'Content-Type': 'application/json' }
+import { getRequest, postRequest } from "./ApiService"
 
 export const findAll = () => {
-    return fetch(process.env.REACT_APP_SERVER_URL + "/sport_schools/all", { headers })
-        .then(res => res.json())
+    return getRequest("/sport_schools/all")
 }
 
 export const addData = (body) => {
-    const requestOptions = {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(body)
-    }
-    return fetch(process.env.REACT_APP_SERVER_URL + "/sport_schools", requestOptions)
-        .then(res => res.json())
+    return postRequest("/sport_schools", body)
 }
 
 export const findById = (id) => {
-    return fetch(process.env.REACT_APP_SERVER_URL + "/sport_schools/" + id, { headers })
-        .then(res => res.json())
+    return getRequest("/sport_schools/" + id)
 }
 
 export const downloadExcel = (columns) => {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(columns)
-    }
-
-    return fetch(process.env.REACT_APP_SERVER_URL + "/sport_schools/excel", requestOptions)
+    return fetch(process.env.REACT_APP_SERVER_URL + "/sport_schools/excel", columns)
         .then(response => {
             response.blob().then(blob => {
                 let url = window.URL.createObjectURL(blob);

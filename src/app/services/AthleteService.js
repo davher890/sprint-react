@@ -1,28 +1,15 @@
-const headers = { 'Content-Type': 'application/json' }
+import { getRequest, postRequest } from "./ApiService"
 
 export const addData = (body) => {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-    }
-    return fetch(process.env.REACT_APP_SERVER_URL + "/athletes", requestOptions)
-        .then(res => res.json())
+    return postRequest("/athletes", body)
 }
 
 export const findById = (id) => {
-    return fetch(process.env.REACT_APP_SERVER_URL + "/athletes/" + id, { headers })
-        .then(res => res.json())
+    return getRequest("/athletes/" + id)
 }
 
 export const findAthleteFee = (body) => {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-    }
-    return fetch(process.env.REACT_APP_SERVER_URL + "/athletes/fee", requestOptions)
-        .then(res => res.json())
+    return postRequest("/athletes/fee", body)
 }
 
 export const downloadExcel = (columns) => {
@@ -31,7 +18,6 @@ export const downloadExcel = (columns) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(columns)
     }
-
     return fetch(process.env.REACT_APP_SERVER_URL + "/athletes/excel", requestOptions)
         .then(response => {
             response.blob().then(blob => {
@@ -48,14 +34,6 @@ export const downloadExcel = (columns) => {
 }
 
 // Sportdata
-
-
 export const addAthleteSportdata = (body) => {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-    }
-    return fetch(process.env.REACT_APP_SERVER_URL + "/sportdata", requestOptions)
-        .then(res => res.json())
+    return postRequest("/sportdata", body)
 }
