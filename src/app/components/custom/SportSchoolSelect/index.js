@@ -19,7 +19,7 @@ const SportSchoolSelect = (props) => {
             setSportSchoolId(props.sportSchoolId)
         }
         props.getAllSportSchools()
-    }, [props.sportSchoolId])
+    }, [props, sportSchoolId])
 
     const onChange = (e, value) => {
         if (props.onChange){

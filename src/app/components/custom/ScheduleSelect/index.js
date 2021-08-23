@@ -21,7 +21,7 @@ export default (props) => {
         if (props.specialization !== specialization){
             setSpecialization(props.specialization)
         }
-    }, [props.schedules, props.scheduleIds, props.specialization])
+    }, [props.schedules, props.scheduleIds, props.specialization, schedules, scheduleIds, specialization])
 
     const onChange = (scheduleIds) => {
         if (props.onChange){

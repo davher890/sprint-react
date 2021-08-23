@@ -46,8 +46,8 @@ export function getHistoricTable(page, size, filters) {
 export function getAthlete(id) {
     return function (dispatch) {
         return findById(id).then(json => {
-            json.age = utils.ageCalculator(new Date(json.birthDate));
-            json.birthDate = moment(new Date(json.birthDate)).format("YYYY-MM-DD")
+            json.age = utils.ageCalculator(json.birthDate);
+            json.birthDateStr = moment.unix(json.birthDate/1000).format("YYYY-MM-DD")
             dispatch({ type: GET_ATHLETE, payload: json });
         });
     }
@@ -74,6 +74,8 @@ export function addAthlete(data) {
             if (!json.errorMessage) {
                 json.successMessage = "Atleta guardado!"
             }
+            json.age = utils.ageCalculator(json.birthDate);
+            json.birthDateStr = moment.unix(json.birthDate/1000).format("YYYY-MM-DD")
             dispatch({ type: ADD_ATHLETE, payload: json });
         });
     }

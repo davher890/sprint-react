@@ -108,6 +108,7 @@ class CreateAthlete extends Component {
                     firstSurname: this.props.athlete.firstSurname || '',
                     secondSurname: this.props.athlete.secondSurname || '',
                     birthDate: this.props.athlete.birthDate || '',
+                    birthDateStr: this.props.athlete.birthDateStr || '',
                     birthPlace: this.props.athlete.birthPlace || '',
                     dni: this.props.athlete.dni || '',
                     nationality: this.props.athlete.nationality || '',
@@ -384,7 +385,7 @@ class CreateAthlete extends Component {
                                                             />
                                                         </Grid>
                                                         <Grid item xs>
-                                                            <MemoTextField name="secondSurname" label="Segundo Appellido" value={values.secondSurname} margin="dense"
+                                                            <MemoTextField name="secondSurname" label="Segundo Apellido" value={values.secondSurname} margin="dense"
                                                                 error={touched.secondSurname && errors.secondSurname}
                                                                 onBlur={e => {
                                                                     if (values.familiarTwoFirstSurname === '') {
@@ -397,20 +398,21 @@ class CreateAthlete extends Component {
                                                     </Grid>
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs>
-                                                            <MemoTextField name="birthDate" value={values.birthDate} margin="dense"
+                                                            <MemoTextField value={values.birthDateStr} margin="dense"
                                                                 label="Fecha de nacimiento" type="date"
-                                                                error={touched.birthDate && errors.birthDate}
+                                                                error={touched.birthDateStr && errors.birthDateStr}
                                                                 onChange={e => {
                                                                     let d = moment(e.target.value, "YYYY-MM-DD")
                                                                     let age = utils.ageCalculator(d)
                                                                     setFieldValue('age', age);
-                                                                    setFieldValue('birthDate', e.target.value);
+                                                                    setFieldValue('birthDateStr', e.target.value);
+                                                                    setFieldValue('birthDate', d.toDate().getTime());
                                                                     setFieldValue('category', utils.calculateCategory(new Date(d).getFullYear()));
                                                                 }}
                                                             />
                                                         </Grid>
                                                         <Grid item xs>
-                                                            <MemoTextField name="age" label="Edad" type="number" disabled value={values.age} margin="dense" />
+                                                            <MemoTextField label="Edad" type="number" disabled value={values.age} margin="dense" />
                                                         </Grid>
                                                         <Grid item xs>
                                                             <MemoTextField name="birthPlace" label="Lugar de nacimiento" type="text" value={values.birthPlace}

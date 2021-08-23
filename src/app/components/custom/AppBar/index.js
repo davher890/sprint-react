@@ -60,9 +60,9 @@ export default (props) => {
                         <MenuItem><Link href="/athletes/historic">Histórico</Link></MenuItem>
                         <MenuItem><Link href="/groups/athletes">Atletas-Grupos</Link></MenuItem>
                     </Menu>
-                    <Typography variant="h6">
+                    {/* <Typography variant="h6">
                         <Link href="/families/list">Familias</Link>
-                    </Typography>
+                    </Typography> */}
                 {/* </Grid> */}
             </Toolbar>
         </AppBar>

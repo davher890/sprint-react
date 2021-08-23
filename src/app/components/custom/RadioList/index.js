@@ -14,7 +14,7 @@ export default (props) => {
         if (props.value !== value){
             setValue(props.value)
         }
-    }, [props.value])
+    }, [props.value, value])
 
     return (
         <Grid container>

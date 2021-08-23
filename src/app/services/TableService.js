@@ -1,6 +1,5 @@
 import utils from '../utils/TableUtils.js'
 import { getRequest } from './ApiService.js'
-const headers = { 'Content-Type': 'application/json' }
 
 export const findAthleteDataPagination = (page=1, size=10, filters) => {
     return findDataPagination("athletes", page, size, filters)
