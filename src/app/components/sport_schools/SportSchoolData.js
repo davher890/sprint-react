@@ -6,7 +6,7 @@ import { Grid, Container } from '@material-ui/core';
 
 import MemoTextField from '../custom/TextField';
 import Card from '../custom/Card';
-import SearchButton from '../custom/SearchButton'
+import SaveButton from '../custom/SaveButton'
 
 import { connect } from "react-redux";
 import { addSportSchool, getSportSchool } from "../../redux/actions/sportSchools";
@@ -27,7 +27,7 @@ class ConnectedForm extends Component {
         }
     }
 
-    handleFormSubmit(event) {
+    handleFormSubmit() {
         this.props.addSportSchool(this.state);
     }
 
@@ -84,7 +84,7 @@ class ConnectedForm extends Component {
                                     </Card>
                                 </Grid>
                                 <Grid item xs>
-                                    <SearchButton type="submit" />
+                                    <SaveButton type="submit" />
                                 </Grid>
                             </Grid>
                         </form>
@@ -96,11 +96,9 @@ class ConnectedForm extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        addSportSchool: sportSchool => dispatch(addSportSchool(sportSchool)),
-        getSportSchool: id => dispatch(getSportSchool(id))
-    }
+const mapDispatchToProps = {
+    addSportSchool,
+    getSportSchool
 }
 
 const mapStateToProps = state => {

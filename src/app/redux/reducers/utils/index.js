@@ -64,8 +64,8 @@ function scheduleDataConversor(d){
     return {
         id : d.id, 
         day: d.day, 
-        start: d.startHour + ':' + d.startMinute,
-        end: d.endHour + ':' + d.endMinute
+        start: d.startHour + ':' + (d.startMinute.toString().length < 2 ? (d.startMinute + '0') : d.startMinute),
+        end: d.endHour + ':' + (d.endMinute.toString().length < 2 ? (d.endMinute + '0') : d.endMinute)
     }
 }
 

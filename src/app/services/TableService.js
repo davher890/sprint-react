@@ -52,7 +52,7 @@ export const findFamilyDataPagination = (page=1, size=10, filters) => {
 }
 
 export const findScheduleDataPagination = (page=1, size=10, filters) => {
-    return findDataPagination("schedules", page, size, filters)
+    return findDataPagination("schedules?sort=day", page, size, filters)
 }
 
 export const findTrainerDataPagination = (page=1, size=10, filters) => {
@@ -74,7 +74,8 @@ export const findGroupAthletesDataPagination = (groupId, scheduleIds=[], page=1,
 
 export const findDataPagination = (entity, page=1, size=10, filters) => {
 
-    let pageParams = "?page=" + (page-1)
+    let paramsSeparator = entity.includes("?") ? "&" : "?"
+    let pageParams = paramsSeparator + "page=" + (page-1)
     let sizeParams = "&size=" + size
     let filtersParams = '';
     if (filters && Object.keys(filters).length > 0){

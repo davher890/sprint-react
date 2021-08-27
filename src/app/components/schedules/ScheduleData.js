@@ -1,122 +1,135 @@
-import React, { Component } from "react";
-import Row from 'react-bootstrap/Row';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { Component, Suspense } from "react";
 
-import { 
-    Form, 
-    Button, 
-    Col,
-    InputGroup } from 'react-bootstrap';
+import { Formik } from 'formik';
 
+import { Grid, Container } from "@material-ui/core";
 
-class CreateSchedule extends Component {
+import MemoTextField from '../custom/TextField';
+import Select from '../custom/Select';
+import SaveButton from '../custom/SaveButton'
+
+import { connect } from "react-redux";
+import { addSchedule, getSchedule } from "../../redux/actions/schedules";
+
+class ConnectedForm extends Component {
 
     constructor(props) {
         super(props);
         this.state = {};
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleFormSubmit = this.handleFormSubmit.bind(this);
     }
 
     componentDidMount(){
-        if (this.props.match.params.id) {
+        if (this.props.match && this.props.match.params && this.props.match.params.id) {
             let id = this.props.match.params.id
             this.setState({ id : id})
-
             if (id){
-                const headers = { 'Content-Type': 'application/json' }
-                fetch(process.env.REACT_APP_SERVER_URL + "/schedules/" + id,  { headers })
-                    .then(res => res.json())
-                    .then(data => this.setState(data[0]));
+                this.props.getSchedule(id)
             }
         }
     }
 
-    formValidation(){
-        if (this.state.day && this.state.day !== "" &&
-            this.state.startHour >=0 && this.state.startHour <25 &&
-            this.state.startMinute >=0 && this.state.endMinute <61){
-            return true;
-        }
-        return false;
-    }
-
-    handleSubmit(event) {
-
-        event.preventDefault();
-
-        if (this.formValidation()){
-
-            const requestOptions = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(this.state)
-            }
-
-            fetch(process.env.REACT_APP_SERVER_URL + "/schedules", requestOptions)
-                .then(response => console.log(response))
-                .then(data => this.setState(data));
-        }
-        else {
-            alert('Formulario Invalido')
-        }
-    }
-
-    handleInputChange(event) {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-
-        this.setState({
-            [name] : value
-        });
+    handleFormSubmit() {
+        this.props.addSchedule(this.state)
     }
 
     render() {
 
         return (
-                <Form className="mx-auto" onSubmit={this.handleSubmit}>
-                    <Row>
-                        <Col>
-                            <Form.Group controlId="day" >
-                                <Form.Label>Día de la semana</Form.Label>
-                                <Form.Control name="day" as="select" custom onChange={this.handleInputChange}>
-                                    <option></option>
-                                    <option>Lunes</option>
-                                    <option>Martes</option>
-                                    <option>Miercoles</option>
-                                    <option>Jueves</option>
-                                    <option>Viernes</option>
-                                    <option>Sabado</option>
-                                    <option>Domingo</option>
-                                </Form.Control>
-                            </Form.Group>
-                        </Col>
-                        <Col>
-                            <InputGroup>
-                                <Form.Control as="input" name="startHour" type="number" min="0" max="23" placeholder="Hora Inicio" value={this.state.startHour} onChange={this.handleInputChange}/>
-                                <InputGroup.Append>
-                                    <InputGroup.Text>:</InputGroup.Text>
-                                </InputGroup.Append>
-                                <Form.Control as="input" name="startMinute" type="number" min="0" max="59" placeholder="Minuto Inicio" value={this.state.startMinute} onChange={this.handleInputChange} />
-                            </InputGroup>
-                        </Col>
-                        <Col>
-                            <InputGroup>
-                                <Form.Control as="input" name="endHour" type="number" min="0" max="23" placeholder="Hora Fin" value={this.state.endHour} onChange={this.handleInputChange} />
-                                <InputGroup.Append>
-                                    <InputGroup.Text id="basic-addon2">:</InputGroup.Text>
-                                </InputGroup.Append>
-                                <Form.Control as="input" name="endMinute" type="number" min="0" max="59" placeholder="Minuto Fin" value={this.state.endMinute} onChange={this.handleInputChange} />
-                            </InputGroup>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Button type="submit">Submit</Button>
-                    </Row>
-                </Form>
+            <Container fixed>
+    	        <Suspense fallback={<div>Cargando...</div>}>
+
+                    <Formik enableReinitialize
+                        initialValues={{
+                            id: this.props.schedule.id || 0,
+                            day: this.props.schedule.day || '',
+                            startHour: this.props.schedule.startHour || 0,
+                            startMinute: this.props.schedule.startMinute || 0,
+                            endHour: this.props.schedule.endHour || 0,
+                            endMinute: this.props.schedule.endMinute || 0,
+                        }}
+                        validate={(values) => {
+                            let errors = {};
+
+                            Object.keys(values).forEach(value => {
+                                if (values[value] === '') {
+                                    errors[value] = true;
+                                }
+                            })
+
+                            //check if my values have errors
+                            return errors;
+                        }}
+                        onSubmit={(values, { setSubmitting }) => {
+                            this.setState(values)
+                            setSubmitting(false);
+                            this.handleFormSubmit()
+                        }}
+                    >
+                    {({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, errors }) => (
+                    
+                        <form onSubmit={handleSubmit}>
+                            <Grid container direction="row" spacing={2}>
+                                <Grid item xs>
+                                    <Select fullWidth name="day" label="Género" error={touched.gender && errors.gender}
+                                        options={[
+                                            { id: "MONDAY", name: "Lunes" }, 
+                                            { id: "TUESDAY", name: "Martes" }, 
+                                            { id: "WEDNESDAY", name: "Miércoles" }, 
+                                            { id: "THURSDAY", name: "Jueves" }, 
+                                            { id: "FRIDAY", name: "Viernes" }, 
+                                            { id: "SATURDAY", name: "Sábado" }, 
+                                            { id: "SUNDAY", name: "Domingo" }
+                                        ]} value={values.day}
+                                        onChange={(e, value) => setFieldValue('day', value ? value.id : "")}
+                                    />
+                                </Grid>
+                                <Grid container item xs spacing={2}>
+                                    <Grid item xs>
+                                        <MemoTextField name="startHour" label="Hora Inicio" value={values.startHour} onChange={handleChange}
+                                            error={touched.startHour && errors.startHour} />
+                                    </Grid>
+                                    <Grid item xs>
+                                        <MemoTextField name="startMinute" label="Minuto Inicio" value={values.startMinute} onChange={handleChange}
+                                            error={touched.startMinute && errors.startMinute} />
+                                    </Grid>
+                                </Grid>
+                                <Grid container item xs spacing={2}>
+                                    <Grid item xs>
+                                        <MemoTextField name="endHour" label="Hora Fin" value={values.endHour} onChange={handleChange}
+                                            error={touched.endHour && errors.endHour} />
+                                    </Grid>
+                                    <Grid item xs>
+                                        <MemoTextField name="endMinute" label="Minuto Fin" value={values.endMinute} onChange={handleChange}
+                                            error={touched.endMinute && errors.endMinute} />
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Grid>
+                                <SaveButton type="submit"/>
+                            </Grid>
+                        </form>
+                    )}
+                    </Formik>
+                </Suspense>
+            </Container>
         );
     }
 }
 
-export default CreateSchedule;
+
+const mapDispatchToProps = {
+    addSchedule,
+    getSchedule
+}
+
+const mapStateToProps = state => {
+    return { 
+        schedule: state.schedule_reducer.schedule
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ConnectedForm);

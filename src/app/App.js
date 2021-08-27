@@ -1,6 +1,5 @@
 import React from "react";
-import "./App.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import "./App.css";
 
 import TrainerData from './components/trainers/TrainerData';
 import TrainerTable from './components/trainers/TrainerTable';

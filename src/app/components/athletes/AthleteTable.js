@@ -1,5 +1,4 @@
 import React, { Component, Suspense } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { Container, Grid } from '@material-ui/core';
 
