@@ -16,16 +16,20 @@ export default (props) => {
         }
     }, [props.value, value])
 
+    const getFormControlLabel = (id, name) => {
+        return <FormControlLabel value={id.toString()} control={<Radio checked={value === id.toString()}/>} label={name} />
+    }
+
     return (
         <Grid container>
             <Grid item xs>
                 <FormControl component="fieldset">
                     <FormLabel component="legend">{props.title}</FormLabel>
-                    <RadioGroup aria-label="gender" name="gender1" onChange={onChange}
+                    <RadioGroup onChange={onChange}
                         style={{maxHeight: 200, overflow: 'auto'}}>
                         <List children={
                                 props.options.map(opt => {
-                                    return <ListItem key={opt.id.toString()}><FormControlLabel value={opt.id.toString()} control={<Radio checked={value === opt.id.toString()}/>} label={opt.name} /></ListItem>
+                                    return <ListItem key={opt.id.toString()}>{getFormControlLabel(opt.id, opt.name)}</ListItem>
                                 })
                             }>
                         </List>

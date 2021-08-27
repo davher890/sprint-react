@@ -9,7 +9,7 @@ export default (props) => (
 				color={props.color || "secondary"}
 				{...props}
 			>
-				<SaveIcon />{props.text}
+				<SaveIcon />{props.text || "Guardar"}
 			</Fab>
 		</Grid>
 	</Grid>

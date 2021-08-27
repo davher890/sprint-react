@@ -1,11 +1,10 @@
 import React, { Component, Suspense } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { textFilter } from 'react-bootstrap-table2-filter';
 
 import { Container, Grid } from '@material-ui/core';
 
 import Table from "../custom/Table";
-import Button from '../custom/Button'
+import Button from '../custom/AddButton'
 
 import { connect } from "react-redux";
 import { getSportSchoolTable, downloadSportSchools } from "../../redux/actions/sportSchools/index";

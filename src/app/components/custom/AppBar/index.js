@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar, Toolbar, Menu, MenuItem, Button, Typography, Link } from '@material-ui/core';
+import { AppBar, Toolbar, Menu, MenuItem, Typography, Link } from '@material-ui/core';
 
 export default (props) => {
 
@@ -32,12 +32,12 @@ export default (props) => {
                     <Typography variant="button">
                         <Link href="/sport_schools/list" color="inherit">Escuelas</Link>
                     </Typography>
-                    <Button>
+                    <Typography variant="button">
                         <Link href="/athletes/list" color="inherit">Atletas</Link>
-                    </Button>
-                    <Button aria-controls="trainers-menu" aria-haspopup="true" onClick={handleTrainersMenuClick}>
-                        Entrenadores
-                    </Button>
+                    </Typography>
+                    <Typography variant="button" aria-controls="trainers-menu" aria-haspopup="true" onClick={handleTrainersMenuClick}>
+                        <Link color="inherit">Entrenadores</Link>
+                    </Typography>
                     <Menu id="trainers-menu"
                             anchorEl={trainersAnchorEl}
                             keepMounted
@@ -47,9 +47,9 @@ export default (props) => {
                         <MenuItem><Link href="/groups/list">Grupos</Link></MenuItem>
                         <MenuItem><Link href="/schedules/list">Horarios</Link></MenuItem>
                     </Menu>
-                    <Button aria-controls="listings-menu" aria-haspopup="true" onClick={handleListingsMenuClick}>
-                        Listados
-                    </Button>
+                    <Typography variant="button" aria-controls="listings-menu" aria-haspopup="true" onClick={handleListingsMenuClick}>
+                        <Link color="inherit">Listados</Link>
+                    </Typography>
                     <Menu id="listings-menu"
                             anchorEl={listingsAnchorEl}
                             keepMounted

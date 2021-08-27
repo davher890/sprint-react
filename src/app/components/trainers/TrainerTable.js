@@ -1,5 +1,4 @@
 import React, { Component, Suspense } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { Container, Grid } from '@material-ui/core';
 
@@ -29,7 +28,7 @@ class TrainerTable extends Component {
 		return (
 			<Container fixed>
 				<Suspense fallback={<div>Cargando...</div>}>
-					<Grid container direction="column">
+					<Grid container direction="column" spacing={3}>
 						<Grid item xs>
 							<Button text="Nuevo Entrenador" href={'/trainers'}/>
 						</Grid>

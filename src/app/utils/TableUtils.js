@@ -8,7 +8,7 @@ const Utils = {
             { dataField: 'name', text : 'Nombre', filter: textFilter(), show: true, width : 50 }, 
             { dataField: 'firstSurname', text : 'Primer apellido', filter: textFilter(), show: true, width : 50 }, 
             { dataField: 'secondSurname', text : 'Segundo apellido', filter: textFilter(), show: true, width : 50 }, 
-            { dataField: 'birthDate', text : 'Fecha de Nacimiento', show: true, width : 200, type: 'dateTime' }, 
+            { dataField: 'birthDate', text : 'Fecha de Nacimiento', show: true, width : 200, type: 'date' }, 
             { dataField: 'gender', text : 'Género', filter: selectFilter({
                 options : {
                     'male' : 'Masculino',

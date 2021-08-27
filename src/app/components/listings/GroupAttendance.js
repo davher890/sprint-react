@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 import { Container, Grid } from '@material-ui/core';
 
 import DownloadButton from '../custom/DownloadButton'
@@ -28,18 +26,6 @@ const GroupAttendante = (props) => {
 
 	const handleFormSubmit = () => {
         props.downloadGroupAttendance(groupId, month)
-            // .then(response => {
-			// 	response.blob().then(blob => {
-			// 		let url = window.URL.createObjectURL(blob);
-			// 		let a = document.createElement('a');
-			// 		a.href = url;
-			// 		a.download = 'listado.xlsx';
-			// 		a.click();
-			// 	})
-			// })
-			// .catch(function() {
-		    //     console.log("error");
-		    // });
     }
 
     return (

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import moment from 'moment'
 import { withRouter } from 'react-router-dom';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 import utils from "../../utils/Functions"
 import { Formik } from 'formik';
 
@@ -497,7 +496,7 @@ class CreateAthlete extends Component {
                                         </Grid>
                                         
                                     </Grid>
-                                    <Grid container item spacing={1}>
+                                    <Grid container item spacing={2}>
                                     <Grid item xs>
                                             <CustomCard title="Datos Familiares">
                                                 <Typography color="textSecondary">Familiar 1</Typography>
