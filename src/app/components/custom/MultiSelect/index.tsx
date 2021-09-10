@@ -1,0 +1,116 @@
+import * as React from "react"
+
+import Grid from '@material-ui/core/Grid';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+
+class MultiSelect extends React.Component<any, any> {
+
+	constructor(props: any) {
+		super(props);
+		let left = props.columns.filter((d: any) => d.show !== undefined && d.show === false)
+		let right = props.columns.filter((d: any) => d.show === undefined || d.show === true)
+		this.state = {
+			left: left,
+			right: right
+		}
+		this.handleToggle = this.handleToggle.bind(this)
+		this.handleAllRight = this.handleAllRight.bind(this)
+		this.handleAllLeft = this.handleAllLeft.bind(this)
+	}
+
+	fireChange(){
+		this.props.changeEvent(this.state.left.map((c: any) => { c.show = false; return c; }).concat(this.state.right.map((c: any) => { c.show = true; return c; })))
+	}
+
+	async toggleRightChange(inRight: any){
+		await this.setState({
+			left: this.state.left.concat(inRight[0]),
+			right: this.state.right.filter((d: any) => d.dataField !== inRight[0].dataField)
+		});
+		this.fireChange()
+	}
+
+	async toggleLeftChange(inLeft: any){
+		await this.setState({
+			right: this.state.right.concat(inLeft[0]),
+			left: this.state.left.filter((d: any) => d.dataField !== inLeft[0].dataField)
+		});
+		this.fireChange()
+	}
+
+	handleToggle(value: any) {
+
+		// Checked in Left
+		const inLeft = this.state.left.filter((d: any) => d.dataField === value.dataField)
+		if (inLeft.length > 0){
+			this.toggleLeftChange(inLeft)
+		}
+
+		// Checked in Right
+		const inRight = this.state.right.filter((d: any) => d.dataField === value.dataField)
+		if (inRight.length > 0 && this.state.right.length > 1){
+			this.toggleRightChange(inRight)
+		}	
+	}
+
+ 	async handleAllLeft(){
+		await this.setState({ 
+			left : this.state.left.concat(this.state.right.splice(1)),
+			right : this.state.right.splice(0, 1)
+		})
+		this.fireChange()
+	};
+
+	async handleAllRight(){
+		await this.setState({ 
+			left : [],
+			right : this.state.right.concat(this.state.left)
+		})
+		this.fireChange()
+	};
+
+	customList(items: any[]){
+		return (
+			<Paper>
+			  <List dense component="div" role="list">
+			    {items.map((value: any) => {
+			      const labelId = `transfer-list-item-${value.dataField}-label`;
+
+			      return (
+			        <ListItem key={value.dataField} role="listitem" button onClick={e => {
+				        	this.handleToggle(value)
+						}}>
+						<ListItemText id={labelId} primary={value.text} />
+			        </ListItem>
+			      );
+			    })}
+			  </List>
+			</Paper>
+		)
+	}
+
+	render() {
+    
+        return (
+			<Grid container spacing={2} justifyContent="center" alignItems="center">
+				<Grid item>{this.customList(this.state.left)}</Grid>
+				<Grid item>
+					<Grid container direction="column" alignItems="center">
+						<Button variant="outlined" size="small" onClick={this.handleAllRight} 
+							disabled={this.state.left.length === 0} aria-label="move all right"
+						>≫</Button>
+						<Button variant="outlined" size="small" onClick={this.handleAllLeft}
+							disabled={this.state.right.length === 0} aria-label="move all left"
+						>≪</Button>
+					</Grid>
+			</Grid>
+				<Grid item>{this.customList(this.state.right)}</Grid>
+			</Grid>
+        )
+    }
+}
+export default MultiSelect;
