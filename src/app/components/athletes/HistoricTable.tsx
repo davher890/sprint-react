@@ -12,7 +12,9 @@ import { getHistoricTable } from "../../redux/actions/athletes";
 class HistoricTableComponent extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
-        this.state = {}
+        this.state = {
+			columns : Utils.getAthleteColumns()
+		}
     }
 
 	componentDidMount() {
@@ -30,11 +32,11 @@ class HistoricTableComponent extends React.Component<any, any> {
 								page={this.props.page}
 								size={this.props.size}
 								total={this.props.total}
-								columns={Utils.getAthleteColumns()} 
+								columns={this.state.columns} 
 								showColumns={true}
 								// filter={this.props.filter}
-								onPaginationChange={(page: number, size: number) => {
-									this.props.getHistoricTable(page, size);
+								onPaginationChange={(page: number, size: number, filters: any) => {
+									this.props.getHistoricTable(page, size, filters);
 								}}
 								onFilterChange={(filters: any) => {
 									this.props.getHistoricTable(this.props.page, this.props.size, filters);

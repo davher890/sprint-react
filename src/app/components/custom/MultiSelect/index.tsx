@@ -11,8 +11,8 @@ class MultiSelect extends React.Component<any, any> {
 
 	constructor(props: any) {
 		super(props);
-		let left = props.columns.filter((d: any) => d.show === undefined || d.show === false)
-		let right = props.columns.filter((d: any) => d.show !== undefined && d.show === true)
+		let left = props.columns.filter((d: any) => d.show !== undefined && d.show === false)
+		let right = props.columns.filter((d: any) => d.show === undefined || d.show === true)
 		this.state = {
 			left: left,
 			right: right

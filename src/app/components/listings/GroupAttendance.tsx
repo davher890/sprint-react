@@ -11,7 +11,7 @@ import utils from "../../utils/Functions"
 import { connect } from "react-redux";
 import { downloadGroupAttendance } from "../../redux/actions/groups";
 
-const GroupAttendante: React.FC<any> = ({ props = {}}) => {
+const GroupAttendante: React.FC<any> = (props) => {
 
     let d = new Date()
     let previousMonth = (d.getMonth()-1 + 12) % 12

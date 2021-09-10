@@ -8,7 +8,7 @@ const useStyles = makeStyles({
 	}
 });
 
-const PageButton: React.FC<any> = ({ props = {}}) => {
+const PageButton: React.FC<any> = (props) => {
 	const classes = useStyles();
 	
 	return (
@@ -17,12 +17,13 @@ const PageButton: React.FC<any> = ({ props = {}}) => {
 				<Fab variant="extended" size="small" aria-label="add"
 					color={props.color || "secondary"}
 					{...props}
-					classes={{
-						root: classes.root, // class name, e.g. `classes-nesting-root-x`
-						// label: classes.label, // class name, e.g. `classes-nesting-label-x`
-					}}
+					// classes={{
+					// 	root: classes.root, // class name, e.g. `classes-nesting-root-x`
+					// 	// label: classes.label, // class name, e.g. `classes-nesting-label-x`
+					// }}
 				>
-					{props.text || "Guardar"}
+					{props.children}
+					{/* {props.text || "Guardar"} */}
 				</Fab>
 			</Grid>
 		</Grid>

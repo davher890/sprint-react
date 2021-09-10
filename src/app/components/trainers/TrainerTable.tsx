@@ -2,21 +2,18 @@ import * as React from "react"
 
 import { Container, Grid } from '@material-ui/core';
 
-import { textFilter } from 'react-bootstrap-table2-filter';
-
 import Table from "../custom/Table";
 import Button from '../custom/Button'
 
 import { connect } from "react-redux";
 import { getTrainerTable } from "../../redux/actions/trainers";
+import Utils from "../../utils/TableUtils";
 
 class TrainerTable extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
-        	columns : [
-        		{ dataField: 'name', text: 'Nombre', filter: textFilter(), show: true }
-    		]
+        	columns : Utils.getTrainerColumns()
         }
     }
 
@@ -40,15 +37,14 @@ class TrainerTable extends React.Component<any, any> {
 								total={this.props.total}
 								columns={this.state.columns} 
 								showColumns={true}
-								// filter={this.props.filter}>
-								onPaginationChange={(page: number, size: number) => {
-									this.props.getAthleteTable(page, size);
+								onPaginationChange={(page: number, size: number, filters:any) => {
+									this.props.getTrainerTable(page, size, filters);
 								}}
 								onFilterChange={(filters: any) => {
-									this.props.getAthleteTable(this.props.page, this.props.size, filters);
+									this.props.getTrainerTable(this.props.page, this.props.size, filters);
 								}}
 								onRowClick={(id: number) => {
-									window.open("/athletes/" + id, "_self");
+									window.open("/trainers/" + id, "_self");
 								}}
 							/>
 						</Grid>

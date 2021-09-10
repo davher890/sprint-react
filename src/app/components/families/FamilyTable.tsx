@@ -1,5 +1,4 @@
 import * as React from "react"
-import { numberFilter } from 'react-bootstrap-table2-filter';
 
 import { Container, Grid } from '@material-ui/core';
 
@@ -7,15 +6,13 @@ import Table from "../custom/Table";
 
 import { connect } from "react-redux";
 import { getFamilyTable } from "../../redux/actions/families/index";
+import Utils from "../../utils/TableUtils";
 
 class FamilyTable extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
-        	columns : [
-	        	{ dataField: 'code', text : 'Código', filter: numberFilter({}), show: true },
-	        	{ dataField: 'count', text : 'Número de familiares', show: true }
-        	]
+        	columns : Utils.getFamilyColumns()
         }
     }
 
@@ -35,8 +32,8 @@ class FamilyTable extends React.Component<any, any> {
 								size={this.props.size}
 								total={this.props.total}
 								columns={this.state.columns} 
-								onPaginationChange={(page: number, size: number) => {
-									this.props.getFamilyTable(page, size);
+								onPaginationChange={(page: number, size: number, filters:any) => {
+									this.props.getFamilyTable(page, size, filters);
 								}}
 								onFilterChange={(filters: any) => {
 									this.props.getFamilyTable(this.props.page, this.props.size, filters);

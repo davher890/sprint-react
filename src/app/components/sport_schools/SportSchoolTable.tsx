@@ -1,5 +1,4 @@
 import * as React from "react"
-import { textFilter } from 'react-bootstrap-table2-filter';
 
 import { Container, Grid } from '@material-ui/core';
 
@@ -8,17 +7,13 @@ import Button from '../custom/AddButton'
 
 import { connect } from "react-redux";
 import { getSportSchoolTable, downloadSportSchools } from "../../redux/actions/sportSchools/index";
+import Utils from "../../utils/TableUtils";
 
 class SportSchoolTable extends React.Component<any, any> {
 	constructor(props: any) {
 		super(props);
 		this.state = {
-			columns: [
-				{ dataField: 'id', text: 'Id', show: false },
-				{ dataField: 'name', text: 'Nombre', filter: textFilter(), show: true, width: 300 },
-				{ dataField: 'municipality', text: 'Municipio', filter: textFilter(), width: 400 },
-				{ dataField: 'address', text: 'Dirección', filter: textFilter(), width: 1300 }
-			]
+			columns: Utils.getSportSchoolColumns()
 		};
 		this.downloadData = this.downloadData.bind(this)
 	}
@@ -44,11 +39,12 @@ class SportSchoolTable extends React.Component<any, any> {
 								data={this.props.table_data}
 								page={this.props.page}
 								size={this.props.size}
+								total={this.props.total}
 								columns={this.state.columns}
 								downloadData={this.downloadData}
 								showColumns={true}
-								onPaginationChange={(page: number, size: number) => {
-									this.props.getSportSchoolTable(page, size);
+								onPaginationChange={(page: number, size: number, filters:any) => {
+									this.props.getSportSchoolTable(page, size, filters);
 								}}
 								onFilterChange={(filters: any) => {
 									this.props.getSportSchoolTable(this.props.page, this.props.size, filters);

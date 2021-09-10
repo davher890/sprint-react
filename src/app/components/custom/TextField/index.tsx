@@ -25,7 +25,7 @@ const CustomTextField: React.FC<any> = (props) => (
                 // onChange={props.onChange} 
                 // onBlur={props.onBlur}
 
-                inputProps={{style: {fontSize: 16}}}
+                // inputProps={{style: {fontSize: 16}}}
 
             />
         </Grid>

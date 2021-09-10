@@ -1,7 +1,7 @@
 import * as React from "react";
 import { AppBar, Toolbar, Menu, MenuItem, Typography, Link } from '@material-ui/core';
 
-const CustomAppBar: React.FC<any> = ({ props = {}}) => {
+const CustomAppBar: React.FC<any> = (props) => {
 
     const [trainersAnchorEl, setTrainersAnchorEl] = React.useState<any | null>();
     const [listingsAnchorEl, setListingsAnchorEl] = React.useState<any | null>();

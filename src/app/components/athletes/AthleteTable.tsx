@@ -11,8 +11,7 @@ import { connect } from "react-redux";
 import { getAthleteTable, downloadAthletes } from "../../redux/actions/athletes";
 
 class AthleteTable extends React.Component<any, any> {
-
-    constructor(props: any) {
+	constructor(props: any) {
         super(props);
         this.state = {
         	columns: Utils.getAthleteColumns() 
@@ -45,8 +44,8 @@ class AthleteTable extends React.Component<any, any> {
 								columns={this.state.columns} 
 								downloadData={this.downloadData}
 								showColumns={true}
-								onPaginationChange={(page: number, size: number) => {
-									this.props.getAthleteTable(page, size);
+								onPaginationChange={(page: number, size: number, filters:any) => {
+									this.props.getAthleteTable(page, size, filters);
 								}}
 								onFilterChange={(filters: any) => {
 									this.props.getAthleteTable(this.props.page, this.props.size, filters);

@@ -27,7 +27,7 @@ import { Box } from '@material-ui/core';
 
 
 
-const AppBar: React.FC<any> = ({ props = {}}) => {
+const AppBar: React.FC<any> = (props) => {
 
   return (
     <Router>

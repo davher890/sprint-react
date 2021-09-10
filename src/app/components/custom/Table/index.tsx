@@ -1,80 +1,71 @@
 import * as React from "react"
-import 'bootstrap/dist/css/bootstrap.min.css';
-import BootstrapTable from 'react-bootstrap-table-next';
-import Paginator, { PaginationProvider } from 'react-bootstrap-table2-paginator'
-import Filter from 'react-bootstrap-table2-filter';
 
+import { withTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import { Table, TableBody, TableHead, TableRow, TablePagination, TableCell, TableContainer } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import ColumnsSelect from "../ColumnsSelect";
-import Button from "../PageButton";
+import TextField from "../TextField";
+import TablePaginationActions from "../TablePagination";
 
 
-const RemotePagination = (props: any) => (
-	<div>
-		<PaginationProvider
-			pagination={
-				Paginator(props.paginationOptions)
-			}
-		>
-		{
-			(paginationTableProps: any) => (
-			<div>
-				<BootstrapTable striped bordered hover 
-					remote
-					keyField="id"
-					data={ props.data }
-					columns={ props.columns }
-					onTableChange={ props.onTableChange }
-					filter={props.filter}
-					noDataIndication="Sin Datos"
-					rowEvents={props.rowEvents}
-					{ ...paginationTableProps }
-				/>
-			</div>
-			)
-		}
-		</PaginationProvider>
-	</div>
-  );
+const CustomTable: React.FC<any> = (props) => {
 
-const Table: React.FC<any> = ({ props = {}}) => {
+	const styles = makeStyles({
+		root: {
+			background: props.theme.palette.primary.main,
+			borderColor: 'white',
+		},
+		focused: {
+			borderColor: props.theme.palette.secondary.main,
+		},
+		input: {
+			  color: props.theme.palette.secondary.main
+		},
+		label: {
+			color : props.theme.palette.secondary.main
+		},
+	});
+
+	const classes = styles();
 
 	const [columns, setColumns] = React.useState<any[]>(props.columns || []);
-	const [page, setPage] = React.useState<number>(props.page || 1)
+	const [page, setPage] = React.useState<number>(props.page || 0)
 	const [pageSize, setPageSize] = React.useState<number>(props.pageSize || 10)
+	const [visibleColumns, setVisibleColumns] = React.useState<any[]>(props.columns.filter((c: any) => c.show === undefined || c.show === true) || []);
+	const [filterObj, setFilterObj] = React.useState<any>(props.filters || {});
 
-	const handleTableChange = (type: any, obj: { filters: any }) => {
-		props.onFilterChange(obj.filters)
-	}
 
-	const handlePageChange = (inputPage: string) => {
-		
-		let p: number
-		if (inputPage === '>>'){
-			p = Math.ceil(props.total / pageSize * 1.0)
-		}
-		else if (inputPage === '>'){
-			p = page + 1
-		}
-		else if (inputPage === '<<'){
-			p = 1
-		}
-		else if (inputPage === '<'){
-			p = page - 1
+	const handleFilterChange = (filterType: string, filterField: string, filterValue: string, filterOptions?: any[]) => {
+
+		if (!filterValue || filterValue === ''){
+			delete filterObj[filterField]
 		}
 		else {
-			p = parseInt(inputPage)
+			filterObj[filterField] = {
+				filterVal : filterValue,
+				comparator: "LIKE"
+			}
+			if (filterType === 'number'){
+				filterObj[filterField].comparator = "="
+			}
 		}
-		setPage(p)
+		setFilterObj(filterObj)
+
+		props.onFilterChange(filterObj)
+	}
+
+	const handlePageChange = (event: any, newPage: number) => {
+		setPage(newPage)
 		if (props.onPaginationChange){
-			props.onPaginationChange(p, pageSize)
+			props.onPaginationChange(newPage, pageSize, filterObj)
 		}
 	}
-	const handlePageSizeChange = (pageSize: number) => {
-		setPageSize(pageSize)
+	const handlePageSizeChange = (event: any) => {
+		setPageSize(parseInt(event.target.value))
 		if (props.onPaginationChange){
-			props.onPaginationChange(page, pageSize)
+			props.onPaginationChange(page, event.target.value, filterObj)
 		}
 	}
 	const downloadData = () => {
@@ -82,45 +73,19 @@ const Table: React.FC<any> = ({ props = {}}) => {
 			props.downloadData(columns)
 		}
 	}
-	const onRowClick = (id: number, row: number) => {
+	const onRowClick = (id: number) => {
 		if (props.onRowClick){
-			props.onRowClick(id, row)
+			props.onRowClick(id)
 		}
 	}
 
-	const paginationOptions = { 
-		page: page, 
-		sizePerPage: pageSize, 
-		totalSize: props.total,
-		pageButtonRenderer: (props: any) => {
-			const handleClick = (e: any) => {
-				e.preventDefault();
-				handlePageChange(page.toString());
-			};
-			return (
-				<Grid item xs={1} key={page} >
-					<Button key={page} text={page} onClick={handleClick} color={props.active ? "primary" : "secondary"}/>
-				</Grid>
-			);
-		},
-		sizePerPageRenderer: (opts: any) => {
-			return (
-			<div className="btn-group" role="group">
-			{
-				opts.options.map((option: any) => {
-					const isSelect = opts.currSizePerPage === `${option.page}`;
-					return (
-						<Button
-							text={ option.text }
-							key={ option.text }
-							onClick={ (e: any)=> { e.preventDefault();handlePageSizeChange(option.page);}} 
-							color={isSelect ? "primary" : "secondary"}
-						/>
-					);
-				})
-			}
-			</div>)
-		}
+	const getRowData = (row: any) => {
+		let columnNames : string[] = visibleColumns.map((c: any) => c.dataField)
+		return Object.keys(row).filter((key:string) => columnNames.includes(key)).map(column => (
+			<TableCell key={ row.id + "_" + column } component="th" scope="row">
+				{row[column]}
+			</TableCell>
+		))
 	}
 
 	return (
@@ -131,6 +96,7 @@ const Table: React.FC<any> = ({ props = {}}) => {
 						columns={columns}
 						changeEvent={(cols: any) => { 
 							setColumns(cols) 
+							setVisibleColumns(cols.filter((c: any) => c.show === undefined || c.show === true))
 						}}
 						downloadData={downloadData}
 					/>
@@ -138,17 +104,53 @@ const Table: React.FC<any> = ({ props = {}}) => {
 			</Grid>
 			<Grid container item spacing={1}>
 				<Grid item xs>
-					<RemotePagination
-						data={props.data}
-						columns={columns.filter((c: any) => c.show === true)}
-						onTableChange={handleTableChange}
-						filter={Filter()}
-						rowEvents={{
-							onClick: (e: any, row: any, rowIndex: number) => {
-								onRowClick(row.id, row)
+					<TableContainer>
+						<Table stickyHeader>
+							<TableHead>
+								<TableRow>
+									{visibleColumns.map((column) => (
+										<TableCell key={column.dataField}>
+										{ column.filter ?
+											<TextField dense label={column.text} className={classes.root} 
+												InputProps={{ className: classes.input }}
+												InputLabelProps={{
+													classes: {
+													  root: classes.label,
+													  focused: classes.focused,
+													},
+												  }}
+												onChange={(e: any) => {
+													handleFilterChange(column.filter.type, column.dataField, e.target.value)
+												}} 
+											>	
+											</TextField>
+											: column.text
+										}
+										</TableCell>
+									))}
+								</TableRow>
+							</TableHead>
+							<TableBody>
+							{
+								props.data.map((row:any) => (
+									<TableRow hover key={row.id} onClick={() => onRowClick(row.id)}>
+										{ getRowData(row) }
+									</TableRow>
+								))
 							}
-						}}
-						paginationOptions={paginationOptions}
+							</TableBody>
+							
+						</Table>
+					</TableContainer>
+					<TablePagination
+						rowsPerPageOptions={[5, 10, 25]}
+						component="div"
+						count={props.total}
+						page={page}
+						rowsPerPage={pageSize}
+						onPageChange={handlePageChange}
+						onRowsPerPageChange={handlePageSizeChange}
+						ActionsComponent={TablePaginationActions}
 					/>
 				</Grid>
 			</Grid>
@@ -156,4 +158,4 @@ const Table: React.FC<any> = ({ props = {}}) => {
 	)
 }
 
-export default Table
+export default withTheme(CustomTable)

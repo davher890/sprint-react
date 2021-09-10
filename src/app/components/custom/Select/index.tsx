@@ -3,37 +3,28 @@ import * as React from "react";
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
-type Props = {
-    name: string, 
-    value: any, 
-    options: any[], 
-    onChange: any, 
-    label: string, 
-    error?: any,
-    fullWidth?: boolean
-}
-const Select: React.FC<Props> = ({ name, value, options, onChange, label, error, fullWidth }) => {
+const Select: React.FC<any> = (props) => {
     
-    if (options && options.length > 0){
+    if (props.options && props.options.length > 0){
         return (
             <Autocomplete
-                id={name}
+                id={props.name}
                 // name={name}
-                options={options}
+                options={props.options}
                 
                 getOptionLabel={(option: {id: string, name: string}) => option.name}
                 // getItemValue={(item: any) => item.label}
 
                 getOptionSelected={(option: {id: string, name: string}, value) => option.id === value.id}
                 value={
-                    {id: value, name: options.find((e: { id: string }) => e.id === value) ? options.find((e: { id: string }) => e.id === value).name : ''}
+                    {id: props.value, name: props.options.find((e: { id: string }) => e.id === props.value) ? props.options.find((e: { id: string }) => e.id === props.value).name : ''}
                 }
-                onChange={onChange}
+                onChange={props.onChange}
                 renderInput={(params) => 
-                    <TextField {...params} label={label} error={error} 
+                    <TextField {...params} label={props.label} error={props.error} 
                     />
                 }
-                fullWidth={fullWidth}
+                fullWidth={props.fullWidth}
 
                 // {...props}
             />

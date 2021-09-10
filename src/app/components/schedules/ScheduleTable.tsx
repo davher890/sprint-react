@@ -1,20 +1,17 @@
 import * as React from "react"
-import { Container } from 'react-bootstrap';
+import { Container } from '@material-ui/core';
 
 import Table from "../custom/Table";
 
 import { connect } from "react-redux";
 import { getScheduleTable } from "../../redux/actions/schedules";
+import Utils from "../../utils/TableUtils";
 
 class ScheduleTable extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
-        	columns : [ 
-        		{ dataField: 'day', text : 'Día', show: true} , 
-        		{ dataField: 'start', text : 'Inicio', show: true }, 
-        		{ dataField: 'end', text : 'Fin', show: true }
-    		]
+        	columns : Utils.getScheduleColumns()
         }
     }
 
@@ -32,8 +29,8 @@ class ScheduleTable extends React.Component<any, any> {
 					total={this.props.total}
 					columns={this.state.columns}
 					showColumns={false}
-					onPaginationChange={(page: number, size: number) => {
-						this.props.getScheduleTable(page, size);
+					onPaginationChange={(page: number, size: number, filters:any) => {
+						this.props.getScheduleTable(page, size, filters);
 					}}
 					onFilterChange={(filters: any) => {
 						this.props.getScheduleTable(this.props.page, this.props.size, filters);

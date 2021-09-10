@@ -1,9 +1,9 @@
 import * as React from "react"
-import { 
-    Form, InputGroup,
-    Col, Row
-} from 'react-bootstrap';
+
+import { Container, Grid } from '@material-ui/core';
+
 import AthleteTable from "../athletes/AthleteTable";
+import TextField from "../custom/TextField";
 
 class CreateGroup extends React.Component<any, any> {
     constructor(props: any) {
@@ -72,22 +72,18 @@ class CreateGroup extends React.Component<any, any> {
 
     render() {
         return (
-            <Form>
-                <Form.Group>
-                    <Row>
-                        <Col>
-                            <InputGroup>
-                                <InputGroup.Prepend>
-                                    <InputGroup.Text>Código</InputGroup.Text>
-                                </InputGroup.Prepend>
-                                <Form.Control key="code" name="code" type="number" value={this.state.code} disabled/>
-                            </InputGroup>
-                        </Col>
-                    </Row>
-                </Form.Group>
-                <AthleteTable filter={`familyId__=__${this.props.id}`}/>
-            </Form>
-
+            <Container fixed>
+				<React.Suspense fallback={<div>Cargando...</div>}>
+					<Grid container direction="column" spacing={3}>
+						<Grid item xs>
+							<TextField disabeld text="Código de familia" value={this.state.code} />
+						</Grid>
+                        <Grid item xs>
+                            <AthleteTable/>
+                        </Grid>
+                    </Grid>
+                </React.Suspense>
+            </Container>
         );
     }
 }

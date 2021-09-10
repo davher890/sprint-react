@@ -1,6 +1,6 @@
 import { createTheme, responsiveFontSizes } from "@material-ui/core/styles";
 
-const theme = createTheme({
+const globalTheme = createTheme({
     palette: {
         primary: {
           main: '#272727'
@@ -28,12 +28,45 @@ const theme = createTheme({
         body1 : {
             fontSize: 16,
         }
-     },
+     }
+  })
+  const theme = createTheme({
     //  paper: {
     //     rounded: "5%",
     //     borderRadius: 100,
     //  },
-     overrides: {
+    overrides: {
+      MuiTableContainer: {
+        root: {
+          height: "55%"
+        }
+      },
+      MuiTableCell: {
+        head: {
+          backgroundColor: globalTheme.palette.primary.main,
+          color: globalTheme.palette.secondary.main,
+        },
+        stickyHeader: {
+          backgroundColor: globalTheme.palette.primary.main,
+          color: globalTheme.palette.secondary.main
+        },
+        // body: {
+        //   fontSize: 14,
+        // }
+      }
+      // MuiTableRow: {
+      //   root: {
+      //     '&:nth-of-type(odd)': {
+      //       backgroundColor: window.theme.palette.action.hover,
+      //     },
+      //   }
+      // }
+      // MuiPaper: {
+      //   root: {
+      //     width: "100%"
+      //   }
+      // }
+
         // MuiPaper: {
         //     rounded: {
         //         borderRadius: 30
@@ -75,6 +108,7 @@ const theme = createTheme({
         //     }
         // }
       }
-});
+},
+globalTheme);
 
 export default responsiveFontSizes(theme);

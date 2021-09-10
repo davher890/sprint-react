@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Grid } from '@material-ui/core';
 import MemoTextField from '../TextField';
 
-export const FamilyData: React.FC<any> = ({ props = {}}) => {
+export const FamilyData: React.FC<any> = (props) => {
 
     const [name, setName] = useState(props.name)
     const [firstSurname, setFirstSurname] = useState(props.firstSurname)

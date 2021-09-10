@@ -1,5 +1,4 @@
 import * as React from "react"
-import { textFilter } from 'react-bootstrap-table2-filter';
 
 import { Container, Grid } from '@material-ui/core';
 
@@ -7,14 +6,13 @@ import Table from "../custom/Table";
 
 import { connect } from "react-redux";
 import { getGroupTable } from "../../redux/actions/groups/index";
+import Utils from "../../utils/TableUtils";
 
 class GroupTable extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = { 
-    		columns : [
-                { dataField: 'name', text : 'Nombre', filter: textFilter(), show: true }, 
-            ]
+    		columns : Utils.getGroupColumns()
         };
     }
 
@@ -34,8 +32,8 @@ class GroupTable extends React.Component<any, any> {
 								size={this.props.size}
 								total={this.props.total}
 								columns={this.state.columns} 
-								onPaginationChange={(page: number, size: number) => {
-									this.props.getGroupTable(page, size);
+								onPaginationChange={(page: number, size: number, filters:any) => {
+									this.props.getGroupTable(page, size, filters);
 								}}
 								onFilterChange={(filters: any) => {
 									this.props.getGroupTable(this.props.page, this.props.size, filters);

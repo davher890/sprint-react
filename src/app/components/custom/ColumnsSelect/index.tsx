@@ -6,7 +6,7 @@ import MultiSelect from '../MultiSelect'
 import Button from '../DownloadButton'
 import SelectButton from '../SelectButton'
 
-const ColumnsSelect: React.FC<any> = ({ props = {}}) => {
+const ColumnsSelect: React.FC<any> = (props) => {
 
     const [openDialog, setOpenDialog] = useState(false)
 

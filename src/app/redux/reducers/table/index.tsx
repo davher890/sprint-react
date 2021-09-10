@@ -8,7 +8,7 @@ import getTableItems from "../utils"
 
 const initialState = {
     table_data : [],
-    page: 1,
+    page: 0,
     size: 10,
     total: 0
 };
@@ -27,12 +27,13 @@ function rootReducer(state = initialState, action: { type: string, payload: any 
         action.type === LOAD_DUPLICATED_ATHLETES_TABLE) {
             
         let items = getTableItems(action)
+
         return {
             ...state,
             table_data : items,
-            page: action.payload.number + 1,
+            page: action.payload.number,
             size: action.payload.size,
-            total: action.payload.totalElements,
+            total: action.payload.totalElements
         };
     }
     else return state;

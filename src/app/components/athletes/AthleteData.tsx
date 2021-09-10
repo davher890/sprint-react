@@ -166,103 +166,43 @@ class CreateAthlete extends React.Component<any, any> {
 
                     errorMessage: this.props.athlete.errorMessage || '',
                     successMessage: this.props.athlete.successMessage || '',
-
-                    required: [
-                        'sportSchoolId',
-                        'imageAuth',
-                        'name',
-                        'firstSurname',
-                        'birthDate',
-                        'gender',
-                        'phone1',
-                        'mail',
-                        'municipality',
-                        'postalCode',
-                        'address',
-                        'paymentType',
-                        'feeType'
-                    ]
                 }}
                 validate={(values) => {
                     let errors: any = {};
 
-                    Object.keys(values).forEach((value: string) => {
-                        if (value === 'iban' && values.iban === '' && values.paymentType === "DOM") {
-                            errors.iban = true;
-                        }
-                        else if (value === 'holderName' && values.holderName === '' && values.paymentType === "DOM") {
-                            errors.holderName = true;
-                        }
-                        else if (value === 'holderFirstSurname' && values.holderFirstSurname === '' && values.paymentType === "DOM") {
-                            errors.holderFirstSurname = true;
-                        }
-                        else if (value === 'holderSecondSurname' && values.holderSecondSurname === '' && values.paymentType === "DOM") {
-                            errors.holderSecondSurname = true;
-                        }
-                        else if (value === 'holderDni' && values.holderDni === '' && values.paymentType === "DOM") {
-                            errors.holderDni = true;
-                        }
-                        // else if (value === 'dni') {
-                        //     // Required only if the age is above 14
-                        //     if (values.age >= 14 && values.dni == "") {
-                        //         errors.dni = true;
-                        //     }
-                        // }
-                        else if (value === 'dni'){
-                            if (!this.isValidDni(values[value])){
-                                errors[value] = true
-                            }
-                        }
-                        else {
-                            switch (value){
-                                case 'sportSchoolId':
-                                    if (values.sportSchoolId  === '') errors.sportSchoolId = true;
-                                    break;
-                                case 'imageAuth':
-                                    if (values.imageAuth  === '') errors.imageAuth = true;
-                                    break;
-                                case 'name':
-                                    if (values.name  === '') errors.name = true;
-                                    break;
-                                case 'firstSurname':
-                                    if (values.firstSurname  === '') errors.firstSurname = true;
-                                    break;
-                                case 'birthDate':
-                                    if (values.birthDate  === '') errors.birthDate = true;
-                                    break;
-                                case 'gender':
-                                    if (values.gender  === '') errors.gender = true;
-                                    break;
-                                case 'phone1':
-                                    if (values.phone1  === '') errors.phone1 = true;
-                                    break;
-                                case 'mail':
-                                    if (values.mail  === '') errors.mail = true;
-                                    break;
-                                case 'municipality':
-                                    if (values.municipality  === '') errors.municipality = true;
-                                    break;
-                                case 'postalCode':
-                                    if (values.postalCode  === '') errors.postalCode = true;
-                                    break;
-                                case 'address':
-                                    if (values.address  === '') errors.address = true;
-                                    break;
-                                case 'paymentType':
-                                    if (values.paymentType  === '') errors.paymentType = true;
-                                    break;
-                                case 'feeType':
-                                    if (values.feeType  === '') errors.feeType = true;
-                                    break;
+                    if (values.sportSchoolId  === '') errors.sportSchoolId = true;
+                    if (values.imageAuth  === '') errors.imageAuth = true;
+                    if (values.name  === '') errors.name = true;
+                    if (values.firstSurname  === '') errors.firstSurname = true;
+                    if (values.birthDate  === '') errors.birthDate = true;
+                    if (values.gender  === '') errors.gender = true;
+                    if (values.phone1  === '') errors.phone1 = true;
+                    if (values.mail  === '') errors.mail = true;
+                    if (values.municipality  === '') errors.municipality = true;
+                    if (values.postalCode  === '') errors.postalCode = true;
+                    if (values.address  === '') errors.address = true;
+                    if (values.paymentType  === '') errors.paymentType = true;
+                    if (values.feeType  === '') errors.feeType = true;
+                                    
+                    if (values.iban === '' && values.paymentType === "DOM") {
+                        errors.iban = true;
+                    }
+                    if (values.holderName === '' && values.paymentType === "DOM") {
+                        errors.holderName = true;
+                    }
+                    if (values.holderFirstSurname === '' && values.paymentType === "DOM") {
+                        errors.holderFirstSurname = true;
+                    }
+                    if (values.holderSecondSurname === '' && values.paymentType === "DOM") {
+                        errors.holderSecondSurname = true;
+                    }
+                    if (values.holderDni === '' && values.paymentType === "DOM") {
+                        errors.holderDni = true;
+                    }
+                    if (!this.isValidDni(values.dni)){
+                        errors.dni = true
+                    }
 
-                                default: 
-                                    break;
-                            }
-                        }
-                        // else if (values.required.includes(value) && values[value] === '') {
-                        //     errors[value] = true;
-                        // }
-                    })
                     //check if my values have errors
                     return errors;
                 }}
