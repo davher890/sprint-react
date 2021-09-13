@@ -61,7 +61,6 @@ export function getGroupSchedules(id: number) {
 }
 
 export function getGroup(id: number) {
-    console.log(id)
     return function (dispatch: any)  {
         return findById(id).then(json => {
             dispatch({ type: GET_GROUP, payload: json });

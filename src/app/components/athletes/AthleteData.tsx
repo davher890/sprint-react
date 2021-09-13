@@ -28,8 +28,7 @@ import { addAthlete, getAthlete, getAthleteFee, getDuplicatedAthletesTable } fro
 class CreateAthlete extends React.Component<any, any> {
 
     feeTypes: { id: string, name: string }[] = []
-    sportSchools = []
-
+    
     constructor(props: {}) {
         super(props);
         this.state = {};

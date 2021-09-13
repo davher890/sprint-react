@@ -78,7 +78,6 @@ export const findDataPagination = (entity: string, page=0, size=10, filters: any
     let pageParams = paramsSeparator + "page=" + page
     let sizeParams = "&size=" + size
     let filtersParams = '';
-    console.log(filters)
     if (filters && Object.keys(filters).length > 0){
         filtersParams = "&filters=" + utils.getFilterParams(filters)
     }
