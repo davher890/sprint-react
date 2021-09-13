@@ -3,9 +3,11 @@ import { LOAD_TRAINERS, LOAD_TRAINER_TABLE, ADD_TRAINER, GET_TRAINER } from "../
 import { findTrainerDataPagination } from "../../../services/TableService"
 import { findAll, addData, findById } from "../../../services/TrainerService"
 
-export function getTrainers() {
+export function getAllTrainers() {
     return function (dispatch: any)  {
-        return findAll().then(json => { dispatch({ type: LOAD_TRAINERS, payload: json }); });
+        return findAll().then(json => { 
+            dispatch({ type: LOAD_TRAINERS, payload: json }); 
+        });
     }
 }
 

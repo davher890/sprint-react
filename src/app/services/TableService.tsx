@@ -59,11 +59,11 @@ export const findTrainerDataPagination = (page: number, size: number, filters: a
     return findDataPagination("trainers", page, size, filters)
 }
 
-export const findAthleteSportdataPagination = (athleteId: number, page=1, size=10, filters: any) => {
+export const findAthleteSportdataPagination = (athleteId: number, page: number, size: number, filters: any) => {
     return findDataPagination("athletes/" + athleteId + "/sportdata", page, size, filters)
 }
 
-export const findGroupAthletesDataPagination = (groupId: number, scheduleIds: number[] =[], page=1, size=10, filters: any) => {
+export const findGroupAthletesDataPagination = (groupId: number, scheduleIds: number[] =[], page: number, size: number, filters: any) => {
 
     let endpoint = "groups/" + groupId + "/athletes"
     if (scheduleIds && scheduleIds.length > 0){
@@ -78,7 +78,6 @@ export const findDataPagination = (entity: string, page=0, size=10, filters: any
     let pageParams = paramsSeparator + "page=" + page
     let sizeParams = "&size=" + size
     let filtersParams = '';
-    console.log(filters)
     if (filters && Object.keys(filters).length > 0){
         filtersParams = "&filters=" + utils.getFilterParams(filters)
     }

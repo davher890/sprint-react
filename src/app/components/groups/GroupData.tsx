@@ -1,8 +1,8 @@
 import * as React from "react"
 
-import { Formik, Field } from 'formik';
+import { Formik } from 'formik';
 
-import { Grid, Container } from "@material-ui/core";
+import { Grid, Container, Checkbox } from "@material-ui/core";
 
 import MemoTextField from '../custom/TextField';
 import Select from '../custom/Select';
@@ -12,17 +12,10 @@ import ScheduleSelect from '../custom/ScheduleSelect'
 
 import { connect } from "react-redux";
 import { addGroup, getGroup } from "../../redux/actions/groups";
-import { getTrainers } from "../../redux/actions/trainers";
 import { getSchedules } from "../../redux/actions/schedules";
+import TrainerSelect from "../custom/TrainerSelect";
 
 class ConnectedForm extends React.Component<any, any> {
-
-    schedules = []
-    trainers = []
-    entityName2 = ""
-    
-    scheduleId = 0
-    schedule = ''
 
     constructor(props: any) {
         super(props);
@@ -39,17 +32,12 @@ class ConnectedForm extends React.Component<any, any> {
                 this.props.getGroup(id)
             }
         }
-        this.props.getTrainers()
         this.props.getSchedules()
     }
 
     handleSubmit() {
 
         this.props.addGroup(JSON.stringify(this.state))
-
-        // fetch(process.env.REACT_APP_SERVER_URL + "/groups", requestOptions)
-        //     .then(res => res.json())
-        //     .then(data => this.setState(data));
     }
 
     render() {
@@ -65,7 +53,7 @@ class ConnectedForm extends React.Component<any, any> {
                             // Group data
                             name: this.props.group.name || '',
                             scheduleIds: this.props.group.scheduleIds || [],
-                            specialization: this.props.group.specialization,
+                            specialization: this.props.group.specialization || false,
                             trainerId: this.props.group.trainerId || ''
                         }}
                         validate={(values) => {
@@ -99,32 +87,32 @@ class ConnectedForm extends React.Component<any, any> {
                                                         error={touched.name && errors.name} />
                                                 </Grid>
                                                 <Grid item xs>
-                                                    <Select name="specialization" label="Especialización" value={values.specialization}
-                                                        options={[
-                                                            { id: "true", name: "Si" },
-                                                            { id: "false", name: "No" }
-                                                        ]}
-                                                    />
+                                                    <Checkbox name="specialization" checked={values.specialization === true} 
+                                                            onChange={e => {
+                                                                setFieldValue('specialization', e.target.checked)
+                                                            }}
+                                                        />
+                                                        Especialización
                                                 </Grid>
                                                 <Grid item xs>
                                                     <ScheduleSelect 
                                                         schedules={this.props.schedules}
                                                         scheduleIds={values.scheduleIds}
-                                                        specialization={this.state.specialization}
+                                                        specialization={values.specialization}
                                                         onChange={(scheduleIds: number[]) => {
                                                             // this.scheduleIdsOnChange(scheduleIds)
                                                         }}
                                                     />
                                                 </Grid>
-                                                {/* <Grid item xs>
-                                                    <Select name="trainerId" value={values.trainerId}
-                                                        options={
-                                                            values.trainers.map((tr: {id: number, name: string}) => {
-                                                                return tr
-                                                            })
-                                                        }
-                                                    />
-                                                </Grid> */}
+                                                <Grid item xs>
+                                                    <TrainerSelect trainerId={values.trainerId} error={touched.trainerId && errors.trainerId}
+                                                            onChange={(trainerId: number) => {
+                                                                if (trainerId) {
+                                                                    setFieldValue('trainerId', trainerId);
+                                                                }
+                                                            }}
+                                                        />
+                                                </Grid>
                                             </Grid>
                                         </Card>
                                     </Grid>
@@ -144,7 +132,6 @@ class ConnectedForm extends React.Component<any, any> {
 const mapStateToProps = (state: any) => {
     return { 
         group: state.group_reducer.group,
-        trainers: state.trainer_reducer.trainers,
         schedules: state.schedule_reducer.schedules
     };
 };
@@ -153,7 +140,6 @@ const mapDispatchToProps = (dispatch: any) => {
     return {
         addGroup: (group: any) => dispatch(addGroup(group)),
         getGroup: (id: any) => dispatch(getGroup(id)),
-        getTrainers: () => dispatch(getTrainers()),
         getSchedules: () => dispatch(getSchedules())
     }
 }
