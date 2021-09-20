@@ -2,7 +2,8 @@ import * as React from "react"
 
 import { Formik } from 'formik';
 
-import { Grid, Container } from '@material-ui/core';
+import { Grid, Snackbar, Container } from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 import MemoTextField from '../custom/TextField';
 import Card from '../custom/Card';
@@ -41,7 +42,9 @@ class ConnectedForm extends React.Component<any, any> {
                             id: this.props.sport_school.id || 0,
                             name: this.props.sport_school.name || '',
                             municipality: this.props.sport_school.municipality || '',
-                            address: this.props.sport_school.address || ''
+                            address: this.props.sport_school.address || '',
+                            errorMessage: this.props.sport_school.errorMessage || '',
+                            successMessage: this.props.sport_school.successMessage || ''
                         }}
                         validate={(values) => {
                             let errors: any = {};
@@ -59,9 +62,23 @@ class ConnectedForm extends React.Component<any, any> {
                             this.handleFormSubmit()
                         }}
                     >
-                    {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
+                    {({ handleSubmit, handleChange, values, touched, setFieldValue, errors, isSubmitting }) => (
 
                         <form onSubmit={handleSubmit}>
+                            <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
+                                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                                <Alert severity="error" onClose={() => { setFieldValue("errorMessage", "") }}>
+                                    <AlertTitle>Error</AlertTitle>
+                                    <strong>{values.errorMessage}</strong>
+                                </Alert>
+                            </Snackbar>
+                            <Snackbar open={values.successMessage !== undefined && values.successMessage !== ''}
+                                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                                <Alert severity="success" onClose={() => { setFieldValue("successMessage", "") }}>
+                                    <AlertTitle>Ok!</AlertTitle>
+                                    <strong>{values.successMessage}</strong>
+                                </Alert>
+                            </Snackbar>
                             <Grid container direction="column" spacing={3}>
                                 <Grid item xs>
                                     <Card title="Datos de la Escuela deportiva">

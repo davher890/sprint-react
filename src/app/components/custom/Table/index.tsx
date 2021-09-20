@@ -98,6 +98,7 @@ const CustomTable: React.FC<any> = (props) => {
 							setColumns(cols) 
 							setVisibleColumns(cols.filter((c: any) => c.show === undefined || c.show === true))
 						}}
+						showDownloadData={props.downloadData !== undefined}
 						downloadData={downloadData}
 					/>
 				</Grid>
@@ -111,7 +112,7 @@ const CustomTable: React.FC<any> = (props) => {
 									{visibleColumns.map((column) => (
 										<TableCell key={column.dataField}>
 										{ column.filter ?
-											<TextField dense label={column.text} className={classes.root} 
+											<TextField dense='true' label={column.text} className={classes.root} 
 												InputProps={{ className: classes.input }}
 												InputLabelProps={{
 													classes: {

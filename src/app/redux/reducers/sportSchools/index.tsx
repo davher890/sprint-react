@@ -15,7 +15,7 @@ function rootReducer(state = initialState, action: { type: string, payload: any 
     else if (action.type === LOAD_SPORTSCHOOLS) {
         return {
             ...state,
-            sport_schools: state.sport_schools.concat(action.payload)
+            sport_schools: action.payload
         };
     }
     else return state;

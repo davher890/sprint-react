@@ -6,7 +6,7 @@ import Table from "../custom/Table";
 import Button from '../custom/Button'
 
 import { connect } from "react-redux";
-import { getTrainerTable } from "../../redux/actions/trainers";
+import { getTrainerTable, downloadTrainers } from "../../redux/actions/trainers";
 import Utils from "../../utils/TableUtils";
 
 class TrainerTable extends React.Component<any, any> {
@@ -15,10 +15,15 @@ class TrainerTable extends React.Component<any, any> {
         this.state = {
         	columns : Utils.getTrainerColumns()
         }
+		this.downloadData = this.downloadData.bind(this)
     }
 
 	componentDidMount() {
 		this.props.getTrainerTable();
+	}
+
+	downloadData(columns: any) {
+		this.props.downloadTrainers(columns)
 	}
 
 	render() {
@@ -36,6 +41,7 @@ class TrainerTable extends React.Component<any, any> {
 								size={this.props.size}
 								total={this.props.total}
 								columns={this.state.columns} 
+								downloadData={this.downloadData}
 								showColumns={true}
 								onPaginationChange={(page: number, size: number, filters:any) => {
 									this.props.getTrainerTable(page, size, filters);
@@ -65,7 +71,7 @@ function mapStateToProps(state: any) {
 }
 
 const mapDispatchToProps = {
-	getTrainerTable
+	getTrainerTable, downloadTrainers
 }
 
 export default connect(

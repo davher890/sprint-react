@@ -40,18 +40,6 @@ function athleteDataConversor(d: any) {
     }
 }
 
-function historicDataConversor(d: any) {
-    return {
-        id : d.id,
-        name : d.name || '', 
-        birthDate: new Intl.DateTimeFormat('sq-AL').format(new Date(d.birthDate)), 
-        gender: d.gender === 'male' ? 'Masculino' : 'Femenino',
-        category : d.category,
-        license : d.license,
-        dorsalNumber : d.dorsalNumber
-    }
-}
-
 function familyDataConversor(d: { id: number, code: number, count: number }) {
     return {
         id : d.id,
@@ -105,14 +93,9 @@ const Utils = (action: { type: string, payload: any }) => {
         })
     }
     else if (action.type === LOAD_ATHLETE_TABLE || action.type === LOAD_DUPLICATED_ATHLETES_TABLE || 
-        action.type === LOAD_GROUP_ATHLETES_TABLE){
+        action.type === LOAD_GROUP_ATHLETES_TABLE || action.type === LOAD_HISTORIC_TABLE){
         items = action.payload.content.map((d: any) => {
             return athleteDataConversor(d)
-        })
-    }
-    else if (action.type === LOAD_HISTORIC_TABLE){
-        items = action.payload.content.map((d: any) => {
-            return historicDataConversor(d)
         })
     }
     else if (action.type === LOAD_FAMILY_TABLE){

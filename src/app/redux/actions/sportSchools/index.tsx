@@ -45,6 +45,9 @@ export function downloadSportSchools(columns: any) {
 export function addSportSchool(data: any) {
     return function (dispatch: any)  {
         return addData(data).then(json => {
+            if (!json.errorMessage) {
+                json.successMessage = "Datos guardados!"
+            }
             dispatch({ type: ADD_SPORTSCHOOL, payload: json });
         });
     }
