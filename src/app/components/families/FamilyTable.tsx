@@ -32,11 +32,8 @@ class FamilyTable extends React.Component<any, any> {
 								size={this.props.size}
 								total={this.props.total}
 								columns={this.state.columns} 
-								onPaginationChange={(page: number, size: number, filters:any) => {
+								onPaginationFilterChange={(page: number, size: number, filters:any) => {
 									this.props.getFamilyTable(page, size, filters);
-								}}
-								onFilterChange={(filters: any) => {
-									this.props.getFamilyTable(this.props.page, this.props.size, filters);
 								}}
 								onRowClick={(id: number) => {
 									window.open("/families/" + id, "_self");

@@ -43,11 +43,8 @@ class TrainerTable extends React.Component<any, any> {
 								columns={this.state.columns} 
 								downloadData={this.downloadData}
 								showColumns={true}
-								onPaginationChange={(page: number, size: number, filters:any) => {
+								onPaginationFilterChange={(page: number, size: number, filters:any) => {
 									this.props.getTrainerTable(page, size, filters);
-								}}
-								onFilterChange={(filters: any) => {
-									this.props.getTrainerTable(this.props.page, this.props.size, filters);
 								}}
 								onRowClick={(id: number) => {
 									window.open("/trainers/" + id, "_self");

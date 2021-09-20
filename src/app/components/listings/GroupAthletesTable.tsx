@@ -75,11 +75,8 @@ class GroupAthletesTable extends React.Component<any, any> {
                             columns={this.state.columns} 
                             downloadData={this.downloadData}
                             showColumns={true}
-                            onPaginationChange={(page: number, size: number, filters:any) => {
+                            onPaginationFilterChange={(page: number, size: number, filters:any) => {
                                 this.props.getGroupAthleteTable(this.state.groupId, this.state.scheduleIds, page, size);
-                            }}
-                            onFilterChange={(filters: any) => {
-                                this.props.getGroupAthleteTable(this.state.groupId, this.state.scheduleIds, this.props.page, this.props.size, filters);
                             }}
                             onRowClick={(id: number) => {
                                 window.open("/athletes/" + id, "_self");

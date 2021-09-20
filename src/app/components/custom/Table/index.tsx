@@ -53,19 +53,20 @@ const CustomTable: React.FC<any> = (props) => {
 		}
 		setFilterObj(filterObj)
 
-		props.onFilterChange(filterObj)
+		setPage(0)
+		props.onPaginationFilterChange(0, pageSize, filterObj)
 	}
 
 	const handlePageChange = (event: any, newPage: number) => {
 		setPage(newPage)
-		if (props.onPaginationChange){
-			props.onPaginationChange(newPage, pageSize, filterObj)
+		if (props.onPaginationFilterChange){
+			props.onPaginationFilterChange(newPage, pageSize, filterObj)
 		}
 	}
 	const handlePageSizeChange = (event: any) => {
 		setPageSize(parseInt(event.target.value))
-		if (props.onPaginationChange){
-			props.onPaginationChange(page, event.target.value, filterObj)
+		if (props.onPaginationFilterChange){
+			props.onPaginationFilterChange(page, event.target.value, filterObj)
 		}
 	}
 	const downloadData = () => {

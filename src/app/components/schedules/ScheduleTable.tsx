@@ -29,11 +29,8 @@ class ScheduleTable extends React.Component<any, any> {
 					total={this.props.total}
 					columns={this.state.columns}
 					showColumns={false}
-					onPaginationChange={(page: number, size: number, filters:any) => {
+					onPaginationFilterChange={(page: number, size: number, filters:any) => {
 						this.props.getScheduleTable(page, size, filters);
-					}}
-					onFilterChange={(filters: any) => {
-						this.props.getScheduleTable(this.props.page, this.props.size, filters);
 					}}
 					onRowClick={(id: number) => {
 						window.open("/schedules/" + id, "_self");

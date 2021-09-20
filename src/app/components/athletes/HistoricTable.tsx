@@ -40,11 +40,8 @@ class HistoricTableComponent extends React.Component<any, any> {
 								columns={this.state.columns} 
 								downloadData={this.downloadData}
 								showColumns={true}
-								onPaginationChange={(page: number, size: number, filters: any) => {
+								onPaginationFilterChange={(page: number, size: number, filters: any) => {
 									this.props.getHistoricTable(page, size, filters);
-								}}
-								onFilterChange={(filters: any) => {
-									this.props.getHistoricTable(this.props.page, this.props.size, filters);
 								}}
 								onRowClick={(id: number) => {
 									window.open("/athletes/" + id, "_self");
