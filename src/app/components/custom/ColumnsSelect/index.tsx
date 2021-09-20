@@ -16,7 +16,7 @@ const ColumnsSelect: React.FC<any> = (props) => {
             <Grid item xs>
                 <SelectButton text={'Seleccionar columnas'} onClick={() => { setOpenDialog(true) }} />
             </Grid>
-            { props.downloadData ?
+            { props.showDownloadData ?
             <Grid item xs>
                 <Button text="Descargar Excel" onClick={(props.downloadData)} />
             </Grid> : null

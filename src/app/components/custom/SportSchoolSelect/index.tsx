@@ -22,7 +22,12 @@ const SportSchoolSelect: React.FC<any> = (props) => {
 
     const onChange = (value: String, item: any) => {
         if (props.onChange){
-            props.onChange(item.id)
+            if (item){
+                props.onChange(item.id)
+            }
+            else {
+                props.onChange(null)
+            }
         }
     }
 

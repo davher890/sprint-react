@@ -12,13 +12,13 @@ export const findAthleteFee = (body: any) => {
     return postRequest("/athletes/fee", body)
 }
 
-export const downloadExcel = (columns: any) => {
+export const downloadExcel = (columns: any, endpoint: string = "/athletes/excel") => {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(columns)
     }
-    return fetch(process.env.REACT_APP_SERVER_URL + "/athletes/excel", requestOptions)
+    return fetch(process.env.REACT_APP_SERVER_URL + endpoint, requestOptions)
         .then(response => {
             response.blob().then(blob => {
                 let url = window.URL.createObjectURL(blob);

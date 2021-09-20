@@ -211,7 +211,7 @@ class CreateAthlete extends React.Component<any, any> {
                     this.handleFormSubmit()
                 }}
             >
-                {({ handleSubmit, values, touched, setFieldValue, errors, handleChange, setFieldTouched }) => {
+                {({ handleSubmit, values, touched, setFieldValue, errors, handleChange, isSubmitting }) => {
                     
                     return (
 
@@ -262,9 +262,9 @@ class CreateAthlete extends React.Component<any, any> {
                                                     <Grid item xs={5}>
                                                         <SportSchoolSelect sportSchoolId={values.sportSchoolId} error={touched.sportSchoolId && errors.sportSchoolId}
                                                             onChange={(sportSchoolId: number) => {
+                                                                setFieldValue('sportSchoolId', sportSchoolId);
                                                                 if (sportSchoolId) {
                                                                     values.feeTypes = utils.getFeeTypes(sportSchoolId)
-                                                                    setFieldValue('sportSchoolId', sportSchoolId);
                                                                     if (values.feeType) {
                                                                         setFieldValue('feeType', values.feeType);
                                                                     }
@@ -402,7 +402,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                         </Grid>
                                                         <Grid item xs>
                                                             <MemoTextField name="birthPlace" label="Lugar de nacimiento" type="text" value={values.birthPlace}
-                                                                error={touched.nationality && errors.nationality} onChange={handleChange}
+                                                                error={touched.birthPlace && errors.birthPlace} onChange={handleChange}
                                                             />
                                                         </Grid>
                                                     </Grid>
@@ -688,7 +688,7 @@ class CreateAthlete extends React.Component<any, any> {
                                         return false;
                                     }}
                                 />
-                                <SaveButton type="submit" text='Guardar y continuar' />
+                                <SaveButton type="submit" text='Guardar y continuar' disabled={isSubmitting} />
                             </Toolbar>
                         </AppBar>
                     </form>

@@ -37,7 +37,7 @@ const GroupAttendante: React.FC<any> = (props) => {
                             value={month} 
                             options={months} 
                             onChange={(e: any, value: any) => {
-                                setMonth(value.id)
+                                value ? setMonth(value.id) : setMonth(value)
                             }} 
                         />
                     </Grid>

@@ -2,7 +2,8 @@ import * as React from "react"
 
 import { Formik } from 'formik';
 
-import { Grid, Container } from "@material-ui/core";
+import { Grid, Snackbar, Container } from "@material-ui/core";
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 import MemoTextField from '../custom/TextField';
 import Select from '../custom/Select';
@@ -47,6 +48,9 @@ class ConnectedForm extends React.Component<any, any> {
                             startMinute: this.props.schedule.startMinute || 0,
                             endHour: this.props.schedule.endHour || 0,
                             endMinute: this.props.schedule.endMinute || 0,
+
+                            errorMessage: this.props.schedule.errorMessage || '',
+                            successMessage: this.props.schedule.successMessage || ''
                         }}
                         validate={(values) => {
                             let errors: any = {};
@@ -66,9 +70,23 @@ class ConnectedForm extends React.Component<any, any> {
                             this.handleFormSubmit()
                         }}
                     >
-                    {({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, errors }) => (
+                    {({ handleSubmit, handleChange, values, touched, setFieldValue, errors, isSubmitting }) => (
                     
                         <form onSubmit={handleSubmit}>
+                            <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
+                                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                                <Alert severity="error" onClose={() => { setFieldValue("errorMessage", "") }}>
+                                    <AlertTitle>Error</AlertTitle>
+                                    <strong>{values.errorMessage}</strong>
+                                </Alert>
+                            </Snackbar>
+                            <Snackbar open={values.successMessage !== undefined && values.successMessage !== ''}
+                                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                                <Alert severity="success" onClose={() => { setFieldValue("successMessage", "") }}>
+                                    <AlertTitle>Ok!</AlertTitle>
+                                    <strong>{values.successMessage}</strong>
+                                </Alert>
+                            </Snackbar>
                             <Grid container direction="row" spacing={2}>
                                 <Grid item xs>
                                     <Select fullWidth name="day" label="Género" error={touched.day && errors.day}
@@ -106,7 +124,7 @@ class ConnectedForm extends React.Component<any, any> {
                                 </Grid>
                             </Grid>
                             <Grid>
-                                <SaveButton type="submit"/>
+                                <SaveButton type="submit" disabled={isSubmitting}/>
                             </Grid>
                         </form>
                     )}

@@ -71,6 +71,9 @@ export function getGroup(id: number) {
 export function addGroup(data: any) {
     return function (dispatch: any)  {
         return addData(data).then(json => {
+            if (!json.errorMessage) {
+                json.successMessage = "Datos guardados!"
+            }
             dispatch({ type: ADD_GROUP, payload: json });
         });
     }

@@ -2,10 +2,10 @@ import * as React from "react"
 
 import { Formik } from 'formik';
 
-import { Grid, Container, Checkbox } from "@material-ui/core";
+import { Grid, Container, Snackbar, Checkbox } from "@material-ui/core";
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 import MemoTextField from '../custom/TextField';
-import Select from '../custom/Select';
 import SaveButton from '../custom/SaveButton'
 import Card from '../custom/Card'
 import ScheduleSelect from '../custom/ScheduleSelect'
@@ -14,6 +14,7 @@ import { connect } from "react-redux";
 import { addGroup, getGroup } from "../../redux/actions/groups";
 import { getSchedules } from "../../redux/actions/schedules";
 import TrainerSelect from "../custom/TrainerSelect";
+import SportSchoolSelect from "../custom/SportSchoolSelect";
 
 class ConnectedForm extends React.Component<any, any> {
 
@@ -36,8 +37,7 @@ class ConnectedForm extends React.Component<any, any> {
     }
 
     handleSubmit() {
-
-        this.props.addGroup(JSON.stringify(this.state))
+        this.props.addGroup(this.state)
     }
 
     render() {
@@ -47,37 +47,49 @@ class ConnectedForm extends React.Component<any, any> {
 
                     <Formik enableReinitialize 
                         initialValues={{
-                            // Other
-                            schedules : this.props.schedules,
-                            trainers: this.props.trainers,
                             // Group data
+                            id: this.props.group.id || 0,
                             name: this.props.group.name || '',
                             scheduleIds: this.props.group.scheduleIds || [],
                             specialization: this.props.group.specialization || false,
-                            trainerId: this.props.group.trainerId || ''
+                            trainerId: this.props.group.trainerId || '',
+                            sportSchoolId: this.props.group.sportSchoolId || '',
+
+                            errorMessage: this.props.group.errorMessage || '',
+                            successMessage: this.props.group.successMessage || ''
                         }}
                         validate={(values) => {
                             let errors: any = {};
 
-                            if (values.schedules === '') errors.schedules = 'Campo obligatorio'
-                            if (values.trainers === '') errors.trainers = 'Campo obligatorio'
-                            if (values.name === '') errors.name = 'Campo obligatorio'
-                            if (values.scheduleIds === '') errors.scheduleIds = 'Campo obligatorio'
-                            if (values.specialization === '') errors.specialization = 'Campo obligatorio'
-                            if (values.trainerId === '') errors.trainerId = 'Campo obligatorio'
+                            if (values.name === '') errors.name = true
+                            if (values.scheduleIds === '') errors.scheduleIds = true
+                            if (!values.trainerId) errors.trainerId = true
                             //check if my values have errors
                             return errors;
                         }}
                         onSubmit={(values, { setSubmitting }) => {
-                            alert("Guardando...");
                             this.setState(values)
                             setSubmitting(false);
                             this.handleSubmit()
                         }}
                         >
-                        {({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, setValues, errors }) => (
+                        {({ handleSubmit, handleChange, values, touched, setFieldValue, errors, isSubmitting }) => (
             
                             <form onSubmit={handleSubmit}>
+                                <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
+                                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                                    <Alert severity="error" onClose={() => { setFieldValue("errorMessage", "") }}>
+                                        <AlertTitle>Error</AlertTitle>
+                                        <strong>{values.errorMessage}</strong>
+                                    </Alert>
+                                </Snackbar>
+                                <Snackbar open={values.successMessage !== undefined && values.successMessage !== ''}
+                                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                                    <Alert severity="success" onClose={() => { setFieldValue("successMessage", "") }}>
+                                        <AlertTitle>Ok!</AlertTitle>
+                                        <strong>{values.successMessage}</strong>
+                                    </Alert>
+                                </Snackbar>
                                 <Grid container direction="column" spacing={3}>
                                     <Grid item xs>
                                         <Card title="Datos del grupo">
@@ -87,6 +99,13 @@ class ConnectedForm extends React.Component<any, any> {
                                                         error={touched.name && errors.name} />
                                                 </Grid>
                                                 <Grid item xs>
+                                                    <SportSchoolSelect sportSchoolId={values.sportSchoolId} error={touched.sportSchoolId && errors.sportSchoolId}
+                                                        onChange={(sportSchoolId: number) => {
+                                                            setFieldValue('sportSchoolId', sportSchoolId);
+                                                        }}
+                                                    />
+                                                    </Grid>
+                                                <Grid item xs>
                                                     <Checkbox name="specialization" checked={values.specialization === true} 
                                                             onChange={e => {
                                                                 setFieldValue('specialization', e.target.checked)
@@ -95,29 +114,27 @@ class ConnectedForm extends React.Component<any, any> {
                                                         Especialización
                                                 </Grid>
                                                 <Grid item xs>
+                                                    <TrainerSelect trainerId={values.trainerId} error={touched.trainerId && errors.trainerId}
+                                                            onChange={(trainerId: number) => {
+                                                                setFieldValue('trainerId', trainerId);
+                                                            }}
+                                                        />
+                                                </Grid>
+                                                <Grid item xs>
                                                     <ScheduleSelect 
                                                         schedules={this.props.schedules}
                                                         scheduleIds={values.scheduleIds}
-                                                        specialization={values.specialization}
+                                                        specialization={false}
                                                         onChange={(scheduleIds: number[]) => {
-                                                            // this.scheduleIdsOnChange(scheduleIds)
+                                                            setFieldValue('scheduleIds', scheduleIds)
                                                         }}
                                                     />
-                                                </Grid>
-                                                <Grid item xs>
-                                                    <TrainerSelect trainerId={values.trainerId} error={touched.trainerId && errors.trainerId}
-                                                            onChange={(trainerId: number) => {
-                                                                if (trainerId) {
-                                                                    setFieldValue('trainerId', trainerId);
-                                                                }
-                                                            }}
-                                                        />
                                                 </Grid>
                                             </Grid>
                                         </Card>
                                     </Grid>
-                                    <Grid>
-                                        <SaveButton type="submit"/>
+                                    <Grid item xs>
+                                        <SaveButton type="submit" disabled={isSubmitting}/>
                                     </Grid>
                                 </Grid>
                             </form>

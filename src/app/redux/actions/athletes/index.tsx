@@ -3,7 +3,8 @@ import { ADD_ATHLETE, GET_ATHLETE, GET_ATHLETE_FEE,
     LOAD_HISTORIC_TABLE, 
     LOAD_ATHLETE_SPORTDATA_TABLE,
     ADD_ATHLETE_SPORTDATA,
-    LOAD_DUPLICATED_ATHLETES_TABLE} from "../../constants/action_types";
+    LOAD_DUPLICATED_ATHLETES_TABLE,
+    DOWNLOAD_HISTORIC} from "../../constants/action_types";
 
 import { addData, findById, findAthleteFee, downloadExcel, addAthleteSportdata } from "../../../services/AthleteService"
 import { findHistoricDataPagination, findAthleteDataPagination, findAthleteSportdataPagination, findDuplicatedAthletesDataPagination } from "../../../services/TableService"
@@ -68,11 +69,20 @@ export function downloadAthletes(columns: any) {
         });
     }
 }
+
+export function downloadHistoricAthletes(columns: any) {
+    return function (dispatch: any) {
+        return downloadExcel(columns, "/athletes/historic/excel").then(json => {
+            dispatch({ type: DOWNLOAD_HISTORIC, payload: json });
+        });
+    }
+}
+
 export function addAthlete(data: any) {
     return function (dispatch: any) {
         return addData(data).then(json => {
             if (!json.errorMessage) {
-                json.successMessage = "Atleta guardado!"
+                json.successMessage = "Datos guardados!"
             }
             json.age = utils.ageCalculator(json.birthDate);
             json.birthDateStr = moment.unix(json.birthDate/1000).format("YYYY-MM-DD")
@@ -88,7 +98,7 @@ export function addSportdata(data: any) {
     return function (dispatch: any) {
         return addAthleteSportdata(data).then(json => {
             if (!json.errorMessage) {
-                json.successMessage = "Datos deportivos guardado!"
+                json.successMessage = "Datos deportivos guardados!"
             }
             dispatch({ type: ADD_ATHLETE_SPORTDATA, payload: json });
         });

@@ -7,7 +7,7 @@ import Table from "../custom/Table";
 import Utils from "../../utils/TableUtils";
 
 import { connect } from "react-redux";
-import { getHistoricTable } from "../../redux/actions/athletes";
+import { getHistoricTable, downloadHistoricAthletes } from "../../redux/actions/athletes";
 
 class HistoricTableComponent extends React.Component<any, any> {
     constructor(props: any) {
@@ -15,10 +15,15 @@ class HistoricTableComponent extends React.Component<any, any> {
         this.state = {
 			columns : Utils.getAthleteColumns()
 		}
+		this.downloadData = this.downloadData.bind(this)
     }
 
 	componentDidMount() {
 		this.props.getHistoricTable();
+	}
+
+	downloadData(columns: any) {
+		this.props.downloadHistoricAthletes(columns)
 	}
 
 	render() {
@@ -33,8 +38,8 @@ class HistoricTableComponent extends React.Component<any, any> {
 								size={this.props.size}
 								total={this.props.total}
 								columns={this.state.columns} 
+								downloadData={this.downloadData}
 								showColumns={true}
-								// filter={this.props.filter}
 								onPaginationChange={(page: number, size: number, filters: any) => {
 									this.props.getHistoricTable(page, size, filters);
 								}}
@@ -64,7 +69,7 @@ function mapStateToProps(state: any) {
 
 // Object of action creators
 const mapDispatchToProps = {
-	getHistoricTable
+	getHistoricTable, downloadHistoricAthletes
 }
 export default connect(
 	mapStateToProps,
