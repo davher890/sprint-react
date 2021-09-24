@@ -389,7 +389,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                                 error={touched.birthDateStr && errors.birthDateStr}
                                                                 onChange={(e: any) => {
                                                                     let d: Moment = moment(e.target.value, "YYYY-MM-DD")
-                                                                    let age: number = utils.ageCalculator(d.milliseconds())
+                                                                    let age: number = utils.ageCalculator(parseInt(d.format('x')))
                                                                     setFieldValue('age', age);
                                                                     setFieldValue('birthDateStr', e.target.value);
                                                                     setFieldValue('birthDate', d.toDate().getTime());
