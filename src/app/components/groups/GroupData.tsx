@@ -5,7 +5,7 @@ import { Formik } from 'formik';
 import { Grid, Container, Snackbar, Checkbox } from "@material-ui/core";
 import { Alert, AlertTitle } from '@material-ui/lab';
 
-import MemoTextField from '../custom/TextField';
+import TextField from '../custom/TextField';
 import SaveButton from '../custom/SaveButton'
 import Card from '../custom/Card'
 import ScheduleSelect from '../custom/ScheduleSelect'
@@ -95,7 +95,7 @@ class ConnectedForm extends React.Component<any, any> {
                                         <Card title="Datos del grupo">
                                             <Grid container spacing={2}>
                                                 <Grid item xs>
-                                                    <MemoTextField fullWidth name="name" label="Nombre" value={values.name} onChange={handleChange}
+                                                    <TextField fullWidth name="name" label="Nombre" value={values.name} onChange={handleChange}
                                                         error={touched.name && errors.name} />
                                                 </Grid>
                                                 <Grid item xs>

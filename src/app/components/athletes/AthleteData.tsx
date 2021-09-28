@@ -16,7 +16,7 @@ import SportSchoolSelect from '../custom/SportSchoolSelect'
 import SaveButton from '../custom/SaveButton'
 import Select from '../custom/Select'
 import Button from '../custom/Button'
-import MemoTextField from '../custom/TextField'
+import TextField from '../custom/TextField'
 
 import AthleteSportdata from './AthleteSportdata'
 import DuplicatedAthletes from './DuplicatedAthletes'
@@ -273,10 +273,10 @@ class CreateAthlete extends React.Component<any, any> {
                                                         />
                                                     </Grid>
                                                     <Grid item xs={3}>
-                                                        <MemoTextField name="code" label="Código de atleta" type="number" disabled value={values.code} />
+                                                        <TextField name="code" label="Código de atleta" type="number" disabled value={values.code} />
                                                     </Grid>
                                                     <Grid item xs={3}>
-                                                        <MemoTextField name="familyCode" label="Código de familia" type="number" disabled value={values.familyCode} />
+                                                        <TextField name="familyCode" label="Código de familia" type="number" disabled value={values.familyCode} />
                                                     </Grid>
                                                 </Grid>
                                             </CustomCard>
@@ -293,7 +293,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                     <DialogContentText>
                                                         Introduce la fecha de {values.registered ? 'baja' : 'alta'}.
                                                 </DialogContentText>
-                                                    <MemoTextField id="registerDate" name="registerDate" value={values.registerDate} margin="dense" onChange={handleChange}
+                                                    <TextField id="registerDate" name="registerDate" value={values.registerDate} margin="dense" onChange={handleChange}
                                                         type="date" />
                                                 </DialogContent>
                                                 <DialogActions>
@@ -343,7 +343,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                 <Grid container direction="column" spacing={2}>
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs>
-                                                            <MemoTextField name="name" label="Nombre" value={values.name} margin="dense"
+                                                            <TextField name="name" label="Nombre" value={values.name} margin="dense"
                                                                 error={touched.name && errors.name} onChange={handleChange} 
                                                                 onBlur={() => {
                                                                     if (values.name && values.firstSurname && values.dni){
@@ -355,7 +355,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                             />
                                                         </Grid>
                                                         <Grid item xs>
-                                                            <MemoTextField name="firstSurname" label="Primer Apellido" value={values.firstSurname} margin="dense"
+                                                            <TextField name="firstSurname" label="Primer Apellido" value={values.firstSurname} margin="dense"
                                                                 error={touched.firstSurname && errors.firstSurname}
                                                                 onBlur={(e: any) => {
                                                                     if (values.familiarOneFirstSurname === '') {
@@ -371,7 +371,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                             />
                                                         </Grid>
                                                         <Grid item xs>
-                                                            <MemoTextField name="secondSurname" label="Segundo Apellido" value={values.secondSurname} margin="dense"
+                                                            <TextField name="secondSurname" label="Segundo Apellido" value={values.secondSurname} margin="dense"
                                                                 error={touched.secondSurname && errors.secondSurname}
                                                                 onBlur={(e: any) => {
                                                                     if (values.familiarTwoFirstSurname === '') {
@@ -384,7 +384,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                     </Grid>
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs>
-                                                            <MemoTextField value={values.birthDateStr} margin="dense"
+                                                            <TextField value={values.birthDateStr} margin="dense"
                                                                 label="Fecha de nacimiento" type="date"
                                                                 error={touched.birthDateStr && errors.birthDateStr}
                                                                 onChange={(e: any) => {
@@ -398,17 +398,17 @@ class CreateAthlete extends React.Component<any, any> {
                                                             />
                                                         </Grid>
                                                         <Grid item xs>
-                                                            <MemoTextField label="Edad" type="number" disabled value={values.age} margin="dense" />
+                                                            <TextField label="Edad" type="number" disabled value={values.age} margin="dense" />
                                                         </Grid>
                                                         <Grid item xs>
-                                                            <MemoTextField name="birthPlace" label="Lugar de nacimiento" type="text" value={values.birthPlace}
+                                                            <TextField name="birthPlace" label="Lugar de nacimiento" type="text" value={values.birthPlace}
                                                                 error={touched.birthPlace && errors.birthPlace} onChange={handleChange}
                                                             />
                                                         </Grid>
                                                     </Grid>
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs>
-                                                            <MemoTextField name="dni" label="DNI/NIE" type="text" value={values.dni}
+                                                            <TextField name="dni" label="DNI/NIE" type="text" value={values.dni}
                                                                 error={touched.dni && errors.dni} onChange={handleChange}
                                                                 onBlur={() => {
                                                                     if (values.name && values.firstSurname && values.dni){
@@ -427,7 +427,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                             />
                                                         </Grid>
                                                         <Grid item xs>
-                                                            <MemoTextField name="nationality" label="Nacionalidad" type="text" value={values.nationality}
+                                                            <TextField name="nationality" label="Nacionalidad" type="text" value={values.nationality}
                                                                 error={touched.nationality && errors.nationality}
                                                                 onChange={handleChange}
                                                             />
@@ -441,40 +441,40 @@ class CreateAthlete extends React.Component<any, any> {
                                                 <Grid container direction="column" spacing={2}>
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs>
-                                                            <MemoTextField fullWidth name="mail" label="Email" type="email" value={values.mail} 
+                                                            <TextField fullWidth name="mail" label="Email" type="email" value={values.mail} 
                                                                 onChange={handleChange} error={touched.mail && errors.mail} />
                                                         </Grid>
                                                     </Grid>
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs>
-                                                            <MemoTextField name="phone1" type="tel" value={values.phone1} label="Teléfono 1" 
+                                                            <TextField name="phone1" type="tel" value={values.phone1} label="Teléfono 1" 
                                                                 onChange={handleChange} error={touched.phone1 && errors.phone1}
                                                             />
                                                         </Grid>
                                                         <Grid item xs>
-                                                            <MemoTextField name="phone2" type="tel" value={values.phone2} label="Teléfono 2" 
+                                                            <TextField name="phone2" type="tel" value={values.phone2} label="Teléfono 2" 
                                                                 onChange={handleChange} error={touched.phone2 && errors.phone2}
                                                             />
                                                         </Grid>
                                                         <Grid item xs>
-                                                            <MemoTextField name="phone3" type="tel" value={values.phone3} label="Teléfono 3"
+                                                            <TextField name="phone3" type="tel" value={values.phone3} label="Teléfono 3"
                                                                 onChange={handleChange} error={touched.phone3 && errors.phone3}
                                                             />
                                                         </Grid>
                                                     </Grid>
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs>
-                                                            <MemoTextField name="municipality" label="Municipio" value={values.municipality} onChange={handleChange}
+                                                            <TextField name="municipality" label="Municipio" value={values.municipality} onChange={handleChange}
                                                                 error={touched.municipality && errors.municipality} />
                                                         </Grid>
                                                         <Grid item xs>
-                                                            <MemoTextField name="postalCode" label="C.P." value={values.postalCode} onChange={handleChange}
+                                                            <TextField name="postalCode" label="C.P." value={values.postalCode} onChange={handleChange}
                                                                 error={touched.postalCode && errors.postalCode} />
                                                         </Grid>
                                                     </Grid>
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs>
-                                                            <MemoTextField fullWidth name="address" label="Dirección" value={values.address} onChange={handleChange}
+                                                            <TextField fullWidth name="address" label="Dirección" value={values.address} onChange={handleChange}
                                                                 error={touched.address && errors.address} />
                                                         </Grid>
                                                     </Grid>
@@ -490,41 +490,41 @@ class CreateAthlete extends React.Component<any, any> {
                                                 <Grid container direction="column" spacing={2}>
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs>
-                                                            <MemoTextField name="familiarOneName" label="Nombre" value={values.familiarOneName} margin="dense" onChange={handleChange} />
+                                                            <TextField name="familiarOneName" label="Nombre" value={values.familiarOneName} margin="dense" onChange={handleChange} />
                                                         </Grid>
                                                         <Grid item xs>
-                                                            <MemoTextField name="familiarOneFirstSurname" label="Primer Apellido" value={values.familiarOneFirstSurname} margin="dense" onChange={handleChange} />
+                                                            <TextField name="familiarOneFirstSurname" label="Primer Apellido" value={values.familiarOneFirstSurname} margin="dense" onChange={handleChange} />
                                                         </Grid>
                                                         <Grid item xs>
-                                                            <MemoTextField name="familiarOneSecondSurname" label="Segundo Apellido" value={values.familiarOneSecondSurname} margin="dense" onChange={handleChange} />
+                                                            <TextField name="familiarOneSecondSurname" label="Segundo Apellido" value={values.familiarOneSecondSurname} margin="dense" onChange={handleChange} />
                                                         </Grid>
                                                     </Grid>
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs>
-                                                            <MemoTextField name="familiarOneDni" type="text" label="Dni" value={values.familiarOneDni} margin="dense" onChange={handleChange} />
+                                                            <TextField name="familiarOneDni" type="text" label="Dni" value={values.familiarOneDni} margin="dense" onChange={handleChange} />
                                                         </Grid>
                                                         <Grid item xs>
-                                                            <MemoTextField name="familiarOneMail" type="text" label="Email" value={values.familiarOneMail} margin="dense" onChange={handleChange} />
+                                                            <TextField name="familiarOneMail" type="text" label="Email" value={values.familiarOneMail} margin="dense" onChange={handleChange} />
                                                         </Grid>
                                                     </Grid>
                                                     <Typography color="textSecondary">Familiar 2</Typography>
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs>
-                                                            <MemoTextField name="familiarTwoName" type="text" label="Nombre" value={values.familiarTwoName} margin="dense" onChange={handleChange} />
+                                                            <TextField name="familiarTwoName" type="text" label="Nombre" value={values.familiarTwoName} margin="dense" onChange={handleChange} />
                                                         </Grid>
                                                         <Grid item xs>
-                                                            <MemoTextField name="familiarTwoFirstSurname" type="text" label="Primer Apellido" value={values.familiarTwoFirstSurname} margin="dense" onChange={handleChange} />
+                                                            <TextField name="familiarTwoFirstSurname" type="text" label="Primer Apellido" value={values.familiarTwoFirstSurname} margin="dense" onChange={handleChange} />
                                                         </Grid>
                                                         <Grid item xs>
-                                                            <MemoTextField name="familiarTwoSecondSurname" type="text" label="Segundo Apellido" value={values.familiarTwoSecondSurname} margin="dense" onChange={handleChange} />
+                                                            <TextField name="familiarTwoSecondSurname" type="text" label="Segundo Apellido" value={values.familiarTwoSecondSurname} margin="dense" onChange={handleChange} />
                                                         </Grid>
                                                     </Grid>
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs>
-                                                            <MemoTextField name="familiarTwoDni" type="text" label="Dni" value={values.familiarTwoDni} margin="dense" onChange={handleChange} />
+                                                            <TextField name="familiarTwoDni" type="text" label="Dni" value={values.familiarTwoDni} margin="dense" onChange={handleChange} />
                                                         </Grid>
                                                         <Grid item xs>
-                                                            <MemoTextField name="familiarTwoMail" type="text" label="Email" value={values.familiarTwoMail} margin="dense" onChange={handleChange} />
+                                                            <TextField name="familiarTwoMail" type="text" label="Email" value={values.familiarTwoMail} margin="dense" onChange={handleChange} />
                                                         </Grid>
                                                     </Grid>
                                                 </Grid>
@@ -551,7 +551,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                             />
                                                         </Grid>
                                                         <Grid item xs>
-                                                            <MemoTextField name="iban" label="Iban" value={values.iban} onChange={handleChange}
+                                                            <TextField name="iban" label="Iban" value={values.iban} onChange={handleChange}
                                                                 error={touched.iban && errors.iban}
                                                             />
                                                         </Grid>
@@ -559,24 +559,24 @@ class CreateAthlete extends React.Component<any, any> {
                                                     <CardHeader subheader="Titular de la cuenta" />
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs>
-                                                            <MemoTextField name="holderName" label="Nombre" value={values.holderName} onChange={handleChange}
+                                                            <TextField name="holderName" label="Nombre" value={values.holderName} onChange={handleChange}
                                                                 error={touched.holderName && errors.holderName}
                                                             />
                                                         </Grid>
                                                         <Grid item xs>
-                                                            <MemoTextField name="holderFirstSurname" label="Primer apellido" value={values.holderFirstSurname} onChange={handleChange}
+                                                            <TextField name="holderFirstSurname" label="Primer apellido" value={values.holderFirstSurname} onChange={handleChange}
                                                                 error={touched.holderFirstSurname && errors.holderFirstSurname}
                                                             />
                                                         </Grid>
                                                         <Grid item xs>
-                                                            <MemoTextField name="holderSecondSurname" label="Segundo apellido" value={values.holderSecondSurname} onChange={handleChange}
+                                                            <TextField name="holderSecondSurname" label="Segundo apellido" value={values.holderSecondSurname} onChange={handleChange}
                                                                 error={touched.holderSecondSurname && errors.holderSecondSurname}
                                                             />
                                                         </Grid>
                                                     </Grid>
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs={3}>
-                                                            <MemoTextField name="holderDni" label="Dni/Nie" value={values.holderDni} onChange={handleChange}
+                                                            <TextField name="holderDni" label="Dni/Nie" value={values.holderDni} onChange={handleChange}
                                                                 error={touched.holderDni && errors.holderDni}
                                                             />
                                                         </Grid>
@@ -608,7 +608,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                         />
                                                     </Grid>
                                                     <Grid item xs={2}>
-                                                        <MemoTextField fullWidth name="dorsalNumber" label="Dorsal" type="number" value={values.dorsalNumber} onChange={handleChange} />
+                                                        <TextField fullWidth name="dorsalNumber" label="Dorsal" type="number" value={values.dorsalNumber} onChange={handleChange} />
                                                     </Grid>
                                                 </Grid>
                                                 <Grid container item spacing={1}>
@@ -619,7 +619,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                         />
                                                     </Grid>
                                                     <Grid item>
-                                                        <MemoTextField fullWidth name="license" label="Licencia" value={values.license} onChange={handleChange} />
+                                                        <TextField fullWidth name="license" label="Licencia" value={values.license} onChange={handleChange} />
                                                     </Grid>
                                                 </Grid>
                                                 <Grid container spacing={1} direction="row">
@@ -644,13 +644,13 @@ class CreateAthlete extends React.Component<any, any> {
                                             <CustomCard title="Calculo de cuota">
                                                 <Grid container spacing={1}>
                                                     <Grid item>
-                                                        <MemoTextField name="membershipFee" label="Cuota de socio" type="number" disabled value={values.membershipFee} />
+                                                        <TextField name="membershipFee" label="Cuota de socio" type="number" disabled value={values.membershipFee} />
                                                     </Grid>
                                                     <Grid item>
-                                                        <MemoTextField name="enrollmentFee" label="Matricula" type="number" disabled value={values.enrollmentFee} />
+                                                        <TextField name="enrollmentFee" label="Matricula" type="number" disabled value={values.enrollmentFee} />
                                                     </Grid>
                                                     <Grid item>
-                                                        <MemoTextField name="monthlyFee" label="Mensualidad" type="number" disabled value={values.monthlyFee} />
+                                                        <TextField name="monthlyFee" label="Mensualidad" type="number" disabled value={values.monthlyFee} />
                                                     </Grid>
                                                 </Grid>
                                             </CustomCard>
@@ -669,7 +669,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                         Autorización de Imágenes
                                                     </Grid>
                                                     <Grid item xs={9}>
-                                                        <MemoTextField fullWidth name="observations" label="Observaciones" multiline
+                                                        <TextField fullWidth name="observations" label="Observaciones" multiline
                                                             value={values.observations} onChange={handleChange} />
                                                     </Grid>
                                                 </Grid>
