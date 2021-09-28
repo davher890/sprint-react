@@ -17,18 +17,17 @@ import SaveButton from '../custom/SaveButton'
 import Select from '../custom/Select'
 import Button from '../custom/Button'
 import MemoTextField from '../custom/TextField'
+import FeeInfo from '../custom/FeeInfo'
 
 import AthleteSportdata from './AthleteSportdata'
 import DuplicatedAthletes from './DuplicatedAthletes'
 
 // Redux
 import { connect } from "react-redux";
-import { addAthlete, getAthlete, getAthleteFee, getDuplicatedAthletesTable } from "../../redux/actions/athletes";
+import { addAthlete, getAthlete, getDuplicatedAthletesTable } from "../../redux/actions/athletes";
 
 class CreateAthlete extends React.Component<any, any> {
 
-    feeTypes: { id: string, name: string }[] = []
-    
     constructor(props: {}) {
         super(props);
         this.state = {};
@@ -47,13 +46,10 @@ class CreateAthlete extends React.Component<any, any> {
 
     getAthlete(id: Number) {
         this.props.getAthlete(id).then((data: Object) => {
-            this.feeTypes = utils.getFeeTypes(this.props.athlete.sportSchoolId)
-            this.props.getAthleteFee(this.props.athlete)
+            this.setState({
+                feeTypes: utils.getFeeTypes(this.props.athlete.sportSchoolId)
+            })
         });
-    }
-
-    fillFee(values: Object) {
-        this.props.getAthleteFee(values)
     }
 
     handleFormSubmit() {
@@ -98,7 +94,7 @@ class CreateAthlete extends React.Component<any, any> {
                     familyCode: this.props.athlete.familyCode || 0,
                     // Extra fields
                     sportSchools: this.props.sportSchools || [],
-                    feeTypes: this.feeTypes || [],
+                    feeTypes: this.state.feeTypes || [],
                     age: this.props.athlete.age || 0,
                     // Personal info
                     sportSchoolId: this.props.athlete.sportSchoolId || '',
@@ -264,7 +260,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                             onChange={(sportSchoolId: number) => {
                                                                 setFieldValue('sportSchoolId', sportSchoolId);
                                                                 if (sportSchoolId) {
-                                                                    values.feeTypes = utils.getFeeTypes(sportSchoolId)
+                                                                    setFieldValue('feeTypes', utils.getFeeTypes(sportSchoolId));
                                                                     if (values.feeType) {
                                                                         setFieldValue('feeType', values.feeType);
                                                                     }
@@ -534,7 +530,7 @@ class CreateAthlete extends React.Component<any, any> {
                                             <CustomCard title="Datos Bancarios" >
                                                 <Grid container direction="column" spacing={2}>
                                                     <Grid container item spacing={1}>
-                                                        <Grid item xs={3}>
+                                                        <Grid item xs>
                                                             <Select fullWidth name="paymentType" label="Forma de pago"
                                                                 options={utils.getPaymentTypes()} value={values.paymentType} error={touched.paymentType && errors.paymentType}
                                                                 onChange={(e: any, value: any) => {
@@ -542,8 +538,8 @@ class CreateAthlete extends React.Component<any, any> {
                                                                 }}
                                                             />
                                                         </Grid>
-                                                        <Grid item xs={3}>
-                                                            <Select name="feeType" label="Tipo de cuota"
+                                                        <Grid item xs>
+                                                            <Select fullWidth name="feeType" label="Tipo de cuota"
                                                                 options={values.feeTypes} value={values.feeType} error={touched.feeType && errors.feeType}
                                                                 onChange={(e: any, value: any) => {
                                                                     setFieldValue('feeType', value ? value.id : "")
@@ -629,9 +625,10 @@ class CreateAthlete extends React.Component<any, any> {
                                                             specialization={values.specialization}
                                                             scheduleIds={values.scheduleIds}
                                                             onChange={(groupId: number, specialization: boolean, scheduleIds: number[]) => {
+                                                                console.log(scheduleIds)
+                                                                setFieldValue('scheduleIds', scheduleIds)
                                                                 setFieldValue('specialization', specialization)
                                                                 setFieldValue('groupId', groupId)
-                                                                setFieldValue('scheduleIds', scheduleIds)
                                                             }}
                                                         />
                                                     </Grid>
@@ -641,19 +638,7 @@ class CreateAthlete extends React.Component<any, any> {
                                     </Grid>
                                     <Grid container item style={{ display: values.feeType !== "SOCIO" ? "block" : "none" }}>
                                         <Grid item>
-                                            <CustomCard title="Calculo de cuota">
-                                                <Grid container spacing={1}>
-                                                    <Grid item>
-                                                        <MemoTextField name="membershipFee" label="Cuota de socio" type="number" disabled value={values.membershipFee} />
-                                                    </Grid>
-                                                    <Grid item>
-                                                        <MemoTextField name="enrollmentFee" label="Matricula" type="number" disabled value={values.enrollmentFee} />
-                                                    </Grid>
-                                                    <Grid item>
-                                                        <MemoTextField name="monthlyFee" label="Mensualidad" type="number" disabled value={values.monthlyFee} />
-                                                    </Grid>
-                                                </Grid>
-                                            </CustomCard>
+                                            <FeeInfo {...values} />
                                         </Grid>
                                     </Grid>
                                     <Grid container item style={{ display: "block" }}>
@@ -661,7 +646,7 @@ class CreateAthlete extends React.Component<any, any> {
                                             <CustomCard>
                                                 <Grid container spacing={1}>
                                                     <Grid item xs={3}>
-                                                        <Checkbox name="scheduleIds" checked={values.imageAuth === true} 
+                                                        <Checkbox name="imageAuth" checked={values.imageAuth === true} 
                                                             onChange={e => {
                                                                 setFieldValue('imageAuth', e.target.checked)
                                                             }}
@@ -701,15 +686,13 @@ class CreateAthlete extends React.Component<any, any> {
 
 const mapDispatchToProps = {
     addAthlete, 
-    getAthlete, 
-    getAthleteFee, 
+    getAthlete,
     getDuplicatedAthletesTable
 }
 
 const mapStateToProps = (state: any) => {
     return {
         athlete: state.athlete_reducer.athlete,
-        athlete_fee: state.athlete_reducer.athlete_fee,
         duplicated_athletes: state.table_reducer.table_data
     };
 };
