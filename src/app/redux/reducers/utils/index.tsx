@@ -9,10 +9,11 @@ function sportSchoolDataConversor(d: { id: number, name: string, municipality: s
     }
 }
 
-function groupDataConversor(d: { id: number, name: string }) {
+function groupDataConversor(d: { id: number, name: string, sportSchoolName: string }) {
     return {
         id : d.id,
-        name : d.name
+        name : d.name,
+        sportSchoolName : d.sportSchoolName
     }
 }
 

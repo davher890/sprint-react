@@ -2,19 +2,21 @@ import * as React from "react"
 
 import { Formik } from 'formik';
 
-import { Grid, Container, Snackbar, Checkbox } from "@material-ui/core";
+import { Grid, Container, Snackbar, Checkbox, AppBar, Toolbar, } from "@material-ui/core";
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 import MemoTextField from '../custom/TextField';
 import SaveButton from '../custom/SaveButton'
+import DeleteButton from '../custom/DeleteButton'
 import Card from '../custom/Card'
 import ScheduleSelect from '../custom/ScheduleSelect'
 
 import { connect } from "react-redux";
-import { addGroup, getGroup } from "../../redux/actions/groups";
+import { addGroup, getGroup, removeGroup } from "../../redux/actions/groups";
 import { getSchedules } from "../../redux/actions/schedules";
 import TrainerSelect from "../custom/TrainerSelect";
 import SportSchoolSelect from "../custom/SportSchoolSelect";
+import ConfirmDialog from "../custom/ConfirmDialog";
 
 class ConnectedForm extends React.Component<any, any> {
 
@@ -38,6 +40,11 @@ class ConnectedForm extends React.Component<any, any> {
 
     handleSubmit() {
         this.props.addGroup(this.state)
+        window.open("/groups/list", "_self");
+    }
+
+    deleteGroup(groupId: number) {
+        this.props.removeGroup(groupId)
     }
 
     render() {
@@ -54,6 +61,8 @@ class ConnectedForm extends React.Component<any, any> {
                             specialization: this.props.group.specialization || false,
                             trainerId: this.props.group.trainerId || '',
                             sportSchoolId: this.props.group.sportSchoolId || '',
+
+                            openDeleteDialog: false,
 
                             errorMessage: this.props.group.errorMessage || '',
                             successMessage: this.props.group.successMessage || ''
@@ -76,6 +85,14 @@ class ConnectedForm extends React.Component<any, any> {
                         {({ handleSubmit, handleChange, values, touched, setFieldValue, errors, isSubmitting }) => (
             
                             <form onSubmit={handleSubmit}>
+                                <ConfirmDialog open={values.openDeleteDialog} 
+                                    confirm={() => {
+                                        this.deleteGroup(this.props.match.params.id); 
+                                        setFieldValue("openDeleteDialog", false);
+                                        window.open("/groups/list", "_self");
+                                    }}
+                                    cancel={() => setFieldValue("openDeleteDialog", false)}
+                                />
                                 <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
                                     anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
                                     <Alert severity="error" onClose={() => { setFieldValue("errorMessage", "") }}>
@@ -133,9 +150,15 @@ class ConnectedForm extends React.Component<any, any> {
                                             </Grid>
                                         </Card>
                                     </Grid>
-                                    <Grid item xs>
-                                        <SaveButton type="submit" disabled={isSubmitting}/>
-                                    </Grid>
+                                    <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
+                                        <Toolbar>
+                                            <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
+                                            {(this.props.match && this.props.match.params && this.props.match.params.id) ? 
+                                                <DeleteButton text='Borrar' onClick={() => setFieldValue("openDeleteDialog", true)}/>
+                                                : null
+                                            }
+                                        </Toolbar>
+                                    </AppBar>
                                 </Grid>
                             </form>
                         )}
@@ -146,20 +169,19 @@ class ConnectedForm extends React.Component<any, any> {
     }
 }
 
+const mapDispatchToProps =  {
+    addGroup,
+    getGroup,
+    removeGroup,
+    getSchedules
+}
+
 const mapStateToProps = (state: any) => {
     return { 
         group: state.group_reducer.group,
         schedules: state.schedule_reducer.schedules
     };
 };
-
-const mapDispatchToProps = (dispatch: any) => {
-    return {
-        addGroup: (group: any) => dispatch(addGroup(group)),
-        getGroup: (id: any) => dispatch(getGroup(id)),
-        getSchedules: () => dispatch(getSchedules())
-    }
-}
 
 export default connect(
     mapStateToProps,

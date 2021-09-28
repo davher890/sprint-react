@@ -68,7 +68,8 @@ const Utils = {
 
     getGroupColumns: () => {
         return [
-            { dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
+            { dataField: 'name', text : 'Nombre', filter: { type: "text" } },
+            { dataField: 'sportSchoolName', text : 'Escuela Deportiva' } 
         ]
     },
 

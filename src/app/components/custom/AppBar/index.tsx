@@ -3,7 +3,7 @@ import { AppBar, Toolbar, Menu, MenuItem, Typography, Link } from '@material-ui/
 
 const CustomAppBar: React.FC<any> = (props) => {
 
-    const [trainersAnchorEl, setTrainersAnchorEl] = React.useState<any | null>();
+    const [groupsAnchorEl, setGroupsAnchorEl] = React.useState<any | null>();
     const [listingsAnchorEl, setListingsAnchorEl] = React.useState<any | null>();
     
     const handleListingsMenuClick = (event: any) => {
@@ -14,12 +14,12 @@ const CustomAppBar: React.FC<any> = (props) => {
         setListingsAnchorEl(null);
     };
 
-    const handleTrainersMenuClick = (event: any) => {
-        setTrainersAnchorEl(event.currentTarget);
+    const handleGroupsMenuClick = (event: any) => {
+        setGroupsAnchorEl(event.currentTarget);
     };
   
-    const handleTrainersMenuClose = () => {
-        setTrainersAnchorEl(null);
+    const handleGroupsMenuClose = () => {
+        setGroupsAnchorEl(null);
     };
 
     return (
@@ -35,17 +35,17 @@ const CustomAppBar: React.FC<any> = (props) => {
                     <Typography variant="button">
                         <Link href="/athletes/list" color="inherit">Atletas</Link>
                     </Typography>
-                    <Typography variant="button" aria-controls="trainers-menu" aria-haspopup="true" onClick={handleTrainersMenuClick}>
-                        <Link color="inherit">Entrenadores</Link>
+                    <Typography variant="button" aria-controls="groups-menu" aria-haspopup="true" onClick={handleGroupsMenuClick}>
+                        <Link color="inherit">Grupos</Link>
                     </Typography>
-                    <Menu id="trainers-menu"
-                            anchorEl={trainersAnchorEl}
+                    <Menu id="groups-menu"
+                            anchorEl={groupsAnchorEl}
                             keepMounted
-                            open={Boolean(trainersAnchorEl)}
-                            onClose={handleTrainersMenuClose}>
-                        <MenuItem><Link href="/trainers/list">Listado</Link></MenuItem>
-                        <MenuItem><Link href="/groups/list">Grupos</Link></MenuItem>
+                            open={Boolean(groupsAnchorEl)}
+                            onClose={handleGroupsMenuClose}>
+                        <MenuItem><Link href="/groups/list">Listado</Link></MenuItem>
                         <MenuItem><Link href="/schedules/list">Horarios</Link></MenuItem>
+                        <MenuItem><Link href="/trainers/list">Entrenadores</Link></MenuItem>
                     </Menu>
                     <Typography variant="button" aria-controls="listings-menu" aria-haspopup="true" onClick={handleListingsMenuClick}>
                         <Link color="inherit">Listados</Link>

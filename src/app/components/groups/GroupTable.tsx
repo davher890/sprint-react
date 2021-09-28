@@ -3,6 +3,7 @@ import * as React from "react"
 import { Container, Grid } from '@material-ui/core';
 
 import Table from "../custom/Table";
+import Button from '../custom/AddButton'
 
 import { connect } from "react-redux";
 import { getGroupTable } from "../../redux/actions/groups/index";
@@ -24,7 +25,10 @@ class GroupTable extends React.Component<any, any> {
 		return (
 			<Container fixed>
 				<React.Suspense fallback={<div>Cargando...</div>}>
-					<Grid container direction="column">
+					<Grid container direction="column" spacing={3}>
+						<Grid item xs>
+							<Button text="Nuevo Grupo" href={'/groups'}/>
+						</Grid>
 						<Grid item xs>
 							<Table 
 								data={this.props.table_data}

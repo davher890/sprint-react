@@ -1,9 +1,9 @@
 import { SPECIALIZATION_GROUPS, NOT_SPECIALIZATION_GROUPS, 
-    GROUP_SCHEDULES, LOAD_GROUP_TABLE, ADD_GROUP, GET_GROUP, 
+    GROUP_SCHEDULES, LOAD_GROUP_TABLE, ADD_GROUP, GET_GROUP, DELETE_GROUP,
     LOAD_GROUPS, LOAD_GROUP_ATHLETES_TABLE,
     DOWNLOAD_GROUP_ATHLETES, DOWNLOAD_GROUP_ATTENDANCE } from "../../constants/action_types";
 
-import { findAllGroups, findSpecializationGroups, findNotSpecializationGroups, findGroupSchedules, downloadGroupSchedulesExcel, addData, findById, findGroupAttendance } from "../../../services/GroupService"
+import { findAllGroups, findSpecializationGroups, findNotSpecializationGroups, findGroupSchedules, downloadGroupSchedulesExcel, addData, findById, findGroupAttendance, deleteGroup } from "../../../services/GroupService"
 import { findGroupDataPagination, findGroupAthletesDataPagination } from "../../../services/TableService"
 
 export function getGroupTable(page: number, size: number, filters: any) {
@@ -64,6 +64,14 @@ export function getGroup(id: number) {
     return function (dispatch: any)  {
         return findById(id).then(json => {
             dispatch({ type: GET_GROUP, payload: json });
+        });
+    }
+}
+
+export function removeGroup(id: number) {
+    return function (dispatch: any)  {
+        return deleteGroup(id).then(json => {
+            dispatch({ type: DELETE_GROUP, payload: json });
         });
     }
 }

@@ -1,4 +1,4 @@
-import { getRequest, postRequest } from "./ApiService"
+import { deleteRequest, getRequest, postRequest } from "./ApiService"
 
 export const addData = (body: any) => {
     return postRequest("/groups", body)
@@ -22,6 +22,10 @@ export const findNotSpecializationGroups = () => {
 
 export const findGroupSchedules = (id: number) => {
     return getRequest("/groups/" + id + "/schedules")
+}
+
+export const deleteGroup = (id: number) => {
+    return deleteRequest("/groups/" + id)
 }
 
 export const downloadGroupSchedulesExcel = (groupId: number, scheduleIds: number[], columns: any) => {
