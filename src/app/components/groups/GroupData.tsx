@@ -111,18 +111,14 @@ class ConnectedForm extends React.Component<any, any> {
                                     <Grid item xs>
                                         <Card title="Datos del grupo">
                                             <Grid container spacing={2}>
-                                                <Grid item xs>
-                                                    <MemoTextField fullWidth name="name" label="Nombre" value={values.name} onChange={handleChange}
-                                                        error={touched.name && errors.name} />
-                                                </Grid>
-                                                <Grid item xs>
+                                                <Grid item xs={3}>
                                                     <SportSchoolSelect sportSchoolId={values.sportSchoolId} error={touched.sportSchoolId && errors.sportSchoolId}
                                                         onChange={(sportSchoolId: number) => {
                                                             setFieldValue('sportSchoolId', sportSchoolId);
                                                         }}
                                                     />
-                                                    </Grid>
-                                                <Grid item xs>
+                                                </Grid>
+                                                <Grid item xs={3}>
                                                     <Checkbox name="specialization" checked={values.specialization === true} 
                                                             onChange={e => {
                                                                 setFieldValue('specialization', e.target.checked)
@@ -130,6 +126,14 @@ class ConnectedForm extends React.Component<any, any> {
                                                         />
                                                         Especialización
                                                 </Grid>
+                                            </Grid>
+                                            <Grid container spacing={2}>
+                                                <Grid item xs>
+                                                    <MemoTextField fullWidth name="name" label="Nombre" value={values.name} onChange={handleChange}
+                                                        error={touched.name && errors.name} />
+                                                </Grid>
+                                                
+                                                
                                                 <Grid item xs>
                                                     <TrainerSelect trainerId={values.trainerId} error={touched.trainerId && errors.trainerId}
                                                             onChange={(trainerId: number) => {
