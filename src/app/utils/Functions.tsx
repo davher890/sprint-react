@@ -103,8 +103,8 @@ const functions = {
     getPaymentTypes: function () {
         return [
             // { id: "", name: "" },
-            { id: "CASH", name: "Efectivo" },
-            { id: "TRANSFER", name: "Transferencia" },
+            { id: "MET", name: "Efectivo" },
+            { id: "TRANSF", name: "Transferencia" },
             { id: "DOM", name: "Domiciliación Bancaria" },
             { id: "SUBV", name: "Subvencionado" },
         ]
@@ -115,11 +115,11 @@ const functions = {
 
             // Santa Ana
             return [
-                { id: '', name: '' },
                 { id: 'CLUB', name: 'Club' },
+                { id: 'CLUB_ANUAL', name: 'Club Anual' },
                 { id: 'PISTAS', name: 'Pistas' },
                 { id: 'LIC_PISTAS', name: 'Licencia/Pistas' },
-                { id: 'ENTRENADOR', name: 'Entrenadores' },
+                { id: 'ENTRENADOR', name: 'Entrenadores' }
             ]
         }
 
@@ -127,8 +127,8 @@ const functions = {
 
             // Paracuellos
             return [
-                { id: '', name: '' },
-                { id: 'CLLUB', name: 'Club' }
+                { id: 'CLLUB', name: 'Club' },
+                { id: 'CLUB_ANUAL', name: 'Club Anual' },
             ]
         }
 
@@ -136,7 +136,6 @@ const functions = {
 
             // Externos
             return [
-                { id: '', name: '' },
                 { id: 'LICENCIA', name: 'Licencia' },
                 { id: 'SOCIO', name: 'Socio' },
                 { id: 'ENTRENADOR', name: 'Entrenadores' },

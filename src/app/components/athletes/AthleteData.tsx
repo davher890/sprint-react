@@ -55,10 +55,7 @@ class CreateAthlete extends React.Component<any, any> {
     handleFormSubmit() {
         this.props.addAthlete(this.state).then((data: Object) => {
 
-            if (this.state.exit) {
-                this.props.history.push("/athletes");
-                window.location.reload();
-            }
+            
         })
     }
 
@@ -130,6 +127,7 @@ class CreateAthlete extends React.Component<any, any> {
                     specialization: this.props.athlete.specialization || false,
                     groupId: this.props.athlete.groupId || '',
                     scheduleIds: this.props.athlete.scheduleIds || [],
+                    scheduleIdsStr: this.props.athlete.scheduleIds ? this.props.athlete.scheduleIds.join(".") || "" : "",
                     // Contact info
                     mail: this.props.athlete.mail || '',
                     phone1: this.props.athlete.phone1 || '',
@@ -198,7 +196,6 @@ class CreateAthlete extends React.Component<any, any> {
                         errors.dni = true
                     }
 
-                    //check if my values have errors
                     return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
@@ -222,7 +219,14 @@ class CreateAthlete extends React.Component<any, any> {
                         </Snackbar>
                         <Snackbar open={values.successMessage !== undefined && values.successMessage !== ''}
                             anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
-                            <Alert severity="success" onClose={() => { setFieldValue("successMessage", "") }}>
+                            <Alert severity="success" onClose={() => { 
+                                    setFieldValue("successMessage", "");
+                                    console.log(values.exit)
+                                    if (values.exit) {
+                                        this.props.history.push("/athletes/list");
+                                        window.location.reload();
+                                    } }
+                                }>
                                 <AlertTitle>Ok!</AlertTitle>
                                 <strong>{values.successMessage}</strong>
                             </Alert>
@@ -625,8 +629,8 @@ class CreateAthlete extends React.Component<any, any> {
                                                             specialization={values.specialization}
                                                             scheduleIds={values.scheduleIds}
                                                             onChange={(groupId: number, specialization: boolean, scheduleIds: number[]) => {
-                                                                console.log(scheduleIds)
                                                                 setFieldValue('scheduleIds', scheduleIds)
+                                                                setFieldValue('scheduleIdsStr', scheduleIds.join("."))
                                                                 setFieldValue('specialization', specialization)
                                                                 setFieldValue('groupId', groupId)
                                                             }}
@@ -668,8 +672,7 @@ class CreateAthlete extends React.Component<any, any> {
                             <Toolbar>
                                 <SaveButton text='Guardar y salir' type="submit" 
                                     onClick={() => {
-                                        values.exit = true;
-                                        console.log(values.exit)
+                                        setFieldValue('exit', true)
                                         return false;
                                     }}
                                 />

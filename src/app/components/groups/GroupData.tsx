@@ -40,7 +40,6 @@ class ConnectedForm extends React.Component<any, any> {
 
     handleSubmit() {
         this.props.addGroup(this.state)
-        window.open("/groups/list", "_self");
     }
 
     deleteGroup(groupId: number) {
@@ -95,14 +94,20 @@ class ConnectedForm extends React.Component<any, any> {
                                 />
                                 <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
                                     anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
-                                    <Alert severity="error" onClose={() => { setFieldValue("errorMessage", "") }}>
+                                    <Alert severity="error" onClose={() => { 
+                                            setFieldValue("errorMessage", "");
+                                        }}>
                                         <AlertTitle>Error</AlertTitle>
                                         <strong>{values.errorMessage}</strong>
                                     </Alert>
                                 </Snackbar>
                                 <Snackbar open={values.successMessage !== undefined && values.successMessage !== ''}
                                     anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
-                                    <Alert severity="success" onClose={() => { setFieldValue("successMessage", "") }}>
+                                    <Alert severity="success" onClose={() => { 
+                                            setFieldValue("successMessage", "") 
+                                            this.props.history.push("/groups/list");
+                                            window.location.reload(); 
+                                        }}>
                                         <AlertTitle>Ok!</AlertTitle>
                                         <strong>{values.successMessage}</strong>
                                     </Alert>

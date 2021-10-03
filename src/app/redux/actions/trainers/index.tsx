@@ -38,6 +38,9 @@ export function downloadTrainers(columns: any) {
 export function addTrainer(data: any) {
     return function (dispatch: any)  {
         return addData(data).then(json => {
+            if (!json.errorMessage) {
+                json.successMessage = "Datos guardados!"
+            }
             dispatch({ type: ADD_TRAINER, payload: json });
         });
     }

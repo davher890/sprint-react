@@ -82,7 +82,7 @@ const CustomTable: React.FC<any> = (props) => {
 
 	const getRowData = (row: any) => {
 		let columnNames : string[] = visibleColumns.map((c: any) => c.dataField)
-		return Object.keys(row).filter((key:string) => columnNames.includes(key)).map(column => (
+		return columnNames.map(column => (
 			<TableCell key={ row.id + "_" + column } component="th" scope="row">
 				{row[column]}
 			</TableCell>
