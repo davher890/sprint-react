@@ -16,19 +16,11 @@ const FeeInfo: React.FC<any> = (props) => {
     React.useEffect(() => {
         getFeeInfo()
     }, [props.specialization, props.scheduleIds, props.scheduleIdsStr, props.firstSurname, props.secondSurname,
-        props.phone1, props.phone2, props.phone3])
+        props.phone1, props.phone2, props.phone3, props.sportSchoolId])
 
 
     const getFeeInfo = () => {
-        props.getAthleteFee({ 
-            specialization: props.specialization,
-            scheduleIds: props.scheduleIds,
-            firstSurname: props.firstSurname,
-            secondSurname: props.secondSurname,
-            phone1: props.phone1,
-            phone2: props.phone2,
-            phone3: props.phone3
-        })
+        props.getAthleteFee(props)
     }
 
     return (
