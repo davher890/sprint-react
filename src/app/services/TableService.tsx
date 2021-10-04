@@ -5,7 +5,7 @@ export const findAthleteDataPagination = (page: number, size: number, filters: a
     return findDataPagination("athletes", page, size, filters)
 }
 
-export const findDuplicatedAthletesDataPagination = (id: number, name: string, firstSurname: string, dni: string, page=1, size=10, filters: any) => {
+export const findDuplicatedAthletesDataPagination = (id: number, name: string, firstSurname: string, dni: string, page=0, size=10, filters: any) => {
 
     if(!filters){
         filters = {}

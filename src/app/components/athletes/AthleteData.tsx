@@ -221,10 +221,15 @@ class CreateAthlete extends React.Component<any, any> {
                             anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
                             <Alert severity="success" onClose={() => { 
                                     setFieldValue("successMessage", "");
-                                    console.log(values.exit)
                                     if (values.exit) {
-                                        this.props.history.push("/athletes/list");
-                                        window.location.reload();
+                                        window.open("/athletes/list", "_self");
+                                        // this.props.history.push("/athletes/list");
+                                        // window.location.reload();
+                                    }
+                                    else {
+                                        window.open("/athletes", "_self");
+                                        // this.props.history.push("/athletes");
+                                        // window.location.reload();
                                     } }
                                 }>
                                 <AlertTitle>Ok!</AlertTitle>
