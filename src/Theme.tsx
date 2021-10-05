@@ -38,7 +38,7 @@ const globalTheme = createTheme({
     overrides: {
       MuiTableContainer: {
         root: {
-          height: "300px"
+          height: "80%"
         }
       },
       MuiTableCell: {

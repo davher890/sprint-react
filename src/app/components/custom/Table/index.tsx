@@ -91,70 +91,66 @@ const CustomTable: React.FC<any> = (props) => {
 
 	return (
 		<Grid container spacing={3} direction="column">
-			<Grid container item style={{ display: props.showColumns ? "block" : "none" }}>
-				<Grid item xs>
-					<ColumnsSelect 
-						columns={columns}
-						changeEvent={(cols: any) => { 
-							setColumns(cols) 
-							setVisibleColumns(cols.filter((c: any) => c.show === undefined || c.show === true))
-						}}
-						showDownloadData={props.downloadData !== undefined}
-						downloadData={downloadData}
-					/>
-				</Grid>
+			<Grid item style={{ display: props.showColumns ? "block" : "none" }}>
+				<ColumnsSelect 
+					columns={columns}
+					changeEvent={(cols: any) => { 
+						setColumns(cols) 
+						setVisibleColumns(cols.filter((c: any) => c.show === undefined || c.show === true))
+					}}
+					showDownloadData={props.downloadData !== undefined}
+					downloadData={downloadData}
+				/>
 			</Grid>
-			<Grid container item spacing={1}>
-				<Grid item xs>
-					<TableContainer>
-						<Table stickyHeader>
-							<TableHead>
-								<TableRow>
-									{visibleColumns.map((column) => (
-										<TableCell key={column.dataField}>
-										{ column.filter ?
-											<TextField dense='true' label={column.text} className={classes.root} 
-												InputProps={{ className: classes.input }}
-												InputLabelProps={{
-													classes: {
-													  root: classes.label,
-													  focused: classes.focused,
-													},
-												  }}
-												onChange={(e: any) => {
-													handleFilterChange(column.filter.type, column.dataField, e.target.value)
-												}} 
-											>	
-											</TextField>
-											: column.text
-										}
-										</TableCell>
-									))}
+			<Grid item spacing={3}>
+				<TableContainer>
+					<Table stickyHeader>
+						<TableHead>
+							<TableRow>
+								{visibleColumns.map((column) => (
+									<TableCell key={column.dataField}>
+									{ column.filter ?
+										<TextField dense='true' label={column.text} className={classes.root} 
+											InputProps={{ className: classes.input }}
+											InputLabelProps={{
+												classes: {
+													root: classes.label,
+													focused: classes.focused,
+												},
+												}}
+											onChange={(e: any) => {
+												handleFilterChange(column.filter.type, column.dataField, e.target.value)
+											}} 
+										>	
+										</TextField>
+										: column.text
+									}
+									</TableCell>
+								))}
+							</TableRow>
+						</TableHead>
+						<TableBody>
+						{
+							props.data.map((row:any) => (
+								<TableRow hover key={row.id} onClick={() => onRowClick(row.id)}>
+									{ getRowData(row) }
 								</TableRow>
-							</TableHead>
-							<TableBody>
-							{
-								props.data.map((row:any) => (
-									<TableRow hover key={row.id} onClick={() => onRowClick(row.id)}>
-										{ getRowData(row) }
-									</TableRow>
-								))
-							}
-							</TableBody>
-							
-						</Table>
-					</TableContainer>
-					<TablePagination
-						rowsPerPageOptions={[5, 10, 25]}
-						component="div"
-						count={props.total}
-						page={page}
-						rowsPerPage={pageSize}
-						onPageChange={handlePageChange}
-						onRowsPerPageChange={handlePageSizeChange}
-						ActionsComponent={TablePaginationActions}
-					/>
-				</Grid>
+							))
+						}
+						</TableBody>
+						
+					</Table>
+				</TableContainer>
+				<TablePagination
+					rowsPerPageOptions={[5, 10, 25]}
+					component="div"
+					count={props.total}
+					page={page}
+					rowsPerPage={pageSize}
+					onPageChange={handlePageChange}
+					onRowsPerPageChange={handlePageSizeChange}
+					ActionsComponent={TablePaginationActions}
+				/>
 			</Grid>
 		</Grid>
 	)
