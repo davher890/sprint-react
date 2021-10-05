@@ -28,6 +28,9 @@ export function getSchedule(id: number) {
 export function addSchedule(data: any) {
     return function (dispatch: any)  {
         return addData(data).then(json => {
+            if (!json.errorMessage) {
+                json.successMessage = "Datos guardados!"
+            }
             dispatch({ type: ADD_SCHEDULE, payload: json });
         });
     }

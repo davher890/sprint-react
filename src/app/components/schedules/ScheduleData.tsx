@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { Formik } from 'formik';
 
-import { Grid, Snackbar, Container } from "@material-ui/core";
+import { Grid, AppBar, Toolbar, Snackbar, Container } from "@material-ui/core";
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 import MemoTextField from '../custom/TextField';
@@ -82,7 +82,11 @@ class ConnectedForm extends React.Component<any, any> {
                             </Snackbar>
                             <Snackbar open={values.successMessage !== undefined && values.successMessage !== ''}
                                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
-                                <Alert severity="success" onClose={() => { setFieldValue("successMessage", "") }}>
+                                <Alert severity="success" onClose={() => { 
+                                        setFieldValue("successMessage", "") 
+                                        this.props.history.push("/schedules/list");
+                                        window.location.reload(); 
+                                    }}>
                                     <AlertTitle>Ok!</AlertTitle>
                                     <strong>{values.successMessage}</strong>
                                 </Alert>
@@ -124,7 +128,11 @@ class ConnectedForm extends React.Component<any, any> {
                                 </Grid>
                             </Grid>
                             <Grid>
-                                <SaveButton type="submit" disabled={isSubmitting}/>
+                                <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
+                                    <Toolbar>
+                                        <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
+                                    </Toolbar>
+                                </AppBar>                            
                             </Grid>
                         </form>
                     )}

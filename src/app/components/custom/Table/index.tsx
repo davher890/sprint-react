@@ -41,20 +41,27 @@ const CustomTable: React.FC<any> = (props) => {
 
 		if (!filterValue || filterValue === ''){
 			delete filterObj[filterField]
+			setFilterObj(filterObj)
+
+			setPage(0)
+			props.onPaginationFilterChange(0, pageSize, filterObj)
 		}
 		else {
-			filterObj[filterField] = {
-				filterVal : filterValue,
-				comparator: "LIKE"
-			}
-			if (filterType === 'number'){
-				filterObj[filterField].comparator = "="
+			if (filterValue.length > 2){
+				filterObj[filterField] = {
+					filterVal : filterValue,
+					comparator: "LIKE"
+				}
+				if (filterType === 'number'){
+					filterObj[filterField].comparator = "="
+				}
+				setFilterObj(filterObj)
+
+				setPage(0)
+				props.onPaginationFilterChange(0, pageSize, filterObj)
 			}
 		}
-		setFilterObj(filterObj)
-
-		setPage(0)
-		props.onPaginationFilterChange(0, pageSize, filterObj)
+		
 	}
 
 	const handlePageChange = (event: any, newPage: number) => {
