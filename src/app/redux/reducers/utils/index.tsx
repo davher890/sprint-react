@@ -1,5 +1,15 @@
 import { LOAD_SPORTSCHOOL_TABLE, LOAD_GROUP_TABLE, LOAD_ATHLETE_TABLE, LOAD_FAMILY_TABLE, LOAD_HISTORIC_TABLE, LOAD_SCHEDULE_TABLE, LOAD_TRAINER_TABLE, LOAD_GROUP_ATHLETES_TABLE, LOAD_ATHLETE_SPORTDATA_TABLE, LOAD_DUPLICATED_ATHLETES_TABLE } from "../../constants/action_types";
 
+let daysMap = new Map([
+    ["monday", "Lunes"],
+    ["tuesday", "Martes"],
+    ["wednesday", "Miércoles"],
+    ["thursday", "Jueves"],
+    ["friday", "Viernes"],
+    ["saturday", "Sábado"],
+    ["sunday", "Domingo"]
+])
+
 function sportSchoolDataConversor(d: { id: number, name: string, municipality: string, address: string }) {
     return {
         id: d.id,
@@ -49,10 +59,10 @@ function familyDataConversor(d: { id: number, code: number, count: number }) {
     }
 }
 
-function scheduleDataConversor(d: any){
+function scheduleDataConversor(d: {id: number, day: string, startHour: number, startMinute: number, endHour: number, endMinute: number}){
     return {
         id : d.id, 
-        day: d.day, 
+        day: daysMap.get(d.day.toLowerCase()), 
         start: d.startHour + ':' + (d.startMinute.toString().length < 2 ? (d.startMinute + '0') : d.startMinute),
         end: d.endHour + ':' + (d.endMinute.toString().length < 2 ? (d.endMinute + '0') : d.endMinute)
     }

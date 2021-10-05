@@ -89,7 +89,7 @@ class ConnectedForm extends React.Component<any, any> {
                             </Snackbar>
                             <Grid container direction="row" spacing={2}>
                                 <Grid item xs>
-                                    <Select fullWidth name="day" label="Género" error={touched.day && errors.day}
+                                    <Select fullWidth name="day" label="Día de la semana" error={touched.day && errors.day}
                                         options={[
                                             { id: "MONDAY", name: "Lunes" }, 
                                             { id: "TUESDAY", name: "Martes" }, 
