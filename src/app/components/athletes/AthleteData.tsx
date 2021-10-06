@@ -15,7 +15,6 @@ import CustomCard from '../custom/Card'
 import GroupScheduleSelect from '../custom/GroupScheduleSelect'
 import SportSchoolSelect from '../custom/SportSchoolSelect'
 import SaveButton from '../custom/SaveButton'
-import AddButton from '../custom/AddButton'
 import SearchButton from '../custom/SearchButton'
 import Select from '../custom/Select'
 import Button from '../custom/Button'
@@ -24,25 +23,22 @@ import FeeInfo from '../custom/FeeInfo'
 import PhoneCard from '../custom/PhoneCard'
 
 import AthleteSportdata from './AthleteSportdata'
-import DuplicatedAthletes from './DuplicatedAthletes'
 
 // Redux
 import { connect } from "react-redux";
-import { addAthlete, getAthlete, getAthletesByPhone, getAthletesBySurnames, getDuplicatedAthletesTable } from "../../redux/actions/athletes";
+import { addAthlete, getAthlete, getAthletesByPhone, getAthletesBySurnames, doRegisterAthlete, doUnregisterAthlete } from "../../redux/actions/athletes";
+import { getSportSchoolFeeTypes } from "../../redux/actions/sportSchools";
 
 class CreateAthlete extends React.Component<any, any> {
 
     constructor(props: {}) {
         super(props);
         this.state = {};
-
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
-
-        
     }
 
     componentDidMount() {
-        if (this.props.match && this.props.match.params && this.props.match.params.id) {
+        if (!this.isNewAthlete()) {
             let id = this.props.match.params.id
             this.getAthlete(id)
         }
@@ -50,9 +46,7 @@ class CreateAthlete extends React.Component<any, any> {
 
     getAthlete(id: Number) {
         this.props.getAthlete(id).then((data: Object) => {
-            this.setState({
-                feeTypes: utils.getFeeTypes(this.props.athlete.sportSchoolId)
-            })
+            this.props.getSportSchoolFeeTypes(this.props.athlete.sportSchoolId)
         });
     }
 
@@ -95,6 +89,10 @@ class CreateAthlete extends React.Component<any, any> {
             phoneList.push(phone3)
         }
         return phoneList;
+    }
+
+    isNewAthlete() {
+        return !(this.props.match && this.props.match.params && this.props.match.params.id)
     }
 
     isMatchingAthletes() {
@@ -174,7 +172,6 @@ class CreateAthlete extends React.Component<any, any> {
                     registerDate: moment(new Date()).format("YYYY-MM-DD"),
                     openRegisterDialog: false,
                     openSportdataDialog: false,
-                    openDuplicatedAthletes: false,
                     openMatchingAthletes: false,
                     
                     exit: false,
@@ -259,32 +256,12 @@ class CreateAthlete extends React.Component<any, any> {
                             </Alert>
                         </Snackbar>
 
-                        <Dialog fullWidth={true} maxWidth="xl" open={values.openDuplicatedAthletes} aria-labelledby="form-dialog-title"
-                            onClose={() => {
-                                setFieldValue('openDuplicatedAthletes', false)
-                            }}
-                        >
-                            <DialogTitle id="form-dialog-title">Histórico deportivo</DialogTitle>
-                            <DialogContent>
-                                <Grid container>
-                                    <DuplicatedAthletes 
-                                        id={values.id}
-                                        name={values.name}
-                                        firstSurname={values.firstSurname}
-                                        dni={values.dni} />
-                                </Grid>
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={() => { setFieldValue('openDuplicatedAthletes', false) }} color="secondary" text="Cerrar" />
-                            </DialogActions>
-                        </Dialog>
-
                         <Dialog fullWidth={true} maxWidth="xl" open={values.openMatchingAthletes} aria-labelledby="form-dialog-title"
                             onClose={() => {
                                 setFieldValue('openMatchingAthletes', false)
                             }}
                         >
-                            <DialogTitle id="form-dialog-title">Coincidencias por telefono</DialogTitle>
+                            <DialogTitle id="form-dialog-title">Atletas coincidentes</DialogTitle>
                             <DialogContent>
                                 <Grid container>
                                     <TableContainer><Table stickyHeader>
@@ -298,6 +275,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                 <TableCell>Teléfono 1</TableCell>
                                                 <TableCell>Teléfono 2</TableCell>
                                                 <TableCell>Teléfono 3</TableCell>
+                                                <TableCell></TableCell>
                                                 <TableCell></TableCell>
                                             </TableRow>
                                         </TableHead>
@@ -314,7 +292,12 @@ class CreateAthlete extends React.Component<any, any> {
                                                         <TableCell>{ row.phone1 }</TableCell>
                                                         <TableCell>{ row.phone2 }</TableCell>
                                                         <TableCell>{ row.phone3 }</TableCell>
-                                                        <TableCell><Button text='Seleccionar familia'onClick={() => { setFieldValue("familyCode", row.familyCode) }}/></TableCell>
+                                                        <TableCell><Button text='Seleccionar familia'
+                                                            onClick={() => { 
+                                                                setFieldValue("familyCode", row.familyCode) 
+                                                                setFieldValue('openMatchingAthletes', false)
+                                                            }}/>
+                                                        </TableCell>
                                                         <TableCell><SearchButton text='Abrir atleta' onClick={() => { window.open("/athletes/" + row.id, "_self");}}/></TableCell>
                                                     </TableRow>
                                                 })
@@ -341,10 +324,11 @@ class CreateAthlete extends React.Component<any, any> {
                                                             onChange={(sportSchoolId: number) => {
                                                                 setFieldValue('sportSchoolId', sportSchoolId);
                                                                 if (sportSchoolId) {
-                                                                    setFieldValue('feeTypes', utils.getFeeTypes(sportSchoolId));
-                                                                    if (values.feeType) {
-                                                                        setFieldValue('feeType', values.feeType);
-                                                                    }
+                                                                    this.props.getSportSchoolFeeTypes(sportSchoolId).then(() => {
+                                                                        if (values.feeType) {
+                                                                            setFieldValue('feeType', values.feeType);
+                                                                        }
+                                                                    })
                                                                 }
                                                             }}
                                                         />
@@ -375,18 +359,12 @@ class CreateAthlete extends React.Component<any, any> {
                                                 </DialogContent>
                                                 <DialogActions>
                                                     <Button onClick={() => {
-                                                        const requestOptions = {
-                                                            method: 'POST',
-                                                            headers: { 'Content-Type': 'application/json' },
-                                                            body: JSON.stringify({ date: values.registerDate })
+                                                        if (values.registered){
+                                                            this.props.doUnregisterAthlete(values.id)
                                                         }
-
-                                                        fetch(process.env.REACT_APP_SERVER_URL + "/athletes/" + values.id + (values.registered ? "/unregister" : "/register"), requestOptions)
-                                                            .then(res => res.json())
-                                                            .then(data => {
-                                                                setFieldValue('openRegisterDialog', false)
-                                                                this.getAthlete(values.id)
-                                                            });
+                                                        else {
+                                                            this.props.doRegisterAthlete(values.id)
+                                                        }
                                                     }} color="primary"
                                                         text={values.registered ? 'Dar de baja' : 'Dar de alta'} />
                                                     <Button onClick={() => { setFieldValue('openRegisterDialog', false) }} color="secondary"
@@ -422,13 +400,6 @@ class CreateAthlete extends React.Component<any, any> {
                                                         <Grid item xs>
                                                             <MemoTextField name="name" label="Nombre" value={values.name} margin="dense"
                                                                 error={touched.name && errors.name} onChange={handleChange} 
-                                                                onBlur={() => {
-                                                                    if (values.name && values.firstSurname && values.dni){
-                                                                        this.props.getDuplicatedAthletesTable(values.id, values.name, values.firstSurname, values.dni).then((d: any) => {
-                                                                            setFieldValue('openDuplicatedAthletes', this.props.duplicated_athletes && this.props.duplicated_athletes.length > 0)
-                                                                        })
-                                                                    }
-                                                                }}
                                                             />
                                                         </Grid>
                                                         <Grid item xs>
@@ -438,16 +409,11 @@ class CreateAthlete extends React.Component<any, any> {
                                                                     if (values.familiarOneFirstSurname === '') {
                                                                         setFieldValue('familiarOneFirstSurname', e.target.value);
                                                                     }
-                                                                    if (values.firstSurname !== '' && values.secondSurname !== ''){
+                                                                    if (this.isNewAthlete() && values.firstSurname !== '' && values.secondSurname !== ''){
                                                                         return this.props.getAthletesBySurnames(values.firstSurname, values.secondSurname).then(() => {
                                                                             setFieldValue('openMatchingAthletes', this.isMatchingAthletes())
                                                                         })
                                                                     }
-                                                                    // if (values.name && values.firstSurname && values.dni){
-                                                                    //     this.props.getDuplicatedAthletesTable(values.id, values.name, values.firstSurname, values.dni).then((d: any) => {
-                                                                    //         setFieldValue('openDuplicatedAthletes', this.props.duplicated_athletes && this.props.duplicated_athletes.length > 0)
-                                                                    //     })
-                                                                    // }
                                                                 }}
                                                                 onChange={handleChange}
                                                             />
@@ -459,7 +425,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                                     if (values.familiarTwoFirstSurname === '') {
                                                                         setFieldValue('familiarTwoFirstSurname', e.target.value);
                                                                     }
-                                                                    if (values.firstSurname !== '' && values.secondSurname !== ''){
+                                                                    if (this.isNewAthlete() && values.firstSurname !== '' && values.secondSurname !== ''){
                                                                         return this.props.getAthletesBySurnames(values.firstSurname, values.secondSurname).then(() => {
                                                                             setFieldValue('openMatchingAthletes', this.isMatchingAthletes())
                                                                         })
@@ -497,14 +463,6 @@ class CreateAthlete extends React.Component<any, any> {
                                                         <Grid item xs>
                                                             <MemoTextField name="dni" label="DNI/NIE" type="text" value={values.dni}
                                                                 error={touched.dni && errors.dni} onChange={handleChange}
-                                                                onBlur={() => {
-                                                                    if (values.name && values.firstSurname && values.dni){
-                                                                        this.props.getDuplicatedAthletesTable(values.id, values.name, values.firstSurname, values.dni).then((d: any) => {
-                                                                            setFieldValue('openDuplicatedAthletes', this.props.duplicated_athletes && this.props.duplicated_athletes.length > 0)
-                                                                        })
-                                                                        
-                                                                    }
-                                                                }}
                                                             />
                                                         </Grid>
                                                         <Grid item xs>
@@ -540,7 +498,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                         }}
                                                         onBlur={() => {
                                                             let phoneList = this.getPhoneList(values.phone1, values.phone2, values.phone3)
-                                                            if (phoneList.length > 0){
+                                                            if (this.isNewAthlete() && phoneList.length > 0){
                                                                 return this.props.getAthletesByPhone(phoneList).then(() => {
                                                                     setFieldValue('openMatchingAthletes', this.isMatchingAthletes())
                                                                 })
@@ -565,10 +523,9 @@ class CreateAthlete extends React.Component<any, any> {
                                                 </Grid>
                                             </CustomCard>
                                         </Grid>
-                                        
                                     </Grid>
                                     <Grid container item spacing={2}>
-                                    <Grid item xs>
+                                        <Grid item xs>
                                             <CustomCard title="Datos Familiares">
                                                 <Typography color="textSecondary">Familiar 1</Typography>
                                                 <Grid container direction="column" spacing={2}>
@@ -628,7 +585,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                         </Grid>
                                                         <Grid item xs>
                                                             <Select fullWidth name="feeType" label="Tipo de cuota"
-                                                                options={values.feeTypes} value={values.feeType} error={touched.feeType && errors.feeType}
+                                                                options={this.props.fee_types} value={values.feeType} error={touched.feeType && errors.feeType}
                                                                 onChange={(e: any, value: any) => {
                                                                     setFieldValue('feeType', value ? value.id : "")
                                                                 }}
@@ -774,9 +731,11 @@ class CreateAthlete extends React.Component<any, any> {
 const mapDispatchToProps = {
     addAthlete, 
     getAthlete,
-    getDuplicatedAthletesTable,
     getAthletesByPhone,
-    getAthletesBySurnames
+    getAthletesBySurnames,
+    getSportSchoolFeeTypes,
+    doRegisterAthlete, 
+    doUnregisterAthlete
 }
 
 const mapStateToProps = (state: any) => {
@@ -784,7 +743,7 @@ const mapStateToProps = (state: any) => {
         athlete: state.athlete_reducer.athlete,
         athletes_by_phone: state.athlete_reducer.athletes_by_phone,
         athletes_by_surnames: state.athlete_reducer.athletes_by_surnames,
-        duplicated_athletes: state.table_reducer.table_data
+        fee_types: state.sport_school_reducer.fee_types,
     };
 };
 

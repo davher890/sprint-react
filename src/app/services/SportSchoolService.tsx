@@ -12,6 +12,10 @@ export const findById = (id: number) => {
     return getRequest("/sport_schools/" + id)
 }
 
+export const findFeeTypesById = (id: number) => {
+    return getRequest("/sport_schools/" + id + "/fee_types")
+}
+
 export const downloadExcel = (columns: any) => {
     return fetch(process.env.REACT_APP_SERVER_URL + "/sport_schools/excel", columns)
         .then(response => {

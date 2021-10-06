@@ -12,6 +12,14 @@ export const findByPhone = (phoneList: string[]) => {
     return getRequest("/athletes/phone?phone_list=" + phoneList.join(','))
 }
 
+export const registerAthlete = (id: number) => {
+    return getRequest("/athletes/" + id + "/register")
+}
+
+export const unregisterAthlete = (id: number) => {
+    return getRequest("/athletes/" + id + "/unregister")
+}
+
 export const findBySurnames = (firstSurname: string, secondSurname: string) => {
     return getRequest("/athletes/surnames?first_surname=" + firstSurname + "&second_surname=" + secondSurname)
 }

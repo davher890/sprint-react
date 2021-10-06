@@ -110,42 +110,6 @@ const functions = {
         ]
     },
 
-    getFeeTypes: function (sportSchoolId: number) {
-        if (sportSchoolId === 1) {
-
-            // Santa Ana
-            return [
-                { id: 'CLUB', name: 'Club' },
-                { id: 'CLUB_ANUAL', name: 'Club Anual' },
-                { id: 'PISTAS', name: 'Pistas' },
-                { id: 'LIC_PISTAS', name: 'Licencia/Pistas' },
-                { id: 'ENTRENADOR', name: 'Entrenadores' }
-            ]
-        }
-
-        else if (sportSchoolId === 2) {
-
-            // Paracuellos
-            return [
-                { id: 'CLLUB', name: 'Club' },
-                { id: 'CLUB_ANUAL', name: 'Club Anual' },
-            ]
-        }
-
-        else if (sportSchoolId === 3) {
-
-            // Externos
-            return [
-                { id: 'LICENCIA', name: 'Licencia' },
-                { id: 'SOCIO', name: 'Socio' },
-                { id: 'ENTRENADOR', name: 'Entrenadores' },
-            ]
-        }
-        else {
-            return []
-        }
-    },
-
     leftPadding: (str: string, max: number, c: string): string => {
         str = str.toString();
         return str.length < max ? functions.leftPadding(c + str, max, c) : str;
