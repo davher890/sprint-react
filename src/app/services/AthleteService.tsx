@@ -8,6 +8,14 @@ export const findById = (id: number) => {
     return getRequest("/athletes/" + id)
 }
 
+export const findByPhone = (phoneList: string[]) => {
+    return getRequest("/athletes/phone?phone_list=" + phoneList.join(','))
+}
+
+export const findBySurnames = (firstSurname: string, secondSurname: string) => {
+    return getRequest("/athletes/surnames?first_surname=" + firstSurname + "&second_surname=" + secondSurname)
+}
+
 export const findAthleteFee = (body: any) => {
     return postRequest("/athletes/fee", body)
 }

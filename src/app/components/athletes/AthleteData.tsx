@@ -7,6 +7,7 @@ import { Formik } from 'formik';
 
 import { CardHeader, Grid, AppBar, Toolbar, Snackbar, Typography, Box, Checkbox } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
+import { Table, TableBody, TableHead, TableRow, TableCell, TableContainer } from '@material-ui/core';
 
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 
@@ -14,17 +15,20 @@ import CustomCard from '../custom/Card'
 import GroupScheduleSelect from '../custom/GroupScheduleSelect'
 import SportSchoolSelect from '../custom/SportSchoolSelect'
 import SaveButton from '../custom/SaveButton'
+import AddButton from '../custom/AddButton'
+import SearchButton from '../custom/SearchButton'
 import Select from '../custom/Select'
 import Button from '../custom/Button'
 import MemoTextField from '../custom/TextField'
 import FeeInfo from '../custom/FeeInfo'
+import PhoneCard from '../custom/PhoneCard'
 
 import AthleteSportdata from './AthleteSportdata'
 import DuplicatedAthletes from './DuplicatedAthletes'
 
 // Redux
 import { connect } from "react-redux";
-import { addAthlete, getAthlete, getDuplicatedAthletesTable } from "../../redux/actions/athletes";
+import { addAthlete, getAthlete, getAthletesByPhone, getAthletesBySurnames, getDuplicatedAthletesTable } from "../../redux/actions/athletes";
 
 class CreateAthlete extends React.Component<any, any> {
 
@@ -53,10 +57,7 @@ class CreateAthlete extends React.Component<any, any> {
     }
 
     handleFormSubmit() {
-        this.props.addAthlete(this.state).then((data: Object) => {
-
-            
-        })
+        this.props.addAthlete(this.state)
     }
 
     isValidDni(dni: string) {
@@ -78,6 +79,26 @@ class CreateAthlete extends React.Component<any, any> {
         else{
             return false
         }
+    }
+
+    getPhoneList(phone1: string, phone2: string, phone3: string): string[] {
+
+        // Check relatives by phone
+        let phoneList: string[] = [];
+        if (phone1 && phone1 !== ''){
+            phoneList.push(phone1)
+        }
+        if (phone2 && phone2 !== ''){
+            phoneList.push(phone2)
+        }
+        if (phone3 && phone3 !== ''){
+            phoneList.push(phone3)
+        }
+        return phoneList;
+    }
+
+    isMatchingAthletes() {
+        return (this.props.athletes_by_surnames && this.props.athletes_by_surnames.length > 0) || (this.props.athletes_by_phone && this.props.athletes_by_phone.length > 0)                                                                     
     }
 
     render() {
@@ -154,7 +175,8 @@ class CreateAthlete extends React.Component<any, any> {
                     openRegisterDialog: false,
                     openSportdataDialog: false,
                     openDuplicatedAthletes: false,
-
+                    openMatchingAthletes: false,
+                    
                     exit: false,
 
                     errorMessage: this.props.athlete.errorMessage || '',
@@ -169,7 +191,7 @@ class CreateAthlete extends React.Component<any, any> {
                     if (values.firstSurname  === '') errors.firstSurname = true;
                     if (values.birthDate  === '') errors.birthDate = true;
                     if (values.gender  === '') errors.gender = true;
-                    if (values.phone1  === '') errors.phone1 = true;
+                    if (values.phone1  === '' && values.phone2  === '' && values.phone3  === '') errors.phone1 = true;
                     if (values.mail  === '') errors.mail = true;
                     if (values.municipality  === '') errors.municipality = true;
                     if (values.postalCode  === '') errors.postalCode = true;
@@ -230,8 +252,8 @@ class CreateAthlete extends React.Component<any, any> {
                                         window.open("/athletes", "_self");
                                         // this.props.history.push("/athletes");
                                         // window.location.reload();
-                                    } }
-                                }>
+                                    } 
+                                }}>
                                 <AlertTitle>Ok!</AlertTitle>
                                 <strong>{values.successMessage}</strong>
                             </Alert>
@@ -254,6 +276,56 @@ class CreateAthlete extends React.Component<any, any> {
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={() => { setFieldValue('openDuplicatedAthletes', false) }} color="secondary" text="Cerrar" />
+                            </DialogActions>
+                        </Dialog>
+
+                        <Dialog fullWidth={true} maxWidth="xl" open={values.openMatchingAthletes} aria-labelledby="form-dialog-title"
+                            onClose={() => {
+                                setFieldValue('openMatchingAthletes', false)
+                            }}
+                        >
+                            <DialogTitle id="form-dialog-title">Coincidencias por telefono</DialogTitle>
+                            <DialogContent>
+                                <Grid container>
+                                    <TableContainer><Table stickyHeader>
+                                        <TableHead>
+							                <TableRow>
+                                                <TableCell>Nombre</TableCell>
+                                                <TableCell>Primer Apellido</TableCell>
+                                                <TableCell>Segundo Apellido</TableCell>   
+                                                <TableCell>Código Atleta</TableCell>
+                                                <TableCell>Código Familia</TableCell>
+                                                <TableCell>Teléfono 1</TableCell>
+                                                <TableCell>Teléfono 2</TableCell>
+                                                <TableCell>Teléfono 3</TableCell>
+                                                <TableCell></TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {
+                                                this.props.athletes_by_phone && this.props.athletes_by_surnames ? 
+                                                this.props.athletes_by_phone.concat(this.props.athletes_by_surnames).map((row: any) => {
+                                                    return <TableRow hover key={row.id}>
+                                                        <TableCell>{ row.name }</TableCell>
+                                                        <TableCell>{ row.firstSurname }</TableCell>
+                                                        <TableCell>{ row.secondSurname }</TableCell>
+                                                        <TableCell>{ row.code }</TableCell>
+                                                        <TableCell>{ row.familyCode }</TableCell>
+                                                        <TableCell>{ row.phone1 }</TableCell>
+                                                        <TableCell>{ row.phone2 }</TableCell>
+                                                        <TableCell>{ row.phone3 }</TableCell>
+                                                        <TableCell><Button text='Seleccionar familia'onClick={() => { setFieldValue("familyCode", row.familyCode) }}/></TableCell>
+                                                        <TableCell><SearchButton text='Abrir atleta' onClick={() => { window.open("/athletes/" + row.id, "_self");}}/></TableCell>
+                                                    </TableRow>
+                                                })
+                                                : null
+                                            }
+                                        </TableBody>
+                                    </Table></TableContainer>
+                                </Grid>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => { setFieldValue('openMatchingAthletes', false) }} color="secondary" text="Cerrar" />
                             </DialogActions>
                         </Dialog>
 
@@ -366,11 +438,16 @@ class CreateAthlete extends React.Component<any, any> {
                                                                     if (values.familiarOneFirstSurname === '') {
                                                                         setFieldValue('familiarOneFirstSurname', e.target.value);
                                                                     }
-                                                                    if (values.name && values.firstSurname && values.dni){
-                                                                        this.props.getDuplicatedAthletesTable(values.id, values.name, values.firstSurname, values.dni).then((d: any) => {
-                                                                            setFieldValue('openDuplicatedAthletes', this.props.duplicated_athletes && this.props.duplicated_athletes.length > 0)
+                                                                    if (values.firstSurname !== '' && values.secondSurname !== ''){
+                                                                        return this.props.getAthletesBySurnames(values.firstSurname, values.secondSurname).then(() => {
+                                                                            setFieldValue('openMatchingAthletes', this.isMatchingAthletes())
                                                                         })
                                                                     }
+                                                                    // if (values.name && values.firstSurname && values.dni){
+                                                                    //     this.props.getDuplicatedAthletesTable(values.id, values.name, values.firstSurname, values.dni).then((d: any) => {
+                                                                    //         setFieldValue('openDuplicatedAthletes', this.props.duplicated_athletes && this.props.duplicated_athletes.length > 0)
+                                                                    //     })
+                                                                    // }
                                                                 }}
                                                                 onChange={handleChange}
                                                             />
@@ -381,6 +458,11 @@ class CreateAthlete extends React.Component<any, any> {
                                                                 onBlur={(e: any) => {
                                                                     if (values.familiarTwoFirstSurname === '') {
                                                                         setFieldValue('familiarTwoFirstSurname', e.target.value);
+                                                                    }
+                                                                    if (values.firstSurname !== '' && values.secondSurname !== ''){
+                                                                        return this.props.getAthletesBySurnames(values.firstSurname, values.secondSurname).then(() => {
+                                                                            setFieldValue('openMatchingAthletes', this.isMatchingAthletes())
+                                                                        })
                                                                     }
                                                                 }}
                                                                 onChange={handleChange}
@@ -450,23 +532,20 @@ class CreateAthlete extends React.Component<any, any> {
                                                                 onChange={handleChange} error={touched.mail && errors.mail} />
                                                         </Grid>
                                                     </Grid>
-                                                    <Grid container item spacing={1}>
-                                                        <Grid item xs>
-                                                            <MemoTextField name="phone1" type="tel" value={values.phone1} label="Teléfono 1" 
-                                                                onChange={handleChange} error={touched.phone1 && errors.phone1}
-                                                            />
-                                                        </Grid>
-                                                        <Grid item xs>
-                                                            <MemoTextField name="phone2" type="tel" value={values.phone2} label="Teléfono 2" 
-                                                                onChange={handleChange} error={touched.phone2 && errors.phone2}
-                                                            />
-                                                        </Grid>
-                                                        <Grid item xs>
-                                                            <MemoTextField name="phone3" type="tel" value={values.phone3} label="Teléfono 3"
-                                                                onChange={handleChange} error={touched.phone3 && errors.phone3}
-                                                            />
-                                                        </Grid>
-                                                    </Grid>
+                                                    <PhoneCard phone1={values.phone1} phone2={values.phone2} phone3={values.phone3}
+                                                        onChange={(phone1:string, phone2:string, phone3:string) => {
+                                                            setFieldValue('phone1', phone1)
+                                                            setFieldValue('phone2', phone2)
+                                                            setFieldValue('phone3', phone3)
+                                                        }}
+                                                        onBlur={() => {
+                                                            let phoneList = this.getPhoneList(values.phone1, values.phone2, values.phone3)
+                                                            if (phoneList.length > 0){
+                                                                return this.props.getAthletesByPhone(phoneList).then(() => {
+                                                                    setFieldValue('openMatchingAthletes', this.isMatchingAthletes())
+                                                                })
+                                                            }
+                                                        }} />
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs>
                                                             <MemoTextField name="municipality" label="Municipio" value={values.municipality} onChange={handleChange}
@@ -695,12 +774,16 @@ class CreateAthlete extends React.Component<any, any> {
 const mapDispatchToProps = {
     addAthlete, 
     getAthlete,
-    getDuplicatedAthletesTable
+    getDuplicatedAthletesTable,
+    getAthletesByPhone,
+    getAthletesBySurnames
 }
 
 const mapStateToProps = (state: any) => {
     return {
         athlete: state.athlete_reducer.athlete,
+        athletes_by_phone: state.athlete_reducer.athletes_by_phone,
+        athletes_by_surnames: state.athlete_reducer.athletes_by_surnames,
         duplicated_athletes: state.table_reducer.table_data
     };
 };

@@ -1,12 +1,13 @@
-import { ADD_ATHLETE, GET_ATHLETE, GET_ATHLETE_FEE, 
+import { ADD_ATHLETE, GET_ATHLETE, GET_ATHLETE_FEE, GET_ATHLETES_BY_PHONE,
     DOWNLOAD_ATHLETES, LOAD_ATHLETE_TABLE, 
     LOAD_HISTORIC_TABLE, 
     LOAD_ATHLETE_SPORTDATA_TABLE,
     ADD_ATHLETE_SPORTDATA,
     LOAD_DUPLICATED_ATHLETES_TABLE,
-    DOWNLOAD_HISTORIC} from "../../constants/action_types";
+    DOWNLOAD_HISTORIC,
+    GET_ATHLETES_BY_SURNAMES} from "../../constants/action_types";
 
-import { addData, findById, findAthleteFee, downloadExcel, addAthleteSportdata } from "../../../services/AthleteService"
+import { addData, findById, findAthleteFee, downloadExcel, addAthleteSportdata, findByPhone, findBySurnames } from "../../../services/AthleteService"
 import { findHistoricDataPagination, findAthleteDataPagination, findAthleteSportdataPagination, findDuplicatedAthletesDataPagination } from "../../../services/TableService"
 
 import utils from "../../../utils/Functions"
@@ -50,6 +51,22 @@ export function getAthlete(id: number) {
             json.age = utils.ageCalculator(json.birthDate);
             json.birthDateStr = moment.unix(json.birthDate/1000).format("YYYY-MM-DD")
             dispatch({ type: GET_ATHLETE, payload: json });
+        });
+    }
+}
+
+export function getAthletesByPhone(phoneList: string[]) {
+    return function (dispatch: any) {
+        return findByPhone(phoneList).then(json => {
+            dispatch({ type: GET_ATHLETES_BY_PHONE, payload: json });
+        });
+    }
+}
+
+export function getAthletesBySurnames(firstSurname: string, secondSurname: string) {
+    return function (dispatch: any) {
+        return findBySurnames(firstSurname, secondSurname).then(json => {
+            dispatch({ type: GET_ATHLETES_BY_SURNAMES, payload: json });
         });
     }
 }

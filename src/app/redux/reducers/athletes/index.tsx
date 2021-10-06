@@ -1,7 +1,8 @@
-import { ADD_ATHLETE, ADD_ATHLETE_SPORTDATA, GET_ATHLETE, GET_ATHLETE_FEE } from "../../constants/action_types";
+import { ADD_ATHLETE, ADD_ATHLETE_SPORTDATA, GET_ATHLETE, GET_ATHLETES_BY_PHONE, GET_ATHLETES_BY_SURNAMES, GET_ATHLETE_FEE } from "../../constants/action_types";
 
 const initialState = {
-    athletes: [],
+    athletes_by_phone: [],
+    athletes_by_surnames: [],
     athlete: {},
     athlete_fee: {},
     athlete_sportdata: {}
@@ -13,6 +14,18 @@ function rootReducer(state = initialState, action: { type: string, payload: any 
             ...state,
             athlete: action.payload
         }
+    }
+    else if (action.type === GET_ATHLETES_BY_PHONE) {
+        return {
+            ...state,
+            athletes_by_phone: action.payload
+        };
+    }
+    else if (action.type === GET_ATHLETES_BY_SURNAMES) {
+        return {
+            ...state,
+            athletes_by_surnames: action.payload
+        };
     }
     else if (action.type === GET_ATHLETE_FEE) {
         return {
