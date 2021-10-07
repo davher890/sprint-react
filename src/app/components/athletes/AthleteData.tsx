@@ -7,7 +7,6 @@ import { Formik } from 'formik';
 
 import { CardHeader, Grid, AppBar, Toolbar, Snackbar, Typography, Box, Checkbox } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
-import { Table, TableBody, TableHead, TableRow, TableCell, TableContainer } from '@material-ui/core';
 
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 
@@ -15,12 +14,14 @@ import CustomCard from '../custom/Card'
 import GroupScheduleSelect from '../custom/GroupScheduleSelect'
 import SportSchoolSelect from '../custom/SportSchoolSelect'
 import SaveButton from '../custom/SaveButton'
-import SearchButton from '../custom/SearchButton'
 import Select from '../custom/Select'
 import Button from '../custom/Button'
 import MemoTextField from '../custom/TextField'
 import FeeInfo from '../custom/FeeInfo'
 import PhoneCard from '../custom/PhoneCard'
+
+import AthletesList from '../custom/Athletes/AthletesList'
+
 
 import AthleteSportdata from './AthleteSportdata'
 
@@ -263,49 +264,16 @@ class CreateAthlete extends React.Component<any, any> {
                         >
                             <DialogTitle id="form-dialog-title">Atletas coincidentes</DialogTitle>
                             <DialogContent>
-                                <Grid container>
-                                    <TableContainer><Table stickyHeader>
-                                        <TableHead>
-							                <TableRow>
-                                                <TableCell>Nombre</TableCell>
-                                                <TableCell>Primer Apellido</TableCell>
-                                                <TableCell>Segundo Apellido</TableCell>   
-                                                <TableCell>Código Atleta</TableCell>
-                                                <TableCell>Código Familia</TableCell>
-                                                <TableCell>Teléfono 1</TableCell>
-                                                <TableCell>Teléfono 2</TableCell>
-                                                <TableCell>Teléfono 3</TableCell>
-                                                <TableCell></TableCell>
-                                                <TableCell></TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {
-                                                this.props.athletes_by_phone && this.props.athletes_by_surnames ? 
-                                                this.props.athletes_by_phone.concat(this.props.athletes_by_surnames).map((row: any) => {
-                                                    return <TableRow hover key={row.id}>
-                                                        <TableCell>{ row.name }</TableCell>
-                                                        <TableCell>{ row.firstSurname }</TableCell>
-                                                        <TableCell>{ row.secondSurname }</TableCell>
-                                                        <TableCell>{ row.code }</TableCell>
-                                                        <TableCell>{ row.familyCode }</TableCell>
-                                                        <TableCell>{ row.phone1 }</TableCell>
-                                                        <TableCell>{ row.phone2 }</TableCell>
-                                                        <TableCell>{ row.phone3 }</TableCell>
-                                                        <TableCell><Button text='Seleccionar familia'
-                                                            onClick={() => { 
-                                                                setFieldValue("familyCode", row.familyCode) 
-                                                                setFieldValue('openMatchingAthletes', false)
-                                                            }}/>
-                                                        </TableCell>
-                                                        <TableCell><SearchButton text='Abrir atleta' onClick={() => { window.open("/athletes/" + row.id, "_self");}}/></TableCell>
-                                                    </TableRow>
-                                                })
-                                                : null
-                                            }
-                                        </TableBody>
-                                    </Table></TableContainer>
-                                </Grid>
+                                <AthletesList athletes={this.props.athletes_by_phone.concat(this.props.athletes_by_surnames)}
+                                    onSelectFamily={(familyCode: number) => { 
+                                        setFieldValue("familyCode", familyCode) 
+                                        setFieldValue('openMatchingAthletes', false)
+                                    }}
+                                    onSelectAthlete={(id: number) => { 
+                                        window.open("/athletes/" + id, "_self");
+                                    }}
+                                />
+                                
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={() => { setFieldValue('openMatchingAthletes', false) }} color="secondary" text="Cerrar" />
