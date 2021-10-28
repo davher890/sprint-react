@@ -17,6 +17,7 @@ const Utils = {
             }}, 
             { dataField: 'dni', text : 'Dni', filter: { type: "text" } }, 
             { dataField: 'firstRegisterDate', text : 'Fecha incorporacion' },
+            { dataField: 'lastUnregisterDate', text : 'Fecha baja' },
             { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
                 type: "options",
                 options : [
