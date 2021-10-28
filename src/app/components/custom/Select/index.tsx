@@ -21,7 +21,7 @@ const Select: React.FC<any> = (props) => {
                 }
                 onChange={props.onChange}
                 renderInput={(params) => 
-                    <TextField {...params} label={props.label} error={props.error} 
+                    <TextField {...params} label={props.label} error={props.error} InputLabelProps={props.InputLabelProps} variant="outlined" 
                     />
                 }
                 fullWidth={props.fullWidth}

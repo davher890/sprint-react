@@ -8,24 +8,31 @@ import { makeStyles } from '@material-ui/core/styles';
 import ColumnsSelect from "../ColumnsSelect";
 import TextField from "../TextField";
 import TablePaginationActions from "../TablePagination";
-
+import Select from '../Select'
 
 const CustomTable: React.FC<any> = (props) => {
 
 	const styles = makeStyles({
 		root: {
-			background: props.theme.palette.primary.main,
-			borderColor: 'white',
+			// background: props.theme.palette.primary.main,
+			color : props.theme.palette.secondary.main,
+			borderColor: props.theme.palette.secondary.main,
+			// "&.Mui-focused": {
+			// 	color: props.theme.palette.secondary.main
+			// }
 		},
 		focused: {
+			color : props.theme.palette.secondary.main,
 			borderColor: props.theme.palette.secondary.main,
+			borderBottomColor: props.theme.palette.secondary.main,
 		},
 		input: {
-			  color: props.theme.palette.secondary.main
+			// borderWidth: "2px",
+			// borderColor: props.theme.palette.secondary.main,
+			color : props.theme.palette.secondary.main,
+			// background: props.theme.palette.primary.main,
 		},
-		label: {
-			color : props.theme.palette.secondary.main
-		},
+		
 	});
 
 	const classes = styles();
@@ -35,7 +42,6 @@ const CustomTable: React.FC<any> = (props) => {
 	const [pageSize, setPageSize] = React.useState<number>(props.pageSize || 10)
 	const [visibleColumns, setVisibleColumns] = React.useState<any[]>(props.columns.filter((c: any) => c.show === undefined || c.show === true) || []);
 	const [filterObj, setFilterObj] = React.useState<any>(props.filters || {});
-
 
 	const handleFilterChange = (filterType: string, filterField: string, filterValue: string, filterOptions?: any[]) => {
 
@@ -47,12 +53,12 @@ const CustomTable: React.FC<any> = (props) => {
 			props.onPaginationFilterChange(0, pageSize, filterObj)
 		}
 		else {
-			if (filterValue.length > 2){
+			if (filterValue.length > 2 || filterType === 'options'){
 				filterObj[filterField] = {
 					filterVal : filterValue,
 					comparator: "LIKE"
 				}
-				if (filterType === 'number'){
+				if (filterType === 'number' || filterType === 'options'){
 					filterObj[filterField].comparator = "="
 				}
 				setFilterObj(filterObj)
@@ -109,29 +115,50 @@ const CustomTable: React.FC<any> = (props) => {
 					downloadData={downloadData}
 				/>
 			</Grid>
-			<Grid item spacing={3}>
+			<Grid item >
 				<TableContainer>
 					<Table stickyHeader>
 						<TableHead>
 							<TableRow>
 								{visibleColumns.map((column) => (
 									<TableCell key={column.dataField}>
-									{ column.filter ?
-										<TextField dense='true' label={column.text} className={classes.root} 
-											InputProps={{ className: classes.input }}
-											InputLabelProps={{
-												classes: {
-													root: classes.label,
-													focused: classes.focused,
-												},
-												}}
-											onChange={(e: any) => {
-												handleFilterChange(column.filter.type, column.dataField, e.target.value)
-											}} 
-										>	
-										</TextField>
-										: column.text
-									}
+									{(() => {
+										if (column.filter){
+											if (column.filter.options && column.filter.options.length > 0){
+												return <Select name={column.dataField} label={column.text} 
+													InputLabelProps={{
+														classes: {
+															root: classes.root,
+															focused: classes.focused
+														},
+													}}
+													options={column.filter.options} value={1}
+													onChange={(value: string, item: any) => {
+														handleFilterChange(column.filter.type, column.dataField, item ? item.id : '')
+													}}
+												/>
+											}
+											else {
+												return <TextField dense='true' label={column.text} className={classes.root} 
+													InputProps={{ 
+														className: classes.input
+													}} 
+													InputLabelProps={{
+														classes: {
+															root: classes.root,
+															focused: classes.focused
+														},
+													}}
+													onChange={(e: any) => {
+														handleFilterChange(column.filter.type, column.dataField, e.target.value)
+													}} 
+												/>
+											}
+										}
+										else {
+											return column.text
+										}
+									})()}
 									</TableCell>
 								))}
 							</TableRow>

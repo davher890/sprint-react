@@ -10,6 +10,26 @@ let daysMap = new Map([
     ["sunday", "Domingo"]
 ])
 
+let daysLetterMap = new Map([
+    ["monday", "L"],
+    ["tuesday", "M"],
+    ["wednesday", "X"],
+    ["thursday", "J"],
+    ["friday", "V"],
+    ["saturday", "S"],
+    ["sunday", "D"]
+])
+
+function getSchedulesString(schedules: any[]){
+   
+    return schedules.map((d: any) => {
+        let startMinute = parseInt(d.startMinute) < 10 ? '0' + d.startMinute : d.startMinute
+        let endMinute = parseInt(d.endMinute) < 10 ? '0' + d.endMinute : d.endMinute
+    
+        return daysLetterMap.get(d.day.toLowerCase()) + ' ' + d.startHour + ':' + startMinute + '-' + d.endHour + ':' + endMinute
+    }).join(' , ')
+}
+
 function sportSchoolDataConversor(d: { id: number, name: string, municipality: string, address: string }) {
     return {
         id: d.id,
@@ -47,7 +67,11 @@ function athleteDataConversor(d: any) {
         licenseType: d.licenseType,
         dorsalNumber: d.dorsalNumber,
         dorsalCategory: d.dorsalCategory,
-        iban: d.iban
+        iban: d.iban,
+        firstRegisterDate: new Intl.DateTimeFormat('sq-AL').format(new Date(d.firstRegisterDate)),
+        sportSchoolId: d.sportSchool.name, 
+        groupName: d.group !== null ? d.group.name : '',
+        schedules: d.schedules !== null && d.schedules.length > 0 ? getSchedulesString(d.schedules) : '',
     }
 }
 

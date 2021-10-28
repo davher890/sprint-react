@@ -43,8 +43,8 @@ class GroupSelect extends React.Component<any, any> {
                     <RadioList title="Especialización"
                         options={this.props.specialization_groups}
                         value={this.state.groupId}
-                        onChange={(event: any) => {
-                            this.groupOnChange(event.target.value, true)
+                        onChange={(value: number) => {
+                            this.groupOnChange(value, true)
                         }}
                     />
                 </Grid>
@@ -52,8 +52,8 @@ class GroupSelect extends React.Component<any, any> {
                     <RadioList title="No especialización"
                         options={this.props.not_specialization_groups}
                         value={this.state.groupId}
-                        onChange={(event: any) => {
-                            this.groupOnChange(event.target.value, false)
+                        onChange={(value: number) => {
+                            this.groupOnChange(value, false)
                         }}
                     />
                 </Grid>
