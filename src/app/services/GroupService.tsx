@@ -40,7 +40,7 @@ export const downloadGroupSchedulesExcel = (groupId: number, scheduleIds: number
                 let url = window.URL.createObjectURL(blob);
                 let a = document.createElement('a');
                 a.href = url;
-                a.download = 'athletes.xlsx';
+                a.download = 'atletas_grupo_' + groupId + '.xlsx';
                 a.click();
             })
         })
@@ -56,7 +56,7 @@ export const findGroupAttendance = (groupId: number, month: number) => {
                 let url = window.URL.createObjectURL(blob);
                 let a = document.createElement('a');
                 a.href = url;
-                a.download = 'athletes.xlsx';
+                a.download = 'listado_asistencia_' + groupId + '.xlsx';
                 a.click();
             })
         })

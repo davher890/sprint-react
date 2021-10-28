@@ -169,6 +169,7 @@ class CreateAthlete extends React.Component<any, any> {
                     membershipFee: (this.props.athlete_fee ? this.props.athlete_fee.membershipFee : 0) || 0,
                     monthlyFee: (this.props.athlete_fee ? this.props.athlete_fee.monthlyFee : 0) || 0,
                     // Dialogs
+                    firstRegisterDate: this.props.athlete.firstRegisterDate || '',
                     registered: this.props.athlete.registered || false,
                     registerDate: moment(new Date()).format("YYYY-MM-DD"),
                     openRegisterDialog: false,
@@ -209,7 +210,7 @@ class CreateAthlete extends React.Component<any, any> {
                     if (values.holderSecondSurname === '' && values.paymentType === "DOM") {
                         errors.holderSecondSurname = true;
                     }
-                    if (values.holderDni === '' && values.paymentType === "DOM") {
+                    if ((values.holderDni === '' || !this.isValidDni(values.holderDni)) && values.paymentType === "DOM" ) {
                         errors.holderDni = true;
                     }
                     if (!this.isValidDni(values.dni)){
@@ -310,7 +311,10 @@ class CreateAthlete extends React.Component<any, any> {
                                                 </Grid>
                                             </CustomCard>
                                         </Grid>
-                                        <Grid item xs={3}>
+                                        <Grid item xs={2}>
+                                            <Typography variant="subtitle1" gutterBottom component="div">Fecha de incorporación: {moment(new Date(values.firstRegisterDate)).format('DD/MM/YYYY')}</Typography>
+                                        </Grid>
+                                        <Grid item xs={1}>
                                             {values.id ? <Button text={values.registered ? 'Dar de baja' : 'Dar de alta'} onClick={() => { setFieldValue('openRegisterDialog', true) }} /> : null}
                                             <Dialog fullWidth={true} open={values.openRegisterDialog} aria-labelledby="form-dialog-title"
                                                 onClose={() => {
@@ -340,7 +344,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                 </DialogActions>
                                             </Dialog>
                                         </Grid>
-                                        <Grid item xs={3}>
+                                        <Grid item xs={1}>
                                             {values.id ? <Button text={'Histórico deportivo'} onClick={() => { setFieldValue('openSportdataDialog', true) }} /> : null}
                                             <Dialog fullWidth={true} maxWidth="xl" open={values.openSportdataDialog} aria-labelledby="form-dialog-title"
                                                 onClose={() => {
@@ -623,7 +627,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                 <Grid container item spacing={1}>
                                                     <Grid item xs={2}>
                                                         <Select fullWidth name="licenseType" label="Tipo de Licencia"
-                                                            value={values.licenseType} options={[{ id: "N", name: "Nacional" }, { id: "T", name: "Territorial" }]}
+                                                            value={values.licenseType} options={[{ id: "National", name: "Nacional" }, { id: "Territorial", name: "Territorial" }]}
                                                             onChange={(e: any, value: any) => setFieldValue('licenseType', value ? value.id : "")}
                                                         />
                                                     </Grid>
