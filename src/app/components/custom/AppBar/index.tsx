@@ -60,6 +60,9 @@ const CustomAppBar: React.FC<any> = (props) => {
                         <MenuItem><Link href="/athletes/historic">Histórico</Link></MenuItem>
                         <MenuItem><Link href="/groups/athletes">Atletas-Grupos</Link></MenuItem>
                     </Menu>
+                    <Typography variant="button">
+                        <Link href="/payments" color="inherit">Cobros</Link>
+                    </Typography>
                     {/* <Typography variant="h6">
                         <Link href="/families/list">Familias</Link>
                     </Typography> */}

@@ -18,6 +18,7 @@ import GroupData from './components/groups/GroupData';
 import GroupTable from './components/groups/GroupTable';
 import FamilyTable from './components/families/FamilyTable';
 import FamilyData from './components/families/FamilyData';
+import DownloadPayment from './components/payments/DownloadPayment';
 
 import CustomAppBar from './components/custom/AppBar'
 
@@ -91,6 +92,8 @@ const AppBar: React.FC<any> = (props) => {
           <Route exact path="/trainers/:id" component={TrainerData}/>
 
           <Route exact path="/trainers" component={TrainerData}/>
+
+          <Route exact path="/payments" component={DownloadPayment}/>
 
         </Switch>
       </Box>

@@ -48,3 +48,4 @@ export const LOAD_FAMILY_TABLE = "LOAD_FAMILY_TABLE";
 export const ADD_FAMILY = "ADD_FAMILY";
 export const GET_FAMILY = "GET_FAMILY";
 
+export const DOWNLOAD_PAYMENTS = "DOWNLOAD_PAYMENTS";

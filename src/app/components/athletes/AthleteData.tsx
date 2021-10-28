@@ -209,7 +209,7 @@ class CreateAthlete extends React.Component<any, any> {
                     if (values.holderSecondSurname === '' && values.paymentType === "DOM") {
                         errors.holderSecondSurname = true;
                     }
-                    if (values.holderDni === '' && values.paymentType === "DOM") {
+                    if ((values.holderDni === '' || !this.isValidDni(values.holderDni)) && values.paymentType === "DOM" ) {
                         errors.holderDni = true;
                     }
                     if (!this.isValidDni(values.dni)){
