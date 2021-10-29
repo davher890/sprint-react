@@ -79,25 +79,25 @@ export function getAthleteFee(data: any) {
     }
 }
 
-export function downloadAthletes(columns: any) {
+export function downloadAthletes(columns: any, filters:any) {
     return function (dispatch: any) {
-        return downloadExcel(columns).then(json => {
+        return downloadExcel(columns, filters).then(json => {
             dispatch({ type: DOWNLOAD_ATHLETES, payload: json });
         });
     }
 }
 
-export function downloadHistoricAthletes(columns: any) {
+export function downloadHistoricAthletes(columns: any, filters: any) {
     return function (dispatch: any) {
-        return downloadExcel(columns, "/athletes/historic/excel").then(json => {
+        return downloadExcel(columns, filters, "/athletes/historic/excel").then(json => {
             dispatch({ type: DOWNLOAD_HISTORIC, payload: json });
         });
     }
 }
 
-export function doRegisterAthlete(id: number) {
+export function doRegisterAthlete(id: number, body: any) {
     return function (dispatch: any) {
-        return registerAthlete(id).then(json => {
+        return registerAthlete(id, body).then(json => {
             if (!json.errorMessage) {
                 json.successMessage = "Datos guardados!"
             }
@@ -108,9 +108,9 @@ export function doRegisterAthlete(id: number) {
     }
 }
 
-export function doUnregisterAthlete(id: number) {
+export function doUnregisterAthlete(id: number, body: any) {
     return function (dispatch: any) {
-        return unregisterAthlete(id).then(json => {
+        return unregisterAthlete(id, body).then(json => {
             if (!json.errorMessage) {
                 json.successMessage = "Datos guardados!"
             }

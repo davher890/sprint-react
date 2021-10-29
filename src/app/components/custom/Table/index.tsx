@@ -84,7 +84,7 @@ const CustomTable: React.FC<any> = (props) => {
 	}
 	const downloadData = () => {
 		if (props.downloadData){
-			props.downloadData(columns)
+			props.downloadData(columns, filterObj)
 		}
 	}
 	const onRowClick = (id: number) => {

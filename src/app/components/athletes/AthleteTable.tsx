@@ -23,8 +23,8 @@ class AthleteTable extends React.Component<any, any> {
 		this.props.getAthleteTable();
 	}
 
-	downloadData(columns: any) {
-		this.props.downloadAthletes(columns)
+	downloadData(columns: any, filters: any) {
+		this.props.downloadAthletes(columns, filters)
 	}
 
 	render() {

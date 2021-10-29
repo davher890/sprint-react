@@ -172,6 +172,8 @@ class CreateAthlete extends React.Component<any, any> {
                     firstRegisterDate: this.props.athlete.firstRegisterDate || '',
                     registered: this.props.athlete.registered || false,
                     registerDate: moment(new Date()).format("YYYY-MM-DD"),
+                    registerDateStr: moment(new Date()).format("YYYY-MM-DD"),
+                    registerObservations: '',
                     openRegisterDialog: false,
                     openSportdataDialog: false,
                     openMatchingAthletes: false,
@@ -326,16 +328,22 @@ class CreateAthlete extends React.Component<any, any> {
                                                     <DialogContentText>
                                                         Introduce la fecha de {values.registered ? 'baja' : 'alta'}.
                                                 </DialogContentText>
-                                                    <MemoTextField id="registerDate" name="registerDate" value={values.registerDate} margin="dense" onChange={handleChange}
+                                                    <MemoTextField name="registerDateStr" value={values.registerDateStr} margin="dense" onChange={(e: any) => {
+                                                                let d: Moment = moment(e.target.value, "YYYY-MM-DD")
+                                                                setFieldValue('registerDateStr', e.target.value);
+                                                                setFieldValue('registerDate', d.toDate().getTime());
+                                                            }}
                                                         type="date" />
+                                                    <MemoTextField fullWidth name="registerObservations" label="Observaciones" multiline
+                                                            value={values.registerObservations} onChange={handleChange}/>
                                                 </DialogContent>
                                                 <DialogActions>
                                                     <Button onClick={() => {
                                                         if (values.registered){
-                                                            this.props.doUnregisterAthlete(values.id)
+                                                            this.props.doUnregisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
                                                         }
                                                         else {
-                                                            this.props.doRegisterAthlete(values.id)
+                                                            this.props.doRegisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
                                                         }
                                                     }} color="primary"
                                                         text={values.registered ? 'Dar de baja' : 'Dar de alta'} />
