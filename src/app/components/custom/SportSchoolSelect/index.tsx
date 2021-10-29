@@ -31,8 +31,6 @@ const SportSchoolSelect: React.FC<any> = (props) => {
         }
     }
 
-    console.log(props)
-
     return (
         <Grid container>
             <Grid item xs>
