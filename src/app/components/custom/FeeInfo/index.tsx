@@ -14,14 +14,9 @@ import { connect } from "react-redux";
 const FeeInfo: React.FC<any> = (props) => {
 
     React.useEffect(() => {
-        getFeeInfo()
-    }, [props.specialization, props.scheduleIds, props.scheduleIdsStr, props.firstSurname, props.secondSurname,
-        props.phone1, props.phone2, props.phone3, props.sportSchoolId])
-
-
-    const getFeeInfo = () => {
         props.getAthleteFee(props)
-    }
+    }, [props.getAthleteFee, props])
+
 
     return (
         <CustomCard title="Calculo de cuota">

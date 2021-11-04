@@ -32,6 +32,12 @@ const CustomTable: React.FC<any> = (props) => {
 			color : props.theme.palette.secondary.main,
 			// background: props.theme.palette.primary.main,
 		},
+		yellowText: {
+			// borderWidth: "2px",
+			// borderColor: props.theme.palette.secondary.main,
+			color : props.theme.palette.secondary.main,
+			// background: props.theme.palette.primary.main,
+		},
 		
 	});
 
@@ -69,7 +75,6 @@ const CustomTable: React.FC<any> = (props) => {
 		}
 		
 	}
-
 	const handlePageChange = (event: any, newPage: number) => {
 		setPage(newPage)
 		if (props.onPaginationFilterChange){
@@ -92,7 +97,6 @@ const CustomTable: React.FC<any> = (props) => {
 			props.onRowClick(id)
 		}
 	}
-
 	const getRowData = (row: any) => {
 		let columnNames : string[] = visibleColumns.map((c: any) => c.dataField)
 		return columnNames.map(column => (
@@ -101,7 +105,6 @@ const CustomTable: React.FC<any> = (props) => {
 			</TableCell>
 		))
 	}
-
 	return (
 		<Grid container spacing={3} direction="column">
 			<Grid item style={{ display: props.showColumns ? "block" : "none" }}>
@@ -129,7 +132,19 @@ const CustomTable: React.FC<any> = (props) => {
 													InputLabelProps={{
 														classes: {
 															root: classes.root,
-															focused: classes.focused
+															// focused: classes.yellowText,
+															// active: classes.yellowText,
+															// focusVisible: classes.yellowText,
+															// selected: classes.yellowText,
+														},
+													}}
+													InputProps={{ 
+														classes: {
+															root: classes.yellowText,
+															focused: classes.yellowText,
+															active: classes.yellowText,
+															focusVisible: classes.yellowText,
+															selected: classes.yellowText,
 														},
 													}}
 													options={column.filter.options} value={1}

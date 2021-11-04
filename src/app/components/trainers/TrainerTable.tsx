@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { Container, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 import Table from "../custom/Table";
 import Button from '../custom/Button'
@@ -28,32 +28,30 @@ class TrainerTable extends React.Component<any, any> {
 
 	render() {
 		return (
-			<Container fixed>
-				<React.Suspense fallback={<div>Cargando...</div>}>
-					<Grid container direction="column" spacing={3}>
-						<Grid item xs>
-							<Button text="Nuevo Entrenador" href={'/trainers'}/>
-						</Grid>
-						<Grid item xs>
-							<Table 
-								data={this.props.table_data}
-								page={this.props.page}
-								size={this.props.size}
-								total={this.props.total}
-								columns={this.state.columns} 
-								downloadData={this.downloadData}
-								showColumns={true}
-								onPaginationFilterChange={(page: number, size: number, filters:any) => {
-									this.props.getTrainerTable(page, size, filters);
-								}}
-								onRowClick={(id: number) => {
-									window.open("/trainers/" + id, "_self");
-								}}
-							/>
-						</Grid>
+			<React.Suspense fallback={<div>Cargando...</div>}>
+				<Grid container direction="column" spacing={3}>
+					<Grid item xs>
+						<Button text="Nuevo Entrenador" href={'/trainers'}/>
 					</Grid>
-				</React.Suspense>
-			</Container>
+					<Grid item xs>
+						<Table 
+							data={this.props.table_data}
+							page={this.props.page}
+							size={this.props.size}
+							total={this.props.total}
+							columns={this.state.columns} 
+							downloadData={this.downloadData}
+							showColumns={true}
+							onPaginationFilterChange={(page: number, size: number, filters:any) => {
+								this.props.getTrainerTable(page, size, filters);
+							}}
+							onRowClick={(id: number) => {
+								window.open("/trainers/" + id, "_self");
+							}}
+						/>
+					</Grid>
+				</Grid>
+			</React.Suspense>
 		)
 	}
 }

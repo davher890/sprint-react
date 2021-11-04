@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { Container, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 import Table from "../custom/Table";
 import Button from '../custom/AddButton'
@@ -23,31 +23,29 @@ class ScheduleTable extends React.Component<any, any> {
 
 	render() {
 		return (
-			<Container fixed>
-				<React.Suspense fallback={<div>Cargando...</div>}>
-					<Grid container direction="column" spacing={3}>
-						<Grid item xs>
-							<Button text="Nuevo horario" href={'/schedules'}/>
-						</Grid>
-						<Grid item xs>
-							<Table 
-								data={this.props.table_data}
-								page={this.props.page}
-								size={this.props.size}
-								total={this.props.total}
-								columns={this.state.columns}
-								showColumns={false}
-								onPaginationFilterChange={(page: number, size: number, filters:any) => {
-									this.props.getScheduleTable(page, size, filters);
-								}}
-								onRowClick={(id: number) => {
-									window.open("/schedules/" + id, "_self");
-								}}		
-							/>
-						</Grid>
+			<React.Suspense fallback={<div>Cargando...</div>}>
+				<Grid container direction="column" spacing={3}>
+					<Grid item xs>
+						<Button text="Nuevo horario" href={'/schedules'}/>
 					</Grid>
-				</React.Suspense>
-			</Container>
+					<Grid item xs>
+						<Table 
+							data={this.props.table_data}
+							page={this.props.page}
+							size={this.props.size}
+							total={this.props.total}
+							columns={this.state.columns}
+							showColumns={false}
+							onPaginationFilterChange={(page: number, size: number, filters:any) => {
+								this.props.getScheduleTable(page, size, filters);
+							}}
+							onRowClick={(id: number) => {
+								window.open("/schedules/" + id, "_self");
+							}}		
+						/>
+					</Grid>
+				</Grid>
+			</React.Suspense>
 		)
 	}
 }

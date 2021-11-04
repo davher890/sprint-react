@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { Formik } from 'formik';
 
-import { Grid, Snackbar, Container } from '@material-ui/core';
+import { Grid, Snackbar } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 import MemoTextField from '../custom/TextField';
@@ -34,83 +34,81 @@ class ConnectedForm extends React.Component<any, any> {
 
     render() {
         return (
-            <Container fixed>
-    	        <React.Suspense fallback={<div>Cargando...</div>}>
+            <React.Suspense fallback={<div>Cargando...</div>}>
 
-                    <Formik enableReinitialize
-                        initialValues={{
-                            id: this.props.sport_school.id || 0,
-                            name: this.props.sport_school.name || '',
-                            municipality: this.props.sport_school.municipality || '',
-                            address: this.props.sport_school.address || '',
-                            errorMessage: this.props.sport_school.errorMessage || '',
-                            successMessage: this.props.sport_school.successMessage || ''
-                        }}
-                        validate={(values) => {
-                            let errors: any = {};
+                <Formik enableReinitialize
+                    initialValues={{
+                        id: this.props.sport_school.id || 0,
+                        name: this.props.sport_school.name || '',
+                        municipality: this.props.sport_school.municipality || '',
+                        address: this.props.sport_school.address || '',
+                        errorMessage: this.props.sport_school.errorMessage || '',
+                        successMessage: this.props.sport_school.successMessage || ''
+                    }}
+                    validate={(values) => {
+                        let errors: any = {};
 
-                            if (values.name === '') errors.name = true
-                            if (values.municipality === '') errors.municipality = true
-                            if (values.address === '') errors.address = true
+                        if (values.name === '') errors.name = true
+                        if (values.municipality === '') errors.municipality = true
+                        if (values.address === '') errors.address = true
 
-                            //check if my values have errors
-                            return errors;
-                        }}
-                        onSubmit={(values, { setSubmitting }) => {
-                            this.setState(values)
-                            setSubmitting(false);
-                            this.handleFormSubmit()
-                        }}
-                    >
-                    {({ handleSubmit, handleChange, values, touched, setFieldValue, errors, isSubmitting }) => (
+                        //check if my values have errors
+                        return errors;
+                    }}
+                    onSubmit={(values, { setSubmitting }) => {
+                        this.setState(values)
+                        setSubmitting(false);
+                        this.handleFormSubmit()
+                    }}
+                >
+                {({ handleSubmit, handleChange, values, touched, setFieldValue, errors, isSubmitting }) => (
 
-                        <form onSubmit={handleSubmit}>
-                            <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
-                                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
-                                <Alert severity="error" onClose={() => { setFieldValue("errorMessage", "") }}>
-                                    <AlertTitle>Error</AlertTitle>
-                                    <strong>{values.errorMessage}</strong>
-                                </Alert>
-                            </Snackbar>
-                            <Snackbar open={values.successMessage !== undefined && values.successMessage !== ''}
-                                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
-                                <Alert severity="success" onClose={() => { 
-                                        setFieldValue("successMessage", "");
-                                        this.props.history.push("/sport_schools/list");
-                                        window.location.reload();
-                                    }}>
-                                    <AlertTitle>Ok!</AlertTitle>
-                                    <strong>{values.successMessage}</strong>
-                                </Alert>
-                            </Snackbar>
-                            <Grid container direction="column" spacing={3}>
-                                <Grid item xs>
-                                    <Card title="Datos de la Escuela deportiva">
-                                        <Grid container spacing={2}>
-                                            <Grid item xs>
-                                                <MemoTextField name="name" label="Nombre" value={values.name} onChange={handleChange}
-                                                    error={touched.name && errors.name} />
-                                            </Grid>
-                                            <Grid item xs>
-                                                <MemoTextField name="municipality" label="Municipio" value={values.municipality} onChange={handleChange}
-                                                    error={touched.municipality && errors.municipality} />
-                                            </Grid>
-                                            <Grid item xs>
-                                                <MemoTextField name="address" label="Dirección" value={values.address} onChange={handleChange}
-                                                    error={touched.address && errors.address} />
-                                            </Grid>
+                    <form onSubmit={handleSubmit}>
+                        <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                            <Alert severity="error" onClose={() => { setFieldValue("errorMessage", "") }}>
+                                <AlertTitle>Error</AlertTitle>
+                                <strong>{values.errorMessage}</strong>
+                            </Alert>
+                        </Snackbar>
+                        <Snackbar open={values.successMessage !== undefined && values.successMessage !== ''}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                            <Alert severity="success" onClose={() => { 
+                                    setFieldValue("successMessage", "");
+                                    this.props.history.push("/sport_schools/list");
+                                    window.location.reload();
+                                }}>
+                                <AlertTitle>Ok!</AlertTitle>
+                                <strong>{values.successMessage}</strong>
+                            </Alert>
+                        </Snackbar>
+                        <Grid container direction="column" spacing={3}>
+                            <Grid item xs>
+                                <Card title="Datos de la Escuela deportiva">
+                                    <Grid container spacing={2}>
+                                        <Grid item xs>
+                                            <MemoTextField name="name" label="Nombre" value={values.name} onChange={handleChange}
+                                                error={touched.name && errors.name} />
                                         </Grid>
-                                    </Card>
-                                </Grid>
-                                <Grid item xs>
-                                    <SaveButton type="submit" disabled={isSubmitting}/>
-                                </Grid>
+                                        <Grid item xs>
+                                            <MemoTextField name="municipality" label="Municipio" value={values.municipality} onChange={handleChange}
+                                                error={touched.municipality && errors.municipality} />
+                                        </Grid>
+                                        <Grid item xs>
+                                            <MemoTextField name="address" label="Dirección" value={values.address} onChange={handleChange}
+                                                error={touched.address && errors.address} />
+                                        </Grid>
+                                    </Grid>
+                                </Card>
                             </Grid>
-                        </form>
-                    )}
-                    </Formik>
-                </React.Suspense>
-            </Container>
+                            <Grid item xs>
+                                <SaveButton type="submit" disabled={isSubmitting}/>
+                            </Grid>
+                        </Grid>
+                    </form>
+                )}
+                </Formik>
+            </React.Suspense>
         );
     }
 }

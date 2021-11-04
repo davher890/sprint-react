@@ -32,7 +32,7 @@ const AppBar: React.FC<any> = (props) => {
   return (
     <Router>
       <CustomAppBar />
-      <Box display="flex" m={2}>
+      <Box m="2%" display="flex">
         <Switch>
           <Route path="/sport_schools/list">
             <SportSchoolTable/>

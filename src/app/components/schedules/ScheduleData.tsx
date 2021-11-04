@@ -2,12 +2,13 @@ import * as React from "react"
 
 import { Formik } from 'formik';
 
-import { Grid, AppBar, Toolbar, Snackbar, Container } from "@material-ui/core";
+import { Grid, AppBar, Toolbar, Snackbar } from "@material-ui/core";
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 import MemoTextField from '../custom/TextField';
 import Select from '../custom/Select';
 import SaveButton from '../custom/SaveButton'
+import Card from '../custom/Card';
 
 import { connect } from "react-redux";
 import { addSchedule, getSchedule } from "../../redux/actions/schedules";
@@ -37,60 +38,60 @@ class ConnectedForm extends React.Component<any, any> {
     render() {
 
         return (
-            <Container fixed>
-    	        <React.Suspense fallback={<div>Cargando...</div>}>
+            <React.Suspense fallback={<div>Cargando...</div>}>
 
-                    <Formik enableReinitialize
-                        initialValues={{
-                            id: this.props.schedule.id || 0,
-                            day: this.props.schedule.day || '',
-                            startHour: this.props.schedule.startHour || 0,
-                            startMinute: this.props.schedule.startMinute || 0,
-                            endHour: this.props.schedule.endHour || 0,
-                            endMinute: this.props.schedule.endMinute || 0,
+                <Formik enableReinitialize
+                    initialValues={{
+                        id: this.props.schedule.id || 0,
+                        day: this.props.schedule.day || '',
+                        startHour: this.props.schedule.startHour || 0,
+                        startMinute: this.props.schedule.startMinute || 0,
+                        endHour: this.props.schedule.endHour || 0,
+                        endMinute: this.props.schedule.endMinute || 0,
 
-                            errorMessage: this.props.schedule.errorMessage || '',
-                            successMessage: this.props.schedule.successMessage || ''
-                        }}
-                        validate={(values) => {
-                            let errors: any = {};
+                        errorMessage: this.props.schedule.errorMessage || '',
+                        successMessage: this.props.schedule.successMessage || ''
+                    }}
+                    validate={(values) => {
+                        let errors: any = {};
 
-                            if (values.day === '') errors.day = true
-                            if (values.startHour === '') errors.startHour = true
-                            if (values.startMinute === '') errors.startMinute = true
-                            if (values.endHour === '') errors.endHour = true
-                            if (values.endMinute === '') errors.endMinute = true
+                        if (values.day === '') errors.day = true
+                        if (values.startHour === '') errors.startHour = true
+                        if (values.startMinute === '') errors.startMinute = true
+                        if (values.endHour === '') errors.endHour = true
+                        if (values.endMinute === '') errors.endMinute = true
 
-                            //check if my values have errors
-                            return errors;
-                        }}
-                        onSubmit={(values, { setSubmitting }) => {
-                            this.setState(values)
-                            setSubmitting(false);
-                            this.handleFormSubmit()
-                        }}
-                    >
-                    {({ handleSubmit, handleChange, values, touched, setFieldValue, errors, isSubmitting }) => (
-                    
-                        <form onSubmit={handleSubmit}>
-                            <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
-                                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
-                                <Alert severity="error" onClose={() => { setFieldValue("errorMessage", "") }}>
-                                    <AlertTitle>Error</AlertTitle>
-                                    <strong>{values.errorMessage}</strong>
-                                </Alert>
-                            </Snackbar>
-                            <Snackbar open={values.successMessage !== undefined && values.successMessage !== ''}
-                                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
-                                <Alert severity="success" onClose={() => { 
-                                        setFieldValue("successMessage", "") 
-                                        this.props.history.push("/schedules/list");
-                                        window.location.reload(); 
-                                    }}>
-                                    <AlertTitle>Ok!</AlertTitle>
-                                    <strong>{values.successMessage}</strong>
-                                </Alert>
-                            </Snackbar>
+                        //check if my values have errors
+                        return errors;
+                    }}
+                    onSubmit={(values, { setSubmitting }) => {
+                        this.setState(values)
+                        setSubmitting(false);
+                        this.handleFormSubmit()
+                    }}
+                >
+                {({ handleSubmit, handleChange, values, touched, setFieldValue, errors, isSubmitting }) => (
+                
+                    <form onSubmit={handleSubmit}>
+                        <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                            <Alert severity="error" onClose={() => { setFieldValue("errorMessage", "") }}>
+                                <AlertTitle>Error</AlertTitle>
+                                <strong>{values.errorMessage}</strong>
+                            </Alert>
+                        </Snackbar>
+                        <Snackbar open={values.successMessage !== undefined && values.successMessage !== ''}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                            <Alert severity="success" onClose={() => { 
+                                    setFieldValue("successMessage", "") 
+                                    this.props.history.push("/schedules/list");
+                                    window.location.reload(); 
+                                }}>
+                                <AlertTitle>Ok!</AlertTitle>
+                                <strong>{values.successMessage}</strong>
+                            </Alert>
+                        </Snackbar>
+                        <Card title="Horario">
                             <Grid container direction="row" spacing={2}>
                                 <Grid item xs>
                                     <Select fullWidth name="day" label="Día de la semana" error={touched.day && errors.day}
@@ -102,7 +103,8 @@ class ConnectedForm extends React.Component<any, any> {
                                             { id: "FRIDAY", name: "Viernes" }, 
                                             { id: "SATURDAY", name: "Sábado" }, 
                                             { id: "SUNDAY", name: "Domingo" }
-                                        ]} value={values.day}
+                                        ]} 
+                                        value={values.day}
                                         onChange={(e: any, value: any) => setFieldValue('day', value ? value.id : "")}
                                     />
                                 </Grid>
@@ -127,18 +129,18 @@ class ConnectedForm extends React.Component<any, any> {
                                     </Grid>
                                 </Grid>
                             </Grid>
-                            <Grid>
-                                <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
-                                    <Toolbar>
-                                        <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
-                                    </Toolbar>
-                                </AppBar>                            
-                            </Grid>
-                        </form>
-                    )}
-                    </Formik>
-                </React.Suspense>
-            </Container>
+                        </Card>
+                        <Grid>
+                            <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
+                                <Toolbar>
+                                    <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
+                                </Toolbar>
+                            </AppBar>                            
+                        </Grid>
+                    </form>
+                )}
+                </Formik>
+            </React.Suspense>
         );
     }
 }

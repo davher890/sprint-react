@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 import DownloadButton from '../custom/DownloadButton'
 import GroupSelect from '../custom/GroupSelect'
@@ -29,35 +29,33 @@ const GroupAttendante: React.FC<any> = (props) => {
     }
 
     return (
-        <Container fixed>
-            <CustomCard>
-                <Grid container>
-                    <Grid item xs={2}>
-                        <Select label="Mes"  name="month" 
-                            value={month} 
-                            options={months} 
-                            onChange={(e: any, value: any) => {
-                                value ? setMonth(value.id) : setMonth(value)
-                            }} 
-                        />
-                    </Grid>
-                    <Grid item xs>
-                        <GroupSelect 
-                            groupId={groupId}
-                            onChange={(id: number) => {
-                                setGroupId(id)
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs>
-                        <DownloadButton type="submit" text="Descargar"
-                            disabled={!(groupId > 0 && month > 0)}
-                            onClick={handleFormSubmit}
-                        />
-                    </Grid>
+        <CustomCard>
+            <Grid container>
+                <Grid item xs={2}>
+                    <Select label="Mes"  name="month" 
+                        value={month} 
+                        options={months} 
+                        onChange={(e: any, value: any) => {
+                            value ? setMonth(value.id) : setMonth(value)
+                        }} 
+                    />
                 </Grid>
-            </CustomCard>
-        </Container>
+                <Grid item xs>
+                    <GroupSelect 
+                        groupId={groupId}
+                        onChange={(id: number) => {
+                            setGroupId(id)
+                        }}
+                    />
+                </Grid>
+                <Grid item xs>
+                    <DownloadButton type="submit" text="Descargar"
+                        disabled={!(groupId > 0 && month > 0)}
+                        onClick={handleFormSubmit}
+                    />
+                </Grid>
+            </Grid>
+        </CustomCard>
     )
 }
 

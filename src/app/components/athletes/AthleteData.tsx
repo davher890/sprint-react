@@ -104,7 +104,9 @@ class CreateAthlete extends React.Component<any, any> {
 
         return (
 
-            <Formik enableReinitialize
+            <React.Suspense fallback={<div>Cargando...</div>}>
+
+                <Formik enableReinitialize
                 initialValues={{
                     id: this.props.athlete.id || 0,
                     code: this.props.athlete.code || 0,
@@ -704,6 +706,7 @@ class CreateAthlete extends React.Component<any, any> {
                 )}}
             </Formik>
 
+            </React.Suspense>
         );
     }
 }
