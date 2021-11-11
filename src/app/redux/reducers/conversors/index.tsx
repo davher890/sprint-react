@@ -73,6 +73,7 @@ function athleteDataConversor(d: any) {
         sportSchoolId: d.sportSchoolName, 
         groupName: d.groupName,
         schedules: d.schedules !== null && d.schedules.length > 0 ? getSchedulesString(d.schedules) : '',
+        numDays: d.numDays
     }
 }
 
