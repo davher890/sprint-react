@@ -28,7 +28,7 @@ const RadioList: React.FC<any> = (props) => {
     }, [props.value, props.options, value])
 
     const getFormControlLabel = (id: number, name: string) => {
-        return <FormControlLabel value={id} control={<Radio checked={value === id}/>} label={name} />
+        return <FormControlLabel disabled={props.disabled || false} value={id} control={<Radio checked={value === id}/>} label={name} />
     }
 
     return (
@@ -48,7 +48,7 @@ const RadioList: React.FC<any> = (props) => {
                     style={{maxHeight: 200, overflow: 'auto'}}>
                     <List children={
                             props.options.map((opt: {id: number, name: string}) => {
-                                return <ListItem key={opt.id}>{getFormControlLabel(opt.id, opt.name)}</ListItem>
+                                return <ListItem key={opt.id}>{getFormControlLabel(opt.id, opt.name) }</ListItem>
                             })
                         }/>
                 </RadioGroup>

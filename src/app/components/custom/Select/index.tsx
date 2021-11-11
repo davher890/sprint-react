@@ -14,7 +14,6 @@ const Select: React.FC<any> = (props) => {
                 options={props.options}
                 
                 getOptionLabel={(option: any) => {
-                    console.log(option)
                     return option.name
                     // if (option){
                     //     return props.options.find((e: {id: string, name: string}) => e.id === option).name

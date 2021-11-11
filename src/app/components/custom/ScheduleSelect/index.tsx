@@ -38,7 +38,7 @@ const ScheduleSelect: React.FC<any> = (props) => {
                             return (
                                 <Grid item key={`row_sch${sch.id}`} >
                                     <Checkbox
-                                        disabled={specialization}
+                                        disabled={props.disabled || specialization}
                                         name="scheduleIds"
                                         key={`sch${sch.id}`}
                                         checked={scheduleIds.includes(sch.id)}

@@ -41,6 +41,7 @@ class GroupSelect extends React.Component<any, any> {
             <Grid container direction="row" spacing={2}>
                 <Grid item xs>
                     <RadioList title="Especialización"
+                        disabled={this.props.disabled || false}
                         options={this.props.specialization_groups}
                         value={this.state.groupId}
                         onChange={(value: number) => {
@@ -50,6 +51,7 @@ class GroupSelect extends React.Component<any, any> {
                 </Grid>
                 <Grid item xs>
                     <RadioList title="No especialización"
+                        disabled={this.props.disabled || false}
                         options={this.props.not_specialization_groups}
                         value={this.state.groupId}
                         onChange={(value: number) => {

@@ -63,6 +63,7 @@ class GroupScheduleSelect extends React.Component<any, any> {
             <Grid container direction="row" spacing={2}>
                 <Grid item xs>
                     <GroupSelect
+                        disabled={this.props.disabled || false}
                         groupId={this.state.groupId}
                         onChange={(groupId: number, specialization: boolean) => {
                             this.groupOnChange(groupId, specialization)
@@ -71,6 +72,7 @@ class GroupScheduleSelect extends React.Component<any, any> {
                 </Grid>
                 <Grid item xs>
                     <ScheduleSelect
+                        disabled={this.props.disabled || false}
                         schedules={this.props.group_schedules}
                         scheduleIds={this.state.scheduleIds}
                         specialization={this.state.specialization}

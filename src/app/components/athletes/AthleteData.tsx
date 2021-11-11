@@ -172,7 +172,7 @@ class CreateAthlete extends React.Component<any, any> {
                     monthlyFee: (this.props.athlete_fee ? this.props.athlete_fee.monthlyFee : 0) || 0,
                     // Dialogs
                     firstRegisterDate: this.props.athlete.firstRegisterDate || '',
-                    registered: this.props.athlete.registered || false,
+                    registered: this.props.athlete.registered || true,
                     registerDate: moment(new Date()).format("YYYY-MM-DD"),
                     registerDateStr: moment(new Date()).format("YYYY-MM-DD"),
                     registerObservations: '',
@@ -195,7 +195,7 @@ class CreateAthlete extends React.Component<any, any> {
                     if (values.birthDate  === '') errors.birthDate = true;
                     if (values.gender  === '') errors.gender = true;
                     if (values.phone1  === '' && values.phone2  === '' && values.phone3  === '') errors.phone1 = true;
-                    if (values.mail  === '') errors.mail = true;
+                    if (values.age >= 18 && values.mail  === '') errors.mail = true;
                     if (values.municipality  === '') errors.municipality = true;
                     if (values.postalCode  === '') errors.postalCode = true;
                     if (values.address  === '') errors.address = true;
@@ -217,7 +217,7 @@ class CreateAthlete extends React.Component<any, any> {
                     if ((values.holderDni === '' || !this.isValidDni(values.holderDni)) && values.paymentType === "DOM" ) {
                         errors.holderDni = true;
                     }
-                    if (!this.isValidDni(values.dni)){
+                    if (values.age >= 14 && !this.isValidDni(values.dni)){
                         errors.dni = true
                     }
 
@@ -315,7 +315,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                 </Grid>
                                             </CustomCard>
                                         </Grid>
-                                        <Grid item xs={2}>
+                                        <Grid item xs={2} style={{ display: values.id > 0 ? "block" : "none" }}>
                                             <Typography variant="subtitle1" gutterBottom component="div">Fecha de incorporación: {moment(new Date(values.firstRegisterDate)).format('DD/MM/YYYY')}</Typography>
                                         </Grid>
                                         <Grid item xs={1}>
@@ -648,6 +648,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                 <Grid container spacing={1} direction="row">
                                                     <Grid item xs>
                                                         <GroupScheduleSelect 
+                                                            disabled={!values.registered}
                                                             groupId={values.groupId}
                                                             specialization={values.specialization}
                                                             scheduleIds={values.scheduleIds}
