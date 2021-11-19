@@ -22,9 +22,9 @@ export function getGroupAthleteTable(groupId: number, scheduleIds: number[], pag
     }
 }
 
-export function downloadGroupSchedulesAthletes(groupId: number, scheduleIds: number[], columns: any) {
+export function downloadGroupSchedulesAthletes(groupId: number, scheduleIds: number[], columns: any, filters:any) {
     return function (dispatch: any) {
-        return downloadGroupSchedulesExcel(groupId, scheduleIds, columns).then(json => {
+        return downloadGroupSchedulesExcel(groupId, scheduleIds, columns, filters).then(json => {
             dispatch({ type: DOWNLOAD_GROUP_ATHLETES, payload: json });
         });
     }

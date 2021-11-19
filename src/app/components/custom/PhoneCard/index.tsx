@@ -38,17 +38,17 @@ const PhoneCard: React.FC<any> = (props) => {
         <Grid container item spacing={1}>
             <Grid item xs>
                 <TextField name="phone1" type="tel" value={phone1} label="Teléfono 1" onBlur={props.onBlur}
-                    onChange={onChangePhone1} // error={touched.phone1 && errors.phone1}
+                    onChange={onChangePhone1} error={props.errorPhone1 || false}
                 />
             </Grid>
             <Grid item xs>
                 <TextField name="phone2" type="tel" value={phone2} label="Teléfono 2" onBlur={props.onBlur}
-                    onChange={onChangePhone2} // error={touched.phone2 && errors.phone2}
+                    onChange={onChangePhone2} error={props.errorPhone2 || false}
                 />
             </Grid>
             <Grid item xs>
                 <TextField name="phone3" type="tel" value={phone3} label="Teléfono 3" onBlur={props.onBlur}
-                    onChange={onChangePhone3} // error={touched.phone3 && errors.phone3}
+                    onChange={onChangePhone3} error={props.errorPhone3 || false}
                 />
             </Grid>
         </Grid>

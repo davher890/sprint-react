@@ -49,7 +49,7 @@ const GroupAttendante: React.FC<any> = (props) => {
                     />
                 </Grid>
                 <Grid item xs>
-                    <DownloadButton type="submit" text="Descargar"
+                    <DownloadButton type="submit"
                         disabled={!(groupId > 0 && month > 0)}
                         onClick={handleFormSubmit}
                     />

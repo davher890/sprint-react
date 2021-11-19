@@ -106,7 +106,7 @@ const CustomTable: React.FC<any> = (props) => {
 		))
 	}
 	return (
-		<Grid container spacing={3} direction="column">
+		<Grid container direction="column">
 			<Grid item style={{ display: props.showColumns ? "block" : "none" }}>
 				<ColumnsSelect 
 					columns={columns}

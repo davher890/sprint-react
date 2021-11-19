@@ -1,17 +1,10 @@
 import React from 'react'
-import { Grid, Fab } from '@material-ui/core';
-import SaveIcon from '@material-ui/icons/Save';
+import { Button } from '@material-ui/core';
+import Icon from '@material-ui/icons/Save';
 
 const SaveButton: React.FC<any> = (props) => (
-	<Grid container spacing={1}>
-		<Grid item xs>
-			<Fab variant="extended" size="large" aria-label="add"
-				color={props.color || "secondary"}
-				{...props}
-			>
-				<SaveIcon />{props.text || "Guardar"}
-			</Fab>
-		</Grid>
-	</Grid>
+	<Button color={props.color || "secondary"} {...props}>
+		<Icon />{props.children || 'Guardar'}
+	</Button>
 )
 export default SaveButton

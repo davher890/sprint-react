@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import utils from "../../utils/Functions"
 import { Formik } from 'formik';
 
-import { CardHeader, Grid, AppBar, Toolbar, Snackbar, Typography, Box, Checkbox } from '@material-ui/core';
+import { CardHeader, Grid, AppBar, Toolbar, Snackbar, Typography, Box, Checkbox, Button } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
@@ -15,7 +15,6 @@ import GroupScheduleSelect from '../custom/GroupScheduleSelect'
 import SportSchoolSelect from '../custom/SportSchoolSelect'
 import SaveButton from '../custom/SaveButton'
 import Select from '../custom/Select'
-import Button from '../custom/Button'
 import MemoTextField from '../custom/TextField'
 import FeeInfo from '../custom/FeeInfo'
 import PhoneCard from '../custom/PhoneCard'
@@ -188,6 +187,25 @@ class CreateAthlete extends React.Component<any, any> {
                 validate={(values) => {
                     let errors: any = {};
 
+                    // errors.sportSchoolId = values.sportSchoolId  === '';
+                    // errors.imageAuth = values.imageAuth  === '';
+                    // errors.name = values.name  === '';
+                    // errors.firstSurname = values.firstSurname  === '';
+                    // errors.birthDate = values.birthDate  === '';
+                    // errors.gender = values.gender  === '';
+                    // errors.phone1 = values.phone1  === '' && values.phone2  === '' && values.phone3  === '';
+                    // errors.mail = values.age >= 18 && values.mail  === '';
+                    // errors.municipality = values.municipality  === '';
+                    // errors.postalCode = values.postalCode  === '';
+                    // errors.address = values.address  === '';
+                    // errors.paymentType = values.paymentType  === '';
+                    // errors.feeType = values.feeType  === '';
+                    // errors.iban = values.iban === '' && values.paymentType === "DOM";
+                    // errors.holderName = values.holderName === '' && values.paymentType === "DOM";
+                    // errors.holderFirstSurname = values.holderFirstSurname === '' && values.paymentType === "DOM";
+                    // errors.holderSecondSurname = values.holderSecondSurname === '' && values.paymentType === "DOM";
+                    // errors.holderDni = (values.holderDni === '' || !this.isValidDni(values.holderDni)) && values.paymentType === "DOM" ;
+                    // errors.dni = values.age >= 14 && !this.isValidDni(values.dni)
                     if (values.sportSchoolId  === '') errors.sportSchoolId = true;
                     if (values.imageAuth  === '') errors.imageAuth = true;
                     if (values.name  === '') errors.name = true;
@@ -220,7 +238,7 @@ class CreateAthlete extends React.Component<any, any> {
                     if (values.age >= 14 && !this.isValidDni(values.dni)){
                         errors.dni = true
                     }
-
+             
                     return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
@@ -281,7 +299,9 @@ class CreateAthlete extends React.Component<any, any> {
                                 
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={() => { setFieldValue('openMatchingAthletes', false) }} color="secondary" text="Cerrar" />
+                                <Button 
+                                    onClick={(a: any) => { setFieldValue('openMatchingAthletes', false) }}
+                                >Cerrar</Button>
                             </DialogActions>
                         </Dialog>
 
@@ -319,7 +339,7 @@ class CreateAthlete extends React.Component<any, any> {
                                             <Typography variant="subtitle1" gutterBottom component="div">Fecha de incorporación: {moment(new Date(values.firstRegisterDate)).format('DD/MM/YYYY')}</Typography>
                                         </Grid>
                                         <Grid item xs={1}>
-                                            {values.id ? <Button text={values.registered ? 'Dar de baja' : 'Dar de alta'} onClick={() => { setFieldValue('openRegisterDialog', true) }} /> : null}
+                                            {values.id ? <Button onClick={() => { setFieldValue('openRegisterDialog', true) }} >{values.registered ? 'Dar de baja' : 'Dar de alta'}</Button> : null}
                                             <Dialog fullWidth={true} open={values.openRegisterDialog} aria-labelledby="form-dialog-title"
                                                 onClose={() => {
                                                     setFieldValue('openRegisterDialog', false)
@@ -347,15 +367,13 @@ class CreateAthlete extends React.Component<any, any> {
                                                         else {
                                                             this.props.doRegisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
                                                         }
-                                                    }} color="primary"
-                                                        text={values.registered ? 'Dar de baja' : 'Dar de alta'} />
-                                                    <Button onClick={() => { setFieldValue('openRegisterDialog', false) }} color="secondary"
-                                                        text="Cancelar" />
+                                                    }}>{values.registered ? 'Dar de baja' : 'Dar de alta'}</Button>
+                                                    <Button onClick={() => { setFieldValue('openRegisterDialog', false) }}>"Cancelar"</Button>
                                                 </DialogActions>
                                             </Dialog>
                                         </Grid>
                                         <Grid item xs={1}>
-                                            {values.id ? <Button text={'Histórico deportivo'} onClick={() => { setFieldValue('openSportdataDialog', true) }} /> : null}
+                                            {values.id ? <Button onClick={() => { setFieldValue('openSportdataDialog', true) }} >Histórico deportivo</Button> : null}
                                             <Dialog fullWidth={true} maxWidth="xl" open={values.openSportdataDialog} aria-labelledby="form-dialog-title"
                                                 onClose={() => {
                                                     setFieldValue('openSportdataDialog', false)
@@ -368,8 +386,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                     </Grid>
                                                 </DialogContent>
                                                 <DialogActions>
-                                                    <Button onClick={() => { setFieldValue('openSportdataDialog', false) }} color="secondary"
-                                                        text="Cerrar" />
+                                                    <Button onClick={() => { setFieldValue('openSportdataDialog', false) }}>Cerrar</Button>
                                                 </DialogActions>
                                             </Dialog>
                                         </Grid>
@@ -473,6 +490,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                         </Grid>
                                                     </Grid>
                                                     <PhoneCard phone1={values.phone1} phone2={values.phone2} phone3={values.phone3}
+                                                        errorPhone1={touched.phone1 && errors.phone1}
                                                         onChange={(phone1:string, phone2:string, phone3:string) => {
                                                             setFieldValue('phone1', phone1)
                                                             setFieldValue('phone2', phone2)
@@ -694,13 +712,13 @@ class CreateAthlete extends React.Component<any, any> {
                         </Box>
                         <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
                             <Toolbar>
-                                <SaveButton text='Guardar y salir' type="submit" 
+                                <SaveButton type="submit" 
                                     onClick={() => {
                                         setFieldValue('exit', true)
                                         return false;
                                     }}
-                                />
-                                <SaveButton type="submit" text='Guardar y continuar' disabled={isSubmitting} />
+                                >Guardar y salir</SaveButton>
+                                <SaveButton type="submit" disabled={isSubmitting}>Guardar y continuar</SaveButton>
                             </Toolbar>
                         </AppBar>
                     </form>

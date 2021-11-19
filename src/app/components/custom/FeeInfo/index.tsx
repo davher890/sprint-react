@@ -15,7 +15,7 @@ const FeeInfo: React.FC<any> = (props) => {
 
     React.useEffect(() => {
         props.getAthleteFee(props)
-    }, [props.getAthleteFee, props])
+    }, [props.getAthleteFee])
 
 
     return (

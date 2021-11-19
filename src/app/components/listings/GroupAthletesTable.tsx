@@ -9,7 +9,7 @@ import GroupScheduleSelect from '../custom/GroupScheduleSelect'
 
 import Utils from "../../utils/TableUtils"
 import { connect } from "react-redux";
-import { getAllGroups, getGroupAthleteTable, getGroupSchedules, downloadGroupSchedulesAthletes } from "../../redux/actions/groups";
+import { getGroupAthleteTable, getGroupSchedules, downloadGroupSchedulesAthletes } from "../../redux/actions/groups";
 
 class GroupAthletesTable extends React.Component<any, any> {
 
@@ -23,12 +23,8 @@ class GroupAthletesTable extends React.Component<any, any> {
         this.downloadData = this.downloadData.bind(this)
 	}
 
-	componentDidMount(){
-        this.props.getAllGroups()
-	}
-
-    downloadData(columns: any) {
-		this.props.downloadGroupSchedulesAthletes(this.state.groupId, this.state.scheduleIds, columns)
+    downloadData(columns: any, filters: any) {
+		this.props.downloadGroupSchedulesAthletes(this.state.groupId, this.state.scheduleIds, columns, filters)
 	}
 
 	handleSubmitQuery() {
@@ -58,9 +54,9 @@ class GroupAthletesTable extends React.Component<any, any> {
                                 />
                             </Grid>
                             <Grid item xs>
-                                <SearchButton text="Buscar" type="submit"
+                                <SearchButton type="submit"
                                     disabled={!(this.state.groupId > 0 && this.state.scheduleIds.length > 0)}
-                                    onClick={this.handleSubmitQuery}/>
+                                    onClick={this.handleSubmitQuery}>Buscar</SearchButton>
                             </Grid>
                         </Grid>
                     </CustomCard>
@@ -75,7 +71,7 @@ class GroupAthletesTable extends React.Component<any, any> {
                         downloadData={this.downloadData}
                         showColumns={true}
                         onPaginationFilterChange={(page: number, size: number, filters:any) => {
-                            this.props.getGroupAthleteTable(this.state.groupId, this.state.scheduleIds, page, size);
+                            this.props.getGroupAthleteTable(this.state.groupId, this.state.scheduleIds, page, size, filters);
                         }}
                         onRowClick={(id: number) => {
                             window.open("/athletes/" + id, "_self");
@@ -98,7 +94,7 @@ function mapStateToProps(state: any) {
 }
 
 const mapDispatchToProps = {
-    getAllGroups, getGroupSchedules, 
+    getGroupSchedules, 
     downloadGroupSchedulesAthletes, getGroupAthleteTable
 }
 

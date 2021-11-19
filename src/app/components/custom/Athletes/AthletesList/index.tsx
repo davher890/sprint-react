@@ -1,6 +1,5 @@
 import React from 'react'
-import { Grid } from '@material-ui/core';
-import Button from '../../../custom/Button'
+import { Grid, Button } from '@material-ui/core';
 import SearchButton from '../../../custom/SearchButton'
 
 import { Table, TableBody, TableHead, TableRow, TableCell, TableContainer } from '@material-ui/core';
@@ -42,11 +41,9 @@ const AthletesList: React.FC<any> = (props) => {
                                 <TableCell>{ row.phone1 }</TableCell>
                                 <TableCell>{ row.phone2 }</TableCell>
                                 <TableCell>{ row.phone3 }</TableCell>
-                                <TableCell><Button text='Seleccionar familia'
-                                    onClick={() => { props.onSelectFamily(row.familyCode); }}/>
+                                <TableCell><Button onClick={() => { props.onSelectFamily(row.familyCode); }}>Seleccionar familia</Button>
                                 </TableCell>
-                                <TableCell><SearchButton text='Abrir atleta' 
-                                    onClick={() => { props.onSelectAthlete(row.id); }}/>
+                                <TableCell><SearchButton onClick={() => { props.onSelectAthlete(row.id); }}>Abrir atleta</SearchButton>
                                 </TableCell>
                             </TableRow>
                         })
