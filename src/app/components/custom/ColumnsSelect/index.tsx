@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
-import {Grid, Dialog, DialogContent, DialogTitle, DialogActions} from '@material-ui/core';
+import {Grid, Dialog, DialogContent, DialogTitle, DialogActions, Button} from '@material-ui/core';
 
 import MultiSelect from '../MultiSelect'
-import Button from '../DownloadButton'
+import DownloadButton from '../DownloadButton'
 import SelectButton from '../SelectButton'
 
 const ColumnsSelect: React.FC<any> = (props) => {
@@ -11,14 +11,13 @@ const ColumnsSelect: React.FC<any> = (props) => {
     const [openDialog, setOpenDialog] = useState(false)
 
     return (
-        
         <Grid container>
             <Grid item xs>
-                <SelectButton text={'Seleccionar columnas'} onClick={() => { setOpenDialog(true) }} />
+                <SelectButton onClick={() => { setOpenDialog(true) }}>Seleccionar columnas</SelectButton>
             </Grid>
             { props.showDownloadData ?
             <Grid item xs>
-                <Button text="Descargar Excel" onClick={(props.downloadData)} />
+                <DownloadButton onClick={(props.downloadData)}>Descargar Excel</DownloadButton>
             </Grid> : null
             }
 
@@ -36,7 +35,7 @@ const ColumnsSelect: React.FC<any> = (props) => {
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => { setOpenDialog(false) }} color="secondary" text="Cerrar" />
+                    <Button onClick={() => { setOpenDialog(false) }}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

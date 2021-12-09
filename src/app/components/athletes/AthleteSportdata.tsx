@@ -2,8 +2,7 @@ import * as React from "react"
 
 import { Grid } from '@material-ui/core';
 
-import SearchButton from '../custom/SearchButton'
-import Button from '../custom/Button'
+import Button from '../custom/SaveButton'
 import Table from "../custom/Table";
 import TextField from "../custom/TextField"
 import Utils from "../../utils/TableUtils";
@@ -158,7 +157,7 @@ class AthleteSportdata extends React.Component<any, any> {
                                         </Grid>
                                         <Grid container spacing={1}>
                                             <Grid item xs={3}>
-                                                <SearchButton type="submit"/>
+                                                <Button type="submit"/>
                                             </Grid>
                                             <Grid item xs={3}>
                                                 <Button text="Reset" color="secondary" onClick={this.cleanForm}/>

@@ -1,7 +1,9 @@
 import * as React from "react"
-import { Container } from '@material-ui/core';
+
+import { Grid } from '@material-ui/core';
 
 import Table from "../custom/Table";
+import Button from '../custom/AddButton'
 
 import { connect } from "react-redux";
 import { getScheduleTable } from "../../redux/actions/schedules";
@@ -21,23 +23,29 @@ class ScheduleTable extends React.Component<any, any> {
 
 	render() {
 		return (
-			<Container>
-				<Table 
-					data={this.props.table_data}
-					page={this.props.page}
-					size={this.props.size}
-					total={this.props.total}
-					columns={this.state.columns}
-					showColumns={false}
-					onPaginationFilterChange={(page: number, size: number, filters:any) => {
-						this.props.getScheduleTable(page, size, filters);
-					}}
-					onRowClick={(id: number) => {
-						window.open("/schedules/" + id, "_self");
-					}}		
-				>
-				</Table>
-			</Container>
+			<React.Suspense fallback={<div>Cargando...</div>}>
+				<Grid container direction="column" spacing={3}>
+					<Grid item xs>
+						<Button text="Nuevo horario" href={'/schedules'}/>
+					</Grid>
+					<Grid item xs>
+						<Table 
+							data={this.props.table_data}
+							page={this.props.page}
+							size={this.props.size}
+							total={this.props.total}
+							columns={this.state.columns}
+							showColumns={false}
+							onPaginationFilterChange={(page: number, size: number, filters:any) => {
+								this.props.getScheduleTable(page, size, filters);
+							}}
+							onRowClick={(id: number) => {
+								window.open("/schedules/" + id, "_self");
+							}}		
+						/>
+					</Grid>
+				</Grid>
+			</React.Suspense>
 		)
 	}
 }

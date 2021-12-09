@@ -1,5 +1,35 @@
 import { LOAD_SPORTSCHOOL_TABLE, LOAD_GROUP_TABLE, LOAD_ATHLETE_TABLE, LOAD_FAMILY_TABLE, LOAD_HISTORIC_TABLE, LOAD_SCHEDULE_TABLE, LOAD_TRAINER_TABLE, LOAD_GROUP_ATHLETES_TABLE, LOAD_ATHLETE_SPORTDATA_TABLE, LOAD_DUPLICATED_ATHLETES_TABLE } from "../../constants/action_types";
 
+let daysMap = new Map([
+    ["monday", "Lunes"],
+    ["tuesday", "Martes"],
+    ["wednesday", "Miércoles"],
+    ["thursday", "Jueves"],
+    ["friday", "Viernes"],
+    ["saturday", "Sábado"],
+    ["sunday", "Domingo"]
+])
+
+let daysLetterMap = new Map([
+    ["monday", "L"],
+    ["tuesday", "M"],
+    ["wednesday", "X"],
+    ["thursday", "J"],
+    ["friday", "V"],
+    ["saturday", "S"],
+    ["sunday", "D"]
+])
+
+function getSchedulesString(schedules: any[]){
+   
+    return schedules.map((d: any) => {
+        let startMinute = parseInt(d.startMinute) < 10 ? '0' + d.startMinute : d.startMinute
+        let endMinute = parseInt(d.endMinute) < 10 ? '0' + d.endMinute : d.endMinute
+    
+        return daysLetterMap.get(d.day.toLowerCase()) + ' ' + d.startHour + ':' + startMinute + '-' + d.endHour + ':' + endMinute
+    }).join(' , ')
+}
+
 function sportSchoolDataConversor(d: { id: number, name: string, municipality: string, address: string }) {
     return {
         id: d.id,
@@ -9,10 +39,11 @@ function sportSchoolDataConversor(d: { id: number, name: string, municipality: s
     }
 }
 
-function groupDataConversor(d: { id: number, name: string }) {
+function groupDataConversor(d: { id: number, name: string, sportSchoolName: string }) {
     return {
         id : d.id,
-        name : d.name
+        name : d.name,
+        sportSchoolName : d.sportSchoolName
     }
 }
 
@@ -36,7 +67,13 @@ function athleteDataConversor(d: any) {
         licenseType: d.licenseType,
         dorsalNumber: d.dorsalNumber,
         dorsalCategory: d.dorsalCategory,
-        iban: d.iban
+        iban: d.iban,
+        firstRegisterDate: d.firstRegisterDate !== null ? new Intl.DateTimeFormat('sq-AL').format(new Date(d.firstRegisterDate)) : '',
+        lastUnregisterDate: d.lastUnregisterDate !== null ? new Intl.DateTimeFormat('sq-AL').format(new Date(d.lastUnregisterDate)) : '',
+        sportSchoolId: d.sportSchoolName, 
+        groupName: d.groupName,
+        schedules: d.schedules !== null && d.schedules.length > 0 ? getSchedulesString(d.schedules) : '',
+        numDays: d.numDays
     }
 }
 
@@ -48,10 +85,10 @@ function familyDataConversor(d: { id: number, code: number, count: number }) {
     }
 }
 
-function scheduleDataConversor(d: any){
+function scheduleDataConversor(d: {id: number, day: string, startHour: number, startMinute: number, endHour: number, endMinute: number}){
     return {
         id : d.id, 
-        day: d.day, 
+        day: daysMap.get(d.day.toLowerCase()), 
         start: d.startHour + ':' + (d.startMinute.toString().length < 2 ? (d.startMinute + '0') : d.startMinute),
         end: d.endHour + ':' + (d.endMinute.toString().length < 2 ? (d.endMinute + '0') : d.endMinute)
     }

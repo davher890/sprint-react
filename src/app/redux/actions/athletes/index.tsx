@@ -1,12 +1,13 @@
-import { ADD_ATHLETE, GET_ATHLETE, GET_ATHLETE_FEE, 
+import { ADD_ATHLETE, GET_ATHLETE, GET_ATHLETE_FEE, GET_ATHLETES_BY_PHONE,
     DOWNLOAD_ATHLETES, LOAD_ATHLETE_TABLE, 
     LOAD_HISTORIC_TABLE, 
     LOAD_ATHLETE_SPORTDATA_TABLE,
     ADD_ATHLETE_SPORTDATA,
     LOAD_DUPLICATED_ATHLETES_TABLE,
-    DOWNLOAD_HISTORIC} from "../../constants/action_types";
+    DOWNLOAD_HISTORIC,
+    GET_ATHLETES_BY_SURNAMES} from "../../constants/action_types";
 
-import { addData, findById, findAthleteFee, downloadExcel, addAthleteSportdata } from "../../../services/AthleteService"
+import { addData, findById, findAthleteFee, downloadExcel, addAthleteSportdata, findByPhone, findBySurnames, registerAthlete, unregisterAthlete } from "../../../services/AthleteService"
 import { findHistoricDataPagination, findAthleteDataPagination, findAthleteSportdataPagination, findDuplicatedAthletesDataPagination } from "../../../services/TableService"
 
 import utils from "../../../utils/Functions"
@@ -54,6 +55,22 @@ export function getAthlete(id: number) {
     }
 }
 
+export function getAthletesByPhone(phoneList: string[]) {
+    return function (dispatch: any) {
+        return findByPhone(phoneList).then(json => {
+            dispatch({ type: GET_ATHLETES_BY_PHONE, payload: json });
+        });
+    }
+}
+
+export function getAthletesBySurnames(firstSurname: string, secondSurname: string) {
+    return function (dispatch: any) {
+        return findBySurnames(firstSurname, secondSurname).then(json => {
+            dispatch({ type: GET_ATHLETES_BY_SURNAMES, payload: json });
+        });
+    }
+}
+
 export function getAthleteFee(data: any) {
     return function (dispatch: any) {
         return findAthleteFee(data).then(json => {
@@ -62,18 +79,44 @@ export function getAthleteFee(data: any) {
     }
 }
 
-export function downloadAthletes(columns: any) {
+export function downloadAthletes(columns: any, filters:any) {
     return function (dispatch: any) {
-        return downloadExcel(columns).then(json => {
+        return downloadExcel(columns, filters).then(json => {
             dispatch({ type: DOWNLOAD_ATHLETES, payload: json });
         });
     }
 }
 
-export function downloadHistoricAthletes(columns: any) {
+export function downloadHistoricAthletes(columns: any, filters: any) {
     return function (dispatch: any) {
-        return downloadExcel(columns, "/athletes/historic/excel").then(json => {
+        return downloadExcel(columns, filters, "/athletes/historic/excel").then(json => {
             dispatch({ type: DOWNLOAD_HISTORIC, payload: json });
+        });
+    }
+}
+
+export function doRegisterAthlete(id: number, body: any) {
+    return function (dispatch: any) {
+        return registerAthlete(id, body).then(json => {
+            if (!json.errorMessage) {
+                json.successMessage = "Datos guardados!"
+            }
+            json.age = utils.ageCalculator(json.birthDate);
+            json.birthDateStr = moment.unix(json.birthDate/1000).format("YYYY-MM-DD")
+            dispatch({ type: ADD_ATHLETE, payload: json });
+        });
+    }
+}
+
+export function doUnregisterAthlete(id: number, body: any) {
+    return function (dispatch: any) {
+        return unregisterAthlete(id, body).then(json => {
+            if (!json.errorMessage) {
+                json.successMessage = "Datos guardados!"
+            }
+            json.age = utils.ageCalculator(json.birthDate);
+            json.birthDateStr = moment.unix(json.birthDate/1000).format("YYYY-MM-DD")
+            dispatch({ type: ADD_ATHLETE, payload: json });
         });
     }
 }

@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { Container, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 import SearchButton from '../custom/SearchButton'
 import Table from "../custom/Table";
@@ -9,7 +9,7 @@ import GroupScheduleSelect from '../custom/GroupScheduleSelect'
 
 import Utils from "../../utils/TableUtils"
 import { connect } from "react-redux";
-import { getAllGroups, getGroupAthleteTable, getGroupSchedules, downloadGroupSchedulesAthletes } from "../../redux/actions/groups";
+import { getGroupAthleteTable, getGroupSchedules, downloadGroupSchedulesAthletes } from "../../redux/actions/groups";
 
 class GroupAthletesTable extends React.Component<any, any> {
 
@@ -23,12 +23,8 @@ class GroupAthletesTable extends React.Component<any, any> {
         this.downloadData = this.downloadData.bind(this)
 	}
 
-	componentDidMount(){
-        this.props.getAllGroups()
-	}
-
-    downloadData(columns: any) {
-		this.props.downloadGroupSchedulesAthletes(this.state.groupId, this.state.scheduleIds, columns)
+    downloadData(columns: any, filters: any) {
+		this.props.downloadGroupSchedulesAthletes(this.state.groupId, this.state.scheduleIds, columns, filters)
 	}
 
 	handleSubmitQuery() {
@@ -41,50 +37,48 @@ class GroupAthletesTable extends React.Component<any, any> {
 
 	render() {
 		return (
-            <Container fixed>
-                <Grid container direction="column" spacing={2}>
-                    <Grid item xs>
-                        <CustomCard>
-                            <Grid container direction="column" spacing={1}>
-                                <Grid item xs>
-                                    <GroupScheduleSelect
-                                        groupId={this.state.groupId}
-                                        scheduleIds={this.state.scheduleIds}
-                                        onChange={(groupId: number, specialization: boolean, scheduleIds: number[]) => {
-                                            this.setState({
-                                                groupId: groupId,
-                                                scheduleIds: scheduleIds 
-                                            })
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item xs>
-                                    <SearchButton text="Buscar" type="submit"
-                                        disabled={!(this.state.groupId > 0 && this.state.scheduleIds.length > 0)}
-                                        onClick={this.handleSubmitQuery}/>
-                                </Grid>
+            <Grid container direction="column" spacing={2}>
+                <Grid item xs>
+                    <CustomCard>
+                        <Grid container direction="column" spacing={1}>
+                            <Grid item xs>
+                                <GroupScheduleSelect
+                                    groupId={this.state.groupId}
+                                    scheduleIds={this.state.scheduleIds}
+                                    onChange={(groupId: number, specialization: boolean, scheduleIds: number[]) => {
+                                        this.setState({
+                                            groupId: groupId,
+                                            scheduleIds: scheduleIds 
+                                        })
+                                    }}
+                                />
                             </Grid>
-                        </CustomCard>
-                    </Grid>
-                    <Grid item xs>
-                        <Table 
-                            data={this.props.table_data}
-                            page={this.props.page}
-                            size={this.props.size}
-                            total={this.props.total}
-                            columns={this.state.columns} 
-                            downloadData={this.downloadData}
-                            showColumns={true}
-                            onPaginationFilterChange={(page: number, size: number, filters:any) => {
-                                this.props.getGroupAthleteTable(this.state.groupId, this.state.scheduleIds, page, size);
-                            }}
-                            onRowClick={(id: number) => {
-                                window.open("/athletes/" + id, "_self");
-                            }}
-                        />
-                    </Grid>
+                            <Grid item xs>
+                                <SearchButton type="submit"
+                                    disabled={!(this.state.groupId > 0 && this.state.scheduleIds.length > 0)}
+                                    onClick={this.handleSubmitQuery}>Buscar</SearchButton>
+                            </Grid>
+                        </Grid>
+                    </CustomCard>
                 </Grid>
-            </Container>
+                <Grid item xs>
+                    <Table 
+                        data={this.props.table_data}
+                        page={this.props.page}
+                        size={this.props.size}
+                        total={this.props.total}
+                        columns={this.state.columns} 
+                        downloadData={this.downloadData}
+                        showColumns={true}
+                        onPaginationFilterChange={(page: number, size: number, filters:any) => {
+                            this.props.getGroupAthleteTable(this.state.groupId, this.state.scheduleIds, page, size, filters);
+                        }}
+                        onRowClick={(id: number) => {
+                            window.open("/athletes/" + id, "_self");
+                        }}
+                    />
+                </Grid>
+            </Grid>
 		)
 	}
 }
@@ -100,7 +94,7 @@ function mapStateToProps(state: any) {
 }
 
 const mapDispatchToProps = {
-    getAllGroups, getGroupSchedules, 
+    getGroupSchedules, 
     downloadGroupSchedulesAthletes, getGroupAthleteTable
 }
 

@@ -1,8 +1,9 @@
 import * as React from "react"
 
-import { Container, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 import Table from "../custom/Table";
+import Button from '../custom/AddButton'
 
 import { connect } from "react-redux";
 import { getGroupTable } from "../../redux/actions/groups/index";
@@ -22,27 +23,28 @@ class GroupTable extends React.Component<any, any> {
 
     render() {
 		return (
-			<Container fixed>
-				<React.Suspense fallback={<div>Cargando...</div>}>
-					<Grid container direction="column">
-						<Grid item xs>
-							<Table 
-								data={this.props.table_data}
-								page={this.props.page}
-								size={this.props.size}
-								total={this.props.total}
-								columns={this.state.columns} 
-								onPaginationFilterChange={(page: number, size: number, filters:any) => {
-									this.props.getGroupTable(page, size, filters);
-								}}
-								onRowClick={(id: number) => {
-									window.open("/groups/" + id, "_self");
-								}}
-							/>
-						</Grid>
+			<React.Suspense fallback={<div>Cargando...</div>}>
+				<Grid container direction="column" spacing={3}>
+					<Grid item xs>
+						<Button text="Nuevo Grupo" href={'/groups'}/>
 					</Grid>
-				</React.Suspense>
-			</Container>
+					<Grid item xs>
+						<Table 
+							data={this.props.table_data}
+							page={this.props.page}
+							size={this.props.size}
+							total={this.props.total}
+							columns={this.state.columns} 
+							onPaginationFilterChange={(page: number, size: number, filters:any) => {
+								this.props.getGroupTable(page, size, filters);
+							}}
+							onRowClick={(id: number) => {
+								window.open("/groups/" + id, "_self");
+							}}
+						/>
+					</Grid>
+				</Grid>
+			</React.Suspense>
 		)
 	}
 }

@@ -4,28 +4,40 @@ const Utils = {
     getAthleteColumns: () => {
         return [
             { dataField: 'id', text: 'Id', show: false },
-            { dataField: 'name', text : 'Nombre', filter: { type: "text" }, width : 50 }, 
-            { dataField: 'firstSurname', text : 'Primer apellido', filter: { type: "text" }, width : 50 }, 
-            { dataField: 'secondSurname', text : 'Segundo apellido', filter: { type: "text" }, width : 50 }, 
-            { dataField: 'birthDate', text : 'Fecha de Nacimiento', width : 200, type: 'date' }, 
+            { dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
+            { dataField: 'firstSurname', text : 'Primer apellido', filter: { type: "text" } }, 
+            { dataField: 'secondSurname', text : 'Segundo apellido', filter: { type: "text" } }, 
+            { dataField: 'birthDate', text : 'Fecha de Nacimiento' }, 
             { dataField: 'gender', text : 'Género', filter: { 
                 type: "options",
-                options : {
-                    'male' : 'Masculino',
-                    'female' : 'Femenino'
-                }
-            }, width : 150 }, 
-            { dataField: 'dni', text : 'Dni', filter: { type: "text" }, width : 150 }, 
-            { dataField: 'nationality', text : 'Nacionalidad', show: false, filter: { type: "text" }, width : 150 }, 
-            { dataField: 'birthPlace', text : 'Lugar de Nacimiento', show: false, filter: { type: "text" }, width : 150 }, 
-            { dataField: 'postalCode', text : 'C.Postal', show: false, filter: { type: "text" }, width : 150 }, 
-            { dataField: 'category', text : 'Categoría', show: false, filter: { type: "text" }, width : 150 }, 
-            { dataField: 'license', text : 'Licencia', show: false, width : 150 }, 
-            { dataField: 'licenseType', text : 'Tipo de licencia', show: false, width : 150 }, 
-            { dataField: 'dorsalNumber', text : 'Dorsal', show: false, filter: { type: "number" }, width : 150 },
-            { dataField: 'dorsalCategory', text : 'Categoría de dorsal', show: false, filter: { type: "text" }, width : 150 },
-            { dataField: 'iban', text : 'IBAN', show: false, filter: { type: "text" }, width : 150 }, 
-    
+                options : [
+                    { id: 'male', name: 'Masculino' },
+                    { id: 'female', name: 'Femenino' }
+                ]
+            }}, 
+            { dataField: 'dni', text : 'Dni', filter: { type: "text" } }, 
+            { dataField: 'firstRegisterDate', text : 'Fecha incorporacion' },
+            { dataField: 'lastUnregisterDate', text : 'Fecha baja' },
+            { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
+                type: "options",
+                options : [
+                    { id : '1', name: 'Santa Ana' },
+                    { id : '2', name: 'Paracuellos' },
+                    { id : '3', name: 'Externos' }
+                ]
+            }}, 
+            { dataField: 'groupName', text : 'Grupo', filter: { type: "text" } }, 
+            { dataField: 'schedules', text : 'Dias' }, 
+            { dataField: 'numDays', text : 'Num. Dias' }, 
+            { dataField: 'nationality', text : 'Nacionalidad', show: false, filter: { type: "text" } }, 
+            { dataField: 'birthPlace', text : 'Lugar de Nacimiento', show: false, filter: { type: "text" } }, 
+            { dataField: 'postalCode', text : 'C.Postal', show: false, filter: { type: "text" } }, 
+            { dataField: 'category', text : 'Categoría', show: false, filter: { type: "text" } }, 
+            { dataField: 'license', text : 'Licencia', show: false }, 
+            { dataField: 'licenseType', text : 'Tipo de licencia', show: false }, 
+            { dataField: 'dorsalNumber', text : 'Dorsal', show: false, filter: { type: "number" } },
+            { dataField: 'dorsalCategory', text : 'Categoría de dorsal', show: false, filter: { type: "text" } },
+            { dataField: 'iban', text : 'IBAN', show: false, filter: { type: "text" } }
         ]
     },
 
@@ -52,9 +64,9 @@ const Utils = {
     getSportSchoolColumns: () => {
         return [
             { dataField: 'id', text: 'Id', show: false },
-            { dataField: 'name', text: 'Nombre', filter: { type: "text" }, width: 300 },
-            { dataField: 'municipality', text: 'Municipio', filter: { type: "text" }, width: 400 },
-            { dataField: 'address', text: 'Dirección', filter: { type: "text" }, width: 1300 }
+            { dataField: 'name', text: 'Nombre', filter: { type: "text" } },
+            { dataField: 'municipality', text: 'Municipio', filter: { type: "text" } },
+            { dataField: 'address', text: 'Dirección', filter: { type: "text" } }
         ]
     },
 
@@ -68,7 +80,8 @@ const Utils = {
 
     getGroupColumns: () => {
         return [
-            { dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
+            { dataField: 'name', text : 'Nombre', filter: { type: "text" } },
+            { dataField: 'sportSchoolName', text : 'Escuela Deportiva' } 
         ]
     },
 

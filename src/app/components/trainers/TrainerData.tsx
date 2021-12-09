@@ -1,5 +1,6 @@
 import * as React from "react"
-import { Container, Grid } from '@material-ui/core';
+import { Container, Grid, Snackbar } from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 import { Formik } from 'formik';
 
@@ -34,17 +35,20 @@ class ConnectedForm extends React.Component<any, any> {
         return (
             <Container fixed>
     	        <React.Suspense fallback={<div>Cargando...</div>}>
+
                     <Formik enableReinitialize
                         initialValues={{
                             id: this.props.trainer.id || 0,
                             name: this.props.trainer.name || '',
-                            mail: this.props.trainer.mail || ''
+                            mail: this.props.trainer.mail || '',
+
+                            errorMessage: this.props.trainer.errorMessage || '',
+                            successMessage: this.props.trainer.successMessage || ''
                         }}
                         validate={(values) => {
                             let errors: any = {};
 
                             if (values.name === '') errors.name = true
-                            if (values.mail === '') errors.mail = true
 
                             //check if my values have errors
                             return errors;
@@ -55,9 +59,29 @@ class ConnectedForm extends React.Component<any, any> {
                             this.handleFormSubmit()
                         }}
                     >
-                    {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
+                    {({ handleSubmit, handleChange, values, touched, setFieldValue, errors, isSubmitting }) => (
 
                         <form onSubmit={handleSubmit}>
+                            <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
+                                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                                <Alert severity="error" onClose={() => { 
+                                        setFieldValue("errorMessage", "");
+                                    }}>
+                                    <AlertTitle>Error</AlertTitle>
+                                    <strong>{values.errorMessage}</strong>
+                                </Alert>
+                            </Snackbar>
+                            <Snackbar open={values.successMessage !== undefined && values.successMessage !== ''}
+                                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                                <Alert severity="success" onClose={() => { 
+                                        setFieldValue("successMessage", "")
+                                        this.props.history.push("/trainers/list");
+                                        window.location.reload(); 
+                                    }}>
+                                    <AlertTitle>Ok!</AlertTitle>
+                                    <strong>{values.successMessage}</strong>
+                                </Alert>
+                            </Snackbar>
                             <Grid container direction="column" spacing={3}>
                                 <Grid item xs>
                                     <Card title="Datos del entrenador">

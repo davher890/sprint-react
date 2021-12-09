@@ -1,6 +1,6 @@
-import { ADD_SPORTSCHOOL, LOAD_SPORTSCHOOLS, LOAD_SPORTSCHOOL_TABLE, GET_SPORTSCHOOL, DOWNLOAD_SPORTSCHOOLS } from "../../constants/action_types";
+import { ADD_SPORTSCHOOL, LOAD_SPORTSCHOOLS, LOAD_SPORTSCHOOL_TABLE, GET_SPORTSCHOOL, DOWNLOAD_SPORTSCHOOLS, GET_SPORTSCHOOL_FEE_TYPES } from "../../constants/action_types";
 
-import { addData, findById, downloadExcel, findAll } from "../../../services/SportSchoolService"
+import { addData, findById, downloadExcel, findAll, findFeeTypesById } from "../../../services/SportSchoolService"
 import { findSportSchoolDataPagination } from "../../../services/TableService"
 
 export function getSportSchoolTable(page: number, size: number, filters: any) {
@@ -19,13 +19,13 @@ export function getAllSportSchools() {
     }
 }
 
-// export function getSportSchools() {
-//     return function (dispatch: any)  {
-//         return findDataPagination().then(json => {
-//             dispatch({ type: LOAD_SPORTSCHOOLS, payload: json });
-//         });
-//     }
-// }
+export function getSportSchoolFeeTypes(id: number) {
+    return function (dispatch: any)  {
+        return findFeeTypesById(id).then(json => {
+            dispatch({ type: GET_SPORTSCHOOL_FEE_TYPES, payload: json });
+        });
+    }
+}
 
 export function getSportSchool(id: number) {
     return function (dispatch: any)  {

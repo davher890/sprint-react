@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import utils from "../../utils/Functions"
 import { Formik } from 'formik';
 
-import { CardHeader, Grid, AppBar, Toolbar, Snackbar, Typography, Box, Checkbox } from '@material-ui/core';
+import { CardHeader, Grid, AppBar, Toolbar, Snackbar, Typography, Box, Checkbox, Button } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
@@ -15,31 +15,30 @@ import GroupScheduleSelect from '../custom/GroupScheduleSelect'
 import SportSchoolSelect from '../custom/SportSchoolSelect'
 import SaveButton from '../custom/SaveButton'
 import Select from '../custom/Select'
-import Button from '../custom/Button'
 import TextField from '../custom/TextField'
+import FeeInfo from '../custom/FeeInfo'
+import PhoneCard from '../custom/PhoneCard'
+
+import AthletesList from '../custom/Athletes/AthletesList'
+
 
 import AthleteSportdata from './AthleteSportdata'
-import DuplicatedAthletes from './DuplicatedAthletes'
 
 // Redux
 import { connect } from "react-redux";
-import { addAthlete, getAthlete, getAthleteFee, getDuplicatedAthletesTable } from "../../redux/actions/athletes";
+import { addAthlete, getAthlete, getAthletesByPhone, getAthletesBySurnames, doRegisterAthlete, doUnregisterAthlete } from "../../redux/actions/athletes";
+import { getSportSchoolFeeTypes } from "../../redux/actions/sportSchools";
 
 class CreateAthlete extends React.Component<any, any> {
 
-    feeTypes: { id: string, name: string }[] = []
-    
     constructor(props: {}) {
         super(props);
         this.state = {};
-
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
-
-        
     }
 
     componentDidMount() {
-        if (this.props.match && this.props.match.params && this.props.match.params.id) {
+        if (!this.isNewAthlete()) {
             let id = this.props.match.params.id
             this.getAthlete(id)
         }
@@ -47,23 +46,12 @@ class CreateAthlete extends React.Component<any, any> {
 
     getAthlete(id: Number) {
         this.props.getAthlete(id).then((data: Object) => {
-            this.feeTypes = utils.getFeeTypes(this.props.athlete.sportSchoolId)
-            this.props.getAthleteFee(this.props.athlete)
+            this.props.getSportSchoolFeeTypes(this.props.athlete.sportSchoolId)
         });
     }
 
-    fillFee(values: Object) {
-        this.props.getAthleteFee(values)
-    }
-
     handleFormSubmit() {
-        this.props.addAthlete(this.state).then((data: Object) => {
-
-            if (this.state.exit) {
-                this.props.history.push("/athletes");
-                window.location.reload();
-            }
-        })
+        this.props.addAthlete(this.state)
     }
 
     isValidDni(dni: string) {
@@ -87,18 +75,44 @@ class CreateAthlete extends React.Component<any, any> {
         }
     }
 
+    getPhoneList(phone1: string, phone2: string, phone3: string): string[] {
+
+        // Check relatives by phone
+        let phoneList: string[] = [];
+        if (phone1 && phone1 !== ''){
+            phoneList.push(phone1)
+        }
+        if (phone2 && phone2 !== ''){
+            phoneList.push(phone2)
+        }
+        if (phone3 && phone3 !== ''){
+            phoneList.push(phone3)
+        }
+        return phoneList;
+    }
+
+    isNewAthlete() {
+        return !(this.props.match && this.props.match.params && this.props.match.params.id)
+    }
+
+    isMatchingAthletes() {
+        return (this.props.athletes_by_surnames && this.props.athletes_by_surnames.length > 0) || (this.props.athletes_by_phone && this.props.athletes_by_phone.length > 0)                                                                     
+    }
+
     render() {
 
         return (
 
-            <Formik enableReinitialize
+            <React.Suspense fallback={<div>Cargando...</div>}>
+
+                <Formik enableReinitialize
                 initialValues={{
                     id: this.props.athlete.id || 0,
                     code: this.props.athlete.code || 0,
                     familyCode: this.props.athlete.familyCode || 0,
                     // Extra fields
                     sportSchools: this.props.sportSchools || [],
-                    feeTypes: this.feeTypes || [],
+                    feeTypes: this.state.feeTypes || [],
                     age: this.props.athlete.age || 0,
                     // Personal info
                     sportSchoolId: this.props.athlete.sportSchoolId || '',
@@ -134,6 +148,7 @@ class CreateAthlete extends React.Component<any, any> {
                     specialization: this.props.athlete.specialization || false,
                     groupId: this.props.athlete.groupId || '',
                     scheduleIds: this.props.athlete.scheduleIds || [],
+                    scheduleIdsStr: this.props.athlete.scheduleIds ? this.props.athlete.scheduleIds.join(".") || "" : "",
                     // Contact info
                     mail: this.props.athlete.mail || '',
                     phone1: this.props.athlete.phone1 || '',
@@ -155,12 +170,15 @@ class CreateAthlete extends React.Component<any, any> {
                     membershipFee: (this.props.athlete_fee ? this.props.athlete_fee.membershipFee : 0) || 0,
                     monthlyFee: (this.props.athlete_fee ? this.props.athlete_fee.monthlyFee : 0) || 0,
                     // Dialogs
-                    registered: this.props.athlete.registered || false,
+                    firstRegisterDate: this.props.athlete.firstRegisterDate || '',
+                    registered: this.props.athlete.registered || true,
                     registerDate: moment(new Date()).format("YYYY-MM-DD"),
+                    registerDateStr: moment(new Date()).format("YYYY-MM-DD"),
+                    registerObservations: '',
                     openRegisterDialog: false,
                     openSportdataDialog: false,
-                    openDuplicatedAthletes: false,
-
+                    openMatchingAthletes: false,
+                    
                     exit: false,
 
                     errorMessage: this.props.athlete.errorMessage || '',
@@ -169,14 +187,33 @@ class CreateAthlete extends React.Component<any, any> {
                 validate={(values) => {
                     let errors: any = {};
 
+                    // errors.sportSchoolId = values.sportSchoolId  === '';
+                    // errors.imageAuth = values.imageAuth  === '';
+                    // errors.name = values.name  === '';
+                    // errors.firstSurname = values.firstSurname  === '';
+                    // errors.birthDate = values.birthDate  === '';
+                    // errors.gender = values.gender  === '';
+                    // errors.phone1 = values.phone1  === '' && values.phone2  === '' && values.phone3  === '';
+                    // errors.mail = values.age >= 18 && values.mail  === '';
+                    // errors.municipality = values.municipality  === '';
+                    // errors.postalCode = values.postalCode  === '';
+                    // errors.address = values.address  === '';
+                    // errors.paymentType = values.paymentType  === '';
+                    // errors.feeType = values.feeType  === '';
+                    // errors.iban = values.iban === '' && values.paymentType === "DOM";
+                    // errors.holderName = values.holderName === '' && values.paymentType === "DOM";
+                    // errors.holderFirstSurname = values.holderFirstSurname === '' && values.paymentType === "DOM";
+                    // errors.holderSecondSurname = values.holderSecondSurname === '' && values.paymentType === "DOM";
+                    // errors.holderDni = (values.holderDni === '' || !this.isValidDni(values.holderDni)) && values.paymentType === "DOM" ;
+                    // errors.dni = values.age >= 14 && !this.isValidDni(values.dni)
                     if (values.sportSchoolId  === '') errors.sportSchoolId = true;
                     if (values.imageAuth  === '') errors.imageAuth = true;
                     if (values.name  === '') errors.name = true;
                     if (values.firstSurname  === '') errors.firstSurname = true;
                     if (values.birthDate  === '') errors.birthDate = true;
                     if (values.gender  === '') errors.gender = true;
-                    if (values.phone1  === '') errors.phone1 = true;
-                    if (values.mail  === '') errors.mail = true;
+                    if (values.phone1  === '' && values.phone2  === '' && values.phone3  === '') errors.phone1 = true;
+                    if (values.age >= 18 && values.mail  === '') errors.mail = true;
                     if (values.municipality  === '') errors.municipality = true;
                     if (values.postalCode  === '') errors.postalCode = true;
                     if (values.address  === '') errors.address = true;
@@ -195,14 +232,13 @@ class CreateAthlete extends React.Component<any, any> {
                     if (values.holderSecondSurname === '' && values.paymentType === "DOM") {
                         errors.holderSecondSurname = true;
                     }
-                    if (values.holderDni === '' && values.paymentType === "DOM") {
+                    if ((values.holderDni === '' || !this.isValidDni(values.holderDni)) && values.paymentType === "DOM" ) {
                         errors.holderDni = true;
                     }
-                    if (!this.isValidDni(values.dni)){
+                    if (values.age >= 14 && !this.isValidDni(values.dni)){
                         errors.dni = true
                     }
-
-                    //check if my values have errors
+             
                     return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
@@ -226,29 +262,46 @@ class CreateAthlete extends React.Component<any, any> {
                         </Snackbar>
                         <Snackbar open={values.successMessage !== undefined && values.successMessage !== ''}
                             anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
-                            <Alert severity="success" onClose={() => { setFieldValue("successMessage", "") }}>
+                            <Alert severity="success" onClose={() => { 
+                                    setFieldValue("successMessage", "");
+                                    if (values.exit) {
+                                        window.open("/athletes/list", "_self");
+                                        // this.props.history.push("/athletes/list");
+                                        // window.location.reload();
+                                    }
+                                    else {
+                                        window.open("/athletes", "_self");
+                                        // this.props.history.push("/athletes");
+                                        // window.location.reload();
+                                    } 
+                                }}>
                                 <AlertTitle>Ok!</AlertTitle>
                                 <strong>{values.successMessage}</strong>
                             </Alert>
                         </Snackbar>
 
-                        <Dialog fullWidth={true} maxWidth="xl" open={values.openDuplicatedAthletes} aria-labelledby="form-dialog-title"
+                        <Dialog fullWidth={true} maxWidth="xl" open={values.openMatchingAthletes} aria-labelledby="form-dialog-title"
                             onClose={() => {
-                                setFieldValue('openDuplicatedAthletes', false)
+                                setFieldValue('openMatchingAthletes', false)
                             }}
                         >
-                            <DialogTitle id="form-dialog-title">Histórico deportivo</DialogTitle>
+                            <DialogTitle id="form-dialog-title">Atletas coincidentes</DialogTitle>
                             <DialogContent>
-                                <Grid container>
-                                    <DuplicatedAthletes 
-                                        id={values.id}
-                                        name={values.name}
-                                        firstSurname={values.firstSurname}
-                                        dni={values.dni} />
-                                </Grid>
+                                <AthletesList athletes={this.props.athletes_by_phone.concat(this.props.athletes_by_surnames)}
+                                    onSelectFamily={(familyCode: number) => { 
+                                        setFieldValue("familyCode", familyCode) 
+                                        setFieldValue('openMatchingAthletes', false)
+                                    }}
+                                    onSelectAthlete={(id: number) => { 
+                                        window.open("/athletes/" + id, "_self");
+                                    }}
+                                />
+                                
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={() => { setFieldValue('openDuplicatedAthletes', false) }} color="secondary" text="Cerrar" />
+                                <Button 
+                                    onClick={(a: any) => { setFieldValue('openMatchingAthletes', false) }}
+                                >Cerrar</Button>
                             </DialogActions>
                         </Dialog>
 
@@ -264,10 +317,11 @@ class CreateAthlete extends React.Component<any, any> {
                                                             onChange={(sportSchoolId: number) => {
                                                                 setFieldValue('sportSchoolId', sportSchoolId);
                                                                 if (sportSchoolId) {
-                                                                    values.feeTypes = utils.getFeeTypes(sportSchoolId)
-                                                                    if (values.feeType) {
-                                                                        setFieldValue('feeType', values.feeType);
-                                                                    }
+                                                                    this.props.getSportSchoolFeeTypes(sportSchoolId).then(() => {
+                                                                        if (values.feeType) {
+                                                                            setFieldValue('feeType', values.feeType);
+                                                                        }
+                                                                    })
                                                                 }
                                                             }}
                                                         />
@@ -281,8 +335,11 @@ class CreateAthlete extends React.Component<any, any> {
                                                 </Grid>
                                             </CustomCard>
                                         </Grid>
-                                        <Grid item xs={3}>
-                                            {values.id ? <Button text={values.registered ? 'Dar de baja' : 'Dar de alta'} onClick={() => { setFieldValue('openRegisterDialog', true) }} /> : null}
+                                        <Grid item xs={2} style={{ display: values.id > 0 ? "block" : "none" }}>
+                                            <Typography variant="subtitle1" gutterBottom component="div">Fecha de incorporación: {moment(new Date(values.firstRegisterDate)).format('DD/MM/YYYY')}</Typography>
+                                        </Grid>
+                                        <Grid item xs={1}>
+                                            {values.id ? <Button onClick={() => { setFieldValue('openRegisterDialog', true) }} >{values.registered ? 'Dar de baja' : 'Dar de alta'}</Button> : null}
                                             <Dialog fullWidth={true} open={values.openRegisterDialog} aria-labelledby="form-dialog-title"
                                                 onClose={() => {
                                                     setFieldValue('openRegisterDialog', false)
@@ -293,32 +350,30 @@ class CreateAthlete extends React.Component<any, any> {
                                                     <DialogContentText>
                                                         Introduce la fecha de {values.registered ? 'baja' : 'alta'}.
                                                 </DialogContentText>
-                                                    <TextField id="registerDate" name="registerDate" value={values.registerDate} margin="dense" onChange={handleChange}
+                                                    <TextField name="registerDateStr" value={values.registerDateStr} margin="dense" onChange={(e: any) => {
+                                                                let d: Moment = moment(e.target.value, "YYYY-MM-DD")
+                                                                setFieldValue('registerDateStr', e.target.value);
+                                                                setFieldValue('registerDate', d.toDate().getTime());
+                                                            }}
                                                         type="date" />
+                                                    <TextField fullWidth name="registerObservations" label="Observaciones" multiline
+                                                            value={values.registerObservations} onChange={handleChange}/>
                                                 </DialogContent>
                                                 <DialogActions>
                                                     <Button onClick={() => {
-                                                        const requestOptions = {
-                                                            method: 'POST',
-                                                            headers: { 'Content-Type': 'application/json' },
-                                                            body: JSON.stringify({ date: values.registerDate })
+                                                        if (values.registered){
+                                                            this.props.doUnregisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
                                                         }
-
-                                                        fetch(process.env.REACT_APP_SERVER_URL + "/athletes/" + values.id + (values.registered ? "/unregister" : "/register"), requestOptions)
-                                                            .then(res => res.json())
-                                                            .then(data => {
-                                                                setFieldValue('openRegisterDialog', false)
-                                                                this.getAthlete(values.id)
-                                                            });
-                                                    }} color="primary"
-                                                        text={values.registered ? 'Dar de baja' : 'Dar de alta'} />
-                                                    <Button onClick={() => { setFieldValue('openRegisterDialog', false) }} color="secondary"
-                                                        text="Cancelar" />
+                                                        else {
+                                                            this.props.doRegisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
+                                                        }
+                                                    }}>{values.registered ? 'Dar de baja' : 'Dar de alta'}</Button>
+                                                    <Button onClick={() => { setFieldValue('openRegisterDialog', false) }}>"Cancelar"</Button>
                                                 </DialogActions>
                                             </Dialog>
                                         </Grid>
-                                        <Grid item xs={3}>
-                                            {values.id ? <Button text={'Histórico deportivo'} onClick={() => { setFieldValue('openSportdataDialog', true) }} /> : null}
+                                        <Grid item xs={1}>
+                                            {values.id ? <Button onClick={() => { setFieldValue('openSportdataDialog', true) }} >Histórico deportivo</Button> : null}
                                             <Dialog fullWidth={true} maxWidth="xl" open={values.openSportdataDialog} aria-labelledby="form-dialog-title"
                                                 onClose={() => {
                                                     setFieldValue('openSportdataDialog', false)
@@ -331,8 +386,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                     </Grid>
                                                 </DialogContent>
                                                 <DialogActions>
-                                                    <Button onClick={() => { setFieldValue('openSportdataDialog', false) }} color="secondary"
-                                                        text="Cerrar" />
+                                                    <Button onClick={() => { setFieldValue('openSportdataDialog', false) }}>Cerrar</Button>
                                                 </DialogActions>
                                             </Dialog>
                                         </Grid>
@@ -345,13 +399,6 @@ class CreateAthlete extends React.Component<any, any> {
                                                         <Grid item xs>
                                                             <TextField name="name" label="Nombre" value={values.name} margin="dense"
                                                                 error={touched.name && errors.name} onChange={handleChange} 
-                                                                onBlur={() => {
-                                                                    if (values.name && values.firstSurname && values.dni){
-                                                                        this.props.getDuplicatedAthletesTable(values.id, values.name, values.firstSurname, values.dni).then((d: any) => {
-                                                                            setFieldValue('openDuplicatedAthletes', this.props.duplicated_athletes && this.props.duplicated_athletes.length > 0)
-                                                                        })
-                                                                    }
-                                                                }}
                                                             />
                                                         </Grid>
                                                         <Grid item xs>
@@ -361,9 +408,9 @@ class CreateAthlete extends React.Component<any, any> {
                                                                     if (values.familiarOneFirstSurname === '') {
                                                                         setFieldValue('familiarOneFirstSurname', e.target.value);
                                                                     }
-                                                                    if (values.name && values.firstSurname && values.dni){
-                                                                        this.props.getDuplicatedAthletesTable(values.id, values.name, values.firstSurname, values.dni).then((d: any) => {
-                                                                            setFieldValue('openDuplicatedAthletes', this.props.duplicated_athletes && this.props.duplicated_athletes.length > 0)
+                                                                    if (this.isNewAthlete() && values.firstSurname !== '' && values.secondSurname !== ''){
+                                                                        return this.props.getAthletesBySurnames(values.firstSurname, values.secondSurname).then(() => {
+                                                                            setFieldValue('openMatchingAthletes', this.isMatchingAthletes())
                                                                         })
                                                                     }
                                                                 }}
@@ -376,6 +423,11 @@ class CreateAthlete extends React.Component<any, any> {
                                                                 onBlur={(e: any) => {
                                                                     if (values.familiarTwoFirstSurname === '') {
                                                                         setFieldValue('familiarTwoFirstSurname', e.target.value);
+                                                                    }
+                                                                    if (this.isNewAthlete() && values.firstSurname !== '' && values.secondSurname !== ''){
+                                                                        return this.props.getAthletesBySurnames(values.firstSurname, values.secondSurname).then(() => {
+                                                                            setFieldValue('openMatchingAthletes', this.isMatchingAthletes())
+                                                                        })
                                                                     }
                                                                 }}
                                                                 onChange={handleChange}
@@ -410,14 +462,6 @@ class CreateAthlete extends React.Component<any, any> {
                                                         <Grid item xs>
                                                             <TextField name="dni" label="DNI/NIE" type="text" value={values.dni}
                                                                 error={touched.dni && errors.dni} onChange={handleChange}
-                                                                onBlur={() => {
-                                                                    if (values.name && values.firstSurname && values.dni){
-                                                                        this.props.getDuplicatedAthletesTable(values.id, values.name, values.firstSurname, values.dni).then((d: any) => {
-                                                                            setFieldValue('openDuplicatedAthletes', this.props.duplicated_athletes && this.props.duplicated_athletes.length > 0)
-                                                                        })
-                                                                        
-                                                                    }
-                                                                }}
                                                             />
                                                         </Grid>
                                                         <Grid item xs>
@@ -445,23 +489,21 @@ class CreateAthlete extends React.Component<any, any> {
                                                                 onChange={handleChange} error={touched.mail && errors.mail} />
                                                         </Grid>
                                                     </Grid>
-                                                    <Grid container item spacing={1}>
-                                                        <Grid item xs>
-                                                            <TextField name="phone1" type="tel" value={values.phone1} label="Teléfono 1" 
-                                                                onChange={handleChange} error={touched.phone1 && errors.phone1}
-                                                            />
-                                                        </Grid>
-                                                        <Grid item xs>
-                                                            <TextField name="phone2" type="tel" value={values.phone2} label="Teléfono 2" 
-                                                                onChange={handleChange} error={touched.phone2 && errors.phone2}
-                                                            />
-                                                        </Grid>
-                                                        <Grid item xs>
-                                                            <TextField name="phone3" type="tel" value={values.phone3} label="Teléfono 3"
-                                                                onChange={handleChange} error={touched.phone3 && errors.phone3}
-                                                            />
-                                                        </Grid>
-                                                    </Grid>
+                                                    <PhoneCard phone1={values.phone1} phone2={values.phone2} phone3={values.phone3}
+                                                        errorPhone1={touched.phone1 && errors.phone1}
+                                                        onChange={(phone1:string, phone2:string, phone3:string) => {
+                                                            setFieldValue('phone1', phone1)
+                                                            setFieldValue('phone2', phone2)
+                                                            setFieldValue('phone3', phone3)
+                                                        }}
+                                                        onBlur={() => {
+                                                            let phoneList = this.getPhoneList(values.phone1, values.phone2, values.phone3)
+                                                            if (this.isNewAthlete() && phoneList.length > 0){
+                                                                return this.props.getAthletesByPhone(phoneList).then(() => {
+                                                                    setFieldValue('openMatchingAthletes', this.isMatchingAthletes())
+                                                                })
+                                                            }
+                                                        }} />
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs>
                                                             <TextField name="municipality" label="Municipio" value={values.municipality} onChange={handleChange}
@@ -481,10 +523,9 @@ class CreateAthlete extends React.Component<any, any> {
                                                 </Grid>
                                             </CustomCard>
                                         </Grid>
-                                        
                                     </Grid>
                                     <Grid container item spacing={2}>
-                                    <Grid item xs>
+                                        <Grid item xs>
                                             <CustomCard title="Datos Familiares">
                                                 <Typography color="textSecondary">Familiar 1</Typography>
                                                 <Grid container direction="column" spacing={2}>
@@ -534,7 +575,7 @@ class CreateAthlete extends React.Component<any, any> {
                                             <CustomCard title="Datos Bancarios" >
                                                 <Grid container direction="column" spacing={2}>
                                                     <Grid container item spacing={1}>
-                                                        <Grid item xs={3}>
+                                                        <Grid item xs>
                                                             <Select fullWidth name="paymentType" label="Forma de pago"
                                                                 options={utils.getPaymentTypes()} value={values.paymentType} error={touched.paymentType && errors.paymentType}
                                                                 onChange={(e: any, value: any) => {
@@ -542,9 +583,9 @@ class CreateAthlete extends React.Component<any, any> {
                                                                 }}
                                                             />
                                                         </Grid>
-                                                        <Grid item xs={3}>
-                                                            <Select name="feeType" label="Tipo de cuota"
-                                                                options={values.feeTypes} value={values.feeType} error={touched.feeType && errors.feeType}
+                                                        <Grid item xs>
+                                                            <Select fullWidth name="feeType" label="Tipo de cuota"
+                                                                options={this.props.fee_types} value={values.feeType} error={touched.feeType && errors.feeType}
                                                                 onChange={(e: any, value: any) => {
                                                                     setFieldValue('feeType', value ? value.id : "")
                                                                 }}
@@ -614,7 +655,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                 <Grid container item spacing={1}>
                                                     <Grid item xs={2}>
                                                         <Select fullWidth name="licenseType" label="Tipo de Licencia"
-                                                            value={values.licenseType} options={[{ id: "N", name: "Nacional" }, { id: "T", name: "Territorial" }]}
+                                                            value={values.licenseType} options={[{ id: "National", name: "Nacional" }, { id: "Territorial", name: "Territorial" }]}
                                                             onChange={(e: any, value: any) => setFieldValue('licenseType', value ? value.id : "")}
                                                         />
                                                     </Grid>
@@ -625,13 +666,15 @@ class CreateAthlete extends React.Component<any, any> {
                                                 <Grid container spacing={1} direction="row">
                                                     <Grid item xs>
                                                         <GroupScheduleSelect 
+                                                            disabled={!values.registered}
                                                             groupId={values.groupId}
                                                             specialization={values.specialization}
                                                             scheduleIds={values.scheduleIds}
                                                             onChange={(groupId: number, specialization: boolean, scheduleIds: number[]) => {
+                                                                setFieldValue('scheduleIds', scheduleIds)
+                                                                setFieldValue('scheduleIdsStr', scheduleIds.join("."))
                                                                 setFieldValue('specialization', specialization)
                                                                 setFieldValue('groupId', groupId)
-                                                                setFieldValue('scheduleIds', scheduleIds)
                                                             }}
                                                         />
                                                     </Grid>
@@ -641,19 +684,7 @@ class CreateAthlete extends React.Component<any, any> {
                                     </Grid>
                                     <Grid container item style={{ display: values.feeType !== "SOCIO" ? "block" : "none" }}>
                                         <Grid item>
-                                            <CustomCard title="Calculo de cuota">
-                                                <Grid container spacing={1}>
-                                                    <Grid item>
-                                                        <TextField name="membershipFee" label="Cuota de socio" type="number" disabled value={values.membershipFee} />
-                                                    </Grid>
-                                                    <Grid item>
-                                                        <TextField name="enrollmentFee" label="Matricula" type="number" disabled value={values.enrollmentFee} />
-                                                    </Grid>
-                                                    <Grid item>
-                                                        <TextField name="monthlyFee" label="Mensualidad" type="number" disabled value={values.monthlyFee} />
-                                                    </Grid>
-                                                </Grid>
-                                            </CustomCard>
+                                            <FeeInfo {...values} />
                                         </Grid>
                                     </Grid>
                                     <Grid container item style={{ display: "block" }}>
@@ -661,7 +692,7 @@ class CreateAthlete extends React.Component<any, any> {
                                             <CustomCard>
                                                 <Grid container spacing={1}>
                                                     <Grid item xs={3}>
-                                                        <Checkbox name="scheduleIds" checked={values.imageAuth === true} 
+                                                        <Checkbox name="imageAuth" checked={values.imageAuth === true} 
                                                             onChange={e => {
                                                                 setFieldValue('imageAuth', e.target.checked)
                                                             }}
@@ -681,36 +712,40 @@ class CreateAthlete extends React.Component<any, any> {
                         </Box>
                         <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
                             <Toolbar>
-                                <SaveButton text='Guardar y salir' type="submit" 
+                                <SaveButton type="submit" 
                                     onClick={() => {
-                                        values.exit = true;
-                                        console.log(values.exit)
+                                        setFieldValue('exit', true)
                                         return false;
                                     }}
-                                />
-                                <SaveButton type="submit" text='Guardar y continuar' disabled={isSubmitting} />
+                                >Guardar y salir</SaveButton>
+                                <SaveButton type="submit" disabled={isSubmitting}>Guardar y continuar</SaveButton>
                             </Toolbar>
                         </AppBar>
                     </form>
                 )}}
             </Formik>
 
+            </React.Suspense>
         );
     }
 }
 
 const mapDispatchToProps = {
     addAthlete, 
-    getAthlete, 
-    getAthleteFee, 
-    getDuplicatedAthletesTable
+    getAthlete,
+    getAthletesByPhone,
+    getAthletesBySurnames,
+    getSportSchoolFeeTypes,
+    doRegisterAthlete, 
+    doUnregisterAthlete
 }
 
 const mapStateToProps = (state: any) => {
     return {
         athlete: state.athlete_reducer.athlete,
-        athlete_fee: state.athlete_reducer.athlete_fee,
-        duplicated_athletes: state.table_reducer.table_data
+        athletes_by_phone: state.athlete_reducer.athletes_by_phone,
+        athletes_by_surnames: state.athlete_reducer.athletes_by_surnames,
+        fee_types: state.sport_school_reducer.fee_types,
     };
 };
 

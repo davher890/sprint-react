@@ -1,4 +1,5 @@
-import { getRequest, postRequest } from "./ApiService"
+import utils from '../utils/TableUtils'
+import { deleteRequest, getRequest, postRequest, postExcelRequest, getExcelRequest } from "./ApiService"
 
 export const addData = (body: any) => {
     return postRequest("/groups", body)
@@ -24,39 +25,19 @@ export const findGroupSchedules = (id: number) => {
     return getRequest("/groups/" + id + "/schedules")
 }
 
-export const downloadGroupSchedulesExcel = (groupId: number, scheduleIds: number[], columns: any) => {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(columns)
+export const deleteGroup = (id: number) => {
+    return deleteRequest("/groups/" + id)
+}
+
+export const downloadGroupSchedulesExcel = (groupId: number, scheduleIds: number[], columns: any, filters:any) => {
+    let endpoint = "/groups/" + groupId + "/schedules/" + scheduleIds.join("_") + "/athletes/excel"
+    let filtersParams = '';
+    if (filters && Object.keys(filters).length > 0){
+        filtersParams = "?filters=" + utils.getFilterParams(filters)
     }
-    return fetch(process.env.REACT_APP_SERVER_URL + "/groups/" + groupId + "/schedules/" + scheduleIds.join("_") + "/athletes/excel", requestOptions)
-        .then(response => {
-            response.blob().then(blob => {
-                let url = window.URL.createObjectURL(blob);
-                let a = document.createElement('a');
-                a.href = url;
-                a.download = 'athletes.xlsx';
-                a.click();
-            })
-        })
-        .catch(function (e) {
-            console.log("error", e);
-        });
+    return postExcelRequest(endpoint + filtersParams, columns, 'atletas_grupo_' + groupId + '.xlsx')
 }
 
 export const findGroupAttendance = (groupId: number, month: number) => {
-    return fetch(process.env.REACT_APP_SERVER_URL + "/groups/" + groupId + "/attendance?month=" + month)
-        .then(response => {
-            response.blob().then(blob => {
-                let url = window.URL.createObjectURL(blob);
-                let a = document.createElement('a');
-                a.href = url;
-                a.download = 'athletes.xlsx';
-                a.click();
-            })
-        })
-        .catch(function () {
-            console.log("error");
-        });
+    return getExcelRequest("/groups/" + groupId + "/attendance?month=" + month, 'atletas_grupo_' + groupId + '.xlsx')
 }

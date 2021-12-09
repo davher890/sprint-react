@@ -1,4 +1,4 @@
-import { SPECIALIZATION_GROUPS, NOT_SPECIALIZATION_GROUPS, GROUP_SCHEDULES, GET_GROUP, ADD_GROUP, LOAD_GROUPS } from "../../constants/action_types";
+import { SPECIALIZATION_GROUPS, NOT_SPECIALIZATION_GROUPS, GROUP_SCHEDULES, GET_GROUP, ADD_GROUP, LOAD_GROUPS, DELETE_GROUP } from "../../constants/action_types";
 
 const initialState = {
     specialization_groups: [],
@@ -9,7 +9,7 @@ const initialState = {
 };
 
 function rootReducer(state = initialState, action: { type: string, payload: any }) {
-    if (action.type === ADD_GROUP || action.type === GET_GROUP) {
+    if (action.type === ADD_GROUP || action.type === GET_GROUP || action.type === DELETE_GROUP) {
         return {
             ...state,
             group: action.payload

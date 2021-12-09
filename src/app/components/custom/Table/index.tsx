@@ -8,24 +8,37 @@ import { makeStyles } from '@material-ui/core/styles';
 import ColumnsSelect from "../ColumnsSelect";
 import TextField from "../TextField";
 import TablePaginationActions from "../TablePagination";
-
+import Select from '../Select'
 
 const CustomTable: React.FC<any> = (props) => {
 
 	const styles = makeStyles({
 		root: {
-			background: props.theme.palette.primary.main,
-			borderColor: 'white',
+			// background: props.theme.palette.primary.main,
+			color : props.theme.palette.secondary.main,
+			borderColor: props.theme.palette.secondary.main,
+			// "&.Mui-focused": {
+			// 	color: props.theme.palette.secondary.main
+			// }
 		},
 		focused: {
+			color : props.theme.palette.secondary.main,
 			borderColor: props.theme.palette.secondary.main,
+			borderBottomColor: props.theme.palette.secondary.main,
 		},
 		input: {
-			  color: props.theme.palette.secondary.main
+			// borderWidth: "2px",
+			// borderColor: props.theme.palette.secondary.main,
+			color : props.theme.palette.secondary.main,
+			// background: props.theme.palette.primary.main,
 		},
-		label: {
-			color : props.theme.palette.secondary.main
+		yellowText: {
+			// borderWidth: "2px",
+			// borderColor: props.theme.palette.secondary.main,
+			color : props.theme.palette.secondary.main,
+			// background: props.theme.palette.primary.main,
 		},
+		
 	});
 
 	const classes = styles();
@@ -36,27 +49,32 @@ const CustomTable: React.FC<any> = (props) => {
 	const [visibleColumns, setVisibleColumns] = React.useState<any[]>(props.columns.filter((c: any) => c.show === undefined || c.show === true) || []);
 	const [filterObj, setFilterObj] = React.useState<any>(props.filters || {});
 
-
 	const handleFilterChange = (filterType: string, filterField: string, filterValue: string, filterOptions?: any[]) => {
 
 		if (!filterValue || filterValue === ''){
 			delete filterObj[filterField]
+			setFilterObj(filterObj)
+
+			setPage(0)
+			props.onPaginationFilterChange(0, pageSize, filterObj)
 		}
 		else {
-			filterObj[filterField] = {
-				filterVal : filterValue,
-				comparator: "LIKE"
-			}
-			if (filterType === 'number'){
-				filterObj[filterField].comparator = "="
+			if (filterValue.length > 2 || filterType === 'options'){
+				filterObj[filterField] = {
+					filterVal : filterValue,
+					comparator: "LIKE"
+				}
+				if (filterType === 'number' || filterType === 'options'){
+					filterObj[filterField].comparator = "="
+				}
+				setFilterObj(filterObj)
+
+				setPage(0)
+				props.onPaginationFilterChange(0, pageSize, filterObj)
 			}
 		}
-		setFilterObj(filterObj)
-
-		setPage(0)
-		props.onPaginationFilterChange(0, pageSize, filterObj)
+		
 	}
-
 	const handlePageChange = (event: any, newPage: number) => {
 		setPage(newPage)
 		if (props.onPaginationFilterChange){
@@ -71,7 +89,7 @@ const CustomTable: React.FC<any> = (props) => {
 	}
 	const downloadData = () => {
 		if (props.downloadData){
-			props.downloadData(columns)
+			props.downloadData(columns, filterObj)
 		}
 	}
 	const onRowClick = (id: number) => {
@@ -79,82 +97,109 @@ const CustomTable: React.FC<any> = (props) => {
 			props.onRowClick(id)
 		}
 	}
-
 	const getRowData = (row: any) => {
 		let columnNames : string[] = visibleColumns.map((c: any) => c.dataField)
-		return Object.keys(row).filter((key:string) => columnNames.includes(key)).map(column => (
+		return columnNames.map(column => (
 			<TableCell key={ row.id + "_" + column } component="th" scope="row">
 				{row[column]}
 			</TableCell>
 		))
 	}
-
 	return (
-		<Grid container spacing={3} direction="column">
-			<Grid container item style={{ display: props.showColumns ? "block" : "none" }}>
-				<Grid item xs>
-					<ColumnsSelect 
-						columns={columns}
-						changeEvent={(cols: any) => { 
-							setColumns(cols) 
-							setVisibleColumns(cols.filter((c: any) => c.show === undefined || c.show === true))
-						}}
-						showDownloadData={props.downloadData !== undefined}
-						downloadData={downloadData}
-					/>
-				</Grid>
+		<Grid container direction="column">
+			<Grid item style={{ display: props.showColumns ? "block" : "none" }}>
+				<ColumnsSelect 
+					columns={columns}
+					changeEvent={(cols: any) => { 
+						setColumns(cols) 
+						setVisibleColumns(cols.filter((c: any) => c.show === undefined || c.show === true))
+					}}
+					showDownloadData={props.downloadData !== undefined}
+					downloadData={downloadData}
+				/>
 			</Grid>
-			<Grid container item spacing={1}>
-				<Grid item xs>
-					<TableContainer>
-						<Table stickyHeader>
-							<TableHead>
-								<TableRow>
-									{visibleColumns.map((column) => (
-										<TableCell key={column.dataField}>
-										{ column.filter ?
-											<TextField dense='true' label={column.text} className={classes.root} 
-												InputProps={{ className: classes.input }}
-												InputLabelProps={{
-													classes: {
-													  root: classes.label,
-													  focused: classes.focused,
-													},
-												  }}
-												onChange={(e: any) => {
-													handleFilterChange(column.filter.type, column.dataField, e.target.value)
-												}} 
-											>	
-											</TextField>
-											: column.text
+			<Grid item >
+				<TableContainer>
+					<Table stickyHeader>
+						<TableHead>
+							<TableRow>
+								{visibleColumns.map((column) => (
+									<TableCell key={column.dataField}>
+									{(() => {
+										if (column.filter){
+											if (column.filter.options && column.filter.options.length > 0){
+												return <Select name={column.dataField} label={column.text} 
+													InputLabelProps={{
+														classes: {
+															root: classes.root,
+															// focused: classes.yellowText,
+															// active: classes.yellowText,
+															// focusVisible: classes.yellowText,
+															// selected: classes.yellowText,
+														},
+													}}
+													InputProps={{ 
+														classes: {
+															root: classes.yellowText,
+															focused: classes.yellowText,
+															active: classes.yellowText,
+															focusVisible: classes.yellowText,
+															selected: classes.yellowText,
+														},
+													}}
+													options={column.filter.options} value={1}
+													onChange={(value: string, item: any) => {
+														handleFilterChange(column.filter.type, column.dataField, item ? item.id : '')
+													}}
+												/>
+											}
+											else {
+												return <TextField dense='true' label={column.text} className={classes.root} 
+													InputProps={{ 
+														className: classes.input
+													}} 
+													InputLabelProps={{
+														classes: {
+															root: classes.root,
+															focused: classes.focused
+														},
+													}}
+													onChange={(e: any) => {
+														handleFilterChange(column.filter.type, column.dataField, e.target.value)
+													}} 
+												/>
+											}
 										}
-										</TableCell>
-									))}
+										else {
+											return column.text
+										}
+									})()}
+									</TableCell>
+								))}
+							</TableRow>
+						</TableHead>
+						<TableBody>
+						{
+							props.data.map((row:any) => (
+								<TableRow hover key={row.id} onClick={() => onRowClick(row.id)}>
+									{ getRowData(row) }
 								</TableRow>
-							</TableHead>
-							<TableBody>
-							{
-								props.data.map((row:any) => (
-									<TableRow hover key={row.id} onClick={() => onRowClick(row.id)}>
-										{ getRowData(row) }
-									</TableRow>
-								))
-							}
-							</TableBody>
-							
-						</Table>
-					</TableContainer>
-					<TablePagination
-						rowsPerPageOptions={[5, 10, 25]}
-						component="div"
-						count={props.total}
-						page={page}
-						rowsPerPage={pageSize}
-						onPageChange={handlePageChange}
-						onRowsPerPageChange={handlePageSizeChange}
-						ActionsComponent={TablePaginationActions}
-					/>
-				</Grid>
+							))
+						}
+						</TableBody>
+						
+					</Table>
+				</TableContainer>
+				<TablePagination
+					rowsPerPageOptions={[5, 10, 25]}
+					component="div"
+					count={props.total}
+					page={page}
+					rowsPerPage={pageSize}
+					onPageChange={handlePageChange}
+					onRowsPerPageChange={handlePageSizeChange}
+					ActionsComponent={TablePaginationActions}
+				/>
 			</Grid>
 		</Grid>
 	)

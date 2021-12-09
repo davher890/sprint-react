@@ -22,8 +22,8 @@ class HistoricTableComponent extends React.Component<any, any> {
 		this.props.getHistoricTable();
 	}
 
-	downloadData(columns: any) {
-		this.props.downloadHistoricAthletes(columns)
+	downloadData(columns: any, filters: any) {
+		this.props.downloadHistoricAthletes(columns, filters)
 	}
 
 	render() {

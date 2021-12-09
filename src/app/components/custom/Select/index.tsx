@@ -8,11 +8,20 @@ const Select: React.FC<any> = (props) => {
     if (props.options && props.options.length > 0){
         return (
             <Autocomplete
+                {...props}
                 id={props.name}
                 // name={name}
                 options={props.options}
                 
-                getOptionLabel={(option: {id: string, name: string}) => option.name}
+                getOptionLabel={(option: any) => {
+                    return option.name
+                    // if (option){
+                    //     return props.options.find((e: {id: string, name: string}) => e.id === option).name
+                    // }
+                    // else {
+                    //     return "";
+                    // }
+                }}
                 // getItemValue={(item: any) => item.label}
 
                 getOptionSelected={(option: {id: string, name: string}, value) => option.id === value.id}
@@ -21,12 +30,12 @@ const Select: React.FC<any> = (props) => {
                 }
                 onChange={props.onChange}
                 renderInput={(params) => 
-                    <TextField {...params} label={props.label} error={props.error} 
+                    <TextField {...params} label={props.label} error={props.error} InputLabelProps={props.InputLabelProps}
                     />
                 }
                 fullWidth={props.fullWidth}
 
-                // {...props}
+                
             />
         )
     }

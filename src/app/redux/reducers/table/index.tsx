@@ -4,7 +4,7 @@ import { LOAD_SPORTSCHOOL_TABLE, LOAD_GROUP_TABLE,
     LOAD_GROUP_ATHLETES_TABLE, LOAD_ATHLETE_SPORTDATA_TABLE,
     LOAD_DUPLICATED_ATHLETES_TABLE } from "../../constants/action_types";
 
-import getTableItems from "../utils"
+import getTableItems from "../conversors"
 
 const initialState = {
     table_data : [],
