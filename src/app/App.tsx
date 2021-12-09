@@ -18,6 +18,7 @@ import GroupData from './components/groups/GroupData';
 import GroupTable from './components/groups/GroupTable';
 import FamilyTable from './components/families/FamilyTable';
 import FamilyData from './components/families/FamilyData';
+import Login from './components/login';
 
 import CustomAppBar from './components/custom/AppBar'
 
@@ -31,69 +32,57 @@ const AppBar: React.FC<any> = (props) => {
 
   return (
     <Router>
-      <CustomAppBar />
-      <Box m="2%" display="flex">
         <Switch>
-          <Route path="/sport_schools/list">
-            <SportSchoolTable/>
-          </Route>
 
-          <Route exact path="/sport_schools/:id" component={SportSchoolData}/>
+          <Route exact path="/login" component={Login}/>
 
-          <Route path="/sport_schools">
-            <SportSchoolData/>
-          </Route>
+          <Route exact path="/sport_schools/list" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><SportSchoolTable {...props}/></Box></div>}/>
 
-          <Route path="/families/list">
-            <FamilyTable/>
-          </Route>
+          <Route exact path="/sport_schools/:id" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><SportSchoolData {...props}/></Box></div>}/>
 
-          <Route path="/families/:id">
-            <FamilyData/>
-          </Route>
+          <Route exact path="/sport_schools" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><SportSchoolData {...props}/></Box></div>}/>
 
-          <Route path="/families">
-            <FamilyData/>
-          </Route>
+          <Route path="/families/list" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><FamilyTable {...props}/></Box></div>}/>
 
-          <Route path="/athletes/list">
-            <AthleteTable/>
-          </Route>
+          <Route path="/families/:id" render={(props) => <div><CustomAppBar/><Box m="2%" display="flex"><FamilyData {...props}/></Box></div>}/>
 
-          <Route exact path="/athletes/:id/historic" component={AthleteData} />
+          <Route path="/families" render={(props) => <div><CustomAppBar/><Box m="2%" display="flex"><FamilyData {...props}/></Box></div>}/>
 
-          <Route exact path="/athletes/:id/sport_data" component={AthleteSportdata} />
+          <Route path="/athletes/list" render={(props) => <div><CustomAppBar/><Box m="2%" display="flex"><AthleteTable {...props}/></Box></div>}/>
+
+          <Route exact path="/athletes/:id/historic" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><AthleteData {...props}/></Box></div>}/>
+
+          <Route exact path="/athletes/:id/sport_data" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><AthleteSportdata {...props}/></Box></div>}/>
           
-          <Route exact path="/athletes/historic" component={HistoricTable} />
+          <Route exact path="/athletes/historic" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><HistoricTable {...props}/></Box></div>}/>
 
-          <Route exact path="/athletes/:id" component={AthleteData} />
+          <Route exact path="/athletes/:id" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><AthleteData {...props}/></Box></div>}/>
 
-          <Route exact path="/athletes" component={AthleteData} />
+          <Route exact path="/athletes" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><AthleteData {...props}/></Box></div>}/>
 
-          <Route exact path="/groups/attendance" component={GroupAttendance}/>
+          <Route exact path="/groups/attendance" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><GroupAttendance {...props}/></Box></div>}/>
 
-          <Route exact path="/groups/athletes" component={GroupAthletesTable}/>
+          <Route exact path="/groups/athletes" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><GroupAthletesTable {...props}/></Box></div>}/>
           
-          <Route exact path="/groups/list" component={GroupTable}/>
+          <Route exact path="/groups/list" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><GroupTable {...props}/></Box></div>}/>
 
-          <Route exact path="/groups/:id" component={GroupData}/>
+          <Route exact path="/groups/:id" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><GroupData {...props}/></Box></div>}/>
 
-          <Route exact path="/groups" component={GroupData} />
+          <Route exact path="/groups" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><GroupData {...props}/></Box></div>}/>
           
-          <Route exact path="/schedules/list" component={ScheduleTable}/>
+          <Route exact path="/schedules/list" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><ScheduleTable {...props}/></Box></div>}/>
 
-          <Route exact path="/schedules/:id" component={ScheduleData}/>
+          <Route exact path="/schedules/:id" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><ScheduleData {...props}/></Box></div>}/>
 
-          <Route exact path="/schedules" component={ScheduleData}/>
+          <Route exact path="/schedules" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><ScheduleData {...props}/></Box></div>}/>
           
-          <Route exact path="/trainers/list" component={TrainerTable}/>
+          <Route exact path="/trainers/list" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><TrainerTable {...props}/></Box></div>}/>
 
-          <Route exact path="/trainers/:id" component={TrainerData}/>
+          <Route exact path="/trainers/:id" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><TrainerData {...props}/></Box></div>}/>
 
-          <Route exact path="/trainers" component={TrainerData}/>
+          <Route exact path="/trainers" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><TrainerData {...props}/></Box></div>}/>
 
         </Switch>
-      </Box>
     </Router>
   );
 }

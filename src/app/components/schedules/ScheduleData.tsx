@@ -5,7 +5,7 @@ import { Formik } from 'formik';
 import { Grid, AppBar, Toolbar, Snackbar } from "@material-ui/core";
 import { Alert, AlertTitle } from '@material-ui/lab';
 
-import MemoTextField from '../custom/TextField';
+import TextField from '../custom/TextField';
 import Select from '../custom/Select';
 import SaveButton from '../custom/SaveButton'
 import Card from '../custom/Card';
@@ -110,21 +110,21 @@ class ConnectedForm extends React.Component<any, any> {
                                 </Grid>
                                 <Grid container item xs spacing={2}>
                                     <Grid item xs>
-                                        <MemoTextField name="startHour" label="Hora Inicio" value={values.startHour} onChange={handleChange}
+                                        <TextField name="startHour" label="Hora Inicio" value={values.startHour} onChange={handleChange}
                                             error={touched.startHour && errors.startHour} />
                                     </Grid>
                                     <Grid item xs>
-                                        <MemoTextField name="startMinute" label="Minuto Inicio" value={values.startMinute} onChange={handleChange}
+                                        <TextField name="startMinute" label="Minuto Inicio" value={values.startMinute} onChange={handleChange}
                                             error={touched.startMinute && errors.startMinute} />
                                     </Grid>
                                 </Grid>
                                 <Grid container item xs spacing={2}>
                                     <Grid item xs>
-                                        <MemoTextField name="endHour" label="Hora Fin" value={values.endHour} onChange={handleChange}
+                                        <TextField name="endHour" label="Hora Fin" value={values.endHour} onChange={handleChange}
                                             error={touched.endHour && errors.endHour} />
                                     </Grid>
                                     <Grid item xs>
-                                        <MemoTextField name="endMinute" label="Minuto Fin" value={values.endMinute} onChange={handleChange}
+                                        <TextField name="endMinute" label="Minuto Fin" value={values.endMinute} onChange={handleChange}
                                             error={touched.endMinute && errors.endMinute} />
                                     </Grid>
                                 </Grid>
