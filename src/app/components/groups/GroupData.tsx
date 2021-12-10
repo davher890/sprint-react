@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { Formik } from 'formik';
 
-import { Grid, Snackbar, Checkbox, AppBar, Toolbar, } from "@material-ui/core";
+import { Grid, Snackbar, Checkbox, AppBar, Toolbar, Box } from "@material-ui/core";
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 import TextField from '../custom/TextField';
@@ -111,40 +111,46 @@ class ConnectedForm extends React.Component<any, any> {
                                     <strong>{values.successMessage}</strong>
                                 </Alert>
                             </Snackbar>
-                            <Grid container direction="column" spacing={3}>
-                                <Grid item xs>
-                                    <Card title="Datos del grupo">
+                            <Box paddingBottom={7}>
+                                <Grid container direction='row' spacing={3}>
+                                    <Grid item xs={6}>
+                                        <Card title="Datos del grupo">
+                                            <Grid container spacing={2}>
+                                                <Grid container item spacing={2}>
+                                                    <Grid item xs={6}>
+                                                        <SportSchoolSelect sportSchoolId={values.sportSchoolId} error={touched.sportSchoolId && errors.sportSchoolId}
+                                                            onChange={(sportSchoolId: number) => {
+                                                                setFieldValue('sportSchoolId', sportSchoolId);
+                                                            }}
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={6}>
+                                                        <Checkbox name="specialization" checked={values.specialization === true} 
+                                                                onChange={e => {
+                                                                    setFieldValue('specialization', e.target.checked)
+                                                                }}
+                                                            />
+                                                            Especialización
+                                                    </Grid>
+                                                </Grid>
+                                                <Grid container item spacing={2}>
+                                                    <Grid item xs>
+                                                        <TextField fullWidth name="name" label="Nombre" value={values.name} onChange={handleChange}
+                                                            error={touched.name && errors.name} />
+                                                    </Grid>
+                                                    <Grid item xs>
+                                                        <TrainerSelect trainerId={values.trainerId} error={touched.trainerId && errors.trainerId}
+                                                                onChange={(trainerId: number) => {
+                                                                    setFieldValue('trainerId', trainerId);
+                                                                }}
+                                                            />
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
+                                        </Card>
+                                    </Grid>
+                                    <Grid item xs={6}>
                                         <Grid container spacing={2}>
-                                            <Grid item xs={3}>
-                                                <SportSchoolSelect sportSchoolId={values.sportSchoolId} error={touched.sportSchoolId && errors.sportSchoolId}
-                                                    onChange={(sportSchoolId: number) => {
-                                                        setFieldValue('sportSchoolId', sportSchoolId);
-                                                    }}
-                                                />
-                                            </Grid>
-                                            <Grid item xs={3}>
-                                                <Checkbox name="specialization" checked={values.specialization === true} 
-                                                        onChange={e => {
-                                                            setFieldValue('specialization', e.target.checked)
-                                                        }}
-                                                    />
-                                                    Especialización
-                                            </Grid>
-                                        </Grid>
-                                        <Grid container spacing={2}>
-                                            <Grid item xs>
-                                                <TextField fullWidth name="name" label="Nombre" value={values.name} onChange={handleChange}
-                                                    error={touched.name && errors.name} />
-                                            </Grid>
-                                            
-                                            
-                                            <Grid item xs>
-                                                <TrainerSelect trainerId={values.trainerId} error={touched.trainerId && errors.trainerId}
-                                                        onChange={(trainerId: number) => {
-                                                            setFieldValue('trainerId', trainerId);
-                                                        }}
-                                                    />
-                                            </Grid>
                                             <Grid item xs>
                                                 <ScheduleSelect 
                                                     schedules={this.props.schedules}
@@ -156,18 +162,18 @@ class ConnectedForm extends React.Component<any, any> {
                                                 />
                                             </Grid>
                                         </Grid>
-                                    </Card>
+                                    </Grid>
                                 </Grid>
-                                <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
-                                    <Toolbar>
-                                        <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
-                                        {(this.props.match && this.props.match.params && this.props.match.params.id) ? 
-                                            <DeleteButton text='Borrar' onClick={() => setFieldValue("openDeleteDialog", true)}/>
-                                            : null
-                                        }
-                                    </Toolbar>
-                                </AppBar>
-                            </Grid>
+                            </Box>
+                            <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
+                                <Toolbar>
+                                    <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
+                                    {(this.props.match && this.props.match.params && this.props.match.params.id) ? 
+                                        <DeleteButton text='Borrar' onClick={() => setFieldValue("openDeleteDialog", true)}/>
+                                        : null
+                                    }
+                                </Toolbar>
+                            </AppBar>
                         </form>
                     )}
                 </Formik>                
