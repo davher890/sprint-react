@@ -21,19 +21,20 @@ const LoginForm: React.FC<any> = (props) => {
     }
     
     return (
-        <Container fixed>
-            <Card>
-                <Grid container spacing={1}>
-                    <Grid item xs>
-                        <TextField name="username" value={username} label="Usuario" onChange={handleUserChange}/>
-                        <TextField name="password" value={password} label="Contraseña" onChange={handlePasswordChange}/>
-                    </Grid>
-                    <Grid item xs>
-                        <SearchButton onClick={() => {props.signUp(username, password)}}></SearchButton>
-                    </Grid>
+        <Card>
+            <Grid container spacing={2} direction='column'>
+                <Grid item xs>
+                    <TextField name="username" value={username} label="Usuario" onChange={handleUserChange}/>
                 </Grid>
-            </Card>
-        </Container>
+                <Grid item xs>
+                    <TextField name="password" value={password} label="Contraseña" type="password"
+                        onChange={handlePasswordChange}/>
+                </Grid>
+                <Grid item xs>
+                    <SearchButton onClick={() => {props.signUp(username, password)}}>Entrar</SearchButton>
+                </Grid>
+            </Grid>
+        </Card>
     )
 }
 

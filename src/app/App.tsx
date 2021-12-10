@@ -34,7 +34,7 @@ const AppBar: React.FC<any> = (props) => {
     <Router>
         <Switch>
 
-          <Route exact path="/login" component={Login}/>
+          <Route exact path="/login" render={(props) => <div><Box ml='35%' mr='45%' m="15%" display="flex"><Login/></Box></div>}/>
 
           <Route exact path="/sport_schools/list" render={(props) => <div><CustomAppBar /><Box m="2%" display="flex"><SportSchoolTable {...props}/></Box></div>}/>
 
