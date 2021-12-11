@@ -41,7 +41,7 @@ const AthletesList: React.FC<any> = (props) => {
                                 <TableCell>{ row.phone1 }</TableCell>
                                 <TableCell>{ row.phone2 }</TableCell>
                                 <TableCell>{ row.phone3 }</TableCell>
-                                <TableCell><Button onClick={() => { props.onSelectFamily(row.familyCode); }}>Seleccionar familia</Button>
+                                <TableCell><Button onClick={() => { props.onSelectFamily(row); }}>Seleccionar familia</Button>
                                 </TableCell>
                                 <TableCell><SearchButton onClick={() => { props.onSelectAthlete(row.id); }}>Abrir atleta</SearchButton>
                                 </TableCell>

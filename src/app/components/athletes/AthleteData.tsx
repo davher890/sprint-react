@@ -229,9 +229,6 @@ class CreateAthlete extends React.Component<any, any> {
                     if (values.holderFirstSurname === '' && values.paymentType === "DOM") {
                         errors.holderFirstSurname = true;
                     }
-                    if (values.holderSecondSurname === '' && values.paymentType === "DOM") {
-                        errors.holderSecondSurname = true;
-                    }
                     if ((values.holderDni === '' || !this.isValidDni(values.holderDni)) && values.paymentType === "DOM" ) {
                         errors.holderDni = true;
                     }
@@ -288,8 +285,36 @@ class CreateAthlete extends React.Component<any, any> {
                             <DialogTitle id="form-dialog-title">Atletas coincidentes</DialogTitle>
                             <DialogContent>
                                 <AthletesList athletes={this.props.athletes_by_phone.concat(this.props.athletes_by_surnames)}
-                                    onSelectFamily={(familyCode: number) => { 
-                                        setFieldValue("familyCode", familyCode) 
+                                    onSelectFamily={(athlete: any) => { 
+
+                                        setFieldValue("familyCode", athlete.familyCode)
+                                        // Contact data
+                                        setFieldValue("mail", athlete.mail)
+                                        setFieldValue("phone1", athlete.phone1)
+                                        setFieldValue("phone2", athlete.phone2)
+                                        setFieldValue("phone3", athlete.phone3)
+                                        setFieldValue("municipality", athlete.municipality)
+                                        setFieldValue("postalCode", athlete.postalCode)
+                                        setFieldValue("address", athlete.address)
+                                        // Family data
+                                        setFieldValue("familiarOneName", athlete.familiarOneName)
+                                        setFieldValue("familiarOneFirstSurname", athlete.familiarOneFirstSurname)
+                                        setFieldValue("familiarOneSecondSurname", athlete.familiarOneSecondSurname)
+                                        setFieldValue("familiarOneDni", athlete.familiarOneDni)
+                                        setFieldValue("familiarOneMail", athlete.familiarOneMail)
+                                        setFieldValue("familiarTwoName", athlete.familiarTwoName)
+                                        setFieldValue("familiarTwoFirstSurname", athlete.familiarTwoFirstSurname)
+                                        setFieldValue("familiarTwoSecondSurname", athlete.familiarTwoSecondSurname)
+                                        setFieldValue("familiarTwoDni", athlete.familiarTwoDni)
+                                        setFieldValue("familiarTwoMail", athlete.familiarTwoMail)
+                                        // Payment data
+                                        setFieldValue("paymentType", athlete.paymentType)
+                                        setFieldValue("feeType", athlete.feeType)
+                                        setFieldValue("iban", athlete.iban)
+                                        setFieldValue("holderName", athlete.holderName)
+                                        setFieldValue("holderFirstSurname", athlete.holderFirstSurname)
+                                        setFieldValue("holderSecondSurname", athlete.holderSecondSurname)
+                                        setFieldValue("holderDni", athlete.holderDni)
                                         setFieldValue('openMatchingAthletes', false)
                                     }}
                                     onSelectAthlete={(id: number) => { 
