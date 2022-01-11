@@ -56,6 +56,13 @@ const CustomAppBar: React.FC<any> = (props) => {
                     <MenuItem><Link href="/athletes/historic">Histórico</Link></MenuItem>
                     <MenuItem><Link href="/groups/athletes">Atletas-Grupos</Link></MenuItem>
                 </Menu>
+                <Typography variant="button">
+                    <Link href="/users/list" color="inherit">Usuarios</Link>
+                </Typography>
+                <Typography variant="button">
+                    <Link href="/social" color="inherit">Red Social</Link>
+                </Typography>
+                
             </Toolbar>
         </AppBar>
     )

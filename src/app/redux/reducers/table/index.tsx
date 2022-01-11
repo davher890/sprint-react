@@ -2,7 +2,8 @@ import { LOAD_SPORTSCHOOL_TABLE, LOAD_GROUP_TABLE,
     LOAD_ATHLETE_TABLE, LOAD_FAMILY_TABLE, LOAD_HISTORIC_TABLE, 
     LOAD_SCHEDULE_TABLE, LOAD_TRAINER_TABLE, 
     LOAD_GROUP_ATHLETES_TABLE, LOAD_ATHLETE_SPORTDATA_TABLE,
-    LOAD_DUPLICATED_ATHLETES_TABLE } from "../../constants/action_types";
+    LOAD_DUPLICATED_ATHLETES_TABLE, 
+    LOAD_USER_TABLE} from "../../constants/action_types";
 
 import getTableItems from "../conversors"
 
@@ -22,6 +23,7 @@ function rootReducer(state = initialState, action: { type: string, payload: any 
         action.type === LOAD_FAMILY_TABLE ||
         action.type === LOAD_SCHEDULE_TABLE ||
         action.type === LOAD_TRAINER_TABLE ||
+        action.type === LOAD_USER_TABLE ||
         action.type === LOAD_GROUP_ATHLETES_TABLE ||
         action.type === LOAD_ATHLETE_SPORTDATA_TABLE || 
         action.type === LOAD_DUPLICATED_ATHLETES_TABLE) {

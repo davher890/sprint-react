@@ -4,6 +4,9 @@ import {
   Route
 } from "react-router-dom";
 
+import Social from './components/social/index';
+import UserData from './components/users/UserData';
+import UserTable from './components/users/UserTable';
 import TrainerData from './components/trainers/TrainerData';
 import TrainerTable from './components/trainers/TrainerTable';
 import ScheduleData from './components/schedules/ScheduleData';
@@ -81,6 +84,14 @@ const AppBar: React.FC<any> = (props) => {
           <Route exact path="/trainers/:id" render={(props) => <div><CustomAppBar /><Box m="2%"><TrainerData {...props}/></Box></div>}/>
 
           <Route exact path="/trainers" render={(props) => <div><CustomAppBar /><Box m="2%"><TrainerData {...props}/></Box></div>}/>
+
+          <Route exact path="/users/list" render={(props) => <div><CustomAppBar /><Box m="2%"><UserTable {...props}/></Box></div>}/>
+
+          <Route exact path="/users/:id" render={(props) => <div><CustomAppBar /><Box m="2%"><UserData {...props}/></Box></div>}/>
+
+          <Route exact path="/users" render={(props) => <div><CustomAppBar /><Box m="2%"><UserData {...props}/></Box></div>}/>
+
+          <Route exact path="/social" render={(props) => <div><CustomAppBar /><Box m="2%"><Social {...props}/></Box></div>}/>
 
         </Switch>
     </Router>

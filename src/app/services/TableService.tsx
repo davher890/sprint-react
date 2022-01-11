@@ -59,6 +59,10 @@ export const findTrainerDataPagination = (page: number, size: number, filters: a
     return findDataPagination("trainers", page, size, filters)
 }
 
+export const findUserDataPagination = (page: number, size: number, filters: any) => {
+    return findDataPagination("users", page, size, filters)
+}
+
 export const findAthleteSportdataPagination = (athleteId: number, page: number, size: number, filters: any) => {
     return findDataPagination("athletes/" + athleteId + "/sportdata", page, size, filters)
 }

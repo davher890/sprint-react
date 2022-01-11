@@ -4,6 +4,7 @@ import athleteReducer from "../reducers/athletes/index";
 import groupReducer from "../reducers/groups/index";
 import scheduleReducer from "../reducers/schedules/index";
 import trainerReducer from "../reducers/trainers/index";
+import userReducer from "../reducers/users/index";
 import tableReducer from "../reducers/table/index";
 import thunk from "redux-thunk";
 
@@ -21,6 +22,7 @@ export default createStore(
     group_reducer: groupReducer,
     schedule_reducer: scheduleReducer,
     trainer_reducer: trainerReducer,
+    user_reducer: userReducer,
     table_reducer: tableReducer
   }),
   storeEnhancers(applyMiddleware(thunk))

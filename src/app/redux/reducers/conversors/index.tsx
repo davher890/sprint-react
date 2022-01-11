@@ -1,4 +1,4 @@
-import { LOAD_SPORTSCHOOL_TABLE, LOAD_GROUP_TABLE, LOAD_ATHLETE_TABLE, LOAD_FAMILY_TABLE, LOAD_HISTORIC_TABLE, LOAD_SCHEDULE_TABLE, LOAD_TRAINER_TABLE, LOAD_GROUP_ATHLETES_TABLE, LOAD_ATHLETE_SPORTDATA_TABLE, LOAD_DUPLICATED_ATHLETES_TABLE } from "../../constants/action_types";
+import { LOAD_SPORTSCHOOL_TABLE, LOAD_GROUP_TABLE, LOAD_ATHLETE_TABLE, LOAD_FAMILY_TABLE, LOAD_HISTORIC_TABLE, LOAD_SCHEDULE_TABLE, LOAD_TRAINER_TABLE, LOAD_GROUP_ATHLETES_TABLE, LOAD_ATHLETE_SPORTDATA_TABLE, LOAD_DUPLICATED_ATHLETES_TABLE, LOAD_USER_TABLE } from "../../constants/action_types";
 
 let daysMap = new Map([
     ["monday", "Lunes"],
@@ -101,6 +101,13 @@ function trainerDataConversor(d: { id: number, name: string }){
     }
 }
 
+function userDataConversor(d: { id: number, username: string }){
+    return {
+        id : d.id, 
+        username: d.username
+    }
+}
+
 function sportDataConversor(d: any){
     return {
         id: d.id,
@@ -148,6 +155,11 @@ const Utils = (action: { type: string, payload: any }) => {
     else if (action.type === LOAD_TRAINER_TABLE){
         items = action.payload.content.map((d: any) => {
             return trainerDataConversor(d)
+        })
+    }
+    else if (action.type === LOAD_USER_TABLE){
+        items = action.payload.content.map((d: any) => {
+            return userDataConversor(d)
         })
     }
     else if (action.type === LOAD_ATHLETE_SPORTDATA_TABLE){

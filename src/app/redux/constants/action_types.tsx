@@ -39,6 +39,10 @@ export const ADD_TRAINER = "ADD_TRAINER";
 export const GET_TRAINER = "GET_TRAINER";
 export const DOWNLOAD_TRAINERS = "DOWNLOAD_TRAINERS";
 
+export const LOAD_USER_TABLE = "LOAD_USER_TABLE";
+export const ADD_USER = "ADD_USER";
+export const GET_USER = "GET_USER";
+
 export const LOAD_SCHEDULE_TABLE = "LOAD_SCHEDULE_TABLE";
 export const LOAD_SCHEDULES = "LOAD_SCHEDULES";
 export const GET_SCHEDULE = "GET_SCHEDULE";

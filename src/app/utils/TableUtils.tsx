@@ -61,6 +61,12 @@ const Utils = {
         ]
     },
 
+    getUserColumns: () => {
+        return [
+            { dataField: 'username', text: 'Nombre', filter: { type: "text" } }
+        ]
+    },
+
     getSportSchoolColumns: () => {
         return [
             { dataField: 'id', text: 'Id', show: false },
