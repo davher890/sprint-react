@@ -1,10 +1,5 @@
-import { LOAD_SPORTSCHOOL_TABLE, LOAD_GROUP_TABLE, 
-    LOAD_ATHLETE_TABLE, LOAD_FAMILY_TABLE, LOAD_HISTORIC_TABLE, 
-    LOAD_SCHEDULE_TABLE, LOAD_TRAINER_TABLE, 
-    LOAD_GROUP_ATHLETES_TABLE, LOAD_ATHLETE_SPORTDATA_TABLE,
-    LOAD_DUPLICATED_ATHLETES_TABLE } from "../../constants/action_types";
-
-import getTableItems from "../conversors"
+import * as ACTION_TYPES from "../../constants/action_types";
+import getTableItems from "../../utils/conversors"
 
 const initialState = {
     table_data : [],
@@ -15,16 +10,16 @@ const initialState = {
 
 function rootReducer(state = initialState, action: { type: string, payload: any }) {
     
-    if (action.type === LOAD_SPORTSCHOOL_TABLE || 
-        action.type === LOAD_GROUP_TABLE || 
-        action.type === LOAD_ATHLETE_TABLE || 
-        action.type === LOAD_HISTORIC_TABLE || 
-        action.type === LOAD_FAMILY_TABLE ||
-        action.type === LOAD_SCHEDULE_TABLE ||
-        action.type === LOAD_TRAINER_TABLE ||
-        action.type === LOAD_GROUP_ATHLETES_TABLE ||
-        action.type === LOAD_ATHLETE_SPORTDATA_TABLE || 
-        action.type === LOAD_DUPLICATED_ATHLETES_TABLE) {
+    if (action.type === ACTION_TYPES.LOAD_SPORTSCHOOL_TABLE || 
+        action.type === ACTION_TYPES.LOAD_GROUP_TABLE || 
+        action.type === ACTION_TYPES.LOAD_ATHLETE_TABLE || 
+        action.type === ACTION_TYPES.LOAD_HISTORIC_TABLE || 
+        action.type === ACTION_TYPES.LOAD_FAMILY_TABLE ||
+        action.type === ACTION_TYPES.LOAD_SCHEDULE_TABLE ||
+        action.type === ACTION_TYPES.LOAD_TRAINER_TABLE ||
+        action.type === ACTION_TYPES.LOAD_GROUP_ATHLETES_TABLE ||
+        action.type === ACTION_TYPES.LOAD_ATHLETE_SPORTDATA_TABLE || 
+        action.type === ACTION_TYPES.LOAD_DUPLICATED_ATHLETES_TABLE) {
             
         let items = getTableItems(action)
 

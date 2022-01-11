@@ -1,4 +1,4 @@
-import { ADD_TRAINER, GET_TRAINER, LOAD_TRAINERS } from "../../constants/action_types";
+import * as ACTION_TYPES from "../../constants/action_types";
 
 const initialState = {
     trainers: [],
@@ -6,13 +6,13 @@ const initialState = {
 };
 
 function rootReducer(state = initialState, action: { type: string, payload: any }) {
-    if (action.type === ADD_TRAINER || action.type === GET_TRAINER) {
+    if (action.type === ACTION_TYPES.ADD_TRAINER || action.type === ACTION_TYPES.GET_TRAINER) {
         return {
             ...state,
             trainer: action.payload
         };
     }
-    else if (action.type === LOAD_TRAINERS) {
+    else if (action.type === ACTION_TYPES.LOAD_TRAINERS) {
         return {
             ...state,
             trainers: action.payload

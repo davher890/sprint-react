@@ -1,10 +1,10 @@
 import { createStore, applyMiddleware, compose, combineReducers } from "redux";
-import sportSchoolReducer from "../reducers/sportSchools/index";
-import athleteReducer from "../reducers/athletes/index";
-import groupReducer from "../reducers/groups/index";
-import scheduleReducer from "../reducers/schedules/index";
-import trainerReducer from "../reducers/trainers/index";
-import tableReducer from "../reducers/table/index";
+import sportSchoolReducer from "./sportSchools/index";
+import athleteReducer from "./athletes/index";
+import groupReducer from "./groups/index";
+import scheduleReducer from "./schedules/index";
+import trainerReducer from "./trainers/index";
+import tableReducer from "./table/index";
 import thunk from "redux-thunk";
 
 declare global {

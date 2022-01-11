@@ -1,4 +1,4 @@
-import { ADD_SCHEDULE, GET_SCHEDULE, LOAD_SCHEDULES } from "../../constants/action_types";
+import * as ACTION_TYPES from "../../constants/action_types";
 
 const initialState = {
     schedules: [],
@@ -6,13 +6,13 @@ const initialState = {
 };
 
 function rootReducer(state = initialState, action: { type: string, payload: any }) {
-    if (action.type === ADD_SCHEDULE || action.type === GET_SCHEDULE) {
+    if (action.type === ACTION_TYPES.ADD_SCHEDULE || action.type === ACTION_TYPES.GET_SCHEDULE) {
         return {
             ...state,
             schedule: action.payload
         };
     }
-    else if (action.type === LOAD_SCHEDULES) {
+    else if (action.type === ACTION_TYPES.LOAD_SCHEDULES) {
         return {
             ...state,
             schedules: action.payload

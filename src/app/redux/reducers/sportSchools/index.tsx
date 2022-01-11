@@ -1,4 +1,4 @@
-import { ADD_SPORTSCHOOL, GET_SPORTSCHOOL, GET_SPORTSCHOOL_FEE_TYPES, LOAD_SPORTSCHOOLS } from "../../constants/action_types";
+import * as ACTION_TYPES from "../../constants/action_types";
 
 const initialState = {
     sport_schools: [],
@@ -7,19 +7,19 @@ const initialState = {
 };
 
 function rootReducer(state = initialState, action: { type: string, payload: any }) {
-    if (action.type === ADD_SPORTSCHOOL || action.type === GET_SPORTSCHOOL) {
+    if (action.type === ACTION_TYPES.ADD_SPORTSCHOOL || action.type === ACTION_TYPES.GET_SPORTSCHOOL) {
         return {
             ...state,
             sport_school: action.payload
         };
     }
-    else if (action.type === LOAD_SPORTSCHOOLS) {
+    else if (action.type === ACTION_TYPES.LOAD_SPORTSCHOOLS) {
         return {
             ...state,
             sport_schools: action.payload
         };
     }
-    else if (action.type === GET_SPORTSCHOOL_FEE_TYPES) {
+    else if (action.type === ACTION_TYPES.GET_SPORTSCHOOL_FEE_TYPES) {
         return {
             ...state,
             fee_types: action.payload

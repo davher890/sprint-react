@@ -1,4 +1,4 @@
-import { LOAD_SPORTSCHOOL_TABLE, LOAD_GROUP_TABLE, LOAD_ATHLETE_TABLE, LOAD_FAMILY_TABLE, LOAD_HISTORIC_TABLE, LOAD_SCHEDULE_TABLE, LOAD_TRAINER_TABLE, LOAD_GROUP_ATHLETES_TABLE, LOAD_ATHLETE_SPORTDATA_TABLE, LOAD_DUPLICATED_ATHLETES_TABLE } from "../../constants/action_types";
+import * as ACTION_TYPES from "../../constants/action_types";
 
 let daysMap = new Map([
     ["monday", "Lunes"],
@@ -119,38 +119,38 @@ function sportDataConversor(d: any){
 
 const Utils = (action: { type: string, payload: any }) => {
     let items = []
-    if (action.type === LOAD_SPORTSCHOOL_TABLE){
+    if (action.type === ACTION_TYPES.LOAD_SPORTSCHOOL_TABLE){
         items = action.payload.content.map((d: any) => {
             return sportSchoolDataConversor(d)
         })
     }
-    else if (action.type === LOAD_GROUP_TABLE){
+    else if (action.type === ACTION_TYPES.LOAD_GROUP_TABLE){
         items = action.payload.content.map((d: any) => {
             return groupDataConversor(d)
         })
     }
-    else if (action.type === LOAD_ATHLETE_TABLE || action.type === LOAD_DUPLICATED_ATHLETES_TABLE || 
-        action.type === LOAD_GROUP_ATHLETES_TABLE || action.type === LOAD_HISTORIC_TABLE){
+    else if (action.type === ACTION_TYPES.LOAD_ATHLETE_TABLE || action.type === ACTION_TYPES.LOAD_DUPLICATED_ATHLETES_TABLE || 
+        action.type === ACTION_TYPES.LOAD_GROUP_ATHLETES_TABLE || action.type === ACTION_TYPES.LOAD_HISTORIC_TABLE){
         items = action.payload.content.map((d: any) => {
             return athleteDataConversor(d)
         })
     }
-    else if (action.type === LOAD_FAMILY_TABLE){
+    else if (action.type === ACTION_TYPES.LOAD_FAMILY_TABLE){
         items = action.payload.content.map((d: any) => {
             return familyDataConversor(d)
         })
     }
-    else if (action.type === LOAD_SCHEDULE_TABLE){
+    else if (action.type === ACTION_TYPES.LOAD_SCHEDULE_TABLE){
         items = action.payload.content.map((d: any) => {
             return scheduleDataConversor(d)
         })
     }
-    else if (action.type === LOAD_TRAINER_TABLE){
+    else if (action.type === ACTION_TYPES.LOAD_TRAINER_TABLE){
         items = action.payload.content.map((d: any) => {
             return trainerDataConversor(d)
         })
     }
-    else if (action.type === LOAD_ATHLETE_SPORTDATA_TABLE){
+    else if (action.type === ACTION_TYPES.LOAD_ATHLETE_SPORTDATA_TABLE){
         items = action.payload.content.map((d: any) => {
             return sportDataConversor(d)
         })

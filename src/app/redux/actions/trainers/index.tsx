@@ -1,4 +1,4 @@
-import { LOAD_TRAINERS, LOAD_TRAINER_TABLE, ADD_TRAINER, GET_TRAINER, DOWNLOAD_TRAINERS } from "../../constants/action_types";
+import * as ACTION_TYPES from "../../constants/action_types";
 
 import { findTrainerDataPagination } from "../../../services/TableService"
 import { findAll, addData, findById, downloadExcel } from "../../../services/TrainerService"
@@ -6,7 +6,7 @@ import { findAll, addData, findById, downloadExcel } from "../../../services/Tra
 export function getAllTrainers() {
     return function (dispatch: any)  {
         return findAll().then(json => { 
-            dispatch({ type: LOAD_TRAINERS, payload: json }); 
+            dispatch({ type: ACTION_TYPES.LOAD_TRAINERS, payload: json }); 
         });
     }
 }
@@ -14,7 +14,7 @@ export function getAllTrainers() {
 export function getTrainerTable(page: number, size: number, filters: any) {
     return function (dispatch: any)  {
         return findTrainerDataPagination(page, size, filters).then(json => {
-            dispatch({ type: LOAD_TRAINER_TABLE, payload: json });
+            dispatch({ type: ACTION_TYPES.LOAD_TRAINER_TABLE, payload: json });
         });
     }
 }
@@ -22,7 +22,7 @@ export function getTrainerTable(page: number, size: number, filters: any) {
 export function getTrainer(id: number) {
     return function (dispatch: any)  {
         return findById(id).then(json => {
-            dispatch({ type: GET_TRAINER, payload: json });
+            dispatch({ type: ACTION_TYPES.GET_TRAINER, payload: json });
         });
     }
 }
@@ -30,7 +30,7 @@ export function getTrainer(id: number) {
 export function downloadTrainers(columns: any) {
     return function (dispatch: any) {
         return downloadExcel(columns).then(json => {
-            dispatch({ type: DOWNLOAD_TRAINERS, payload: json });
+            dispatch({ type: ACTION_TYPES.DOWNLOAD_TRAINERS, payload: json });
         });
     }
 }
@@ -41,7 +41,7 @@ export function addTrainer(data: any) {
             if (!json.errorMessage) {
                 json.successMessage = "Datos guardados!"
             }
-            dispatch({ type: ADD_TRAINER, payload: json });
+            dispatch({ type: ACTION_TYPES.ADD_TRAINER, payload: json });
         });
     }
 }
