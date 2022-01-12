@@ -1,5 +1,5 @@
 import * as React from "react"
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 
 import { Grid } from '@material-ui/core';
 
@@ -56,4 +56,4 @@ const mapStateToProps = (state: any) => {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(withRouter(TrainerSelect));
+)(TrainerSelect);

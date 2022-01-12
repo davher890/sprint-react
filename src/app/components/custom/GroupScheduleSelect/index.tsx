@@ -1,5 +1,5 @@
 import * as React from "react"
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 
 import ScheduleSelect from '../ScheduleSelect';
 import GroupSelect from '../GroupSelect';
@@ -99,4 +99,4 @@ const mapStateToProps = (state: any) => {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(withRouter(GroupScheduleSelect));
+)(GroupScheduleSelect);

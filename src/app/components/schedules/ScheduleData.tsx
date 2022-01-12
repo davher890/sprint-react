@@ -11,6 +11,8 @@ import SaveButton from '../custom/SaveButton'
 import Card from '../custom/Card';
 
 import { connect } from "react-redux";
+import { useParams } from 'react-router-dom';
+
 import { addSchedule, getSchedule } from "../../redux/actions/schedules";
 
 class ConnectedForm extends React.Component<any, any> {
@@ -22,8 +24,8 @@ class ConnectedForm extends React.Component<any, any> {
     }
 
     componentDidMount(){
-        if (this.props.match && this.props.match.params && this.props.match.params.id) {
-            let id = this.props.match.params.id
+        if (this.props.id) {
+            let id = this.props.id
             this.setState({ id : id})
             if (id){
                 this.props.getSchedule(id)
@@ -157,7 +159,13 @@ const mapStateToProps = (state: any) => {
     };
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ConnectedForm);
+const ConnectedComponent = connect(mapStateToProps, mapDispatchToProps)(ConnectedForm);
+
+const WithRouterWrapper = () => {
+    let { id } = useParams()
+
+    return (
+        <ConnectedComponent id={id}></ConnectedComponent>
+    )
+}
+export default WithRouterWrapper

@@ -9,6 +9,8 @@ import Card from "../custom/Card";
 import SaveButton from "../custom/SaveButton";
 
 import { connect } from "react-redux";
+import { useParams } from 'react-router-dom';
+
 import { addTrainer, getTrainer } from "../../redux/actions/trainers";
 
 class ConnectedForm extends React.Component<any, any> {
@@ -19,8 +21,8 @@ class ConnectedForm extends React.Component<any, any> {
     }
 
     componentDidMount(){
-        if (this.props.match && this.props.match.params && this.props.match.params.id) {
-            let id = this.props.match.params.id
+        if (this.props.id) {
+            let id = this.props.id
             if (id) {
                 this.props.getTrainer(id)
             }
@@ -121,7 +123,13 @@ const mapStateToProps = (state: any) => {
     };
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ConnectedForm);
+const ConnectedComponent = connect(mapStateToProps, mapDispatchToProps)(ConnectedForm);
+
+const WithRouterWrapper = () => {
+    let { id } = useParams()
+
+    return (
+        <ConnectedComponent id={id}></ConnectedComponent>
+    )
+}
+export default WithRouterWrapper

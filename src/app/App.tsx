@@ -1,7 +1,5 @@
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route
+  BrowserRouter as Router, Routes, Route
 } from "react-router-dom";
 
 import TrainerData from './components/trainers/TrainerData';
@@ -33,66 +31,31 @@ const AppBar: React.FC<any> = (props) => {
     <Router>
       <CustomAppBar />
       <Box m="2%" display="flex">
-        <Switch>
-          <Route path="/sport_schools/list">
-            <SportSchoolTable/>
-          </Route>
-
-          <Route exact path="/sport_schools/:id" component={SportSchoolData}/>
-
-          <Route path="/sport_schools">
-            <SportSchoolData/>
-          </Route>
-
-          <Route path="/families/list">
-            <FamilyTable/>
-          </Route>
-
-          <Route path="/families/:id">
-            <FamilyData/>
-          </Route>
-
-          <Route path="/families">
-            <FamilyData/>
-          </Route>
-
-          <Route path="/athletes/list">
-            <AthleteTable/>
-          </Route>
-
-          <Route exact path="/athletes/:id/historic" component={AthleteData} />
-
-          <Route exact path="/athletes/:id/sport_data" component={AthleteSportdata} />
-          
-          <Route exact path="/athletes/historic" component={HistoricTable} />
-
-          <Route exact path="/athletes/:id" component={AthleteData} />
-
-          <Route exact path="/athletes" component={AthleteData} />
-
-          <Route exact path="/groups/attendance" component={GroupAttendance}/>
-
-          <Route exact path="/groups/athletes" component={GroupAthletesTable}/>
-          
-          <Route exact path="/groups/list" component={GroupTable}/>
-
-          <Route exact path="/groups/:id" component={GroupData}/>
-
-          <Route exact path="/groups" component={GroupData} />
-          
-          <Route exact path="/schedules/list" component={ScheduleTable}/>
-
-          <Route exact path="/schedules/:id" component={ScheduleData}/>
-
-          <Route exact path="/schedules" component={ScheduleData}/>
-          
-          <Route exact path="/trainers/list" component={TrainerTable}/>
-
-          <Route exact path="/trainers/:id" component={TrainerData}/>
-
-          <Route exact path="/trainers" component={TrainerData}/>
-
-        </Switch>
+        <Routes>
+          <Route path="/sport_schools/list" element={<SportSchoolTable/>}/>
+          <Route path="/sport_schools/:id" element={<SportSchoolData/>}/>
+          <Route path="/sport_schools" element={<SportSchoolData/>}/>
+          <Route path="/families/list" element={<FamilyTable/>}/>
+          <Route path="/families/:id" element={<FamilyData/>}/>
+          <Route path="/families" element={<FamilyData/>}/>
+          <Route path="/athletes/list" element={<AthleteTable/>}/>
+          <Route path="/athletes/:id/historic" element={<AthleteData/>} />
+          <Route path="/athletes/:id/sport_data" element={<AthleteSportdata/>} />
+          <Route path="/athletes/historic" element={<HistoricTable/>} />
+          <Route path="/athletes/:id" element={<AthleteData/>} />
+          <Route path="/athletes" element={<AthleteData/>} />
+          <Route path="/groups/attendance" element={<GroupAttendance/>}/>
+          <Route path="/groups/athletes" element={<GroupAthletesTable/>}/>
+          <Route path="/groups/list" element={<GroupTable/>}/>
+          <Route path="/groups/:id" element={<GroupData/>}/>
+          <Route path="/groups" element={<GroupData/>} />
+          <Route path="/schedules/list" element={<ScheduleTable/>}/>
+          <Route path="/schedules/:id" element={<ScheduleData/>}/>
+          <Route path="/schedules" element={<ScheduleData/>}/>
+          <Route path="/trainers/list" element={<TrainerTable/>}/>
+          <Route path="/trainers/:id" element={<TrainerData/>}/>
+          <Route path="/trainers" element={<TrainerData/>}/>
+        </Routes>
       </Box>
     </Router>
   );

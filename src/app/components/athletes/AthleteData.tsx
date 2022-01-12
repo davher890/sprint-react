@@ -1,6 +1,6 @@
 import * as React from "react"
 import moment, { Moment } from 'moment'
-import { withRouter } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import utils from "../../utils/Functions"
 import { Formik } from 'formik';
@@ -39,7 +39,7 @@ class CreateAthlete extends React.Component<any, any> {
 
     componentDidMount() {
         if (!this.isNewAthlete()) {
-            let id = this.props.match.params.id
+            let id = this.props.id
             this.getAthlete(id)
         }
     }
@@ -92,7 +92,7 @@ class CreateAthlete extends React.Component<any, any> {
     }
 
     isNewAthlete() {
-        return !(this.props.match && this.props.match.params && this.props.match.params.id)
+        return !(this.props.id)
     }
 
     isMatchingAthletes() {
@@ -774,7 +774,13 @@ const mapStateToProps = (state: any) => {
     };
 };
 
-export default withRouter(connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(CreateAthlete));
+const ConnectedComponent = connect(mapStateToProps,mapDispatchToProps)(CreateAthlete)
+
+const WithRouterWrapper = () => {
+    let { id } = useParams()
+
+    return (
+        <ConnectedComponent id={id}></ConnectedComponent>
+    )
+}
+export default WithRouterWrapper

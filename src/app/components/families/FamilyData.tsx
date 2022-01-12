@@ -5,7 +5,7 @@ import { Container, Grid } from '@material-ui/core';
 import AthleteTable from "../athletes/AthleteTable";
 import TextField from "../custom/TextField";
 
-class CreateGroup extends React.Component<any, any> {
+class FamilyData extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {};
@@ -88,4 +88,4 @@ class CreateGroup extends React.Component<any, any> {
     }
 }
 
-export default CreateGroup;
+export default FamilyData;
