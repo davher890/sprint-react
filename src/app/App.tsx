@@ -2,6 +2,9 @@ import {
   BrowserRouter as Router, Routes, Route
 } from "react-router-dom";
 
+import Social from './components/social/index';
+import UserData from './components/users/UserData';
+import UserTable from './components/users/UserTable';
 import TrainerData from './components/trainers/TrainerData';
 import TrainerTable from './components/trainers/TrainerTable';
 import ScheduleData from './components/schedules/ScheduleData';
@@ -16,6 +19,7 @@ import GroupData from './components/groups/GroupData';
 import GroupTable from './components/groups/GroupTable';
 import FamilyTable from './components/families/FamilyTable';
 import FamilyData from './components/families/FamilyData';
+import Login from './components/login';
 
 import CustomAppBar from './components/custom/AppBar'
 
@@ -32,6 +36,7 @@ const AppBar: React.FC<any> = (props) => {
       <CustomAppBar />
       <Box m="2%" display="flex">
         <Routes>
+          <Route path="/login" element={<Login/>}/>
           <Route path="/sport_schools/list" element={<SportSchoolTable/>}/>
           <Route path="/sport_schools/:id" element={<SportSchoolData/>}/>
           <Route path="/sport_schools" element={<SportSchoolData/>}/>
@@ -55,6 +60,10 @@ const AppBar: React.FC<any> = (props) => {
           <Route path="/trainers/list" element={<TrainerTable/>}/>
           <Route path="/trainers/:id" element={<TrainerData/>}/>
           <Route path="/trainers" element={<TrainerData/>}/>
+          <Route path="/users/list" element={<UserTable />}/>
+          <Route path="/users/:id" element={<UserData />}/>
+          <Route path="/users" element={<UserData />}/>
+          <Route path="/social" element={<Social />}/>
         </Routes>
       </Box>
     </Router>

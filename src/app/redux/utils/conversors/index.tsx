@@ -101,6 +101,13 @@ function trainerDataConversor(d: { id: number, name: string }){
     }
 }
 
+function userDataConversor(d: { id: number, username: string }){
+    return {
+        id : d.id, 
+        username: d.username
+    }
+}
+
 function sportDataConversor(d: any){
     return {
         id: d.id,
@@ -148,6 +155,11 @@ const Utils = (action: { type: string, payload: any }) => {
     else if (action.type === ACTION_TYPES.LOAD_TRAINER_TABLE){
         items = action.payload.content.map((d: any) => {
             return trainerDataConversor(d)
+        })
+    }
+    else if (action.type === ACTION_TYPES.LOAD_USER_TABLE){
+        items = action.payload.content.map((d: any) => {
+            return userDataConversor(d)
         })
     }
     else if (action.type === ACTION_TYPES.LOAD_ATHLETE_SPORTDATA_TABLE){

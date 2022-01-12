@@ -39,6 +39,10 @@ export const ADD_TRAINER = "ADD_TRAINER";
 export const GET_TRAINER = "GET_TRAINER";
 export const DOWNLOAD_TRAINERS = "DOWNLOAD_TRAINERS";
 
+export const LOAD_USER_TABLE = "LOAD_USER_TABLE";
+export const ADD_USER = "ADD_USER";
+export const GET_USER = "GET_USER";
+
 export const LOAD_SCHEDULE_TABLE = "LOAD_SCHEDULE_TABLE";
 export const LOAD_SCHEDULES = "LOAD_SCHEDULES";
 export const GET_SCHEDULE = "GET_SCHEDULE";
@@ -47,4 +51,6 @@ export const ADD_SCHEDULE = "ADD_SCHEDULE";
 export const LOAD_FAMILY_TABLE = "LOAD_FAMILY_TABLE";
 export const ADD_FAMILY = "ADD_FAMILY";
 export const GET_FAMILY = "GET_FAMILY";
+
+export const SIGNUP = "SIGNUP";
 
