@@ -2,7 +2,7 @@ import {
   BrowserRouter as Router, Routes, Route
 } from "react-router-dom";
 
-import Social from './components/social/index';
+import Social from './components/social';
 import UserData from './components/users/UserData';
 import UserTable from './components/users/UserTable';
 import TrainerData from './components/trainers/TrainerData';
