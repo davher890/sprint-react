@@ -33,8 +33,8 @@ function getSchedulesString(schedules: any[]){
 function sportSchoolDataConversor(d: { id: number, name: string, municipality: string, address: string }) {
     return {
         id: d.id,
-        name: d.name,
-        municipality: d.municipality,
+        name: d.name.substring(0, 3) + '*****',
+        municipality: d.municipality ? d.municipality.substring(0, 3) + '*****' : '',
         address: d.address
     }
 }
@@ -51,14 +51,14 @@ function athleteDataConversor(d: any) {
     return {
         id : d.id,
         name : d.name || '', 
-        firstSurname : d.firstSurname || '', 
-        secondSurname : d.secondSurname || '', 
+        firstSurname : d.firstSurname.substring(0, 3) + '*****' || '', 
+        secondSurname : d.secondSurname.substring(0, 3) + '*****' || '', 
         birthDate: new Intl.DateTimeFormat('sq-AL').format(new Date(d.birthDate)), 
         gender: d.gender === 'male' ? 'Masculino' : 'Femenino',
-        phone1: d.phone1,
-        phone2: d.phone2,
-        phone3: d.phone3,
-        dni: d.dni,
+        phone1: d.phone1.substring(0, 3) + '*****',
+        phone2: d.phone2.substring(0, 3) + '*****',
+        phone3: d.phone3.substring(0, 3) + '*****',
+        dni: d.dni.substring(0, 3) + '*****',
         nationality: d.nationality,
         birthPlace: d.birthPlace,
         postalCode: d.postalCode,
@@ -67,10 +67,10 @@ function athleteDataConversor(d: any) {
         licenseType: d.licenseType,
         dorsalNumber: d.dorsalNumber,
         dorsalCategory: d.dorsalCategory,
-        iban: d.iban,
+        iban: d.iban ? d.iban.substring(0, 3) + '*****' : '',
         firstRegisterDate: d.firstRegisterDate !== null ? new Intl.DateTimeFormat('sq-AL').format(new Date(d.firstRegisterDate)) : '',
         lastUnregisterDate: d.lastUnregisterDate !== null ? new Intl.DateTimeFormat('sq-AL').format(new Date(d.lastUnregisterDate)) : '',
-        sportSchoolId: d.sportSchoolName, 
+        sportSchoolId: d.sportSchoolName ? d.sportSchoolName.substring(0, 3) + '*****' : '',
         groupName: d.groupName,
         schedules: d.schedules !== null && d.schedules.length > 0 ? getSchedulesString(d.schedules) : '',
         numDays: d.numDays
