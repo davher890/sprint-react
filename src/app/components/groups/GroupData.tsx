@@ -87,7 +87,7 @@ class ConnectedForm extends React.Component<any, any> {
                         <form onSubmit={handleSubmit}>
                             <ConfirmDialog open={values.openDeleteDialog} 
                                 confirm={() => {
-                                    this.deleteGroup(this.props.match.params.id); 
+                                    this.deleteGroup(this.props.id); 
                                     setFieldValue("openDeleteDialog", false);
                                     window.open("/groups/list", "_self");
                                 }}
@@ -106,8 +106,7 @@ class ConnectedForm extends React.Component<any, any> {
                                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
                                 <Alert severity="success" onClose={() => { 
                                         setFieldValue("successMessage", "") 
-                                        this.props.history.push("/groups/list");
-                                        window.location.reload(); 
+                                        window.open("/trainers/list", "_self");
                                     }}>
                                     <AlertTitle>Ok!</AlertTitle>
                                     <strong>{values.successMessage}</strong>
@@ -170,7 +169,7 @@ class ConnectedForm extends React.Component<any, any> {
                             <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
                                 <Toolbar>
                                     <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
-                                    {(this.props.match && this.props.match.params && this.props.match.params.id) ? 
+                                    {(this.props.id) ? 
                                         <DeleteButton text='Borrar' onClick={() => setFieldValue("openDeleteDialog", true)}/>
                                         : null
                                     }

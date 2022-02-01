@@ -2,7 +2,11 @@ import utils from '../utils/TableUtils'
 import { getRequest } from './ApiService'
 
 export const findAthleteDataPagination = (page: number, size: number, filters: any) => {
-    return findDataPagination("athletes", page, size, filters)
+    return findDataPagination("registered_athletes", page, size, filters)
+}
+
+export const findHistoricDataPagination = (page: number, size: number, filters: any) => {
+    return findDataPagination("unregistered_athletes", page, size, filters)
 }
 
 export const findDuplicatedAthletesDataPagination = (id: number, name: string, firstSurname: string, dni: string, page=0, size=10, filters: any) => {
@@ -33,10 +37,6 @@ export const findDuplicatedAthletesDataPagination = (id: number, name: string, f
         filterVal: dni
     }
     return findDataPagination("athletes", page, size, filters)
-}
-
-export const findHistoricDataPagination = (page: number, size: number, filters: any) => {
-    return findDataPagination("athletes/historic", page, size, filters)
 }
 
 export const findGroupDataPagination = (page: number, size: number, filters: any) => {

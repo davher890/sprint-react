@@ -37,7 +37,9 @@ const Utils = {
             { dataField: 'licenseType', text : 'Tipo de licencia', show: false }, 
             { dataField: 'dorsalNumber', text : 'Dorsal', show: false, filter: { type: "number" } },
             { dataField: 'dorsalCategory', text : 'Categoría de dorsal', show: false, filter: { type: "text" } },
-            { dataField: 'iban', text : 'IBAN', show: false, filter: { type: "text" } }
+            { dataField: 'iban', text : 'IBAN', show: false, filter: { type: "text" } },
+            { dataField: 'code', text : 'Codigo atleta', show: false, filter: { type: "number" } },
+            { dataField: 'familyCode', text : 'Codigo familia', show: false, filter: { type: "number" } }
         ]
     },
 

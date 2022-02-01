@@ -1,6 +1,16 @@
 const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
 const functions = {
+
+    isRegistered: function (historic: {type: string, date: number}[]) {
+
+        if (historic && historic.length > 0){
+            let filtered = historic.filter((h: {type: string, date: number}) => { return h.date < new Date().getTime() })
+                .sort((a: {type: string, date: number}, b: {type: string, date: number}) => { return a.date - b.date})
+            return filtered[filtered.length -1].type === 'REGISTER'
+        }
+        return false
+    },
         
     getMonth: function (month: number) {
         return monthNames[month]

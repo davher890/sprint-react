@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Container, Grid, Snackbar } from '@material-ui/core';
+import { Grid, Snackbar, AppBar, Toolbar, Box } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 import { Formik } from 'formik';
@@ -35,55 +35,54 @@ class ConnectedForm extends React.Component<any, any> {
 
     render() {
         return (
-            <Container fixed>
-    	        <React.Suspense fallback={<div>Cargando...</div>}>
+            <React.Suspense fallback={<div>Cargando...</div>}>
 
-                    <Formik enableReinitialize
-                        initialValues={{
-                            id: this.props.trainer.id || 0,
-                            name: this.props.trainer.name || '',
-                            mail: this.props.trainer.mail || '',
+                <Formik enableReinitialize
+                    initialValues={{
+                        id: this.props.trainer.id || 0,
+                        name: this.props.trainer.name || '',
+                        mail: this.props.trainer.mail || '',
 
-                            errorMessage: this.props.trainer.errorMessage || '',
-                            successMessage: this.props.trainer.successMessage || ''
-                        }}
-                        validate={(values) => {
-                            let errors: any = {};
+                        errorMessage: this.props.trainer.errorMessage || '',
+                        successMessage: this.props.trainer.successMessage || ''
+                    }}
+                    validate={(values) => {
+                        let errors: any = {};
 
-                            if (values.name === '') errors.name = true
+                        if (values.name === '') errors.name = true
 
-                            //check if my values have errors
-                            return errors;
-                        }}
-                        onSubmit={(values, { setSubmitting }) => {
-                            this.setState(values)
-                            setSubmitting(false);
-                            this.handleFormSubmit()
-                        }}
-                    >
-                    {({ handleSubmit, handleChange, values, touched, setFieldValue, errors, isSubmitting }) => (
+                        //check if my values have errors
+                        return errors;
+                    }}
+                    onSubmit={(values, { setSubmitting }) => {
+                        this.setState(values)
+                        setSubmitting(false);
+                        this.handleFormSubmit()
+                    }}
+                >
+                {({ handleSubmit, handleChange, values, touched, setFieldValue, errors, isSubmitting }) => (
 
-                        <form onSubmit={handleSubmit}>
-                            <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
-                                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
-                                <Alert severity="error" onClose={() => { 
-                                        setFieldValue("errorMessage", "");
-                                    }}>
-                                    <AlertTitle>Error</AlertTitle>
-                                    <strong>{values.errorMessage}</strong>
-                                </Alert>
-                            </Snackbar>
-                            <Snackbar open={values.successMessage !== undefined && values.successMessage !== ''}
-                                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
-                                <Alert severity="success" onClose={() => { 
-                                        setFieldValue("successMessage", "")
-                                        this.props.history.push("/trainers/list");
-                                        window.location.reload(); 
-                                    }}>
-                                    <AlertTitle>Ok!</AlertTitle>
-                                    <strong>{values.successMessage}</strong>
-                                </Alert>
-                            </Snackbar>
+                    <form onSubmit={handleSubmit}>
+                        <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                            <Alert severity="error" onClose={() => { 
+                                    setFieldValue("errorMessage", "");
+                                }}>
+                                <AlertTitle>Error</AlertTitle>
+                                <strong>{values.errorMessage}</strong>
+                            </Alert>
+                        </Snackbar>
+                        <Snackbar open={values.successMessage !== undefined && values.successMessage !== ''}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                            <Alert severity="success" onClose={() => { 
+                                    setFieldValue("successMessage", "")
+                                    window.open("/trainers/list", "_self");
+                                }}>
+                                <AlertTitle>Ok!</AlertTitle>
+                                <strong>{values.successMessage}</strong>
+                            </Alert>
+                        </Snackbar>
+                        <Box paddingBottom={7}>
                             <Grid container direction="column" spacing={3}>
                                 <Grid item xs>
                                     <Card title="Datos del entrenador">
@@ -99,15 +98,17 @@ class ConnectedForm extends React.Component<any, any> {
                                         </Grid>
                                     </Card>
                                 </Grid>
-                                <Grid item xs>
-                                    <SaveButton type="submit" disabled={isSubmitting}/>
-                                </Grid>
                             </Grid>
-                        </form>
-                    )}
-                    </Formik>
-                </React.Suspense>
-            </Container>
+                        </Box>
+                        <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
+                            <Toolbar>
+                                <SaveButton type="submit" disabled={isSubmitting}/>
+                                </Toolbar>
+                        </AppBar>
+                    </form>
+                )}
+                </Formik>
+            </React.Suspense>
         );
     }
 }

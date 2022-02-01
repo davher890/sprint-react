@@ -110,6 +110,7 @@ class CreateAthlete extends React.Component<any, any> {
                     id: this.props.athlete.id || 0,
                     code: this.props.athlete.code || 0,
                     familyCode: this.props.athlete.familyCode || 0,
+                    historic: this.props.athlete.historic || [],
                     // Extra fields
                     sportSchools: this.props.sportSchools || [],
                     feeTypes: this.state.feeTypes || [],
@@ -170,8 +171,6 @@ class CreateAthlete extends React.Component<any, any> {
                     membershipFee: (this.props.athlete_fee ? this.props.athlete_fee.membershipFee : 0) || 0,
                     monthlyFee: (this.props.athlete_fee ? this.props.athlete_fee.monthlyFee : 0) || 0,
                     // Dialogs
-                    firstRegisterDate: this.props.athlete.firstRegisterDate || '',
-                    registered: this.props.athlete.registered || true,
                     registerDate: moment(new Date()).format("YYYY-MM-DD"),
                     registerDateStr: moment(new Date()).format("YYYY-MM-DD"),
                     registerObservations: '',
@@ -187,25 +186,6 @@ class CreateAthlete extends React.Component<any, any> {
                 validate={(values) => {
                     let errors: any = {};
 
-                    // errors.sportSchoolId = values.sportSchoolId  === '';
-                    // errors.imageAuth = values.imageAuth  === '';
-                    // errors.name = values.name  === '';
-                    // errors.firstSurname = values.firstSurname  === '';
-                    // errors.birthDate = values.birthDate  === '';
-                    // errors.gender = values.gender  === '';
-                    // errors.phone1 = values.phone1  === '' && values.phone2  === '' && values.phone3  === '';
-                    // errors.mail = values.age >= 18 && values.mail  === '';
-                    // errors.municipality = values.municipality  === '';
-                    // errors.postalCode = values.postalCode  === '';
-                    // errors.address = values.address  === '';
-                    // errors.paymentType = values.paymentType  === '';
-                    // errors.feeType = values.feeType  === '';
-                    // errors.iban = values.iban === '' && values.paymentType === "DOM";
-                    // errors.holderName = values.holderName === '' && values.paymentType === "DOM";
-                    // errors.holderFirstSurname = values.holderFirstSurname === '' && values.paymentType === "DOM";
-                    // errors.holderSecondSurname = values.holderSecondSurname === '' && values.paymentType === "DOM";
-                    // errors.holderDni = (values.holderDni === '' || !this.isValidDni(values.holderDni)) && values.paymentType === "DOM" ;
-                    // errors.dni = values.age >= 14 && !this.isValidDni(values.dni)
                     if (values.sportSchoolId  === '') errors.sportSchoolId = true;
                     if (values.imageAuth  === '') errors.imageAuth = true;
                     if (values.name  === '') errors.name = true;
@@ -361,19 +341,21 @@ class CreateAthlete extends React.Component<any, any> {
                                             </CustomCard>
                                         </Grid>
                                         <Grid item xs={2} style={{ display: values.id > 0 ? "block" : "none" }}>
-                                            <Typography variant="subtitle1" gutterBottom component="div">Fecha de incorporación: {moment(new Date(values.firstRegisterDate)).format('DD/MM/YYYY')}</Typography>
+                                            {values.historic.map((historic:any) => {
+                                                return <Typography variant="subtitle1" gutterBottom component="div">{historic.type === 'REGISTER' ? 'Alta' : 'Baja'}: {moment(new Date(historic.date)).format('DD/MM/YYYY')}</Typography>
+                                            })}
                                         </Grid>
                                         <Grid item xs={1}>
-                                            {values.id ? <Button onClick={() => { setFieldValue('openRegisterDialog', true) }} >{values.registered ? 'Dar de baja' : 'Dar de alta'}</Button> : null}
+                                            {values.id ? <Button onClick={() => { setFieldValue('openRegisterDialog', true) }} >{utils.isRegistered(values.historic) ? 'Dar de baja' : 'Dar de alta'}</Button> : null}
                                             <Dialog fullWidth={true} open={values.openRegisterDialog} aria-labelledby="form-dialog-title"
                                                 onClose={() => {
                                                     setFieldValue('openRegisterDialog', false)
                                                 }}
                                             >
-                                                <DialogTitle id="form-dialog-title">Fecha de {values.registered ? 'baja' : 'alta'}</DialogTitle>
+                                                <DialogTitle id="form-dialog-title">Fecha de {utils.isRegistered(values.historic) ? 'baja' : 'alta'}</DialogTitle>
                                                 <DialogContent>
                                                     <DialogContentText>
-                                                        Introduce la fecha de {values.registered ? 'baja' : 'alta'}.
+                                                        Introduce la fecha de {utils.isRegistered(values.historic) ? 'baja' : 'alta'}.
                                                 </DialogContentText>
                                                     <TextField name="registerDateStr" value={values.registerDateStr} margin="dense" onChange={(e: any) => {
                                                                 let d: Moment = moment(e.target.value, "YYYY-MM-DD")
@@ -386,14 +368,16 @@ class CreateAthlete extends React.Component<any, any> {
                                                 </DialogContent>
                                                 <DialogActions>
                                                     <Button onClick={() => {
-                                                        if (values.registered){
+                                                        if (utils.isRegistered(values.historic)){
                                                             this.props.doUnregisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
+                                                            .then(() => window.open("/athletes/list", "_self"))
                                                         }
                                                         else {
                                                             this.props.doRegisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
+                                                            .then(() => window.open("/athletes/list", "_self"))
                                                         }
-                                                    }}>{values.registered ? 'Dar de baja' : 'Dar de alta'}</Button>
-                                                    <Button onClick={() => { setFieldValue('openRegisterDialog', false) }}>"Cancelar"</Button>
+                                                    }}>Guardar</Button>
+                                                    <Button onClick={() => { setFieldValue('openRegisterDialog', false) }}>Cancelar</Button>
                                                 </DialogActions>
                                             </Dialog>
                                         </Grid>
@@ -691,7 +675,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                 <Grid container spacing={1} direction="row">
                                                     <Grid item xs>
                                                         <GroupScheduleSelect 
-                                                            disabled={!values.registered}
+                                                            disabled={!utils.isRegistered(values.historic)}
                                                             groupId={values.groupId}
                                                             specialization={values.specialization}
                                                             scheduleIds={values.scheduleIds}

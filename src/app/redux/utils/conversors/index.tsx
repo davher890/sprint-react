@@ -68,12 +68,11 @@ function athleteDataConversor(d: any) {
         dorsalNumber: d.dorsalNumber,
         dorsalCategory: d.dorsalCategory,
         iban: d.iban,
-        firstRegisterDate: d.firstRegisterDate !== null ? new Intl.DateTimeFormat('sq-AL').format(new Date(d.firstRegisterDate)) : '',
-        lastUnregisterDate: d.lastUnregisterDate !== null ? new Intl.DateTimeFormat('sq-AL').format(new Date(d.lastUnregisterDate)) : '',
         sportSchoolId: d.sportSchoolName, 
         groupName: d.groupName,
         schedules: d.schedules !== null && d.schedules.length > 0 ? getSchedulesString(d.schedules) : '',
-        numDays: d.numDays
+        numDays: d.numDays,
+        code: d.code
     }
 }
 
