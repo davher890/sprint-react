@@ -120,6 +120,7 @@ export function addAthlete(data: any) {
             if (!json.errorMessage) {
                 json.successMessage = "Datos guardados!"
             }
+            json.exit = data.exit
             json.age = utils.ageCalculator(json.birthDate);
             json.birthDateStr = moment.unix(json.birthDate/1000).format("YYYY-MM-DD")
             dispatch({ type: ACTION_TYPES.ADD_ATHLETE, payload: json });

@@ -178,7 +178,7 @@ class CreateAthlete extends React.Component<any, any> {
                     openSportdataDialog: false,
                     openMatchingAthletes: false,
                     
-                    exit: false,
+                    exit: this.props.athlete.exit || false,
 
                     errorMessage: this.props.athlete.errorMessage || '',
                     successMessage: this.props.athlete.successMessage || '',
