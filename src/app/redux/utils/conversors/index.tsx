@@ -72,7 +72,9 @@ function athleteDataConversor(d: any) {
         groupName: d.groupName,
         schedules: d.schedules !== null && d.schedules.length > 0 ? getSchedulesString(d.schedules) : '',
         numDays: d.numDays,
-        code: d.code
+        code: d.code,
+        lastRegisterDate: d.lastRegisterDate ? new Intl.DateTimeFormat('sq-AL').format(new Date(d.lastRegisterDate)) : '',
+        lastUnregisterDate: d.lastUnregisterDate ? new Intl.DateTimeFormat('sq-AL').format(new Date(d.lastUnregisterDate)) : ''
     }
 }
 
