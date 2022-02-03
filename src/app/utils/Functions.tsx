@@ -5,9 +5,10 @@ const functions = {
     isRegistered: function (historic: {type: string, date: number}[]) {
 
         if (historic && historic.length > 0){
-            let filtered = historic.filter((h: {type: string, date: number}) => { return h.date < new Date().getTime() })
+            let filtered = historic.filter((h: {type: string, date: number}) => { return h.date <= new Date().getTime() })
                 .sort((a: {type: string, date: number}, b: {type: string, date: number}) => { return a.date - b.date})
-            return filtered[filtered.length -1].type === 'REGISTER'
+            console.log(';;;', filtered)
+            return filtered[0].type === 'REGISTER'
         }
         return false
     },

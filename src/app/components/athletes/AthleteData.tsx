@@ -341,7 +341,8 @@ class CreateAthlete extends React.Component<any, any> {
                                             </CustomCard>
                                         </Grid>
                                         <Grid item xs={2} style={{ display: values.id > 0 ? "block" : "none" }}>
-                                            {values.historic.map((historic:any) => {
+                                            {values.historic.sort((a: {type: string, date: number}, b: {type: string, date: number}) => { return b.date - a.date})
+                                            .map((historic:any) => {
                                                 return <Typography variant="subtitle1" gutterBottom component="div">{historic.type === 'REGISTER' ? 'Alta' : 'Baja'}: {moment(new Date(historic.date)).format('DD/MM/YYYY')}</Typography>
                                             })}
                                         </Grid>
