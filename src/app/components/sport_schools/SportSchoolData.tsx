@@ -77,8 +77,7 @@ class ConnectedForm extends React.Component<any, any> {
                             anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
                             <Alert severity="success" onClose={() => { 
                                     setFieldValue("successMessage", "");
-                                    this.props.history.push("/sport_schools/list");
-                                    window.location.reload();
+                                    window.open("/sport_schools/list", "_self");
                                 }}>
                                 <AlertTitle>Ok!</AlertTitle>
                                 <strong>{values.successMessage}</strong>

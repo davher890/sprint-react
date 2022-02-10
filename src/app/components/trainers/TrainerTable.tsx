@@ -1,8 +1,9 @@
 import * as React from "react"
 
-import { Grid, Button } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 import Table from "../custom/Table";
+import Button from '../custom/AddButton'
 
 import { connect } from "react-redux";
 import { getTrainerTable, downloadTrainers } from "../../redux/actions/trainers";
@@ -30,7 +31,7 @@ class TrainerTable extends React.Component<any, any> {
 			<React.Suspense fallback={<div>Cargando...</div>}>
 				<Grid container direction="column" spacing={3}>
 					<Grid item xs>
-						<Button href={'/trainers'}>Nuevo Entrenador</Button>
+						<Button text='Nuevo Entrenador' href={'/trainers'}/>
 					</Grid>
 					<Grid item xs>
 						<Table 

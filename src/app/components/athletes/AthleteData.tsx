@@ -243,13 +243,9 @@ class CreateAthlete extends React.Component<any, any> {
                                     setFieldValue("successMessage", "");
                                     if (values.exit) {
                                         window.open("/athletes/list", "_self");
-                                        // this.props.history.push("/athletes/list");
-                                        // window.location.reload();
                                     }
                                     else {
                                         window.open("/athletes", "_self");
-                                        // this.props.history.push("/athletes");
-                                        // window.location.reload();
                                     } 
                                 }}>
                                 <AlertTitle>Ok!</AlertTitle>
