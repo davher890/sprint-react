@@ -74,7 +74,7 @@ export function getAthleteFee(data: any) {
 
 export function downloadAthletes(columns: any, filters:any) {
     return function (dispatch: any) {
-        return downloadExcel(columns, filters).then(json => {
+        return downloadExcel(columns, filters, "/registered_athletes/excel").then(json => {
             dispatch({ type: ACTION_TYPES.DOWNLOAD_ATHLETES, payload: json });
         });
     }
@@ -82,7 +82,7 @@ export function downloadAthletes(columns: any, filters:any) {
 
 export function downloadHistoricAthletes(columns: any, filters: any) {
     return function (dispatch: any) {
-        return downloadExcel(columns, filters, "/athletes/historic/excel").then(json => {
+        return downloadExcel(columns, filters, "/unregistered_athletes/excel").then(json => {
             dispatch({ type: ACTION_TYPES.DOWNLOAD_HISTORIC, payload: json });
         });
     }
