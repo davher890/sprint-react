@@ -28,29 +28,27 @@ class HistoricTableComponent extends React.Component<any, any> {
 
 	render() {
 		return (
-            <Container fixed>
-				<React.Suspense fallback={<div>Cargando...</div>}>
-					<Grid container direction="column">
-						<Grid item xs >
-							<Table 
-								data={this.props.table_data}
-								page={this.props.page}
-								size={this.props.size}
-								total={this.props.total}
-								columns={this.state.columns} 
-								downloadData={this.downloadData}
-								showColumns={true}
-								onPaginationFilterChange={(page: number, size: number, filters: any) => {
-									this.props.getHistoricTable(page, size, filters);
-								}}
-								onRowClick={(id: number) => {
-									window.open("/athletes/" + id, "_self");
-								}}>
-							</Table>
-						</Grid>
+			<React.Suspense fallback={<div>Cargando...</div>}>
+				<Grid container direction="column">
+					<Grid item xs >
+						<Table 
+							data={this.props.table_data}
+							page={this.props.page}
+							size={this.props.size}
+							total={this.props.total}
+							columns={this.state.columns} 
+							downloadData={this.downloadData}
+							showColumns={true}
+							onPaginationFilterChange={(page: number, size: number, filters: any) => {
+								this.props.getHistoricTable(page, size, filters);
+							}}
+							onRowClick={(id: number) => {
+								window.open("/athletes/" + id, "_self");
+							}}>
+						</Table>
 					</Grid>
-				</React.Suspense>
-			</Container>
+				</Grid>
+			</React.Suspense>
 		)
 	}
 }

@@ -70,7 +70,7 @@ function athleteDataConversor(d: any) {
         iban: d.iban,
         sportSchoolId: d.sportSchoolName, 
         groupName: d.groupName,
-        schedules: d.days !== null && d.days.length > 0 ? d.days.split(',').map((day: String) => daysMap.get(day.toLowerCase())).join(','): '',
+        days: d.days !== null && d.days.length > 0 ? d.days.split(',').map((day: String) => daysMap.get(day.toLowerCase())).join(','): '',
         numDays: d.numDays,
         code: d.code,
         lastRegisterDate: d.lastRegisterDate ? new Intl.DateTimeFormat('sq-AL').format(new Date(d.lastRegisterDate)) : '',

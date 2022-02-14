@@ -54,3 +54,5 @@ export const GET_FAMILY = "GET_FAMILY";
 
 export const SIGNUP = "SIGNUP";
 
+export const API_CALL = "API_CALL";
+

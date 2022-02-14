@@ -1,4 +1,5 @@
-import { getRequest, postRequest } from "./ApiService"
+import utils from '../utils/TableUtils'
+import { getRequest, postRequest, postExcelRequest } from "./ApiService"
 
 export const findAll = () => {
     return getRequest("/sport_schools/all")
@@ -16,18 +17,12 @@ export const findFeeTypesById = (id: number) => {
     return getRequest("/sport_schools/" + id + "/fee_types")
 }
 
-export const downloadExcel = (columns: any) => {
-    return fetch(process.env.REACT_APP_SERVER_URL + "/sport_schools/excel", columns)
-        .then(response => {
-            response.blob().then(blob => {
-                let url = window.URL.createObjectURL(blob);
-                let a = document.createElement('a');
-                a.href = url;
-                a.download = 'sport_schools.xlsx';
-                a.click();
-            })
-        })
-        .catch(function () {
-            console.log("error");
-        });
+export const downloadExcel = (columns: any, filters: any, endpoint: string = "/sport_schools/excel") => {
+    
+    let filtersParams = '';
+    if (filters && Object.keys(filters).length > 0){
+        filtersParams = "?filters=" + utils.getFilterParams(filters)
+    }
+    
+    return postExcelRequest(endpoint + filtersParams, columns, 'sport_schools.xlsx')
 }

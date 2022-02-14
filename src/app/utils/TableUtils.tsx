@@ -27,7 +27,7 @@ const Utils = {
                 ]
             }}, 
             { dataField: 'groupName', text : 'Grupo', filter: { type: "text" } }, 
-            { dataField: 'schedules', text : 'Dias' }, 
+            { dataField: 'days', text : 'Dias' }, 
             { dataField: 'numDays', text : 'Num. Dias' }, 
             { dataField: 'nationality', text : 'Nacionalidad', show: false, filter: { type: "text" } }, 
             { dataField: 'birthPlace', text : 'Lugar de Nacimiento', show: false, filter: { type: "text" } }, 

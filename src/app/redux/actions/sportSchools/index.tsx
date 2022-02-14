@@ -35,9 +35,9 @@ export function getSportSchool(id: number) {
     }
 }
 
-export function downloadSportSchools(columns: any) {
+export function downloadSportSchools(columns: any, filters:any) {
     return function (dispatch: any)  {
-        return downloadExcel(columns).then(json => {
+        return downloadExcel(columns, filters, "/sport_schools/excel").then(json => {
             dispatch({ type: ACTION_TYPES.DOWNLOAD_SPORTSCHOOLS, payload: json });
         });
     }

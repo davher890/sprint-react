@@ -6,6 +6,7 @@ import scheduleReducer from "./schedules/index";
 import trainerReducer from "./trainers/index";
 import userReducer from "./users/index";
 import tableReducer from "./table/index";
+import apiReducer from "./api/index";
 import thunk from "redux-thunk";
 
 declare global {
@@ -23,7 +24,8 @@ export default createStore(
     schedule_reducer: scheduleReducer,
     trainer_reducer: trainerReducer,
     user_reducer: userReducer,
-    table_reducer: tableReducer
+    table_reducer: tableReducer,
+    api_reducer: apiReducer
   }),
   storeEnhancers(applyMiddleware(thunk))
 );
