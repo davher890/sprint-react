@@ -5,6 +5,8 @@ const initialState = {
     athletes_by_surnames: [],
     athlete: {},
     athlete_fee: {},
+    athlete_observations: [],
+    athlete_historic: [],
     athlete_sportdata: {}
 };
 
@@ -31,6 +33,18 @@ function rootReducer(state = initialState, action: { type: string, payload: any 
         return {
             ...state,
             athlete_fee: action.payload
+        };
+    }
+    else if (action.type === ACTION_TYPES.GET_ATHLETE_OBSERVATIONS) {
+        return {
+            ...state,
+            athlete_observations: action.payload
+        };
+    }
+    else if (action.type === ACTION_TYPES.GET_ATHLETE_HISTORIC) {
+        return {
+            ...state,
+            athlete_historic: action.payload
         };
     }
     else if (action.type === ACTION_TYPES.ADD_ATHLETE_SPORTDATA) {

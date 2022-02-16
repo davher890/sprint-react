@@ -21,6 +21,14 @@ export const unregisterAthlete = (id: number, body: any) => {
     return postRequest("/athletes/" + id + "/unregister", body)
 }
 
+export const findAthleteObservations = (id: number) => {
+    return getRequest("/athletes/" + id + "/observations")
+}
+
+export const findAthleteHistoric = (id: number) => {
+    return getRequest("/athletes/" + id + "/historic")
+}
+
 export const findBySurnames = (firstSurname: string, secondSurname: string) => {
     return getRequest("/athletes/surnames?first_surname=" + firstSurname + "&second_surname=" + secondSurname)
 }

@@ -20,6 +20,7 @@ import FeeInfo from '../custom/FeeInfo'
 import PhoneCard from '../custom/PhoneCard'
 
 import AthletesList from '../custom/Athletes/AthletesList'
+import AthletesObservations from './AthleteObservations'
 
 
 import AthleteSportdata from './AthleteSportdata'
@@ -118,7 +119,7 @@ class CreateAthlete extends React.Component<any, any> {
                     // Personal info
                     sportSchoolId: this.props.athlete.sportSchoolId || '',
                     imageAuth: this.props.athlete.imageAuth,
-                    observations: this.props.athlete.observations || '',
+                    observations: this.props.athlete.observations || [],
                     name: this.props.athlete.name || '',
                     firstSurname: this.props.athlete.firstSurname || '',
                     secondSurname: this.props.athlete.secondSurname || '',
@@ -706,8 +707,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                         Autorización de Imágenes
                                                     </Grid>
                                                     <Grid item xs={9}>
-                                                        <TextField fullWidth name="observations" label="Observaciones" multiline
-                                                            value={values.observations} onChange={handleChange} />
+                                                        <AthletesObservations athleteId={values.id}/>
                                                     </Grid>
                                                 </Grid>
                                             </CustomCard>

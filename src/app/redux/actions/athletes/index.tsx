@@ -1,6 +1,6 @@
 import * as ACTION_TYPES from "../../constants/action_types";
 
-import { addData, findById, findAthleteFee, downloadExcel, addAthleteSportdata, findByPhone, findBySurnames, registerAthlete, unregisterAthlete } from "../../../services/AthleteService"
+import { addData, findById, findAthleteFee, downloadExcel, addAthleteSportdata, findByPhone, findBySurnames, registerAthlete, unregisterAthlete, findAthleteObservations, findAthleteHistoric } from "../../../services/AthleteService"
 import { findHistoricDataPagination, findAthleteDataPagination, findAthleteSportdataPagination, findDuplicatedAthletesDataPagination } from "../../../services/TableService"
 
 import utils from "../../../utils/Functions"
@@ -68,6 +68,22 @@ export function getAthleteFee(data: any) {
     return function (dispatch: any) {
         return findAthleteFee(data).then(json => {
             dispatch({ type: ACTION_TYPES.GET_ATHLETE_FEE, payload: json });
+        });
+    }
+}
+
+export function getAthleteObservations(id: number) {
+    return function (dispatch: any) {
+        return findAthleteObservations(id).then(json => {
+            dispatch({ type: ACTION_TYPES.GET_ATHLETE_OBSERVATIONS, payload: json });
+        });
+    }
+}
+
+export function getAthleteHistoric(id: number) {
+    return function (dispatch: any) {
+        return findAthleteHistoric(id).then(json => {
+            dispatch({ type: ACTION_TYPES.GET_ATHLETE_HISTORIC, payload: json });
         });
     }
 }
