@@ -17,7 +17,7 @@ class GroupAthletesTable extends React.Component<any, any> {
 
 		super(props);
 		this.state = {
-        	columns: Utils.getAthleteColumns() 
+        	columns: Utils.getGroupAthleteColumns() 
 		}
         this.handleSubmitQuery = this.handleSubmitQuery.bind(this);
         this.downloadData = this.downloadData.bind(this)

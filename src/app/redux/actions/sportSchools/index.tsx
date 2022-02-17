@@ -1,6 +1,6 @@
 import * as ACTION_TYPES from "../../constants/action_types";
 
-import { addData, findById, downloadExcel, findAll, findFeeTypesById } from "../../../services/SportSchoolService"
+import { addData, findById, downloadExcel, findAll, findFeeTypesById, deleteSportSchool } from "../../../services/SportSchoolService"
 import { findSportSchoolDataPagination } from "../../../services/TableService"
 
 export function getSportSchoolTable(page: number, size: number, filters: any) {
@@ -49,6 +49,14 @@ export function addSportSchool(data: any) {
                 json.successMessage = "Datos guardados!"
             }
             dispatch({ type: ACTION_TYPES.ADD_SPORTSCHOOL, payload: json });
+        });
+    }
+}
+
+export function removeSportSchool(id: number) {
+    return function (dispatch: any)  {
+        return deleteSportSchool(id).then(json => {
+            dispatch({ type: ACTION_TYPES.DELETE_SPORTSCHOOL, payload: json });
         });
     }
 }

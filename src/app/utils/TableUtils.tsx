@@ -3,7 +3,6 @@ const Utils = {
 
     getAthleteColumns: () => {
         return [
-            { dataField: 'id', text: 'Id', show: false },
             { dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
             { dataField: 'firstSurname', text : 'Primer apellido', filter: { type: "text" } }, 
             { dataField: 'secondSurname', text : 'Segundo apellido', filter: { type: "text" } }, 
@@ -38,6 +37,57 @@ const Utils = {
             { dataField: 'dorsalNumber', text : 'Dorsal', show: false, filter: { type: "number" } },
             { dataField: 'dorsalCategory', text : 'Categoría de dorsal', show: false, filter: { type: "text" } },
             { dataField: 'iban', text : 'IBAN', show: false, filter: { type: "text" } },
+            { dataField: 'mail', text : 'Email', show: false, filter: { type: "text" } },
+            { dataField: 'familiarOneMail', text : 'Fam.1 Email', show: false, filter: { type: "text" } },
+            { dataField: 'familiarTwoMail', text : 'Fam.2 Email', show: false, filter: { type: "text" } },
+            { dataField: 'phone1', text : 'Tel.1', show: false, filter: { type: "text" } },
+            { dataField: 'phone2', text : 'Tel.2', show: false, filter: { type: "text" } },
+            { dataField: 'phone3', text : 'Tel.3', show: false, filter: { type: "text" } },
+            { dataField: 'code', text : 'Codigo atleta', show: false, filter: { type: "number" } },
+            { dataField: 'familyCode', text : 'Codigo familia', show: false, filter: { type: "number" } }
+        ]
+    },
+
+    getGroupAthleteColumns: () => {
+        return [
+            { dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
+            { dataField: 'firstSurname', text : 'Primer apellido', filter: { type: "text" } }, 
+            { dataField: 'secondSurname', text : 'Segundo apellido', filter: { type: "text" } }, 
+            { dataField: 'birthDate', text : 'Fecha de Nacimiento' }, 
+            { dataField: 'gender', text : 'Género', filter: { 
+                type: "options",
+                options : [
+                    { id: 'male', name: 'Masculino' },
+                    { id: 'female', name: 'Femenino' }
+                ]
+            }}, 
+            { dataField: 'dni', text : 'Dni', filter: { type: "text" } }, 
+            { dataField: 'lastRegisterDate', text : 'Fecha incorporacion' },
+            { dataField: 'lastUnregisterDate', text : 'Fecha baja' },
+            { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
+                type: "options",
+                options : [
+                    { id : '1', name: 'Santa Ana' },
+                    { id : '2', name: 'Paracuellos' },
+                    { id : '3', name: 'Externos' }
+                ]
+            }}, 
+            { dataField: 'groupName', text : 'Grupo', filter: { type: "text" } }, 
+            { dataField: 'days', text : 'Dias' }, 
+            { dataField: 'numDays', text : 'Num. Dias' }, 
+            { dataField: 'nationality', text : 'Nacionalidad', show: false, filter: { type: "text" } }, 
+            { dataField: 'birthPlace', text : 'Lugar de Nacimiento', show: false, filter: { type: "text" } }, 
+            { dataField: 'category', text : 'Categoría', show: false, filter: { type: "text" } }, 
+            { dataField: 'license', text : 'Licencia', show: false }, 
+            { dataField: 'licenseType', text : 'Tipo de licencia', show: false }, 
+            { dataField: 'dorsalNumber', text : 'Dorsal', show: false, filter: { type: "number" } },
+            { dataField: 'dorsalCategory', text : 'Categoría de dorsal', show: false, filter: { type: "text" } },
+            { dataField: 'mail', text : 'Email', show: false, filter: { type: "text" } },
+            { dataField: 'familiarOneMail', text : 'Fam.1 Email', show: false, filter: { type: "text" } },
+            { dataField: 'familiarTwoMail', text : 'Fam.2 Email', show: false, filter: { type: "text" } },
+            { dataField: 'phone1', text : 'Tel.1', show: false, filter: { type: "text" } },
+            { dataField: 'phone2', text : 'Tel.2', show: false, filter: { type: "text" } },
+            { dataField: 'phone3', text : 'Tel.3', show: false, filter: { type: "text" } },
             { dataField: 'code', text : 'Codigo atleta', show: false, filter: { type: "number" } },
             { dataField: 'familyCode', text : 'Codigo familia', show: false, filter: { type: "number" } }
         ]

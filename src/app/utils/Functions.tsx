@@ -6,8 +6,7 @@ const functions = {
 
         if (historic && historic.length > 0){
             let filtered = historic.filter((h: {type: string, date: number}) => { return h.date <= new Date().getTime() })
-                .sort((a: {type: string, date: number}, b: {type: string, date: number}) => { return a.date - b.date})
-            console.log(';;;', filtered)
+                .sort((a: {type: string, date: number}, b: {type: string, date: number}) => { return a.date < b.date ? 1 : -1})
             return filtered[0].type === 'REGISTER'
         }
         return false

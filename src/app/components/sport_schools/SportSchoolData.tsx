@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { Formik } from 'formik';
 
-import { Grid, Snackbar } from '@material-ui/core';
+import { Grid, Snackbar, AppBar, Toolbar, Box } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 import TextField from '../custom/TextField';
@@ -12,7 +12,9 @@ import SaveButton from '../custom/SaveButton'
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
 
-import { addSportSchool, getSportSchool } from "../../redux/actions/sportSchools";
+import { addSportSchool, getSportSchool, removeSportSchool } from "../../redux/actions/sportSchools";
+import DeleteButton from "../custom/DeleteButton";
+import ConfirmDialog from "../custom/ConfirmDialog";
 
 class ConnectedForm extends React.Component<any, any> {
     constructor(props: any) {
@@ -34,6 +36,10 @@ class ConnectedForm extends React.Component<any, any> {
         this.props.addSportSchool(this.state);
     }
 
+    deleteSportSchool(groupId: number) {
+        this.props.removeSportSchool(groupId)
+    }
+
     render() {
         return (
             <React.Suspense fallback={<div>Cargando...</div>}>
@@ -44,6 +50,9 @@ class ConnectedForm extends React.Component<any, any> {
                         name: this.props.sport_school.name || '',
                         municipality: this.props.sport_school.municipality || '',
                         address: this.props.sport_school.address || '',
+                        
+                        openDeleteDialog: false,
+                        
                         errorMessage: this.props.sport_school.errorMessage || '',
                         successMessage: this.props.sport_school.successMessage || ''
                     }}
@@ -66,6 +75,14 @@ class ConnectedForm extends React.Component<any, any> {
                 {({ handleSubmit, handleChange, values, touched, setFieldValue, errors, isSubmitting }) => (
 
                     <form onSubmit={handleSubmit}>
+                        <ConfirmDialog open={values.openDeleteDialog} 
+                            confirm={() => {
+                                this.deleteSportSchool(this.props.id); 
+                                setFieldValue("openDeleteDialog", false);
+                                window.open("/sport_schools/list", "_self");
+                            }}
+                            cancel={() => setFieldValue("openDeleteDialog", false)}
+                        />
                         <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
                             anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
                             <Alert severity="error" onClose={() => { setFieldValue("errorMessage", "") }}>
@@ -83,29 +100,39 @@ class ConnectedForm extends React.Component<any, any> {
                                 <strong>{values.successMessage}</strong>
                             </Alert>
                         </Snackbar>
-                        <Grid container direction="column" spacing={3}>
-                            <Grid item xs>
-                                <Card title="Datos de la Escuela deportiva">
-                                    <Grid container spacing={2}>
-                                        <Grid item xs>
-                                            <TextField name="name" label="Nombre" value={values.name} onChange={handleChange}
-                                                error={touched.name && errors.name} />
+                        <Box paddingBottom={7}>
+                            <Grid container direction="column" spacing={3}>
+                                <Grid item xs>
+                                    <Card title="Datos de la Escuela deportiva">
+                                        <Grid container spacing={2}>
+                                            <Grid item xs>
+                                                <TextField name="name" label="Nombre" value={values.name} onChange={handleChange}
+                                                    error={touched.name && errors.name} />
+                                            </Grid>
+                                            <Grid item xs>
+                                                <TextField name="municipality" label="Municipio" value={values.municipality} onChange={handleChange}
+                                                    error={touched.municipality && errors.municipality} />
+                                            </Grid>
+                                            <Grid item xs>
+                                                <TextField name="address" label="Dirección" value={values.address} onChange={handleChange}
+                                                    error={touched.address && errors.address} />
+                                            </Grid>
                                         </Grid>
-                                        <Grid item xs>
-                                            <TextField name="municipality" label="Municipio" value={values.municipality} onChange={handleChange}
-                                                error={touched.municipality && errors.municipality} />
-                                        </Grid>
-                                        <Grid item xs>
-                                            <TextField name="address" label="Dirección" value={values.address} onChange={handleChange}
-                                                error={touched.address && errors.address} />
-                                        </Grid>
-                                    </Grid>
-                                </Card>
+                                    </Card>
+                                </Grid>
+                                <Grid item xs>
+                                </Grid>
                             </Grid>
-                            <Grid item xs>
-                                <SaveButton type="submit" disabled={isSubmitting}/>
-                            </Grid>
-                        </Grid>
+                        </Box>
+                        <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
+                            <Toolbar>
+                                <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
+                                {(this.props.id) ? 
+                                    <DeleteButton text='Borrar' onClick={() => setFieldValue("openDeleteDialog", true)}/>
+                                    : null
+                                }
+                            </Toolbar>
+                        </AppBar>
                     </form>
                 )}
                 </Formik>
@@ -116,7 +143,8 @@ class ConnectedForm extends React.Component<any, any> {
 
 const mapDispatchToProps = {
     addSportSchool,
-    getSportSchool
+    getSportSchool,
+    removeSportSchool
 }
 
 const mapStateToProps = (state: any) => {
