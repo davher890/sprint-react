@@ -27,8 +27,10 @@ import AthleteSportdata from './AthleteSportdata'
 
 // Redux
 import { connect } from "react-redux";
-import { addAthlete, getAthlete, getAthletesByPhone, getAthletesBySurnames, doRegisterAthlete, doUnregisterAthlete } from "../../redux/actions/athletes";
+import { addAthlete, getAthlete, getAthletesByPhone, getAthletesBySurnames, doRegisterAthlete, doUnregisterAthlete, removeAthlete } from "../../redux/actions/athletes";
 import { getSportSchoolFeeTypes } from "../../redux/actions/sportSchools";
+import DeleteButton from "../custom/DeleteButton";
+import ConfirmDialog from "../custom/ConfirmDialog";
 
 class CreateAthlete extends React.Component<any, any> {
 
@@ -178,6 +180,7 @@ class CreateAthlete extends React.Component<any, any> {
                     openRegisterDialog: false,
                     openSportdataDialog: false,
                     openMatchingAthletes: false,
+                    openDeleteDialog: false,
                     
                     exit: this.props.athlete.exit || false,
 
@@ -231,6 +234,14 @@ class CreateAthlete extends React.Component<any, any> {
 
                     <form onSubmit={handleSubmit}>
 
+                        <ConfirmDialog open={values.openDeleteDialog} 
+                            confirm={() => {
+                                this.props.removeAthlete(values.id);
+                                setFieldValue("openDeleteDialog", false);
+                                window.open("/athletes/list", "_self");
+                            }}
+                            cancel={() => setFieldValue("openDeleteDialog", false)}
+                        />
                         <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
                             anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
                             <Alert severity="error" onClose={() => { setFieldValue("errorMessage", "") }}>
@@ -725,6 +736,10 @@ class CreateAthlete extends React.Component<any, any> {
                                     }}
                                 >Guardar y salir</SaveButton>
                                 <SaveButton type="submit" disabled={isSubmitting}>Guardar y continuar</SaveButton>
+                                {(this.props.id) ? 
+                                    <DeleteButton text='Borrar' onClick={() => setFieldValue("openDeleteDialog", true)}/>
+                                    : null
+                                }
                             </Toolbar>
                         </AppBar>
                     </form>
@@ -743,7 +758,8 @@ const mapDispatchToProps = {
     getAthletesBySurnames,
     getSportSchoolFeeTypes,
     doRegisterAthlete, 
-    doUnregisterAthlete
+    doUnregisterAthlete,
+    removeAthlete
 }
 
 const mapStateToProps = (state: any) => {

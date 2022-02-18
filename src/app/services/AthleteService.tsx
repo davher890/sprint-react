@@ -1,5 +1,5 @@
 import utils from '../utils/TableUtils'
-import { getRequest, postRequest, postExcelRequest } from "./ApiService"
+import { getRequest, postRequest, postExcelRequest, deleteRequest } from "./ApiService"
 
 export const addData = (body: any) => {
     return postRequest("/athletes", body)
@@ -35,6 +35,10 @@ export const findBySurnames = (firstSurname: string, secondSurname: string) => {
 
 export const findAthleteFee = (body: any) => {
     return postRequest("/athletes/fee", body)
+}
+
+export const deleteAthlete = (id: number) => {
+    return deleteRequest("/athletes/" + id)
 }
 
 export const downloadExcel = (columns: any, filters: any, endpoint: string = "/athletes/excel") => {

@@ -1,6 +1,6 @@
 import * as ACTION_TYPES from "../../constants/action_types";
 
-import { addData, findById, findAthleteFee, downloadExcel, addAthleteSportdata, findByPhone, findBySurnames, registerAthlete, unregisterAthlete, findAthleteObservations, findAthleteHistoric } from "../../../services/AthleteService"
+import { addData, findById, findAthleteFee, downloadExcel, addAthleteSportdata, findByPhone, findBySurnames, registerAthlete, unregisterAthlete, findAthleteObservations, findAthleteHistoric, deleteAthlete } from "../../../services/AthleteService"
 import { findHistoricDataPagination, findAthleteDataPagination, findAthleteSportdataPagination, findDuplicatedAthletesDataPagination } from "../../../services/TableService"
 
 import utils from "../../../utils/Functions"
@@ -140,6 +140,14 @@ export function addAthlete(data: any) {
             json.age = utils.ageCalculator(json.birthDate);
             json.birthDateStr = moment.unix(json.birthDate/1000).format("YYYY-MM-DD")
             dispatch({ type: ACTION_TYPES.ADD_ATHLETE, payload: json });
+        });
+    }
+}
+
+export function removeAthlete(id: number) {
+    return function (dispatch: any)  {
+        return deleteAthlete(id).then(json => {
+            dispatch({ type: ACTION_TYPES.DELETE_ATHLETE, payload: json });
         });
     }
 }
