@@ -76,6 +76,7 @@ function athleteDataConversor(d: any) {
         lastRegisterDate: d.lastRegisterDate ? new Intl.DateTimeFormat('sq-AL').format(new Date(d.lastRegisterDate)) : '',
         lastUnregisterDate: d.lastUnregisterDate ? new Intl.DateTimeFormat('sq-AL').format(new Date(d.lastUnregisterDate)) : '',
         mail: d.mail,
+        address: d.address,
         familiarOneMail: d.familiarOneMail,
         familiarTwoMail: d.familiarTwoMail
     }

@@ -43,6 +43,7 @@ const Utils = {
             { dataField: 'phone1', text : 'Tel.1', show: false, filter: { type: "text" } },
             { dataField: 'phone2', text : 'Tel.2', show: false, filter: { type: "text" } },
             { dataField: 'phone3', text : 'Tel.3', show: false, filter: { type: "text" } },
+            { dataField: 'address', text: 'Dirección', filter: { type: "text" } },
             { dataField: 'code', text : 'Codigo atleta', show: false, filter: { type: "number" } },
             { dataField: 'familyCode', text : 'Codigo familia', show: false, filter: { type: "number" } }
         ]

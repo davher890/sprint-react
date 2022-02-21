@@ -9,7 +9,7 @@ const functions = {
                 .sort((a: {type: string, date: number}, b: {type: string, date: number}) => { return a.date < b.date ? 1 : -1})
             return filtered[0].type === 'REGISTER'
         }
-        return false
+        return true
     },
         
     getMonth: function (month: number) {
