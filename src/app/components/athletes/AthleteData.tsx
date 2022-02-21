@@ -228,7 +228,7 @@ class CreateAthlete extends React.Component<any, any> {
                     this.handleFormSubmit()
                 }}
             >
-                {({ handleSubmit, values, touched, setFieldValue, errors, handleChange, isSubmitting }) => {
+                {({ handleSubmit, values, touched, setFieldValue, errors, handleChange, isSubmitting, setFieldError, setFieldTouched }) => {
                     
                     return (
 
@@ -480,6 +480,12 @@ class CreateAthlete extends React.Component<any, any> {
                                                         <Grid item xs>
                                                             <TextField name="dni" label="DNI/NIE" type="text" value={values.dni}
                                                                 error={touched.dni && errors.dni} onChange={handleChange}
+                                                                onBlur={() => {
+                                                                    if (!this.isValidDni(values.dni)){
+                                                                        setFieldTouched("dni", true, false);
+                                                                        setFieldError("dni", "DNI/NIE incorrecto");
+                                                                    }
+                                                                }}
                                                             />
                                                         </Grid>
                                                         <Grid item xs>
