@@ -24,54 +24,66 @@ const functions = {
 
     calculateCategory: function (year: number) {
         const currentYear = new Date().getFullYear()
-        let category = "MASTER"
-        switch (currentYear - year) {
-            case 6:
-            case 7:
-                category = "SUB8"
-                break;
-            case 8:
-            case 9:
-                category = "SUB10"
-                break;
-            case 10:
-            case 11:
-                category = "SUB12"
-                break;
-            case 12:
-            case 13:
-                category = "SUB14"
-                break;
-            case 14:
-            case 15:
-                category = "SUB16"
-                break;
-            case 16:
-            case 17:
-                category = "SUB18"
-                break;
-            case 18:
-            case 19:
-                category = "SUB20"
-                break;
-            case 20:
-            case 21:
-            case 22:
-                category = "SUB23"
-                break;
-            default:
-                if (currentYear - year < 6) {
-                    category = "SUB8"
-                }
-                if (currentYear - year <= 35) {
-                    category = "SENIOR"
-                }
-                else {
-                    category = "MASTER"
-                }
-                break;
+        let category = null
+        if (!year){
+            return category;
         }
-        return category
+        else {
+            switch (currentYear - year) {
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                    category = "CHUPETIN"
+                    break;
+                case 6:
+                case 7:
+                    category = "SUB8"
+                    break;
+                case 8:
+                case 9:
+                    category = "SUB10"
+                    break;
+                case 10:
+                case 11:
+                    category = "SUB12"
+                    break;
+                case 12:
+                case 13:
+                    category = "SUB14"
+                    break;
+                case 14:
+                case 15:
+                    category = "SUB16"
+                    break;
+                case 16:
+                case 17:
+                    category = "SUB18"
+                    break;
+                case 18:
+                case 19:
+                    category = "SUB20"
+                    break;
+                case 20:
+                case 21:
+                case 22:
+                    category = "SUB23"
+                    break;
+                default:
+                    console.log(currentYear - year)
+                    if (currentYear - year < 6) {
+                        category = "SUB8"
+                    }
+                    if (currentYear - year <= 35) {
+                        category = "SENIOR"
+                    }
+                    else {
+                        category = "MASTER"
+                    }
+                    break;
+            }
+            return category
+        }
     },
 
     getCategories: function () {
@@ -86,7 +98,8 @@ const functions = {
             { id: "SUB14", name: "SUB14" },
             { id: "SUB12", name: "SUB12" },
             { id: "SUB10", name: "SUB10" },
-            { id: "SUB8", name: "SUB8" }
+            { id: "SUB8", name: "SUB8" },
+            { id: "CHUPETIN", name: "CHUPETIN"}
         ]
     },
 

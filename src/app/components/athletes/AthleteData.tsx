@@ -181,6 +181,7 @@ class CreateAthlete extends React.Component<any, any> {
                     openSportdataDialog: false,
                     openMatchingAthletes: false,
                     openDeleteDialog: false,
+                    selectedCategory: false,
                     
                     exit: this.props.athlete.exit || false,
 
@@ -656,8 +657,11 @@ class CreateAthlete extends React.Component<any, any> {
                                                 <Grid container item spacing={1}>
                                                     <Grid item xs={2}>
                                                         <Select fullWidth name="category" label="Categoría"
-                                                            options={utils.getCategories()} value={values.category || utils.calculateCategory(new Date(values.birthDate).getFullYear())}
-                                                            onChange={(e: any, value: any) => setFieldValue('category', value ? value.id : "")}
+                                                            options={utils.getCategories()} value={values.selectedCategory ? values.category : utils.calculateCategory(new Date(values.birthDate).getFullYear())}
+                                                            onChange={(e: any, value: any) => {
+                                                                setFieldValue('selectedCategory', 'true');
+                                                                setFieldValue('category', value ? value.id : "")
+                                                            }}
                                                         />
                                                     </Grid>
                                                     <Grid item xs={2}>
