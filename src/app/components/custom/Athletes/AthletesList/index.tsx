@@ -13,7 +13,7 @@ const AthletesList: React.FC<any> = (props) => {
     }, [props.athletes])
     
     return ( 
-        <Grid container>
+        <Grid container style={{ width: "100%", overflowX: "auto" }}>
             <TableContainer><Table stickyHeader>
                 <TableHead>
                     <TableRow>
@@ -25,8 +25,8 @@ const AthletesList: React.FC<any> = (props) => {
                         <TableCell>Teléfono 1</TableCell>
                         <TableCell>Teléfono 2</TableCell>
                         <TableCell>Teléfono 3</TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
+                        { props.onSelectFamily ? <TableCell></TableCell> : null }
+                        { props.onSelectAthlete ? <TableCell></TableCell> : null }
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -41,10 +41,8 @@ const AthletesList: React.FC<any> = (props) => {
                                 <TableCell>{ row.phone1 }</TableCell>
                                 <TableCell>{ row.phone2 }</TableCell>
                                 <TableCell>{ row.phone3 }</TableCell>
-                                <TableCell><Button onClick={() => { props.onSelectFamily(row); }}>Seleccionar familia</Button>
-                                </TableCell>
-                                <TableCell><SearchButton onClick={() => { props.onSelectAthlete(row.id); }}>Abrir atleta</SearchButton>
-                                </TableCell>
+                                { props.onSelectFamily ? <TableCell><Button onClick={() => { if (props.onSelectFamily) props.onSelectFamily(row); }}>Seleccionar familia</Button></TableCell> : null }
+                                { props.onSelectAthlete ? <TableCell><SearchButton onClick={() => { if (props.onSelectAthlete) props.onSelectAthlete(row.id); }}>Abrir atleta</SearchButton></TableCell> : null }
                             </TableRow>
                         })
                     }

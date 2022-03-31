@@ -20,6 +20,9 @@ const CustomTable: React.FC<any> = (props) => {
 			// "&.Mui-focused": {
 			// 	color: props.theme.palette.secondary.main
 			// }
+			// width: "100%",
+			// marginTop: theme.spacing.unit * 3,
+			overflowX: "auto"
 		},
 		focused: {
 			color : props.theme.palette.secondary.main,
@@ -118,7 +121,7 @@ const CustomTable: React.FC<any> = (props) => {
 					downloadData={downloadData}
 				/>
 			</Grid>
-			<Grid item >
+			<Grid item style={{ width: "100%", overflowX: "auto" }}>
 				<TableContainer>
 					<Table stickyHeader>
 						<TableHead>

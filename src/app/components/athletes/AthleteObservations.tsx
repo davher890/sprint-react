@@ -43,7 +43,7 @@ const AthleteObservations: React.FC<any> = (props) => {
             return {
                 date: h.date,
                 text: h.observations,
-                type: h.type == 'REGISTER' ? 'Alta' : 'Baja'
+                type: h.type === 'REGISTER' ? 'Alta' : 'Baja'
             }
         }) : []
         Array.prototype.push.apply(obsData, historicData)

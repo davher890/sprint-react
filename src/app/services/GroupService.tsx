@@ -25,6 +25,14 @@ export const findGroupSchedules = (id: number) => {
     return getRequest("/groups/" + id + "/schedules")
 }
 
+export const findGroupAthletes = (id: number) => {
+    return getRequest("/groups/" + id + "/athletes")
+}
+
+export const swapGroupsAthletes = (idA: number, idB: number, groupAAthletes: number[], groupBAthletes: number[]) => {
+    return getRequest("/groups/" + idA + "/swap/" + idB + "?groupAAthletes=" + groupAAthletes + "&groupBAthletes=" + groupBAthletes)
+}
+
 export const deleteGroup = (id: number) => {
     return deleteRequest("/groups/" + id)
 }

@@ -15,7 +15,7 @@ import { Box, Toolbar, Typography } from '@material-ui/core'
 // import { addUser, getUser } from "../../redux/actions/users";
 
 
-const drawerWidth = 240;
+// const drawerWidth = 240;
 
 
 class Social extends React.Component<any, any> {

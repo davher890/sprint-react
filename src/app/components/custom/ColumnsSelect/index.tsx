@@ -10,6 +10,12 @@ const ColumnsSelect: React.FC<any> = (props) => {
 
     const [openDialog, setOpenDialog] = useState(false)
 
+    const changeEvent = (left: any, right: any) => {
+        if (props.changeEvent){
+            props.changeEvent(left.map((c: any) => { c.show = false; return c; }).concat(right.map((c: any) => { c.show = true; return c; })))
+        }
+    }
+
     return (
         <Grid container>
             <Grid item xs>
@@ -30,7 +36,10 @@ const ColumnsSelect: React.FC<any> = (props) => {
                 <DialogContent>
                     <Grid container direction="row" spacing={2} justifyContent="flex-start" alignItems="flex-start">
                         <Grid item xs>
-                            <MultiSelect columns={props.columns} changeEvent={props.changeEvent} />
+                            <MultiSelect 
+                                left={props.columns.filter((d: any) => d.show !== undefined && d.show === false)}
+                                right={props.columns.filter((d: any) => d.show === undefined || d.show === true)}
+                                changeEvent={changeEvent} />
                         </Grid>
                     </Grid>
                 </DialogContent>

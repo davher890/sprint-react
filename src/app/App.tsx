@@ -2,7 +2,6 @@ import {
   BrowserRouter as Router, Routes, Route
 } from "react-router-dom";
 
-import Social from './components/social';
 import UserData from './components/users/UserData';
 import UserTable from './components/users/UserTable';
 import TrainerData from './components/trainers/TrainerData';
@@ -17,6 +16,7 @@ import AthleteTable from './components/athletes/AthleteTable';
 import HistoricTable from './components/athletes/HistoricTable';
 import GroupData from './components/groups/GroupData';
 import GroupTable from './components/groups/GroupTable';
+import GroupSwap from './components/groups/GroupSwap';
 import FamilyTable from './components/families/FamilyTable';
 import FamilyData from './components/families/FamilyData';
 import Login from './components/login';
@@ -51,6 +51,7 @@ const AppBar: React.FC<any> = (props) => {
           <Route path="/athletes" element={<AthleteData/>} />
           <Route path="/groups/attendance" element={<GroupAttendance/>}/>
           <Route path="/groups/athletes" element={<GroupAthletesTable/>}/>
+          <Route path="/groups/swap" element={<GroupSwap/>}/>
           <Route path="/groups/list" element={<GroupTable/>}/>
           <Route path="/groups/:id" element={<GroupData/>}/>
           <Route path="/groups" element={<GroupData/>} />
@@ -63,7 +64,6 @@ const AppBar: React.FC<any> = (props) => {
           <Route path="/users/list" element={<UserTable />}/>
           <Route path="/users/:id" element={<UserData />}/>
           <Route path="/users" element={<UserData />}/>
-          <Route path="/social" element={<Social />}/>
         </Routes>
       </Box>
     </Router>

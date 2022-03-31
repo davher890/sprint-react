@@ -59,6 +59,7 @@ const CustomAppBar: React.FC<any> = (props) => {
                         open={Boolean(groupsAnchorEl)}
                         onClose={handleGroupsMenuClose}>
                     <MenuItem><Link href="/groups/list">Gestión</Link></MenuItem>
+                    <MenuItem><Link href="/groups/swap">Intercambio Masivo</Link></MenuItem>
                     <MenuItem><Link href="/schedules/list">Horarios</Link></MenuItem>
                     <MenuItem><Link href="/trainers/list">Entrenadores</Link></MenuItem>
                 </Menu>

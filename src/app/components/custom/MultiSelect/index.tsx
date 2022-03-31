@@ -11,11 +11,11 @@ class MultiSelect extends React.Component<any, any> {
 
 	constructor(props: any) {
 		super(props);
-		let left = props.columns.filter((d: any) => d.show !== undefined && d.show === false)
-		let right = props.columns.filter((d: any) => d.show === undefined || d.show === true)
+		console.log(props)
 		this.state = {
-			left: left,
-			right: right
+			left: props.left || [],
+			right: props.right || [],
+			allowEmptyGroups: props.allowEmptyGroups || false
 		}
 		this.handleToggle = this.handleToggle.bind(this)
 		this.handleAllRight = this.handleAllRight.bind(this)
@@ -23,7 +23,9 @@ class MultiSelect extends React.Component<any, any> {
 	}
 
 	fireChange(){
-		this.props.changeEvent(this.state.left.map((c: any) => { c.show = false; return c; }).concat(this.state.right.map((c: any) => { c.show = true; return c; })))
+		if (this.props.changeEvent){
+			this.props.changeEvent(this.state.left, this.state.right)
+		}
 	}
 
 	async toggleRightChange(inRight: any){
@@ -60,7 +62,7 @@ class MultiSelect extends React.Component<any, any> {
  	async handleAllLeft(){
 		await this.setState({ 
 			left : this.state.left.concat(this.state.right.splice(1)),
-			right : this.state.right.splice(0, 1)
+			right : this.state.allowEmptyGroups ? [] : this.state.right.splice(0, 1)
 		})
 		this.fireChange()
 	};

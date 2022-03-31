@@ -4,8 +4,10 @@ const initialState = {
     specialization_groups: [],
     not_specialization_groups: [],
     group_schedules: [],
+    group_athletes: [],
     group: {},
-    groups: []
+    groups: [],
+    swap_groups: []
 };
 
 function rootReducer(state = initialState, action: { type: string, payload: any }) {
@@ -37,6 +39,18 @@ function rootReducer(state = initialState, action: { type: string, payload: any 
         return {
             ...state,
             group_schedules: action.payload
+        };
+    }
+    else if (action.type === ACTION_TYPES.GROUP_ATHLETES) {
+        return {
+            ...state,
+            group_athletes: action.payload
+        };
+    }
+    else if (action.type === ACTION_TYPES.SWAP_GROUPS_ATHLETES) {
+        return {
+            ...state,
+            group_athletes: action.payload
         };
     }
     return state;

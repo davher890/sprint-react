@@ -1,6 +1,6 @@
 import * as ACTION_TYPES from "../../constants/action_types";
 
-import { findAllGroups, findSpecializationGroups, findNotSpecializationGroups, findGroupSchedules, downloadGroupSchedulesExcel, addData, findById, findGroupAttendance, deleteGroup } from "../../../services/GroupService"
+import { findAllGroups, findSpecializationGroups, findNotSpecializationGroups, findGroupSchedules, downloadGroupSchedulesExcel, addData, findById, findGroupAttendance, deleteGroup, findGroupAthletes, swapGroupsAthletes } from "../../../services/GroupService"
 import { findGroupDataPagination, findGroupAthletesDataPagination } from "../../../services/TableService"
 
 export function getGroupTable(page: number, size: number, filters: any) {
@@ -57,6 +57,12 @@ export function getGroupSchedules(id: number) {
     }
 }
 
+export function getGroupAthletes(id: number) {
+    return function (dispatch: any)  {
+        return findGroupAthletes(id).then(json => { dispatch({ type: ACTION_TYPES.GROUP_ATHLETES, payload: json }); });
+    }
+}
+
 export function getGroup(id: number) {
     return function (dispatch: any)  {
         return findById(id).then(json => {
@@ -80,6 +86,14 @@ export function addGroup(data: any) {
                 json.successMessage = "Datos guardados!"
             }
             dispatch({ type: ACTION_TYPES.ADD_GROUP, payload: json });
+        });
+    }
+}
+
+export function swapGroups(idA: number, idB: number, groupAAthletes: number[], groupBAthletes: number[]) {
+    return function (dispatch: any)  {
+        return swapGroupsAthletes(idA, idB, groupAAthletes, groupBAthletes).then((json: any) => {
+            dispatch({ type: ACTION_TYPES.SWAP_GROUPS_ATHLETES, payload: json });
         });
     }
 }
