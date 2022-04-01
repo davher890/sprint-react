@@ -3,6 +3,8 @@ import * as ACTION_TYPES from "../../constants/action_types";
 import { findTrainerDataPagination } from "../../../services/TableService"
 import { findAll, addData, findById, downloadExcel } from "../../../services/TrainerService"
 
+import { Order } from '../../../types/order'
+
 export function getAllTrainers() {
     return function (dispatch: any)  {
         return findAll().then(json => { 
@@ -11,9 +13,9 @@ export function getAllTrainers() {
     }
 }
 
-export function getTrainerTable(page: number, size: number, filters: any) {
+export function getTrainerTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
     return function (dispatch: any)  {
-        return findTrainerDataPagination(page, size, filters).then(json => {
+        return findTrainerDataPagination(page, size, filters, sort, sortDirection).then(json => {
             dispatch({ type: ACTION_TYPES.LOAD_TRAINER_TABLE, payload: json });
         });
     }

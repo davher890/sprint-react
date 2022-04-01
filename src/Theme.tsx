@@ -19,8 +19,8 @@ const theme = createTheme({
   // },
   // },
   typography: {
-    fontFamily: 'Roboto',
-    fontSize: 16,
+    fontFamily: 'Calibri',
+    fontSize: 13,
     button: {
         margin : "1%"
     },

@@ -3,10 +3,11 @@ import * as ACTION_TYPES from "../../constants/action_types";
 import { findScheduleDataPagination } from "../../../services/TableService"
 import { findAll, findById, addData } from "../../../services/ScheduleService"
 
+import { Order } from '../../../types/order'
 
-export function getScheduleTable(page: number, size: number, filters: any) {
+export function getScheduleTable(page: number, size: number, filters: any, sort: string="day", sortDirection: Order) {
     return function (dispatch: any)  {
-        return findScheduleDataPagination(page, size, filters).then(json => {
+        return findScheduleDataPagination(page, size, filters, sort, sortDirection).then(json => {
             dispatch({ type: ACTION_TYPES.LOAD_SCHEDULE_TABLE, payload: json });
         });
     }

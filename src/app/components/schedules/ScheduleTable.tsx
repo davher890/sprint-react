@@ -9,6 +9,8 @@ import { connect } from "react-redux";
 import { getScheduleTable } from "../../redux/actions/schedules";
 import Utils from "../../utils/TableUtils";
 
+import { Order } from '../../types/order'
+
 class ScheduleTable extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
@@ -36,8 +38,8 @@ class ScheduleTable extends React.Component<any, any> {
 							total={this.props.total}
 							columns={this.state.columns}
 							showColumns={false}
-							onPaginationFilterChange={(page: number, size: number, filters:any) => {
-								this.props.getScheduleTable(page, size, filters);
+							onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
+								this.props.getScheduleTable(page, size, filters, sort, sortDirection);
 							}}
 							onRowClick={(id: number) => {
 								window.open("/schedules/" + id, "_self");

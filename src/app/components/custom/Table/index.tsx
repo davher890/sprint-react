@@ -2,13 +2,15 @@ import * as React from "react"
 
 import { withTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import { Table, TableBody, TableHead, TableRow, TablePagination, TableCell, TableContainer } from '@material-ui/core';
+import { Table, TableBody, TableHead, TableRow, TablePagination, TableCell, TableContainer, TableSortLabel } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import ColumnsSelect from "../ColumnsSelect";
 import TextField from "../TextField";
 import TablePaginationActions from "../TablePagination";
 import Select from '../Select'
+
+import { Order } from '../../../types/order'
 
 const CustomTable: React.FC<any> = (props) => {
 
@@ -41,7 +43,11 @@ const CustomTable: React.FC<any> = (props) => {
 			color : props.theme.palette.secondary.main,
 			// background: props.theme.palette.primary.main,
 		},
-		
+		sortLabelIcon: {
+			color: props.theme.palette.secondary.main,
+			// fontSize: 30,
+			opacity: 1
+		}
 	});
 
 	const classes = styles();
@@ -52,6 +58,9 @@ const CustomTable: React.FC<any> = (props) => {
 	const [visibleColumns, setVisibleColumns] = React.useState<any[]>(props.columns.filter((c: any) => c.show === undefined || c.show === true) || []);
 	const [filterObj, setFilterObj] = React.useState<any>(props.filters || {});
 
+	const [orderBy, setOrderBy] = React.useState<string>('')
+    const [order, setOrder] = React.useState<Order>('asc')
+
 	const handleFilterChange = (filterType: string, filterField: string, filterValue: string, filterOptions?: any[]) => {
 
 		if (!filterValue || filterValue === ''){
@@ -59,7 +68,7 @@ const CustomTable: React.FC<any> = (props) => {
 			setFilterObj(filterObj)
 
 			setPage(0)
-			props.onPaginationFilterChange(0, pageSize, filterObj)
+			props.onPaginationFilterChange(0, pageSize, filterObj, orderBy, order)
 		}
 		else {
 			if (filterValue.length > 2 || filterType === 'options'){
@@ -73,7 +82,7 @@ const CustomTable: React.FC<any> = (props) => {
 				setFilterObj(filterObj)
 
 				setPage(0)
-				props.onPaginationFilterChange(0, pageSize, filterObj)
+				props.onPaginationFilterChange(0, pageSize, filterObj, orderBy, order)
 			}
 		}
 		
@@ -81,13 +90,13 @@ const CustomTable: React.FC<any> = (props) => {
 	const handlePageChange = (event: any, newPage: number) => {
 		setPage(newPage)
 		if (props.onPaginationFilterChange){
-			props.onPaginationFilterChange(newPage, pageSize, filterObj)
+			props.onPaginationFilterChange(newPage, pageSize, filterObj, orderBy, order)
 		}
 	}
 	const handlePageSizeChange = (event: any) => {
 		setPageSize(parseInt(event.target.value))
 		if (props.onPaginationFilterChange){
-			props.onPaginationFilterChange(page, event.target.value, filterObj)
+			props.onPaginationFilterChange(page, event.target.value, filterObj, orderBy, order)
 		}
 	}
 	const downloadData = () => {
@@ -103,10 +112,70 @@ const CustomTable: React.FC<any> = (props) => {
 	const getRowData = (row: any) => {
 		let columnNames : string[] = visibleColumns.map((c: any) => c.dataField)
 		return columnNames.map(column => (
-			<TableCell key={ row.id + "_" + column } component="th" scope="row">
+			<TableCell key={ row.id + "_" + column }>
 				{row[column]}
 			</TableCell>
 		))
+	}
+	const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
+        const or = orderBy === property && order === 'asc' ? 'desc' : 'asc';
+        setOrder(or);
+        setOrderBy(property);
+		if (props.onPaginationFilterChange){
+			props.onPaginationFilterChange(page, pageSize, filterObj, property, or)
+		}
+    };
+
+	const getCell = (column: any) => { 
+		return (() => {
+			if (column.filter){
+				if (column.filter.options && column.filter.options.length > 0){
+					return <Select name={column.dataField} label={column.text} 
+						InputLabelProps={{
+							classes: {
+								root: classes.root,
+								// focused: classes.yellowText,
+								// active: classes.yellowText,
+								// focusVisible: classes.yellowText,
+								// selected: classes.yellowText,
+							},
+						}}
+						InputProps={{ 
+							classes: {
+								root: classes.yellowText,
+								focused: classes.yellowText,
+								active: classes.yellowText,
+								focusVisible: classes.yellowText,
+								selected: classes.yellowText,
+							},
+						}}
+						options={column.filter.options} value={1}
+						onChange={(value: string, item: any) => {
+							handleFilterChange(column.filter.type, column.dataField, item ? item.id : '')
+						}}
+					/>
+				}
+				else {
+					return <TextField dense='true' label={column.text} className={classes.root} 
+						InputProps={{ 
+							className: classes.input
+						}} 
+						InputLabelProps={{
+							classes: {
+								root: classes.root,
+								focused: classes.focused
+							},
+						}}
+						onChange={(e: any) => {
+							handleFilterChange(column.filter.type, column.dataField, e.target.value)
+						}} 
+					/>
+				}
+			}
+			else {
+				return column.text
+			}
+		})()
 	}
 	return (
 		<Grid container direction="column">
@@ -127,56 +196,21 @@ const CustomTable: React.FC<any> = (props) => {
 						<TableHead>
 							<TableRow>
 								{visibleColumns.map((column) => (
-									<TableCell key={column.dataField}>
-									{(() => {
-										if (column.filter){
-											if (column.filter.options && column.filter.options.length > 0){
-												return <Select name={column.dataField} label={column.text} 
-													InputLabelProps={{
-														classes: {
-															root: classes.root,
-															// focused: classes.yellowText,
-															// active: classes.yellowText,
-															// focusVisible: classes.yellowText,
-															// selected: classes.yellowText,
-														},
-													}}
-													InputProps={{ 
-														classes: {
-															root: classes.yellowText,
-															focused: classes.yellowText,
-															active: classes.yellowText,
-															focusVisible: classes.yellowText,
-															selected: classes.yellowText,
-														},
-													}}
-													options={column.filter.options} value={1}
-													onChange={(value: string, item: any) => {
-														handleFilterChange(column.filter.type, column.dataField, item ? item.id : '')
-													}}
-												/>
-											}
-											else {
-												return <TextField dense='true' label={column.text} className={classes.root} 
-													InputProps={{ 
-														className: classes.input
-													}} 
-													InputLabelProps={{
-														classes: {
-															root: classes.root,
-															focused: classes.focused
-														},
-													}}
-													onChange={(e: any) => {
-														handleFilterChange(column.filter.type, column.dataField, e.target.value)
-													}} 
-												/>
-											}
+									<TableCell style={{ minWidth: '150px' }} 
+										key={column.dataField}>
+										{ column.sort === false ? getCell(column) : 
+											<TableSortLabel
+												active={orderBy === column.dataField}
+												direction={orderBy === column.dataField ? order : 'asc'}
+												onClick={createSortHandler(column.dataField)}
+												classes={{
+													icon: classes.sortLabelIcon,
+													active: classes.sortLabelIcon
+												}}
+											>
+											{ getCell(column) }
+											</TableSortLabel>
 										}
-										else {
-											return column.text
-										}
-									})()}
 									</TableCell>
 								))}
 							</TableRow>

@@ -9,6 +9,8 @@ import { connect } from "react-redux";
 import { getGroupTable } from "../../redux/actions/groups/index";
 import Utils from "../../utils/TableUtils";
 
+import { Order } from '../../types/order'
+
 class GroupTable extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
@@ -35,8 +37,8 @@ class GroupTable extends React.Component<any, any> {
 							size={this.props.size}
 							total={this.props.total}
 							columns={this.state.columns} 
-							onPaginationFilterChange={(page: number, size: number, filters:any) => {
-								this.props.getGroupTable(page, size, filters);
+							onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
+								this.props.getGroupTable(page, size, filters, sort, sortDirection);
 							}}
 							onRowClick={(id: number) => {
 								window.open("/groups/" + id, "_self");

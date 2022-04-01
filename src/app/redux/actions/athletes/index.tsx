@@ -6,33 +6,35 @@ import { findHistoricDataPagination, findAthleteDataPagination, findAthleteSport
 import utils from "../../../utils/Functions"
 import moment from 'moment'
 
-export function getAthleteTable(page: number, size: number, filters: any) {
+import { Order } from '../../../types/order'
+
+export function getAthleteTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
     return function (dispatch: any) {
-        return findAthleteDataPagination(page, size, filters).then(json => {
+        return findAthleteDataPagination(page, size, filters, sort, sortDirection).then(json => {
             dispatch({ type: ACTION_TYPES.LOAD_ATHLETE_TABLE, payload: json });
         });
     }
 }
 
-export function getDuplicatedAthletesTable(id: number, name: string, firstSurname: string, dni: string, page: number, size: number, filters: any) {
+export function getDuplicatedAthletesTable(id: number, name: string, firstSurname: string, dni: string, page: number, size: number, filters: any, sort: string, sortDirection: Order) {
     return function (dispatch: any) {
-        return findDuplicatedAthletesDataPagination(id, name, firstSurname, dni, page, size, filters).then(json => {
+        return findDuplicatedAthletesDataPagination(id, name, firstSurname, dni, page, size, filters, sort, sortDirection).then(json => {
             dispatch({ type: ACTION_TYPES.LOAD_DUPLICATED_ATHLETES_TABLE, payload: json });
         });
     }
 }
 
-export function getAthleteTableSportdataTable(athleteId: number, page: number, size: number, filters: any) {
+export function getAthleteTableSportdataTable(athleteId: number, page: number, size: number, filters: any, sort: string, sortDirection: Order) {
     return function (dispatch: any) {
-        return findAthleteSportdataPagination(athleteId, page, size, filters).then(json => {
+        return findAthleteSportdataPagination(athleteId, page, size, filters, sort, sortDirection).then(json => {
             dispatch({ type: ACTION_TYPES.LOAD_ATHLETE_SPORTDATA_TABLE, payload: json });
         });
     }
 }
 
-export function getHistoricTable(page: number, size: number, filters: any) {
+export function getHistoricTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
     return function (dispatch: any) {
-        return findHistoricDataPagination(page, size, filters).then(json => {
+        return findHistoricDataPagination(page, size, filters, sort, sortDirection).then(json => {
             dispatch({ type: ACTION_TYPES.LOAD_HISTORIC_TABLE, payload: json });
         });
     }

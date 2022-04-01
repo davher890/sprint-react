@@ -3,9 +3,11 @@ import * as ACTION_TYPES from "../../constants/action_types";
 import { addData, findById, downloadExcel, findAll, findFeeTypesById, deleteSportSchool } from "../../../services/SportSchoolService"
 import { findSportSchoolDataPagination } from "../../../services/TableService"
 
-export function getSportSchoolTable(page: number, size: number, filters: any) {
+import { Order } from '../../../types/order'
+
+export function getSportSchoolTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
     return function (dispatch: any)  {
-        return findSportSchoolDataPagination(page, size, filters).then(json => {
+        return findSportSchoolDataPagination(page, size, filters, sort, sortDirection).then(json => {
             dispatch({ type: ACTION_TYPES.LOAD_SPORTSCHOOL_TABLE, payload: json });
         });
     }

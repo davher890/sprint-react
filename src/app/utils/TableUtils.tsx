@@ -132,8 +132,8 @@ const Utils = {
     getScheduleColumns: () => {
         return [ 
             { dataField: 'day', text : 'Día' }, 
-            { dataField: 'start', text : 'Inicio' }, 
-            { dataField: 'end', text : 'Fin' }
+            { dataField: 'start', text : 'Inicio', sort: false }, 
+            { dataField: 'end', text : 'Fin', sort: false }
         ]
     },
 

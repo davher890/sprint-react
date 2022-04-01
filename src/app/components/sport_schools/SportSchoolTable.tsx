@@ -9,6 +9,8 @@ import { connect } from "react-redux";
 import { getSportSchoolTable, downloadSportSchools } from "../../redux/actions/sportSchools/index";
 import Utils from "../../utils/TableUtils";
 
+import { Order } from '../../types/order'
+
 class SportSchoolTable extends React.Component<any, any> {
 	constructor(props: any) {
 		super(props);
@@ -42,8 +44,8 @@ class SportSchoolTable extends React.Component<any, any> {
 							columns={this.state.columns}
 							downloadData={this.downloadData}
 							showColumns={true}
-							onPaginationFilterChange={(page: number, size: number, filters:any) => {
-								this.props.getSportSchoolTable(page, size, filters);
+							onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
+								this.props.getSportSchoolTable(page, size, filters, sort, sortDirection);
 							}}
 							onRowClick={(id: number) => {
 								window.open("/sport_schools/" + id, "_self");

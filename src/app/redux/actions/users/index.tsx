@@ -3,10 +3,11 @@ import { LOAD_USER_TABLE, ADD_USER, GET_USER } from "../../constants/action_type
 import { findUserDataPagination } from "../../../services/TableService"
 import { addData, findById } from "../../../services/UserService"
 
+import { Order } from '../../../types/order'
 
-export function getUserTable(page: number, size: number, filters: any) {
+export function getUserTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
     return function (dispatch: any)  {
-        return findUserDataPagination(page, size, filters).then(json => {
+        return findUserDataPagination(page, size, filters, sort, sortDirection).then(json => {
             dispatch({ type: LOAD_USER_TABLE, payload: json });
         });
     }

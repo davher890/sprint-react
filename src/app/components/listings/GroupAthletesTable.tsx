@@ -11,6 +11,8 @@ import Utils from "../../utils/TableUtils"
 import { connect } from "react-redux";
 import { getGroupAthleteTable, getGroupSchedules, downloadGroupSchedulesAthletes } from "../../redux/actions/groups";
 
+import { Order } from '../../types/order'
+
 class GroupAthletesTable extends React.Component<any, any> {
 
 	constructor(props: any) {
@@ -70,8 +72,8 @@ class GroupAthletesTable extends React.Component<any, any> {
                         columns={this.state.columns} 
                         downloadData={this.downloadData}
                         showColumns={true}
-                        onPaginationFilterChange={(page: number, size: number, filters:any) => {
-                            this.props.getGroupAthleteTable(this.state.groupId, this.state.scheduleIds, page, size, filters);
+                        onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
+                            this.props.getGroupAthleteTable(this.state.groupId, this.state.scheduleIds, page, size, filters, sort, sortDirection);
                         }}
                         onRowClick={(id: number) => {
                             window.open("/athletes/" + id, "_self");

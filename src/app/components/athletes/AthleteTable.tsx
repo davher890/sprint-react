@@ -10,6 +10,8 @@ import Utils from "../../utils/TableUtils";
 import { connect } from "react-redux";
 import { getAthleteTable, downloadAthletes } from "../../redux/actions/athletes";
 
+import { Order } from '../../types/order'
+
 class AthleteTable extends React.Component<any, any> {
 	constructor(props: any) {
         super(props);
@@ -43,8 +45,8 @@ class AthleteTable extends React.Component<any, any> {
 							columns={this.state.columns} 
 							downloadData={this.downloadData}
 							showColumns={true}
-							onPaginationFilterChange={(page: number, size: number, filters:any) => {
-								this.props.getAthleteTable(page, size, filters);
+							onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
+								this.props.getAthleteTable(page, size, filters, sort, sortDirection);
 							}}
 							onRowClick={(id: number) => {
 								window.open("/athletes/" + id, "_self");

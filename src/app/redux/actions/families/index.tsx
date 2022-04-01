@@ -3,9 +3,11 @@ import * as ACTION_TYPES from "../../constants/action_types";
 import { addData, findById } from "../../../services/FamilyService"
 import { findFamilyDataPagination } from "../../../services/TableService"
 
-export function getFamilyTable(page: number, size: number, filters: any) {
+import { Order } from '../../../types/order'
+
+export function getFamilyTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
     return function (dispatch: any) {
-        return findFamilyDataPagination(page, size, filters).then(json => {
+        return findFamilyDataPagination(page, size, filters, sort, sortDirection).then(json => {
             dispatch({ type: ACTION_TYPES.LOAD_FAMILY_TABLE, payload: json });
         });
     }
