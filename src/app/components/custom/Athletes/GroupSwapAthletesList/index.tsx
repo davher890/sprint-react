@@ -1,11 +1,45 @@
 import React from 'react'
 import { Grid } from '@material-ui/core';
 
-import { Table, TableBody, TableHead, TableRow, TableCell, TableContainer } from '@material-ui/core';
+import { Table, TableBody, TableHead, TableRow, TableCell, TableContainer, TableSortLabel } from '@material-ui/core';
+
+function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
+    if (b[orderBy] < a[orderBy]) {
+      return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1;
+    }
+    return 0;
+}
+
+type Order = 'asc' | 'desc';
+
+function getComparator<Key extends keyof any>(order: Order, orderBy: Key): 
+(a: { [key in Key]: number | string }, b: { [key in Key]: number | string },) => number {
+    return order === 'desc'
+        ? (a, b) => descendingComparator(a, b, orderBy)
+        : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
+    const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
+    stabilizedThis.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) {
+        return order;
+      }
+      return a[1] - b[1];
+    });
+    return stabilizedThis.map((el) => el[0]);
+}
 
 const GroupSwapAthletesList: React.FC<any> = (props) => {
 
     const [athletes, setAthletes] = React.useState<any[]>(props.athletes || [])
+
+    const [orderBy, setOrderBy] = React.useState<string>('')
+    const [order, setOrder] = React.useState<Order>('asc')
 
     React.useEffect(() => {
         setAthletes(props.athletes || [])
@@ -16,6 +50,12 @@ const GroupSwapAthletesList: React.FC<any> = (props) => {
 			props.onRowClick(row)
 		}
 	}
+
+    const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
     
     return ( 
         <Grid container style={{ width: "100%", overflowX: "auto" }}>
@@ -23,16 +63,46 @@ const GroupSwapAthletesList: React.FC<any> = (props) => {
                 <TableContainer><Table stickyHeader>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Nombre</TableCell>
-                            <TableCell>Primer Apellido</TableCell>
-                            <TableCell>Segundo Apellido</TableCell>   
-                            <TableCell>Fecha Nac.</TableCell>
-                            <TableCell>Categoría</TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={orderBy === 'name'}
+                                    direction={orderBy === 'name' ? order : 'asc'}
+                                    onClick={createSortHandler('name')}
+                                >Nombre</TableSortLabel>
+                            </TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={orderBy === 'firstSurname'}
+                                    direction={orderBy === 'firstSurname' ? order : 'asc'}
+                                    onClick={createSortHandler('firstSurname')}
+                                >Primer Apellido</TableSortLabel>
+                            </TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={orderBy === 'secondSurname'}
+                                    direction={orderBy === 'secondSurname' ? order : 'asc'}
+                                    onClick={createSortHandler('secondSurname')}
+                                >Segundo Apellido</TableSortLabel>
+                            </TableCell>   
+                            <TableCell>
+                                <TableSortLabel
+                                    active={orderBy === 'birthDate'}
+                                    direction={orderBy === 'birthDate' ? order : 'asc'}
+                                    onClick={createSortHandler('birthDate')}
+                                >Fecha Nac.</TableSortLabel>
+                            </TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={orderBy === 'category'}
+                                    direction={orderBy === 'category' ? order : 'asc'}
+                                    onClick={createSortHandler('category')}
+                                >Categoría</TableSortLabel>
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {
-                            athletes.map((row: any) => {
+                            stableSort(athletes, getComparator(order, orderBy)).map((row: any) => {
                                 return <TableRow hover key={row.id} onClick={() => onRowClick(row)}>
                                     <TableCell>{ row.name }</TableCell>
                                     <TableCell>{ row.firstSurname }</TableCell>
