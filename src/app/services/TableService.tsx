@@ -86,7 +86,10 @@ const findDataPagination = (entity: string, page=0, size=10, filters: any, sort:
     if (filters && Object.keys(filters).length > 0){
         filtersParams = "&filters=" + utils.getFilterParams(filters)
     }
-    let sortParams = '&sort=' + sort + '&sortDirection=' + sortDirection.toUpperCase()
+    let sortParams = ''
+    if (sort && sortDirection){
+        sortParams = '&sort=' + sort + '&sortDirection=' + sortDirection.toUpperCase()    
+    }
     let urlParams = pageParams + sizeParams + filtersParams + sortParams
     return getRequest("/" + entity + urlParams)
 }

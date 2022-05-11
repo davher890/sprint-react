@@ -106,6 +106,7 @@ const functions = {
     getDorsalCategories: function () {
         return [
             // { id: "", name: "" },
+            { id: "MM", name: "MM" },
             { id: "SM", name: "SM" },
             { id: "SF", name: "SF" },
             { id: "U23M", name: "U23M" },

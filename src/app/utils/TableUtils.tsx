@@ -1,4 +1,6 @@
 
+import functions from "./Functions";
+
 const Utils = {
 
     getAthleteColumns: () => {
@@ -31,11 +33,17 @@ const Utils = {
             { dataField: 'nationality', text : 'Nacionalidad', show: false, filter: { type: "text" } }, 
             { dataField: 'birthPlace', text : 'Lugar de Nacimiento', show: false, filter: { type: "text" } }, 
             { dataField: 'postalCode', text : 'C.Postal', show: false, filter: { type: "text" } }, 
-            { dataField: 'category', text : 'Categoría', show: false, filter: { type: "text" } }, 
+            { dataField: 'category', text : 'Categoría', show: false, filter: { 
+                type: "options",
+                options : functions.getCategories()
+            } }, 
             { dataField: 'license', text : 'Licencia', show: false }, 
             { dataField: 'licenseType', text : 'Tipo de licencia', show: false }, 
             { dataField: 'dorsalNumber', text : 'Dorsal', show: false, filter: { type: "number" } },
-            { dataField: 'dorsalCategory', text : 'Categoría de dorsal', show: false, filter: { type: "text" } },
+            { dataField: 'dorsalCategory', text : 'Categoría de dorsal', show: false, filter: { 
+                type: "options",
+                options : functions.getDorsalCategories()
+            } },
             { dataField: 'iban', text : 'IBAN', show: false, filter: { type: "text" } },
             { dataField: 'mail', text : 'Email', show: false, filter: { type: "text" } },
             { dataField: 'familiarOneMail', text : 'Fam.1 Email', show: false, filter: { type: "text" } },

@@ -58,7 +58,7 @@ const CustomTable: React.FC<any> = (props) => {
 	const [visibleColumns, setVisibleColumns] = React.useState<any[]>(props.columns.filter((c: any) => c.show === undefined || c.show === true) || []);
 	const [filterObj, setFilterObj] = React.useState<any>(props.filters || {});
 
-	const [orderBy, setOrderBy] = React.useState<string>('')
+	const [orderBy, setOrderBy] = React.useState<string>('id')
     const [order, setOrder] = React.useState<Order>('asc')
 
 	const handleFilterChange = (filterType: string, filterField: string, filterValue: string, filterOptions?: any[]) => {
@@ -118,9 +118,9 @@ const CustomTable: React.FC<any> = (props) => {
 		))
 	}
 	const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
-        const or = orderBy === property && order === 'asc' ? 'desc' : 'asc';
-        setOrder(or);
-        setOrderBy(property);
+		const or = orderBy === property && order === 'asc' ? 'desc' : 'asc';
+		setOrder(or);
+		setOrderBy(property);
 		if (props.onPaginationFilterChange){
 			props.onPaginationFilterChange(page, pageSize, filterObj, property, or)
 		}
@@ -199,17 +199,22 @@ const CustomTable: React.FC<any> = (props) => {
 									<TableCell style={{ minWidth: '150px' }} 
 										key={column.dataField}>
 										{ column.sort === false ? getCell(column) : 
-											<TableSortLabel
-												active={orderBy === column.dataField}
-												direction={orderBy === column.dataField ? order : 'asc'}
-												onClick={createSortHandler(column.dataField)}
-												classes={{
-													icon: classes.sortLabelIcon,
-													active: classes.sortLabelIcon
-												}}
-											>
-											{ getCell(column) }
-											</TableSortLabel>
+											<Grid container>
+												<Grid item>
+													{ getCell(column) }
+												</Grid>
+												<Grid item>
+													<TableSortLabel
+														active={orderBy === column.dataField}
+														direction={orderBy === column.dataField ? order : 'asc'}
+														onClick={createSortHandler(column.dataField)}
+														classes={{
+															icon: classes.sortLabelIcon,
+															active: classes.sortLabelIcon
+														}}
+													/>
+												</Grid>
+											</Grid>
 										}
 									</TableCell>
 								))}
