@@ -33,6 +33,10 @@ export const swapGroupsAthletes = (idA: number, idB: number, groupAAthletes: num
     return getRequest("/groups/" + idA + "/swap/" + idB + "?groupAAthletes=" + groupAAthletes + "&groupBAthletes=" + groupBAthletes)
 }
 
+export const swapGroupAthletes = (id: number, athletesIds: number[], ) => {
+    return getRequest("/groups/" + id + "/swap?athletesIds=" + athletesIds)
+}
+
 export const deleteGroup = (id: number) => {
     return deleteRequest("/groups/" + id)
 }

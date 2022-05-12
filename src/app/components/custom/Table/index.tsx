@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { withTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import { Table, TableBody, TableHead, TableRow, TablePagination, TableCell, TableContainer, TableSortLabel } from '@material-ui/core';
+import { Table, TableBody, TableHead, TableRow, TablePagination, TableCell, TableContainer, TableSortLabel, Checkbox } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import ColumnsSelect from "../ColumnsSelect";
@@ -11,6 +11,7 @@ import TablePaginationActions from "../TablePagination";
 import Select from '../Select'
 
 import { Order } from '../../../types/order'
+import functions from '../../../utils/Functions'
 
 const CustomTable: React.FC<any> = (props) => {
 
@@ -61,6 +62,9 @@ const CustomTable: React.FC<any> = (props) => {
 	const [orderBy, setOrderBy] = React.useState<string>('id')
     const [order, setOrder] = React.useState<Order>('asc')
 
+	const [selectableRows, setSelectableRows] = React.useState<boolean>(props.selectableRows || false)
+	const [selectedIds, setSelectedIds] = React.useState<number[]>(props.selectedIds || []);
+
 	const handleFilterChange = (filterType: string, filterField: string, filterValue: string, filterOptions?: any[]) => {
 
 		if (!filterValue || filterValue === ''){
@@ -110,12 +114,31 @@ const CustomTable: React.FC<any> = (props) => {
 		}
 	}
 	const getRowData = (row: any) => {
+
+		let rowId = row.id
 		let columnNames : string[] = visibleColumns.map((c: any) => c.dataField)
-		return columnNames.map(column => (
-			<TableCell key={ row.id + "_" + column }>
+		let cells = []
+		let rowChecked = selectedIds.indexOf(rowId) > -1
+		if (selectableRows){
+			cells.push(
+				<TableCell style={{ minWidth: '50px' }}  key={'select'}>
+					<Checkbox
+						color="primary"
+						checked={rowChecked}
+						onChange={e => {
+							if (props.onSelectedIds){
+								props.onSelectedIds(rowId, e.target.checked)
+							}
+						}}
+					/>
+				</TableCell>
+			)
+		} 
+		return cells.concat(columnNames.map(column => (
+			<TableCell key={ rowId + "_" + column } onClick={() => onRowClick(rowId)}>
 				{row[column]}
 			</TableCell>
-		))
+		)))
 	}
 	const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
 		const or = orderBy === property && order === 'asc' ? 'desc' : 'asc';
@@ -130,53 +153,58 @@ const CustomTable: React.FC<any> = (props) => {
 		return (() => {
 			if (column.filter){
 				if (column.filter.options && column.filter.options.length > 0){
-					return <Select name={column.dataField} label={column.text} 
-						InputLabelProps={{
-							classes: {
-								root: classes.root,
-								// focused: classes.yellowText,
-								// active: classes.yellowText,
-								// focusVisible: classes.yellowText,
-								// selected: classes.yellowText,
-							},
-						}}
-						InputProps={{ 
-							classes: {
-								root: classes.yellowText,
-								focused: classes.yellowText,
-								active: classes.yellowText,
-								focusVisible: classes.yellowText,
-								selected: classes.yellowText,
-							},
-						}}
-						options={column.filter.options} value={1}
-						onChange={(value: string, item: any) => {
-							handleFilterChange(column.filter.type, column.dataField, item ? item.id : '')
-						}}
-					/>
+					return <Grid item xs>
+						<Select name={column.dataField} label={column.text} 
+							InputLabelProps={{
+								classes: {
+									root: classes.root,
+									// focused: classes.yellowText,
+									// active: classes.yellowText,
+									// focusVisible: classes.yellowText,
+									// selected: classes.yellowText,
+								},
+							}}
+							InputProps={{ 
+								classes: {
+									root: classes.yellowText,
+									focused: classes.yellowText,
+									active: classes.yellowText,
+									focusVisible: classes.yellowText,
+									selected: classes.yellowText,
+								},
+							}}
+							options={column.filter.options} value={1}
+							onChange={(value: string, item: any) => {
+								handleFilterChange(column.filter.type, column.dataField, item ? item.id : '')
+							}}
+						/>
+					</Grid>
 				}
 				else {
-					return <TextField dense='true' label={column.text} className={classes.root} 
-						InputProps={{ 
-							className: classes.input
-						}} 
-						InputLabelProps={{
-							classes: {
-								root: classes.root,
-								focused: classes.focused
-							},
-						}}
-						onChange={(e: any) => {
-							handleFilterChange(column.filter.type, column.dataField, e.target.value)
-						}} 
-					/>
+					return <Grid item xs>
+						<TextField label={column.text} className={classes.root} 
+							InputProps={{ 
+								className: classes.input
+							}} 
+							InputLabelProps={{
+								classes: {
+									root: classes.root,
+									focused: classes.focused
+								},
+							}}
+							onChange={(e: any) => {
+								handleFilterChange(column.filter.type, column.dataField, e.target.value)
+							}} 
+						/>
+					</Grid>
 				}
 			}
 			else {
-				return column.text
+				return <div>{column.text}</div>
 			}
 		})()
 	}
+
 	return (
 		<Grid container direction="column">
 			<Grid item style={{ display: props.showColumns ? "block" : "none" }}>
@@ -195,15 +223,23 @@ const CustomTable: React.FC<any> = (props) => {
 					<Table stickyHeader>
 						<TableHead>
 							<TableRow>
+								{selectableRows ? <TableCell style={{ minWidth: '50px' }} key={'select'}>
+									<Checkbox
+										color="secondary"
+										checked={functions.arrayContains(selectedIds, props.data.map((row: any) => row.id))}
+										onChange={e => {
+											if (props.onSelectedIds){
+												props.data.map((row: any) => props.onSelectedIds(row.id, e.target.checked))
+											}
+										}}
+									/>
+								</TableCell> : null }
 								{visibleColumns.map((column) => (
-									<TableCell style={{ minWidth: '150px' }} 
-										key={column.dataField}>
+									<TableCell style={{ minWidth: '200px' }} key={column.dataField}>
 										{ column.sort === false ? getCell(column) : 
-											<Grid container>
-												<Grid item>
-													{ getCell(column) }
-												</Grid>
-												<Grid item>
+											<Grid container direction="row" spacing={2}>
+												{ getCell(column) }
+												<Grid item xs>
 													<TableSortLabel
 														active={orderBy === column.dataField}
 														direction={orderBy === column.dataField ? order : 'asc'}
@@ -223,7 +259,7 @@ const CustomTable: React.FC<any> = (props) => {
 						<TableBody>
 						{
 							props.data.map((row:any) => (
-								<TableRow hover key={row.id} onClick={() => onRowClick(row.id)}>
+								<TableRow hover key={row.id}>
 									{ getRowData(row) }
 								</TableRow>
 							))

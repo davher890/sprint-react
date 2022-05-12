@@ -34,6 +34,9 @@ class GroupSelect extends React.Component<any, any> {
         if (this.props.onChange){
             this.props.onChange(groupId, specialization)
         }
+        else {
+            this.setState({ groupId: groupId })
+        }
     }
 
     render() {
