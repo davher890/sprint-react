@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { withTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import { Table, TableBody, TableHead, TableRow, TablePagination, TableCell, TableContainer, TableSortLabel } from '@material-ui/core';
+import { Table, TableBody, TableHead, TableRow, TablePagination, TableCell, TableContainer, TableSortLabel, Checkbox } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import ColumnsSelect from "../ColumnsSelect";
@@ -61,6 +61,8 @@ const CustomTable: React.FC<any> = (props) => {
 	const [orderBy, setOrderBy] = React.useState<string>('id')
     const [order, setOrder] = React.useState<Order>('asc')
 
+	const [selectedIds, setSelectedIds] = React.useState<number[]>(props.selectedIds || []);
+
 	const handleFilterChange = (filterType: string, filterField: string, filterValue: string, filterOptions?: any[]) => {
 
 		if (!filterValue || filterValue === ''){
@@ -110,12 +112,28 @@ const CustomTable: React.FC<any> = (props) => {
 		}
 	}
 	const getRowData = (row: any) => {
+
+		let rowId = row.id
 		let columnNames : string[] = visibleColumns.map((c: any) => c.dataField)
-		return columnNames.map(column => (
-			<TableCell key={ row.id + "_" + column }>
+		let cells = []
+		cells.push(
+			<TableCell style={{ minWidth: '50px' }} key={'select'}>
+				<Checkbox
+					color="primary"
+					checked={selectedIds.indexOf(rowId) > -1}
+					onChange={e => {
+						if (props.onSelectedIdsChange){
+							props.onSelectedIdsChange(rowId, e.target.checked)
+						}
+					}}
+				/>
+			</TableCell>
+		) 
+		return cells.concat(columnNames.map(column => (
+			<TableCell key={ rowId + "_" + column } onClick={() => onRowClick(rowId)}>
 				{row[column]}
 			</TableCell>
-		))
+		)))
 	}
 	const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
 		const or = orderBy === property && order === 'asc' ? 'desc' : 'asc';
@@ -196,8 +214,7 @@ const CustomTable: React.FC<any> = (props) => {
 						<TableHead>
 							<TableRow>
 								{visibleColumns.map((column) => (
-									<TableCell style={{ minWidth: '150px' }} 
-										key={column.dataField}>
+									<TableCell style={{ minWidth: '150px' }} key={column.dataField}>
 										{ column.sort === false ? getCell(column) : 
 											<Grid container>
 												<Grid item>
@@ -223,7 +240,7 @@ const CustomTable: React.FC<any> = (props) => {
 						<TableBody>
 						{
 							props.data.map((row:any) => (
-								<TableRow hover key={row.id} onClick={() => onRowClick(row.id)}>
+								<TableRow hover key={row.id}>
 									{ getRowData(row) }
 								</TableRow>
 							))

@@ -53,6 +53,12 @@ function rootReducer(state = initialState, action: { type: string, payload: any 
             group_athletes: action.payload
         };
     }
+    else if (action.type === ACTION_TYPES.SWAP_GROUP_ATHLETES) {
+        return {
+            ...state,
+            group: action.payload
+        };
+    }
     return state;
 };
 
