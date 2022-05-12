@@ -102,6 +102,7 @@ class AthleteTable extends React.Component<any, any> {
 							columns={this.state.columns} 
 							downloadData={this.downloadData}
 							showColumns={true}
+							selectableRows={true}
 							selectedIds={this.state.selectedIds}
 							onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
 								this.props.getAthleteTable(page, size, filters, sort, sortDirection);
@@ -109,7 +110,7 @@ class AthleteTable extends React.Component<any, any> {
 							onRowClick={(id: number) => {
 								window.open("/athletes/" + id, "_self");
 							}}
-							onSelectedIdsChange={(id: number, checked: boolean) =>{
+							onSelectedIds={(id: number, checked: boolean) =>{
 								let ids = this.state.selectedIds
 								if (checked){
 									ids.push(id)

@@ -137,6 +137,17 @@ const functions = {
     leftPadding: (str: string, max: number, c: string): string => {
         str = str.toString();
         return str.length < max ? functions.leftPadding(c + str, max, c) : str;
+    },
+
+    arrayContains: (array1: number[], array2: number[]): boolean => {
+        let as = new Set(array1)
+        let bs = new Set(array2)
+        for (const b of bs) {
+            if (!as.has(b)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
 export default functions;
