@@ -148,7 +148,14 @@ const Utils = {
     getGroupColumns: () => {
         return [
             { dataField: 'name', text : 'Nombre', filter: { type: "text" } },
-            { dataField: 'sportSchoolName', text : 'Escuela Deportiva' } 
+            { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
+                type: "options",
+                options : [
+                    { id : '1', name: 'Santa Ana' },
+                    { id : '2', name: 'Paracuellos' },
+                    { id : '3', name: 'Externos' }
+                ]
+            }}
         ]
     },
 
