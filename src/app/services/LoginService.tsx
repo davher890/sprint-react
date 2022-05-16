@@ -1,5 +1,5 @@
 import { loginRequest } from "./ApiService"
 
-export const signup = (username: string, password: string) => {
-    return loginRequest("/login", { username: username, password: password})
+export const signup = (email: string, password: string) => {
+    return loginRequest("/login", { email: email, password: password})
 }

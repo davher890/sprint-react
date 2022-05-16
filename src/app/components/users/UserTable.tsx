@@ -1,8 +1,9 @@
 import * as React from "react"
 
-import { Grid, Button } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 import Table from "../custom/Table";
+import Button from '../custom/AddButton'
 
 import { connect } from "react-redux";
 import { getUserTable } from "../../redux/actions/users";
@@ -25,7 +26,7 @@ class UserTable extends React.Component<any, any> {
 			<React.Suspense fallback={<div>Cargando...</div>}>
 				<Grid container direction="column" spacing={3}>
 					<Grid item xs>
-						<Button href={'/users'}>Nuevo Usuario</Button>
+						<Button text="Nuevo Usuario" href={'/users'}/>
 					</Grid>
 					<Grid item xs>
 						<Table 

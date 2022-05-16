@@ -10,11 +10,11 @@ import { signUp } from "../../redux/actions/login"
 
 const LoginForm: React.FC<any> = (props) => {
 
-    const [username, setUsername] = useState("")
+    const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    const handleUserChange = (event: any) => {
-        setUsername(event.target.value)
+    const handleEmailChange = (event: any) => {
+        setEmail(event.target.value)
     }
     const handlePasswordChange = (event: any) => {
         setPassword(event.target.value)
@@ -24,14 +24,14 @@ const LoginForm: React.FC<any> = (props) => {
         <Card>
             <Grid container spacing={2} direction='column'>
                 <Grid item xs>
-                    <TextField name="username" value={username} label="Usuario" onChange={handleUserChange}/>
+                    <TextField name="email" value={email} label="Email" onChange={handleEmailChange}/>
                 </Grid>
                 <Grid item xs>
                     <TextField name="password" value={password} label="Contraseña" type="password"
                         onChange={handlePasswordChange}/>
                 </Grid>
                 <Grid item xs>
-                    <SearchButton onClick={() => {props.signUp(username, password)}}>Entrar</SearchButton>
+                    <SearchButton onClick={() => {props.signUp(email, password)}}>Entrar</SearchButton>
                 </Grid>
             </Grid>
         </Card>

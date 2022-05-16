@@ -1,7 +1,7 @@
 import { LOAD_USER_TABLE, ADD_USER, GET_USER } from "../../constants/action_types";
 
 import { findUserDataPagination } from "../../../services/TableService"
-import { addData, findById } from "../../../services/UserService"
+import { addData, changePassword, findById } from "../../../services/UserService"
 
 import { Order } from '../../../types/order'
 
@@ -17,6 +17,17 @@ export function getUser(id: number) {
     return function (dispatch: any)  {
         return findById(id).then(json => {
             dispatch({ type: GET_USER, payload: json });
+        });
+    }
+}
+
+export function changeUserPassword(data: any) {
+    return function (dispatch: any)  {
+        return changePassword(data).then(json => {
+            if (!json.errorMessage) {
+                json.successMessage = "Datos guardados!"
+            }
+            dispatch({ type: ADD_USER, payload: json });
         });
     }
 }
