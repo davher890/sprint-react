@@ -1,5 +1,8 @@
 import * as React from "react";
-import { AppBar, Toolbar, Menu, MenuItem, Typography, Link } from '@material-ui/core';
+import { AppBar, Toolbar, Menu, MenuItem, Typography, Link, IconButton } from '@material-ui/core';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+
+import * as UserService from '../../../services/UserService'
 
 const CustomAppBar: React.FC<any> = (props) => {
 
@@ -81,6 +84,17 @@ const CustomAppBar: React.FC<any> = (props) => {
                 <Typography variant="button">
                     <Link href="/social" color="inherit">Red Social</Link>
                 </Typography> */}
+                <IconButton
+                    // size="large"
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    href={"/users/" + UserService.findCurrentUserId()}
+                    // onClick={handleMenu}
+                    color="inherit"
+                >   
+                    <AccountCircle />
+                </IconButton>
                 
             </Toolbar>
         </AppBar>

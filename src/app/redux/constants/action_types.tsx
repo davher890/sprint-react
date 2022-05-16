@@ -50,6 +50,7 @@ export const DOWNLOAD_TRAINERS = "DOWNLOAD_TRAINERS";
 export const LOAD_USER_TABLE = "LOAD_USER_TABLE";
 export const ADD_USER = "ADD_USER";
 export const GET_USER = "GET_USER";
+export const CURRENT_USER_ID = "CURRENT_USER_ID"
 
 export const LOAD_SCHEDULE_TABLE = "LOAD_SCHEDULE_TABLE";
 export const LOAD_SCHEDULES = "LOAD_SCHEDULES";

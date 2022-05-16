@@ -1,7 +1,7 @@
-import { LOAD_USER_TABLE, ADD_USER, GET_USER } from "../../constants/action_types";
+import { LOAD_USER_TABLE, ADD_USER, GET_USER, CURRENT_USER_ID } from "../../constants/action_types";
 
 import { findUserDataPagination } from "../../../services/TableService"
-import { addData, changePassword, findById } from "../../../services/UserService"
+import { addData, changePassword, findById, findCurrentUserId } from "../../../services/UserService"
 
 import { Order } from '../../../types/order'
 
@@ -40,5 +40,12 @@ export function addUser(data: any) {
             }
             dispatch({ type: ADD_USER, payload: json });
         });
+    }
+}
+
+export function getCurrentUser() {
+    return function (dispatch: any)  {
+        const id = findCurrentUserId()
+        dispatch({ type: CURRENT_USER_ID, payload: id });
     }
 }

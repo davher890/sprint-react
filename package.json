@@ -13,6 +13,7 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "@typed/react": "^1.0.1",
+    "@types/jwt-decode": "^3.1.0",
     "@types/react-dom": "^17.0.11",
     "formik": "^2.2.9",
     "moment": "^2.29.1",

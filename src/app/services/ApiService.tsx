@@ -1,3 +1,6 @@
+
+import jwt_decode from 'jwt-decode';
+
 const serverUrl = process.env.REACT_APP_SERVER_URL
 
 const headers: any = { 
@@ -120,5 +123,9 @@ const saveLastUrl = (url: string) => {
 }
 
 const saveToken = (headers: Headers) => {
-    sessionStorage.setItem('token', headers.get('authorization') || '');
+    const token = headers.get('authorization') || ''
+
+    let decoded: any = jwt_decode(token);
+    sessionStorage.setItem('token', token || '');
+    sessionStorage.setItem('user_id', decoded.user_id || 0)
 }
