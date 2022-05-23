@@ -6,6 +6,7 @@ import SearchButton from '../custom/SearchButton'
 import Table from "../custom/Table";
 import CustomCard from '../custom/Card'
 import GroupScheduleSelect from '../custom/GroupScheduleSelect'
+import SportSchoolSelect from "../custom/SportSchoolSelect";
 
 import Utils from "../../utils/TableUtils"
 import { connect } from "react-redux";
@@ -19,7 +20,7 @@ class GroupAthletesTable extends React.Component<any, any> {
 
 		super(props);
 		this.state = {
-        	columns: Utils.getGroupAthleteColumns() 
+        	columns: Utils.getGroupAthleteColumns()
 		}
         this.handleSubmitQuery = this.handleSubmitQuery.bind(this);
         this.downloadData = this.downloadData.bind(this)
@@ -43,17 +44,29 @@ class GroupAthletesTable extends React.Component<any, any> {
                 <Grid item xs>
                     <CustomCard>
                         <Grid container direction="column" spacing={1}>
-                            <Grid item xs>
-                                <GroupScheduleSelect
-                                    groupId={this.state.groupId}
-                                    scheduleIds={this.state.scheduleIds}
-                                    onChange={(groupId: number, specialization: boolean, scheduleIds: number[]) => {
-                                        this.setState({
-                                            groupId: groupId,
-                                            scheduleIds: scheduleIds 
-                                        })
-                                    }}
-                                />
+                            <Grid container item spacing={1}>
+                                <Grid item xs={2}>
+                                    <SportSchoolSelect sportSchoolId={this.state.sportSchoolId}
+                                        onChange={(sportSchoolId: number) => {
+                                            this.setState({
+                                                sportSchoolId: sportSchoolId 
+                                            })
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs>
+                                    <GroupScheduleSelect
+                                        sportSchoolId={this.state.sportSchoolId}
+                                        groupId={this.state.groupId}
+                                        scheduleIds={this.state.scheduleIds}
+                                        onChange={(groupId: number, specialization: boolean, scheduleIds: number[]) => {
+                                            this.setState({
+                                                groupId: groupId,
+                                                scheduleIds: scheduleIds 
+                                            })
+                                        }}
+                                    />
+                                </Grid>
                             </Grid>
                             <Grid item xs>
                                 <SearchButton type="submit"

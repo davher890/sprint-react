@@ -142,7 +142,7 @@ class ConnectedForm extends React.Component<any, any> {
                                         </Grid>
                                     </Card>
                                 </Grid>
-                                <Grid item xs={6}>
+                                {/* <Grid item xs={6}>
                                     <SportSchoolMultiSelect 
                                         sportSchools={this.props.sportSchools}
                                         sportSchoolIds={values.sportSchoolIds}
@@ -150,7 +150,7 @@ class ConnectedForm extends React.Component<any, any> {
                                             setFieldValue('sportSchoolIds', sportSchoolIds)
                                         }}
                                     />
-                                </Grid>
+                                </Grid> */}
                             </Grid>
                         </Box>
                         <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>

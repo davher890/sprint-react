@@ -13,6 +13,14 @@ export const findById = (id: number) => {
     return getRequest("/sport_schools/" + id)
 }
 
+export const findSportSchoolGroups = (id: number, specialization: boolean) => {
+    return getRequest("/sport_schools/" + id + "/groups?specialization=" + specialization)
+}
+
+export const findSportSchoolTrainers = (id: number) => {
+    return getRequest("/sport_schools/" + id + "/trainers")
+}
+
 export const findFeeTypesById = (id: number) => {
     return getRequest("/sport_schools/" + id + "/fee_types")
 }

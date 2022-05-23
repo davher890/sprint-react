@@ -1,6 +1,6 @@
 import * as ACTION_TYPES from "../../constants/action_types";
 
-import { addData, findById, downloadExcel, findAll, findFeeTypesById, deleteSportSchool } from "../../../services/SportSchoolService"
+import { addData, findById, downloadExcel, findAll, findFeeTypesById, deleteSportSchool, findSportSchoolGroups, findSportSchoolTrainers } from "../../../services/SportSchoolService"
 import { findSportSchoolDataPagination } from "../../../services/TableService"
 
 import { Order } from '../../../types/order'
@@ -34,6 +34,20 @@ export function getSportSchool(id: number) {
         return findById(id).then(json => {
             dispatch({ type: ACTION_TYPES.GET_SPORTSCHOOL, payload: json });
         });
+    }
+}
+
+export function getSportSchoolGroups(id: number, specialization: boolean) {
+    return function (dispatch: any)  {
+        return findSportSchoolGroups(id, specialization)
+            .then(json => { dispatch({ type: specialization ? ACTION_TYPES.SPECIALIZATION_GROUPS : ACTION_TYPES.NOT_SPECIALIZATION_GROUPS, payload: json }); })
+    }
+}
+
+export function getSportSchoolTrainers(id: number) {
+    return function (dispatch: any)  {
+        return findSportSchoolTrainers(id)
+            .then(json => { dispatch({ type: ACTION_TYPES.LOAD_TRAINERS, payload: json }); })
     }
 }
 

@@ -6,23 +6,26 @@ import { Grid } from '@material-ui/core';
 
 // Redux
 import { connect } from "react-redux";
-import { getGroups } from "../../../redux/actions/groups";
+import { getSportSchoolGroups } from "../../../redux/actions/sportSchools";
 
 class GroupSelect extends React.Component<any, any> {
 
     constructor(props: any) {
         super(props);
         this.state = {
+            sportSchoolId: props.sportSchoolId,
             groupId: props.groupId,
         };
     }
 
-    componentDidMount() {
-        this.props.getGroups(true)
-        this.props.getGroups(false)
-    }
-
     componentDidUpdate = (prevProps: any) => {
+        if (this.props.sportSchoolId !== prevProps.sportSchoolId && this.props.sportSchoolId){
+            this.setState({
+                sportSchoolId: this.props.sportSchoolId.toString()
+            })
+            this.props.getSportSchoolGroups(this.props.sportSchoolId, true)
+            this.props.getSportSchoolGroups(this.props.sportSchoolId, false)
+        }
         if (this.props.groupId !== prevProps.groupId){
             this.setState({
                 groupId: this.props.groupId.toString()
@@ -68,7 +71,7 @@ class GroupSelect extends React.Component<any, any> {
 }
 
 const mapDispatchToProps = {
-    getGroups
+    getSportSchoolGroups
 }
 
 const mapStateToProps = (state: any) => {

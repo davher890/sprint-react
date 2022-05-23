@@ -6,6 +6,8 @@ import GroupSelect from '../custom/GroupSelect'
 import Select from '../custom/Select'
 import CustomCard from '../custom/Card'
 
+import SportSchoolSelect from "../custom/SportSchoolSelect";
+
 import utils from "../../utils/Functions"
 
 import { connect } from "react-redux";
@@ -23,6 +25,7 @@ const GroupAttendante: React.FC<any> = (props) => {
     ]
     const [month, setMonth] = useState<number>(d.getMonth())
     const [groupId, setGroupId] = useState<number>(0)
+    const [sportSchoolId, setsportSchoolId] = useState<number>(0)
 
 	const handleFormSubmit = () => {
         props.downloadGroupAttendance(groupId, month)
@@ -31,18 +34,28 @@ const GroupAttendante: React.FC<any> = (props) => {
     return (
         <CustomCard>
             <Grid container>
-                <Grid item xs={2}>
-                    <Select label="Mes"  name="month" 
-                        value={month} 
-                        options={months} 
-                        onChange={(e: any, value: any) => {
-                            value ? setMonth(value.id) : setMonth(value)
-                        }} 
-                    />
+                <Grid container item direction="column" xs>
+                    <Grid item xs>
+                        <SportSchoolSelect sportSchoolId={sportSchoolId}
+                            onChange={(sportSchoolId: number) => {
+                                setsportSchoolId(sportSchoolId)
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs>
+                        <Select label="Mes"  name="month" 
+                            value={month} 
+                            options={months} 
+                            onChange={(e: any, value: any) => {
+                                value ? setMonth(value.id) : setMonth(value)
+                            }} 
+                        />
+                    </Grid>
                 </Grid>
                 <Grid item xs>
                     <GroupSelect 
                         groupId={groupId}
+                        sportSchoolId={sportSchoolId}
                         onChange={(id: number) => {
                             setGroupId(id)
                         }}

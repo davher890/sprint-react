@@ -73,6 +73,7 @@ class ConnectedForm extends React.Component<any, any> {
                         if (values.name === '') errors.name = true
                         if (values.scheduleIds === '') errors.scheduleIds = true
                         if (!values.trainerId) errors.trainerId = true
+                        if (!values.sportSchoolId) errors.sportSchoolId = true
                         //check if my values have errors
                         return errors;
                     }}
@@ -140,11 +141,14 @@ class ConnectedForm extends React.Component<any, any> {
                                                             error={touched.name && errors.name} />
                                                     </Grid>
                                                     <Grid item xs>
-                                                        <TrainerSelect trainerId={values.trainerId} error={touched.trainerId && errors.trainerId}
-                                                                onChange={(trainerId: number) => {
-                                                                    setFieldValue('trainerId', trainerId);
-                                                                }}
-                                                            />
+                                                        <TrainerSelect 
+                                                            trainerId={values.trainerId} 
+                                                            sportSchoolId={values.sportSchoolId}  
+                                                            error={touched.trainerId && errors.trainerId}
+                                                            onChange={(trainerId: number) => {
+                                                                setFieldValue('trainerId', trainerId);
+                                                            }}
+                                                        />
                                                     </Grid>
                                                 </Grid>
                                             </Grid>

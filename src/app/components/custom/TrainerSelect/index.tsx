@@ -7,18 +7,25 @@ import Select from '../Select'
 
 // Redux
 import { connect } from "react-redux";
-import { getAllTrainers } from "../../../redux/actions/trainers";
+import { getSportSchoolTrainers } from "../../../redux/actions/sportSchools";
 
 const TrainerSelect: React.FC<any> = (props) => {
 
     const [trainerId, setTrainerId] = React.useState<number>(props.trainerId)
+    const [sportSchoolId, setSportSchoolId] = React.useState<number>(props.sportSchoolId)
 
     React.useEffect(() => {
         if (props.trainerId !== trainerId){
             setTrainerId(props.trainerId)
         }
-        props.getAllTrainers()
-    }, [props.trainerId, props.getAllTrainers, trainerId])
+        if (props.sportSchoolId !== sportSchoolId){
+            setSportSchoolId(props.sportSchoolId)
+            if (props.sportSchoolId > 0){
+                props.getSportSchoolTrainers(props.sportSchoolId)
+            }
+        }
+        
+    }, [props.trainerId, props.sportSchoolId, trainerId, sportSchoolId])
 
     const onChange = (value: String, item: any) => {
         if (props.onChange){
@@ -44,7 +51,7 @@ const TrainerSelect: React.FC<any> = (props) => {
 }
 
 const mapDispatchToProps = {
-    getAllTrainers
+    getSportSchoolTrainers
 }
 
 const mapStateToProps = (state: any) => {

@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useState } from "react";
 
 import { Grid, AppBar, Toolbar, Snackbar } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
@@ -7,116 +7,128 @@ import SaveButton from '../custom/SaveButton'
 import CustomCard from '../custom/Card'
 import GroupSelect from '../custom/GroupSelect'
 import AthletesList from '../custom/Athletes/GroupSwapAthletesList'
+import SportSchoolSelect from "../custom/SportSchoolSelect";
 
 import { connect } from "react-redux";
 import { getGroupAthletes, swapGroups } from "../../redux/actions/groups";
 
-class GroupSwap extends React.Component<any, any> {
+const GroupSwap: React.FC<any> = (props) => {
 
-	constructor(props: any) {
-		super(props);
-        this.state = {}
-	}
+    const [success, setSuccess] = useState<boolean>(false)
 
-	render() {
-		return (
-            <Grid>
-                <Snackbar open={this.state.success}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
-                    <Alert severity="success" onClose={() => { 
-                            this.setState({
-                                success: false
-                            })
-                        }}>
-                        <AlertTitle>Cambios guardados!</AlertTitle>
-                    </Alert>
-                </Snackbar>
-                <Grid container direction="column" spacing={2}>
-                    <Grid container item direction="row" spacing={2}>
-                        <Grid item xs>
-                            <CustomCard>
-                                <Grid container>
-                                    <Grid item xs>
-                                        <GroupSelect groupId={this.state.groupAId}
-                                            onChange={(groupId: number, specialization: boolean, scheduleIds: number[]) => {
-                                                this.props.getGroupAthletes(groupId).then(() => {
-                                                    this.setState({
-                                                        groupAId: groupId,
-                                                        groupAAthletes: this.props.group_athletes
-                                                    })
-                                                })
-                                            }}
-                                        />
-                                    </Grid>
+    const [sportSchoolAId, setsportSchoolAId] = useState<number>(0)
+    const [sportSchoolBId, setsportSchoolBId] = useState<number>(0)
+    
+    const [groupAId, setGroupAId] = useState<number>(0)
+    const [groupBId, setGroupBId] = useState<number>(0)
+
+    const [groupAAthletes, setGroupAAthletes] = useState<any[]>([])
+    const [groupBAthletes, setGroupBAthletes] = useState<any[]>([])
+    
+    return (
+        <Grid>
+            <Snackbar open={success}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                <Alert severity="success" onClose={() => { 
+                        setSuccess(false)
+                    }}>
+                    <AlertTitle>Cambios guardados!</AlertTitle>
+                </Alert>
+            </Snackbar>
+            <Grid container direction="column" spacing={2}>
+                <Grid container item direction="row" spacing={2}>
+                    <Grid item xs>
+                        <CustomCard>
+                            <Grid container direction="column">
+                                <Grid item xs>
+                                    <SportSchoolSelect sportSchoolId={sportSchoolAId}
+                                        onChange={(sportSchoolId: number) => {
+                                            setsportSchoolAId(sportSchoolId)
+                                        }}
+                                    />
                                 </Grid>
-                            </CustomCard>
-                        </Grid>
-                        <Grid item xs style={{ display: this.state.groupAId ? "block" : "none" }}>
-                            <CustomCard>
-                                <Grid container>
-                                    <Grid item xs>
-                                        <GroupSelect groupId={this.state.groupBId}
-                                            onChange={(groupId: number, specialization: boolean, scheduleIds: number[]) => {
-                                                this.props.getGroupAthletes(groupId).then(() => {
-                                                    this.setState({
-                                                        groupBId: groupId,
-                                                        groupBAthletes: this.props.group_athletes
-                                                    })
-                                                })
-                                            }}
-                                        />
-                                    </Grid>
+                                <Grid item xs>
+                                    <GroupSelect 
+                                        sportSchoolId={sportSchoolAId}
+                                        groupId={groupAId}
+                                        onChange={(groupId: number, specialization: boolean, scheduleIds: number[]) => {
+                                            props.getGroupAthletes(groupId).then(() => {
+                                                setGroupAId(groupId)
+                                                setGroupAAthletes([...props.group_athletes])
+                                            })
+                                        }}
+                                    />
                                 </Grid>
-                            </CustomCard>
-                        </Grid>
+                            </Grid>
+                        </CustomCard>
                     </Grid>
-                    <Grid container item direction="row" spacing={2} style={{ display: this.state.groupBId ? "" : "none" }}>
-                        <Grid item xs>
-                            <AthletesList athletes={this.state.groupAAthletes}
-                                onRowClick={(athlete: any) => {
-                                    let grBAthletes = this.state.groupBAthletes
-                                    grBAthletes.push(athlete)
-                                    let grAAthletes = this.state.groupAAthletes.filter((a: any) => a.id !== athlete.id)
-                                    this.setState({
-                                        groupBAthletes: grBAthletes,
-                                        groupAAthletes: grAAthletes
-                                    })
-                                }}/>
-                        </Grid>
-                        <Grid item xs>
-                            <AthletesList athletes={this.state.groupBAthletes}
-                                onRowClick={(athlete: any) => {
-                                    let grAAthletes = this.state.groupAAthletes
-                                    grAAthletes.push(athlete)
-                                    let grBAthletes = this.state.groupBAthletes.filter((a: any) => a.id !== athlete.id)
-                                    this.setState({
-                                        groupAAthletes: grAAthletes,
-                                        groupBAthletes: grBAthletes
-                                    })
-                                }}/>
-                        </Grid>
+                    <Grid item xs style={{ display: groupAId ? "block" : "none" }}>
+                        <CustomCard>
+                            <Grid container direction="column">
+                                <Grid item xs>
+                                    <SportSchoolSelect sportSchoolId={sportSchoolBId}
+                                        onChange={(sportSchoolId: number) => {
+                                            setsportSchoolBId(sportSchoolId)
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs>
+                                    <GroupSelect 
+                                        sportSchoolId={sportSchoolBId}
+                                        groupId={groupBId}
+                                        onChange={(groupId: number, specialization: boolean, scheduleIds: number[]) => {
+                                            props.getGroupAthletes(groupId).then(() => {
+                                                setGroupBId(groupId)
+                                                setGroupBAthletes([...props.group_athletes])
+                                            })
+                                        }}
+                                    />
+                                </Grid>
+                            </Grid>
+                        </CustomCard>
                     </Grid>
                 </Grid>
-                <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
-                    <Toolbar>
-                        <SaveButton 
-                            onClick={() => { 
-                                this.props.swapGroups(
-                                    this.state.groupAId, this.state.groupBId, 
-                                    this.state.groupAAthletes.map((x:any) => x.id), 
-                                    this.state.groupBAthletes.map((x:any) => x.id)
-                                ).then(() => {
-                                    this.setState({
-                                        success: true
-                                    })
-                                })
-                            }}>Guardar</SaveButton>
-                    </Toolbar>
-                </AppBar>
+                <Grid container item direction="row" spacing={2} style={{ display: groupBId ? "" : "none" }}>
+                    <Grid item xs>
+                        <AthletesList athletes={groupAAthletes}
+                            onRowClick={(athlete: any) => {
+                                let grBAthletes = groupBAthletes
+                                grBAthletes.push(athlete)
+                                let grAAthletes = groupAAthletes.filter((a: any) => a.id !== athlete.id)
+                                setGroupAAthletes(grAAthletes)
+                                setGroupBAthletes(grBAthletes)
+                            }}/>
+                    </Grid>
+                    <Grid item xs>
+                        <AthletesList athletes={groupBAthletes}
+                            onRowClick={(athlete: any) => {
+                                let grAAthletes = groupAAthletes
+                                grAAthletes.push(athlete)
+                                let grBAthletes = groupBAthletes.filter((a: any) => a.id !== athlete.id)
+                                setGroupAAthletes(grAAthletes)
+                                setGroupBAthletes(grBAthletes)
+                            }}/>
+                    </Grid>
+                </Grid>
             </Grid>
-		)
-	}
+            <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
+                <Toolbar>
+                    <SaveButton 
+                        onClick={() => { 
+                            props.swapGroups(
+                                groupAId, groupBId, 
+                                groupAAthletes.map((x:any) => x.id), 
+                                groupBAthletes.map((x:any) => x.id)
+                            ).then(() => {
+                                setSuccess(true)
+                            })
+                        }}>Guardar</SaveButton>
+                </Toolbar>
+            </AppBar>
+        </Grid>
+    )
 }
+
 function mapStateToProps(state: any) {
 	return {
 		group_athletes: state.group_reducer.group_athletes,

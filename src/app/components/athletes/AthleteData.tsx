@@ -651,7 +651,7 @@ class CreateAthlete extends React.Component<any, any> {
                                             </CustomCard>
                                         </Grid>
                                     </Grid>
-                                    <Grid container item style={{ display: values.feeType !== 'SOCIO' ? "block" : "none" }}>
+                                    <Grid container item style={{ display: values.sportSchoolId > 0 && values.feeType !== 'SOCIO' ? "block" : "none" }}>
                                         <Grid item>
                                             <CustomCard title="Datos Deportivos" >
                                                 <Grid container item spacing={1}>
@@ -696,6 +696,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                         <GroupScheduleSelect 
                                                             disabled={!utils.isRegistered(values.historic)}
                                                             groupId={values.groupId}
+                                                            sportSchoolId={values.sportSchoolId}
                                                             specialization={values.specialization}
                                                             scheduleIds={values.scheduleIds}
                                                             onChange={(groupId: number, specialization: boolean, scheduleIds: number[]) => {

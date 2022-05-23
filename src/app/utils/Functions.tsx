@@ -70,7 +70,6 @@ const functions = {
                     category = "SUB23"
                     break;
                 default:
-                    console.log(currentYear - year)
                     if (currentYear - year < 6) {
                         category = "SUB8"
                     }

@@ -13,6 +13,8 @@ import { useParams } from 'react-router-dom';
 
 import { addTrainer, getTrainer } from "../../redux/actions/trainers";
 
+import SportSchoolSelect from "../custom/SportSchoolSelect";
+
 class ConnectedForm extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
@@ -42,6 +44,7 @@ class ConnectedForm extends React.Component<any, any> {
                         id: this.props.trainer.id || 0,
                         name: this.props.trainer.name || '',
                         mail: this.props.trainer.mail || '',
+                        sportSchoolId: this.props.trainer.sportSchoolId || '',
 
                         errorMessage: this.props.trainer.errorMessage || '',
                         successMessage: this.props.trainer.successMessage || ''
@@ -87,6 +90,13 @@ class ConnectedForm extends React.Component<any, any> {
                                 <Grid item xs>
                                     <Card title="Datos del entrenador">
                                         <Grid container spacing={2}>
+                                            <Grid item xs={6}>
+                                                <SportSchoolSelect sportSchoolId={values.sportSchoolId} error={touched.sportSchoolId && errors.sportSchoolId}
+                                                    onChange={(sportSchoolId: number) => {
+                                                        setFieldValue('sportSchoolId', sportSchoolId);
+                                                    }}
+                                                />
+                                            </Grid>
                                             <Grid item xs>
                                                 <TextField name="name" label="Nombre" value={values.name} onChange={handleChange}
                                                     error={touched.name && errors.name} />

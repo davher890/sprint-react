@@ -9,6 +9,14 @@ const headers: any = {
     'Authorization': sessionStorage.getItem('token')
 }
 
+const getPostRequestOptions = (body: any) => {
+    return {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(body)
+    }
+}
+
 export const getRequest = (endpoint: string) => {
 
     return fetch((serverUrl || '') + endpoint, { headers } )
@@ -17,6 +25,7 @@ export const getRequest = (endpoint: string) => {
             saveLastUrl(window.location.href)
             window.open("/login", "_self");
         }
+        saveToken(res.headers)
         return res.json()
     })
 }
@@ -31,28 +40,26 @@ export const deleteRequest = (endpoint: string) => {
             saveLastUrl(window.location.href)
             window.open("/login", "_self");
         }
+        saveToken(res.headers)
         return res.json()
     })
 }
 
 export const postRequest = (endpoint: string, body: Object) => {
-    const requestOptions = {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(body)
-    }
-    return fetch((serverUrl || '') + endpoint, requestOptions).then(res => {
+    return fetch((serverUrl || '') + endpoint, getPostRequestOptions(body))
+    .then(res => {
         if (res.status === 403){
             saveLastUrl(window.location.href)
             window.open("/login", "_self");
         }
+        saveToken(res.headers)
         return res.json()
     })
 }
 
 
 export const getExcelRequest = (endpoint: string, excelName: string) => {
-    return fetch((serverUrl || '') + endpoint, headers)
+    return fetch((serverUrl || '') + endpoint, { headers })
     .then(res => {
         if (res.status === 403){
             saveLastUrl(window.location.href)
@@ -74,12 +81,7 @@ export const getExcelRequest = (endpoint: string, excelName: string) => {
 }
 
 export const postExcelRequest = (endpoint: string, body: Object, excelName: string) => {
-    const requestOptions = {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(body)
-    }
-    return fetch((serverUrl || '') + endpoint, requestOptions)
+    return fetch((serverUrl || '') + endpoint, getPostRequestOptions(body))
     .then(res => {
         if (res.status === 403){
             saveLastUrl(window.location.href)
@@ -101,12 +103,7 @@ export const postExcelRequest = (endpoint: string, body: Object, excelName: stri
 }
 
 export const loginRequest = (endpoint: string, body: Object) => {
-    const requestOptions = {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(body)
-    }
-    return fetch((serverUrl || '') + endpoint, requestOptions)
+    return fetch((serverUrl || '') + endpoint, getPostRequestOptions(body))
     .then(res => {
         saveToken(res.headers)
         const lastUrl = sessionStorage.getItem('last_url')

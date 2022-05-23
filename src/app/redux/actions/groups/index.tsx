@@ -45,7 +45,7 @@ export function getAllGroups() {
     }
 }
 
-export function getGroups(specialization: boolean) {
+export function getGroups(sportSchoolId: number, specialization: boolean) {
     return function (dispatch: any)  {
         return specialization ?
             findSpecializationGroups().then(json => { dispatch({ type: ACTION_TYPES.SPECIALIZATION_GROUPS, payload: json }); })

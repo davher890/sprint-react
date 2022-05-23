@@ -7,13 +7,14 @@ import { Grid } from '@material-ui/core';
 
 // Redux
 import { connect } from "react-redux";
-import { getGroups, getGroupSchedules } from "../../../redux/actions/groups";
+import { getGroupSchedules } from "../../../redux/actions/groups";
 
 class GroupScheduleSelect extends React.Component<any, any> {
 
     constructor(props: any) {
         super(props);
         this.state = {
+            sportSchoolId: props.sportSchoolId,
             groupId: props.groupId,
             specialization: props.specialization,
             scheduleIds: props.scheduleIds || [],
@@ -31,6 +32,11 @@ class GroupScheduleSelect extends React.Component<any, any> {
         if (this.props.specialization !== prevProps.specialization){
             this.setState({
                 specialization: this.props.specialization,
+            })
+        }
+        if (this.props.sportSchoolId !== prevProps.sportSchoolId){
+            this.setState({
+                sportSchoolId: this.props.sportSchoolId,
             })
         }
     }
@@ -64,6 +70,7 @@ class GroupScheduleSelect extends React.Component<any, any> {
                 <Grid item xs>
                     <GroupSelect
                         disabled={this.props.disabled || false}
+                        sportSchoolId={this.state.sportSchoolId}
                         groupId={this.state.groupId}
                         onChange={(groupId: number, specialization: boolean) => {
                             this.groupOnChange(groupId, specialization)
@@ -87,7 +94,7 @@ class GroupScheduleSelect extends React.Component<any, any> {
 }
 
 const mapDispatchToProps = {
-    getGroups, getGroupSchedules
+    getGroupSchedules
 }
 
 const mapStateToProps = (state: any) => {
