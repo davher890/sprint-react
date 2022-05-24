@@ -33,39 +33,37 @@ const AppBar: React.FC<any> = (props) => {
 
   return (
     <Router>
-      <CustomAppBar />
-      <Box m="2%" display="flex">
         <Routes>
           <Route path="/login" element={<Login/>}/>
-          <Route path="/sport_schools/list" element={<SportSchoolTable/>}/>
-          <Route path="/sport_schools/:id" element={<SportSchoolData/>}/>
-          <Route path="/sport_schools" element={<SportSchoolData/>}/>
-          <Route path="/families/list" element={<FamilyTable/>}/>
-          <Route path="/families/:id" element={<FamilyData/>}/>
-          <Route path="/families" element={<FamilyData/>}/>
-          <Route path="/athletes/list" element={<AthleteTable/>}/>
-          <Route path="/athletes/:id/historic" element={<AthleteData/>} />
-          <Route path="/athletes/:id/sport_data" element={<AthleteSportdata/>} />
-          <Route path="/athletes/historic" element={<HistoricTable/>} />
-          <Route path="/athletes/:id" element={<AthleteData/>} />
-          <Route path="/athletes" element={<AthleteData/>} />
-          <Route path="/groups/attendance" element={<GroupAttendance/>}/>
-          <Route path="/groups/athletes" element={<GroupAthletesTable/>}/>
-          <Route path="/groups/swap" element={<GroupSwap/>}/>
-          <Route path="/groups/list" element={<GroupTable/>}/>
-          <Route path="/groups/:id" element={<GroupData/>}/>
-          <Route path="/groups" element={<GroupData/>} />
-          <Route path="/schedules/list" element={<ScheduleTable/>}/>
-          <Route path="/schedules/:id" element={<ScheduleData/>}/>
-          <Route path="/schedules" element={<ScheduleData/>}/>
-          <Route path="/trainers/list" element={<TrainerTable/>}/>
-          <Route path="/trainers/:id" element={<TrainerData/>}/>
-          <Route path="/trainers" element={<TrainerData/>}/>
-          <Route path="/users/list" element={<UserTable />}/>
-          <Route path="/users/:id" element={<UserData />}/>
-          <Route path="/users" element={<UserData />}/>
+          <Route path="/sport_schools/list" element={<div><CustomAppBar/><Box m="2%" display="flex"><SportSchoolTable/></Box></div>}/>
+          <Route path="/sport_schools/:id" element={<div><CustomAppBar/><Box m="2%" display="flex"><SportSchoolData/></Box></div>}/>
+          <Route path="/sport_schools" element={<div><CustomAppBar/><Box m="2%" display="flex"><SportSchoolData/></Box></div>}/>
+          <Route path="/families/list" element={<div><CustomAppBar/><Box m="2%" display="flex"><FamilyTable/></Box></div>}/>
+          <Route path="/families/:id" element={<div><CustomAppBar/><Box m="2%" display="flex"><FamilyData/></Box></div>}/>
+          <Route path="/families" element={<div><CustomAppBar/><Box m="2%" display="flex"><FamilyData/></Box></div>}/>
+          <Route path="/athletes/list" element={<div><CustomAppBar/><Box m="2%" display="flex"><AthleteTable/></Box></div>}/>
+          <Route path="/athletes/:id/historic" element={<div><CustomAppBar/><Box m="2%" display="flex"><AthleteData/></Box></div>} />
+          <Route path="/athletes/:id/sport_data" element={<div><CustomAppBar/><Box m="2%" display="flex"><AthleteSportdata/></Box></div>} />
+          <Route path="/athletes/historic" element={<div><CustomAppBar/><Box m="2%" display="flex"><HistoricTable/></Box></div>} />
+          <Route path="/athletes/:id" element={<div><CustomAppBar/><Box m="2%" display="flex"><AthleteData/></Box></div>} />
+          <Route path="/athletes" element={<div><CustomAppBar/><Box m="2%" display="flex"><AthleteData/></Box></div>} />
+          <Route path="/groups/attendance" element={<div><CustomAppBar/><Box m="2%" display="flex"><GroupAttendance/></Box></div>}/>
+          <Route path="/groups/athletes" element={<div><CustomAppBar/><Box m="2%" display="flex"><GroupAthletesTable/></Box></div>}/>
+          <Route path="/groups/swap" element={<div><CustomAppBar/><Box m="2%" display="flex"><GroupSwap/></Box></div>}/>
+          <Route path="/groups/list" element={<div><CustomAppBar/><Box m="2%" display="flex"><GroupTable/></Box></div>}/>
+          <Route path="/groups/:id" element={<div><CustomAppBar/><Box m="2%" display="flex"><GroupData/></Box></div>}/>
+          <Route path="/groups" element={<div><CustomAppBar/><Box m="2%" display="flex"><GroupData/></Box></div>} />
+          <Route path="/schedules/list" element={<div><CustomAppBar/><Box m="2%" display="flex"><ScheduleTable/></Box></div>}/>
+          <Route path="/schedules/:id" element={<div><CustomAppBar/><Box m="2%" display="flex"><ScheduleData/></Box></div>}/>
+          <Route path="/schedules" element={<div><CustomAppBar/><Box m="2%" display="flex"><ScheduleData/></Box></div>}/>
+          <Route path="/trainers/list" element={<div><CustomAppBar/><Box m="2%" display="flex"><TrainerTable/></Box></div>}/>
+          <Route path="/trainers/:id" element={<div><CustomAppBar/><Box m="2%" display="flex"><TrainerData/></Box></div>}/>
+          <Route path="/trainers" element={<div><CustomAppBar/><Box m="2%" display="flex"><TrainerData/></Box></div>}/>
+          <Route path="/users/list" element={<div><CustomAppBar/><Box m="2%" display="flex"><UserTable /></Box></div>}/>
+          <Route path="/users/:id" element={<div><CustomAppBar/><Box m="2%" display="flex"><UserData /></Box></div>}/>
+          <Route path="/users" element={<div><CustomAppBar/><Box m="2%" display="flex"><UserData /></Box></div>}/>
         </Routes>
-      </Box>
+      
     </Router>
   );
 }

@@ -21,8 +21,8 @@ const LoginForm: React.FC<any> = (props) => {
     }
     
     return (
-        <Card>
-            <Grid container spacing={2} direction='column'>
+        <Grid xs={2}>
+            <Card>
                 <Grid item xs>
                     <TextField name="email" value={email} label="Email" onChange={handleEmailChange}/>
                 </Grid>
@@ -33,8 +33,8 @@ const LoginForm: React.FC<any> = (props) => {
                 <Grid item xs>
                     <SearchButton onClick={() => {props.signUp(email, password)}}>Entrar</SearchButton>
                 </Grid>
-            </Grid>
-        </Card>
+            </Card>
+        </Grid>
     )
 }
 
