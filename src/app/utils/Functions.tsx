@@ -123,6 +123,10 @@ const functions = {
         ]
     },
 
+    getSportSchools: function() {
+        return JSON.parse(sessionStorage.getItem('sport_schools') || '[]')
+    },
+
     getPaymentTypes: function () {
         return [
             // { id: "", name: "" },

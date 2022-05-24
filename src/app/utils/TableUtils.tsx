@@ -21,11 +21,7 @@ const Utils = {
             { dataField: 'lastUnregisterDate', text : 'Fecha baja' },
             { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
                 type: "options",
-                options : [
-                    { id : '1', name: 'Santa Ana' },
-                    { id : '2', name: 'Paracuellos' },
-                    { id : '3', name: 'Externos' }
-                ]
+                options : functions.getSportSchools()
             }}, 
             { dataField: 'groupName', text : 'Grupo', filter: { type: "text" } }, 
             { dataField: 'days', text : 'Dias' }, 
@@ -75,11 +71,7 @@ const Utils = {
             { dataField: 'lastUnregisterDate', text : 'Fecha baja' },
             { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
                 type: "options",
-                options : [
-                    { id : '1', name: 'Santa Ana' },
-                    { id : '2', name: 'Paracuellos' },
-                    { id : '3', name: 'Externos' }
-                ]
+                options : functions.getSportSchools()
             }}, 
             { dataField: 'groupName', text : 'Grupo', filter: { type: "text" } }, 
             { dataField: 'days', text : 'Dias' }, 
@@ -150,11 +142,7 @@ const Utils = {
             { dataField: 'name', text : 'Nombre', filter: { type: "text" } },
             { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
                 type: "options",
-                options : [
-                    { id : '1', name: 'Santa Ana' },
-                    { id : '2', name: 'Paracuellos' },
-                    { id : '3', name: 'Externos' }
-                ]
+                options : functions.getSportSchools()
             }}
         ]
     },

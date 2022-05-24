@@ -125,4 +125,8 @@ const saveToken = (headers: Headers) => {
     let decoded: any = jwt_decode(token);
     sessionStorage.setItem('token', token || '');
     sessionStorage.setItem('user_id', decoded.user_id || 0)
+    let sportSchools = (decoded.sport_school_ids || []).map(function(e: number, i: number) {
+        return {id: e.toString(), name: decoded.sport_school_names[i]}
+    });
+    sessionStorage.setItem('sport_schools', JSON.stringify(sportSchools))
 }
