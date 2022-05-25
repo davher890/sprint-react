@@ -19,6 +19,8 @@ import { useParams } from 'react-router-dom';
 import { isAdmin } from "../../services/LoginService";
 import SportSchoolMultiSelect from "../custom/SportSchoolMultiSelect";
 
+import { getUserId } from "../../services/LoginService";
+
 class ConnectedForm extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
@@ -130,7 +132,7 @@ class ConnectedForm extends React.Component<any, any> {
                         </Dialog>
                         <Box paddingBottom={7}>
                             <Grid container direction="row" spacing={3}>
-                                <Grid item xs={6}>
+                                <Grid item xs>
                                     <Card title="Datos del usuario">
                                         <Grid container spacing={2}>
                                             <Grid item xs>
@@ -145,7 +147,7 @@ class ConnectedForm extends React.Component<any, any> {
                                     </Card>
                                 </Grid>
                                 { isAdmin() ?
-                                    <Grid item xs={6}>
+                                    <Grid item xs>
                                         <SportSchoolMultiSelect 
                                             sportSchools={this.props.sportSchools}
                                             sportSchoolIds={values.sportSchoolIds}
@@ -193,6 +195,9 @@ const ConnectedComponent = connect(mapStateToProps, mapDispatchToProps)(Connecte
 
 const WithRouterWrapper = () => {
     let { id } = useParams()
+    if (!id){
+        id = getUserId().toString()
+    }
 
     return (
         <ConnectedComponent id={id}></ConnectedComponent>

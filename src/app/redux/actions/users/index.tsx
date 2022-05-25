@@ -1,8 +1,9 @@
 import { LOAD_USER_TABLE, ADD_USER, GET_USER, CURRENT_USER_ID } from "../../constants/action_types";
 
 import { findUserDataPagination } from "../../../services/TableService"
-import { addData, changePassword, findById, findCurrentUserId } from "../../../services/UserService"
+import { addData, changePassword, findById } from "../../../services/UserService"
 
+import { getUserId } from "../../../services/LoginService";
 import { Order } from '../../../types/order'
 
 export function getUserTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
@@ -45,7 +46,7 @@ export function addUser(data: any) {
 
 export function getCurrentUser() {
     return function (dispatch: any)  {
-        const id = findCurrentUserId()
+        const id = getUserId()
         dispatch({ type: CURRENT_USER_ID, payload: id });
     }
 }

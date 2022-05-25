@@ -11,7 +11,3 @@ export const changePassword = (body: any) => {
 export const findById = (id: number) => {
     return getRequest("/users/" + id)
 }
-
-export const findCurrentUserId = () => {
-    return sessionStorage.getItem('user_id')
-} 
