@@ -15,4 +15,4 @@ do
   esac
 done
 
-git push heroku $BRANCH
+git push heroku $BRANCH:master

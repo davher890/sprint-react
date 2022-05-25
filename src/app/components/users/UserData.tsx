@@ -9,13 +9,15 @@ import { Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/
 import TextField from "../custom/TextField";
 import Card from "../custom/Card";
 import SaveButton from "../custom/SaveButton";
-import SportSchoolMultiSelect from '../custom/SportSchoolMultiSelect'
 
 import { addUser, getUser, changeUserPassword } from "../../redux/actions/users";
 import { getAllSportSchools } from "../../redux/actions/sportSchools";
 
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
+
+import { isAdmin } from "../../services/LoginService";
+import SportSchoolMultiSelect from "../custom/SportSchoolMultiSelect";
 
 class ConnectedForm extends React.Component<any, any> {
     constructor(props: any) {
@@ -142,15 +144,17 @@ class ConnectedForm extends React.Component<any, any> {
                                         </Grid>
                                     </Card>
                                 </Grid>
-                                {/* <Grid item xs={6}>
-                                    <SportSchoolMultiSelect 
-                                        sportSchools={this.props.sportSchools}
-                                        sportSchoolIds={values.sportSchoolIds}
-                                        onChange={(sportSchoolIds: number[]) => {
-                                            setFieldValue('sportSchoolIds', sportSchoolIds)
-                                        }}
-                                    />
-                                </Grid> */}
+                                { isAdmin() ?
+                                    <Grid item xs={6}>
+                                        <SportSchoolMultiSelect 
+                                            sportSchools={this.props.sportSchools}
+                                            sportSchoolIds={values.sportSchoolIds}
+                                            onChange={(sportSchoolIds: number[]) => {
+                                                setFieldValue('sportSchoolIds', sportSchoolIds)
+                                            }}
+                                        />
+                                    </Grid>
+                                    : null }
                             </Grid>
                         </Box>
                         <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>

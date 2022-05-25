@@ -106,12 +106,7 @@ export const loginRequest = (endpoint: string, body: Object) => {
     return fetch((serverUrl || '') + endpoint, getPostRequestOptions(body))
     .then(res => {
         saveToken(res.headers)
-        const lastUrl = sessionStorage.getItem('last_url')
-        if (lastUrl){
-            window.open(lastUrl, "_self");
-        } else {
-            window.open("/athletes", "_self");
-        }
+        return res
     })
 }
 
@@ -124,6 +119,7 @@ const saveToken = (headers: Headers) => {
 
     let decoded: any = jwt_decode(token);
     sessionStorage.setItem('token', token || '');
+    sessionStorage.setItem('is_admin', decoded.is_admin || '');
     sessionStorage.setItem('user_id', decoded.user_id || 0)
     let sportSchools = (decoded.sport_school_ids || []).map(function(e: number, i: number) {
         return {id: e.toString(), name: decoded.sport_school_names[i]}
