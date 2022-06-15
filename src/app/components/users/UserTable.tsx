@@ -40,7 +40,7 @@ class UserTable extends React.Component<any, any> {
 								this.props.getUserTable(page, size, filters);
 							}}
 							onRowClick={(id: number) => {
-								window.open("/users/" + id, "_self");
+								window.open("/admin/users/" + id, "_self");
 							}}
 						/>
 					</Grid>

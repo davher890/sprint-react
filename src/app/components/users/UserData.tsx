@@ -9,17 +9,16 @@ import { Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/
 import TextField from "../custom/TextField";
 import Card from "../custom/Card";
 import SaveButton from "../custom/SaveButton";
+import SportSchoolMultiSelect from "../custom/SportSchoolMultiSelect";
+import GroupMultiSelect from "../custom/GroupMultiSelect";
 
 import { addUser, getUser, changeUserPassword } from "../../redux/actions/users";
-import { getAllSportSchools } from "../../redux/actions/sportSchools";
+import { getAllSportSchools, getSportSchoolGroups } from "../../redux/actions/sportSchools";
 
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
 
-import { isAdmin } from "../../services/LoginService";
-import SportSchoolMultiSelect from "../custom/SportSchoolMultiSelect";
-
-import { getUserId } from "../../services/LoginService";
+import { getUserId, isAdmin } from "../../services/LoginService";
 
 class ConnectedForm extends React.Component<any, any> {
     constructor(props: any) {
@@ -54,6 +53,9 @@ class ConnectedForm extends React.Component<any, any> {
                         email: this.props.user.email || '',
                         password: this.props.user.password || '',
                         sportSchoolIds: this.props.user.sportSchoolIds || [],
+                        groupIds: this.props.user.groupIds || [],
+
+                        admin: this.props.user.admin || false,
 
                         openChangePassword: false,
                         oldPassword: this.props.user.oldPassword,
@@ -131,32 +133,52 @@ class ConnectedForm extends React.Component<any, any> {
                             </DialogActions>
                         </Dialog>
                         <Box paddingBottom={7}>
-                            <Grid container direction="row" spacing={3}>
-                                <Grid item xs>
-                                    <Card title="Datos del usuario">
-                                        <Grid container spacing={2}>
-                                            <Grid item xs>
-                                                <TextField name="username" label="Nombre" value={values.username} onChange={handleChange}
-                                                    error={touched.username && errors.username} />
+                            <Grid container direction="column" spacing={3}>
+                                <Grid container direction="row" spacing={3}>
+                                    <Grid item xs>
+                                        <Card title="Datos del usuario">
+                                            <Grid container spacing={2}>
+                                                <Grid item xs>
+                                                    <TextField name="username" label="Nombre" value={values.username} onChange={handleChange}
+                                                        error={touched.username && errors.username} />
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <TextField name="email" label="Email" value={values.email} onChange={handleChange}
+                                                        error={touched.email && errors.email} />
+                                                </Grid>
                                             </Grid>
+                                        </Card>
+                                    </Grid>
+                                    { isAdmin() ?
                                             <Grid item xs>
-                                                <TextField name="email" label="Email" value={values.email} onChange={handleChange}
-                                                    error={touched.email && errors.email} />
+                                                <SportSchoolMultiSelect 
+                                                    sportSchools={this.props.sportSchools}
+                                                    sportSchoolIds={values.sportSchoolIds}
+                                                    onChange={(sportSchoolIds: number[]) => {
+                                                        setFieldValue('sportSchoolIds', sportSchoolIds)
+                                                    }}
+                                                />
                                             </Grid>
-                                        </Grid>
-                                    </Card>
+                                        : null }
                                 </Grid>
                                 { isAdmin() ?
-                                    <Grid item xs>
-                                        <SportSchoolMultiSelect 
-                                            sportSchools={this.props.sportSchools}
-                                            sportSchoolIds={values.sportSchoolIds}
-                                            onChange={(sportSchoolIds: number[]) => {
-                                                setFieldValue('sportSchoolIds', sportSchoolIds)
-                                            }}
-                                        />
+                                <Grid container spacing={3}>
+                                    <Grid container item xs>
+                                        { values.sportSchoolIds.map((sportSchoolId: number) => {
+                                            this.props.getSportSchoolGroups(sportSchoolId, false).then((values: any) => {
+                                                console.log(sportSchoolId, values)
+                                            })
+                                            // <GroupMultiSelect 
+                                            //     groups={}
+                                            //     groupIds={values.groupIds}
+                                            //     onChange={(groupIds: number[]) => {
+                                            //         setFieldValue('groupIds', groupIds)
+                                            //     }}
+                                            // />
+                                        })}
                                     </Grid>
-                                    : null }
+                                </Grid>
+                                : null }
                             </Grid>
                         </Box>
                         <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
@@ -181,13 +203,15 @@ const mapDispatchToProps = {
     addUser,
     getUser,
     getAllSportSchools,
-    changeUserPassword
+    changeUserPassword,
+    getSportSchoolGroups
 }
 
 const mapStateToProps = (state: any) => {
     return { 
         user: state.user_reducer.user,
-        sportSchools: state.sport_school_reducer.sport_schools
+        sportSchools: state.sport_school_reducer.sport_schools,
+        sport_school_groups: state.group_reducer.groups,
     };
 };
 

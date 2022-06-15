@@ -20,7 +20,7 @@ export const signup = (email: string, password: string) => {
         if (lastUrl){
             window.open(lastUrl, "_self");
         } else {
-            window.open("/athletes", "_self");
+            window.open("/athletes/list", "_self");
         }
     })
 }

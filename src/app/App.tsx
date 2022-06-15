@@ -40,6 +40,7 @@ const AppBar: React.FC<any> = (props) => {
           <Route path="/login" element={<Login/>}/>
           <Route path="/admin" element={<Protected isAuthenticated={isAuthenticated()}><AdminPage isAdmin={isAdmin()}/></Protected>}/>
           <Route path="/admin/users/:id" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><UserData /></Box></Protected>}/>
+          <Route path="/admin/users/list" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><UserTable /></Box></Protected>}/>
           <Route path="/users/me" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><UserData /></Box></Protected>}/>
           <Route path="/sport_schools/list" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><SportSchoolTable/></Box></Protected>}/>
           <Route path="/sport_schools/:id" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><SportSchoolData/></Box></Protected>}/>
