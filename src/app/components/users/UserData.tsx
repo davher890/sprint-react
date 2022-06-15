@@ -54,7 +54,6 @@ class ConnectedForm extends React.Component<any, any> {
                         password: this.props.user.password || '',
                         sportSchoolIds: this.props.user.sportSchoolIds || [],
                         groupIds: this.props.user.groupIds || [],
-
                         admin: this.props.user.admin || false,
 
                         openChangePassword: false,

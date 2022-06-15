@@ -2,7 +2,8 @@ import * as React from "react"
 
 import { Grid } from '@material-ui/core';
 
-import Button from '../custom/SaveButton'
+import SaveButton from '../custom/SaveButton'
+import DeleteButton from '../custom/DeleteButton'
 import Table from "../custom/Table";
 import TextField from "../custom/TextField"
 import Utils from "../../utils/TableUtils";
@@ -49,7 +50,9 @@ class AthleteSportdata extends React.Component<any, any> {
             technicalLevel: row.technicalLevel,
             motivations: row.motivations,
             outstandingResults: row.outstandingResults,
-            injuries: row.injuries
+            injuries: row.injuries,
+            observations: row.observations,
+            num_competitions: row.num_competitions
         })
     }
 
@@ -64,7 +67,9 @@ class AthleteSportdata extends React.Component<any, any> {
             technicalLevel: '',
             motivations: '',
             outstandingResults: '',
-            injuries: ''
+            injuries: '',
+            num_competitions: '',
+            observations: ''
         })
     }
 
@@ -96,7 +101,9 @@ class AthleteSportdata extends React.Component<any, any> {
                             technicalLevel: this.state.technicalLevel || '',
                             motivations: this.state.motivations || '',
                             outstandingResults: this.state.outstandingResults || '',
-                            injuries: this.state.injuries || ''
+                            injuries: this.state.injuries || '',
+                            num_competitions: this.state.num_competitions || '',
+                            observations: this.state.observations || ''
                         }}
                         validate={(values) => {
                             let errors: any = {};
@@ -108,6 +115,8 @@ class AthleteSportdata extends React.Component<any, any> {
                             if (values.motivations === '') errors.motivations = true;
                             if (values.outstandingResults === '') errors.outstandingResults = true;
                             if (values.injuries === '') errors.injuries = true;
+                            if (values.num_competitions === '') errors.num_competitions = true
+                            if (values.observations === '') errors.observations = true
 
                             //check if my values have errors
                             return errors;
@@ -122,7 +131,7 @@ class AthleteSportdata extends React.Component<any, any> {
 
                             <form onSubmit={handleSubmit}>
                                 {/* <CustomCard> */}
-                                    <Grid container direction="column" spacing={5}>
+                                    <Grid container direction="column" spacing={2}>
                                         <Grid container item spacing={1}>
                                             <Grid item xs>
                                                 <TextField name="season" label="Temporada" value={values.season} type="number"
@@ -154,13 +163,24 @@ class AthleteSportdata extends React.Component<any, any> {
                                                 <TextField name="injuries" label="Lesiones" value={values.injuries}
                                                     error={touched.injuries && errors.injuries} onChange={handleChange} />
                                             </Grid>
+                                            
+                                        </Grid>
+                                        <Grid container item spacing={1}>
+                                            <Grid item xs>
+                                                <TextField name="num_competitions" label="Competiciones en la temporada" value={values.num_competitions}
+                                                    error={touched.num_competitions && errors.num_competitions} onChange={handleChange} />
+                                            </Grid>
+                                            <Grid item xs>
+                                                <TextField name="observations" label="Observaciones" value={values.observations}
+                                                    error={touched.observations && errors.observations} onChange={handleChange} />
+                                            </Grid>
                                         </Grid>
                                         <Grid container spacing={1}>
                                             <Grid item xs={3}>
-                                                <Button type="submit"/>
+                                                <SaveButton type="submit"/>
                                             </Grid>
                                             <Grid item xs={3}>
-                                                <Button text="Reset" color="secondary" onClick={this.cleanForm}/>
+                                                <DeleteButton color="secondary" onClick={this.cleanForm}>Reset</DeleteButton>
                                             </Grid>
                                         </Grid>
                                     </Grid>

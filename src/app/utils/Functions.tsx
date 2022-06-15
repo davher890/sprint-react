@@ -2,6 +2,27 @@ const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Juli
 
 const functions = {
 
+    isValidDni: function(dni: string) {
+        
+        const dniRegex = /^[0-9]{8,8}[A-Za-z]$/
+        
+        if(dniRegex.test(dni)){
+            var number = Number.parseInt(dni.substr(0, dni.length-1));
+            var letr = dni.substr(dni.length-1,1);
+            number = number % 23;
+            let letter = 'TRWAGMYFPDXBNJZSQVHLCKET';
+            letter = letter.substring(number, number+1);
+            if (letter !== letr.toUpperCase()) {
+                return false
+            }else{
+                return true
+            }
+        }
+        else{
+            return false
+        }
+    },
+
     isRegistered: function (historic: {type: string, date: number}[]) {
 
         if (historic && historic.length > 0){

@@ -57,26 +57,7 @@ class CreateAthlete extends React.Component<any, any> {
         this.props.addAthlete(this.state)
     }
 
-    isValidDni(dni: string) {
-        
-        const dniRegex = /^[0-9]{8,8}[A-Za-z]$/
-        
-        if(dniRegex.test(dni)){
-            var number = Number.parseInt(dni.substr(0, dni.length-1));
-            var letr = dni.substr(dni.length-1,1);
-            number = number % 23;
-            let letter = 'TRWAGMYFPDXBNJZSQVHLCKET';
-            letter = letter.substring(number, number+1);
-            if (letter !== letr.toUpperCase()) {
-                return false
-            }else{
-                return true
-            }
-        }
-        else{
-            return false
-        }
-    }
+    
 
     getPhoneList(phone1: string, phone2: string, phone3: string): string[] {
 
@@ -214,10 +195,10 @@ class CreateAthlete extends React.Component<any, any> {
                     if (values.holderFirstSurname === '' && values.paymentType === "DOM") {
                         errors.holderFirstSurname = true;
                     }
-                    if ((values.holderDni === '' || !this.isValidDni(values.holderDni)) && values.paymentType === "DOM" ) {
+                    if ((values.holderDni === '' || !utils.isValidDni(values.holderDni)) && values.paymentType === "DOM" ) {
                         errors.holderDni = true;
                     }
-                    if (values.age >= 14 && !this.isValidDni(values.dni)){
+                    if (values.age >= 14 && !utils.isValidDni(values.dni)){
                         errors.dni = true
                     }
              
@@ -482,7 +463,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                             <TextField name="dni" label="DNI/NIE" type="text" value={values.dni}
                                                                 error={touched.dni && errors.dni} onChange={handleChange}
                                                                 onBlur={() => {
-                                                                    if (!this.isValidDni(values.dni)){
+                                                                    if (!utils.isValidDni(values.dni)){
                                                                         setFieldTouched("dni", true, false);
                                                                         setFieldError("dni", "DNI/NIE incorrecto");
                                                                     }
