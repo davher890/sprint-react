@@ -104,7 +104,9 @@ const Utils = {
             { dataField: 'technicalLevel', text: 'Nivel técnico' },
             { dataField: 'motivations', text: 'Motivaciones' },
             { dataField: 'outstandingResults', text: 'Resultados destacados' },
-            { dataField: 'injuries', text: 'Lesiones' }
+            { dataField: 'injuries', text: 'Lesiones' },
+            { dataField: 'observations', text: 'Observaciones' },
+            { dataField: 'num_competitions', text: 'Num Competiciones' }
         ]
     },
 

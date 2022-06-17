@@ -24,7 +24,6 @@ class ConnectedForm extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {};
-
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
     }
 
@@ -77,7 +76,7 @@ class ConnectedForm extends React.Component<any, any> {
                         this.handleFormSubmit()
                     }}
                 >
-                {({ handleSubmit, handleChange, values, touched, setFieldValue, errors, isSubmitting }) => (
+                {({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, errors, isSubmitting }) => (
 
                     <form onSubmit={handleSubmit}>
                         <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
@@ -133,7 +132,7 @@ class ConnectedForm extends React.Component<any, any> {
                         </Dialog>
                         <Box paddingBottom={7}>
                             <Grid container direction="column" spacing={3}>
-                                <Grid container direction="row" spacing={3}>
+                                <Grid container item direction="row" spacing={3}>
                                     <Grid item xs>
                                         <Card title="Datos del usuario">
                                             <Grid container spacing={2}>
@@ -155,27 +154,33 @@ class ConnectedForm extends React.Component<any, any> {
                                                     sportSchoolIds={values.sportSchoolIds}
                                                     onChange={(sportSchoolIds: number[]) => {
                                                         setFieldValue('sportSchoolIds', sportSchoolIds)
+                                                        setFieldTouched('sportSchoolIds', true, true)
                                                     }}
                                                 />
                                             </Grid>
                                         : null }
                                 </Grid>
                                 { isAdmin() ?
-                                <Grid container spacing={3}>
-                                    <Grid container item xs>
-                                        { values.sportSchoolIds.map((sportSchoolId: number) => {
-                                            this.props.getSportSchoolGroups(sportSchoolId, false).then((values: any) => {
-                                                console.log(sportSchoolId, values)
-                                            })
-                                            // <GroupMultiSelect 
-                                            //     groups={}
-                                            //     groupIds={values.groupIds}
-                                            //     onChange={(groupIds: number[]) => {
-                                            //         setFieldValue('groupIds', groupIds)
-                                            //     }}
-                                            // />
-                                        })}
-                                    </Grid>
+                                <Grid container item direction="row" spacing={3}>
+                                    {values.sportSchoolIds.map((id:number) => {
+                                        return <GroupMultiSelect
+                                            key={`sport_school_${id}`}
+                                            sportSchoolId={id}
+                                            selectedGroupIds={values.groupIds}
+                                            onChange={(selectedGroupIds: number[], groupId: number, checked: boolean) => {
+                                                let selectedIds = JSON.parse(JSON.stringify(values.groupIds))
+                                                if (checked){
+                                                    selectedIds.push(groupId)
+                                                }
+                                                else {
+                                                    const idx = selectedIds.indexOf(groupId);
+                                                    selectedIds.splice(idx, 1);
+                                                }
+                                                setFieldValue('groupIds', Array.from(new Set(selectedIds)))
+                                            }}
+                                        />
+                                        
+                                    })}
                                 </Grid>
                                 : null }
                             </Grid>
@@ -210,7 +215,7 @@ const mapStateToProps = (state: any) => {
     return { 
         user: state.user_reducer.user,
         sportSchools: state.sport_school_reducer.sport_schools,
-        sport_school_groups: state.group_reducer.groups,
+        groups: state.group_reducer.groups
     };
 };
 

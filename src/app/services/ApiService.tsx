@@ -41,7 +41,7 @@ export const deleteRequest = (endpoint: string) => {
             window.open("/login", "_self");
         }
         saveToken(res.headers)
-        return res.json()
+        // return res.json()
     })
 }
 

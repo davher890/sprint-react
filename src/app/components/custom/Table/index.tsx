@@ -108,9 +108,9 @@ const CustomTable: React.FC<any> = (props) => {
 			props.downloadData(columns, filterObj)
 		}
 	}
-	const onRowClick = (id: number) => {
+	const onRowClick = (id: number, row:any) => {
 		if (props.onRowClick){
-			props.onRowClick(id)
+			props.onRowClick(id, row)
 		}
 	}
 	const getRowData = (row: any) => {
@@ -135,7 +135,7 @@ const CustomTable: React.FC<any> = (props) => {
 			)
 		} 
 		return cells.concat(columnNames.map(column => (
-			<TableCell key={ rowId + "_" + column } onClick={() => onRowClick(rowId)}>
+			<TableCell key={ rowId + "_" + column } onClick={() => onRowClick(rowId, row)}>
 				{row[column]}
 			</TableCell>
 		)))
