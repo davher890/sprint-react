@@ -63,7 +63,7 @@ class AthleteTable extends React.Component<any, any> {
 				>
 					<DialogTitle id="form-dialog-title">Cambio de grupo</DialogTitle>
 					<DialogContent>
-						<Grid container>
+						<Grid container spacing={3}>
 							<Grid item xs={2}>
 								<SportSchoolSelect sportSchoolId={this.state.sportSchoolId}
 									onChange={(id: number) => {

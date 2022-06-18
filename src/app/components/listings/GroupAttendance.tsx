@@ -28,7 +28,7 @@ const GroupAttendante: React.FC<any> = (props) => {
     const [sportSchoolId, setsportSchoolId] = useState<number>(0)
 
 	const handleFormSubmit = () => {
-        props.downloadGroupAttendance(groupId, month)
+        props.downloadGroupAttendance(groupId, month, sportSchoolId)
     }
 
     return (

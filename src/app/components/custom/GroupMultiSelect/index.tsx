@@ -13,7 +13,6 @@ const GroupMultiSelect: React.FC<any> = (props) => {
     const [selectedGroupIds, setSelectedGroupIds] = React.useState(props.selectedGroupIds || [])
 
     React.useEffect(() => {
-        console.log(props.sportSchool)
         // if (JSON.stringify(props.sportSchoolId) !== JSON.stringify(sportSchoolId)){
             props.getSportSchoolGroups(props.sportSchool.id)
             setSportSchool(props.sportSchool)
