@@ -15,6 +15,7 @@ import { swapGroup } from "../../redux/actions/groups";
 import { Order } from '../../types/order'
 import GroupSelect from "../custom/GroupSelect";
 import ConfirmDialog from "../custom/ConfirmDialog";
+import SportSchoolSelect from "../custom/SportSchoolSelect";
 
 class AthleteTable extends React.Component<any, any> {
 	constructor(props: any) {
@@ -24,7 +25,8 @@ class AthleteTable extends React.Component<any, any> {
 			selectedIds: [],
 			openGroupChangeDialog: false,
 			openGroupChangeConfirmDialog: false,
-			groupChangeId: 0
+			groupChangeId: 0,
+			sportSchoolId: 0
 		}
 		this.downloadData = this.downloadData.bind(this)
     }
@@ -61,14 +63,28 @@ class AthleteTable extends React.Component<any, any> {
 				>
 					<DialogTitle id="form-dialog-title">Cambio de grupo</DialogTitle>
 					<DialogContent>
-						<GroupSelect
-							groupId={this.state.groupChangeId}
-							onChange={(groupId: number, specialization: boolean) => {
-								this.setState({
-									groupChangeId: groupId
-								})
-							}}
-						/>
+						<Grid container>
+							<Grid item xs={2}>
+								<SportSchoolSelect sportSchoolId={this.state.sportSchoolId}
+									onChange={(id: number) => {
+										this.setState({
+											sportSchoolId: id
+										})
+									}}
+								/>
+							</Grid>
+							<Grid item xs>
+								<GroupSelect
+									groupId={this.state.groupChangeId}
+									sportSchoolId={this.state.sportSchoolId}
+									onChange={(groupId: number, specialization: boolean) => {
+										this.setState({
+											groupChangeId: groupId
+										})
+									}}
+								/>
+							</Grid>
+						</Grid>
 					</DialogContent>
 					<DialogActions>
 						<Button text="Aceptar"
@@ -84,16 +100,18 @@ class AthleteTable extends React.Component<any, any> {
 					</DialogActions>
 				</Dialog>
 				<Grid container direction="column" spacing={3}>
-					<Grid container item spacing={3}>
-						<Grid item xs>
+					<Grid container item >
+						<Grid item xs={3}>
 							<Button text="Nuevo Atleta" href={'/athletes'}/>
 						</Grid>
-						<Grid item xs style={{ display: this.state.selectedIds.length > 0 ? "block" : "none" }}>
-							<Button text="Cambiar de grupo" 
-								onClick={() => this.setState({openGroupChangeDialog: true})}/>
-						</Grid>
+						{this.state.selectedIds.length > 0 ? 
+							<Grid item xs={3}>
+								<Button text="Cambiar de grupo" 
+									onClick={() => this.setState({openGroupChangeDialog: true})}/>
+							</Grid>
+						: null}
 					</Grid>
-					<Grid item xs>
+					<Grid container item xs>
 						<Table 
 							data={this.props.table_data}
 							page={this.props.page}

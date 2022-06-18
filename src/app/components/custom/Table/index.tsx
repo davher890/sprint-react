@@ -9,6 +9,7 @@ import ColumnsSelect from "../ColumnsSelect";
 import TextField from "../TextField";
 import TablePaginationActions from "../TablePagination";
 import Select from '../Select'
+import DownloadButton from '../DownloadButton'
 
 import { Order } from '../../../types/order'
 import functions from '../../../utils/Functions'
@@ -206,17 +207,25 @@ const CustomTable: React.FC<any> = (props) => {
 	}
 
 	return (
-		<Grid container direction="column">
-			<Grid item style={{ display: props.showColumns ? "block" : "none" }}>
-				<ColumnsSelect 
-					columns={columns}
-					changeEvent={(cols: any) => { 
-						setColumns(cols) 
-						setVisibleColumns(cols.filter((c: any) => c.show === undefined || c.show === true))
-					}}
-					showDownloadData={props.downloadData !== undefined}
-					downloadData={downloadData}
-				/>
+		<Grid container item direction="column" spacing={3}>
+			<Grid container item direction="row">
+				{ props.showColumns ? 
+					<Grid item xs={3}>
+						<ColumnsSelect 
+							columns={columns}
+							changeEvent={(cols: any) => { 
+								setColumns(cols) 
+								setVisibleColumns(cols.filter((c: any) => c.show === undefined || c.show === true))
+							}}
+							downloadData={downloadData}
+						/>
+					</Grid>
+				: null }
+				{ downloadData !== undefined ?
+					<Grid item xs={3}>
+						<DownloadButton onClick={(downloadData)}>Descargar Excel</DownloadButton>
+					</Grid> : null
+				}
 			</Grid>
 			<Grid item style={{ width: "100%", overflowX: "auto" }}>
 				<TableContainer>

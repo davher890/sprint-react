@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import {Grid, Dialog, DialogContent, DialogTitle, DialogActions, Button} from '@material-ui/core';
 
 import MultiSelect from '../MultiSelect'
-import DownloadButton from '../DownloadButton'
 import SelectButton from '../SelectButton'
 
 const ColumnsSelect: React.FC<any> = (props) => {
@@ -17,15 +16,8 @@ const ColumnsSelect: React.FC<any> = (props) => {
     }
 
     return (
-        <Grid container>
-            <Grid item xs>
-                <SelectButton onClick={() => { setOpenDialog(true) }}>Seleccionar columnas</SelectButton>
-            </Grid>
-            { props.showDownloadData ?
-            <Grid item xs>
-                <DownloadButton onClick={(props.downloadData)}>Descargar Excel</DownloadButton>
-            </Grid> : null
-            }
+        <Grid container item xs>
+            <SelectButton onClick={() => { setOpenDialog(true) }}>Seleccionar columnas</SelectButton>
 
             <Dialog fullWidth={true} maxWidth="xl" open={openDialog} aria-labelledby="form-dialog-title"
                 onClose={() => {

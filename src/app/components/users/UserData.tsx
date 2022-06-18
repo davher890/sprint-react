@@ -165,7 +165,7 @@ class ConnectedForm extends React.Component<any, any> {
                                     {values.sportSchoolIds.map((id:number) => {
                                         return <GroupMultiSelect
                                             key={`sport_school_${id}`}
-                                            sportSchoolId={id}
+                                            sportSchool={this.props.sportSchools.find((sportSchool: any) => sportSchool.id === id )}
                                             selectedGroupIds={values.groupIds}
                                             onChange={(selectedGroupIds: number[], groupId: number, checked: boolean) => {
                                                 let selectedIds = JSON.parse(JSON.stringify(values.groupIds))
