@@ -1,6 +1,6 @@
 import * as ACTION_TYPES from "../../constants/action_types";
 
-import { addData, findById, findAthleteFee, downloadExcel, addAthleteSportdata, findByPhone, findBySurnames, registerAthlete, unregisterAthlete, findAthleteObservations, findAthleteHistoric, deleteAthlete } from "../../../services/AthleteService"
+import { addData, findById, findAthleteFee, downloadExcel, findByPhone, findBySurnames, registerAthlete, unregisterAthlete, findAthleteObservations, findAthleteHistoric, deleteAthlete } from "../../../services/AthleteService"
 import { findHistoricDataPagination, findAthleteDataPagination, findAthleteSportdataPagination, findDuplicatedAthletesDataPagination } from "../../../services/TableService"
 
 import utils from "../../../utils/Functions"
@@ -10,6 +10,7 @@ import { Order } from '../../../types/order'
 
 export function getAthleteTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
     return function (dispatch: any) {
+        dispatch({ type: ACTION_TYPES.API_CALL})
         return findAthleteDataPagination(page, size, filters, sort, sortDirection).then(json => {
             dispatch({ type: ACTION_TYPES.LOAD_ATHLETE_TABLE, payload: json });
         });
@@ -26,6 +27,7 @@ export function getDuplicatedAthletesTable(id: number, name: string, firstSurnam
 
 export function getAthleteTableSportdataTable(athleteId: number, page: number, size: number, filters: any, sort: string, sortDirection: Order) {
     return function (dispatch: any) {
+        dispatch({ type: ACTION_TYPES.API_CALL})
         return findAthleteSportdataPagination(athleteId, page, size, filters, sort, sortDirection).then(json => {
             dispatch({ type: ACTION_TYPES.LOAD_ATHLETE_SPORTDATA_TABLE, payload: json });
         });
@@ -34,6 +36,7 @@ export function getAthleteTableSportdataTable(athleteId: number, page: number, s
 
 export function getHistoricTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
     return function (dispatch: any) {
+        dispatch({ type: ACTION_TYPES.API_CALL})
         return findHistoricDataPagination(page, size, filters, sort, sortDirection).then(json => {
             dispatch({ type: ACTION_TYPES.LOAD_HISTORIC_TABLE, payload: json });
         });
@@ -92,6 +95,7 @@ export function getAthleteHistoric(id: number) {
 
 export function downloadAthletes(columns: any, filters:any) {
     return function (dispatch: any) {
+        dispatch({ type: ACTION_TYPES.API_CALL})
         return downloadExcel(columns, filters, "/registered_athletes/excel").then(json => {
             dispatch({ type: ACTION_TYPES.DOWNLOAD_ATHLETES, payload: json });
         });
@@ -100,6 +104,7 @@ export function downloadAthletes(columns: any, filters:any) {
 
 export function downloadHistoricAthletes(columns: any, filters: any) {
     return function (dispatch: any) {
+        dispatch({ type: ACTION_TYPES.API_CALL})
         return downloadExcel(columns, filters, "/unregistered_athletes/excel").then(json => {
             dispatch({ type: ACTION_TYPES.DOWNLOAD_HISTORIC, payload: json });
         });
@@ -150,20 +155,6 @@ export function removeAthlete(id: number) {
     return function (dispatch: any)  {
         return deleteAthlete(id).then(json => {
             dispatch({ type: ACTION_TYPES.DELETE_ATHLETE, payload: json });
-        });
-    }
-}
-
-// Sportdata
-
-export function addSportdata(data: any) {
-    console.log(data)
-    return function (dispatch: any) {
-        return addAthleteSportdata(data).then(json => {
-            if (!json.errorMessage) {
-                json.successMessage = "Datos deportivos guardados!"
-            }
-            dispatch({ type: ACTION_TYPES.ADD_ATHLETE_SPORTDATA, payload: json });
         });
     }
 }

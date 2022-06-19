@@ -108,12 +108,12 @@ class ConnectedForm extends React.Component<any, any> {
                                 <Grid container direction="column">
                                     <Grid container item>
                                         <Grid item>
-                                            <TextField name="oldPassword" label="Contraseña antigua" value={values.oldPassword} onChange={handleChange}/>
+                                            <TextField name="oldPassword" label="Contraseña antigua" type="password" value={values.oldPassword} onChange={handleChange}/>
                                         </Grid>
                                     </Grid>
                                     <Grid container item>
                                         <Grid item>
-                                            <TextField name="newPassword" label="Nueva contraseña" value={values.newPassword} onChange={handleChange}/>
+                                            <TextField name="newPassword" label="Nueva contraseña" type="password" value={values.newPassword} onChange={handleChange}/>
                                         </Grid>
                                     </Grid>
                                 </Grid>

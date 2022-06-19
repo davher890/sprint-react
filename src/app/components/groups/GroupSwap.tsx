@@ -62,31 +62,33 @@ const GroupSwap: React.FC<any> = (props) => {
                             </Grid>
                         </CustomCard>
                     </Grid>
-                    <Grid item xs style={{ display: groupAId ? "block" : "none" }}>
-                        <CustomCard>
-                            <Grid container direction="column">
-                                <Grid item xs>
-                                    <SportSchoolSelect sportSchoolId={sportSchoolBId}
-                                        onChange={(sportSchoolId: number) => {
-                                            setsportSchoolBId(sportSchoolId)
-                                        }}
-                                    />
+                    { groupAId ? 
+                        <Grid item xs>
+                            <CustomCard>
+                                <Grid container direction="column">
+                                    <Grid item xs>
+                                        <SportSchoolSelect sportSchoolId={sportSchoolBId}
+                                            onChange={(sportSchoolId: number) => {
+                                                setsportSchoolBId(sportSchoolId)
+                                            }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs>
+                                        <GroupSelect 
+                                            sportSchoolId={sportSchoolBId}
+                                            groupId={groupBId}
+                                            onChange={(groupId: number, specialization: boolean, scheduleIds: number[]) => {
+                                                props.getGroupAthletes(groupId).then(() => {
+                                                    setGroupBId(groupId)
+                                                    setGroupBAthletes([...props.group_athletes])
+                                                })
+                                            }}
+                                        />
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs>
-                                    <GroupSelect 
-                                        sportSchoolId={sportSchoolBId}
-                                        groupId={groupBId}
-                                        onChange={(groupId: number, specialization: boolean, scheduleIds: number[]) => {
-                                            props.getGroupAthletes(groupId).then(() => {
-                                                setGroupBId(groupId)
-                                                setGroupBAthletes([...props.group_athletes])
-                                            })
-                                        }}
-                                    />
-                                </Grid>
-                            </Grid>
-                        </CustomCard>
-                    </Grid>
+                            </CustomCard>
+                        </Grid>
+                    : null }
                 </Grid>
                 <Grid container item direction="row" spacing={2} style={{ display: groupBId ? "" : "none" }}>
                     <Grid item xs>

@@ -11,7 +11,8 @@ import Utils from "../../utils/TableUtils";
 import { Formik } from 'formik';
 
 import { connect } from "react-redux";
-import { getAthleteTableSportdataTable, addSportdata } from "../../redux/actions/athletes";
+import { getAthleteTableSportdataTable } from "../../redux/actions/athletes";
+import { addSportdata } from "../../redux/actions/sportdata";
 import { deleteSportdata } from "../../redux/actions/sportdata";
 
 class AthleteSportdata extends React.Component<any, any> {

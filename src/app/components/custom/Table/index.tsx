@@ -1,5 +1,6 @@
 import * as React from "react"
 
+import { connect } from "react-redux";
 import { withTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { Table, TableBody, TableHead, TableRow, TablePagination, TableCell, TableContainer, TableSortLabel, Checkbox } from '@material-ui/core';
@@ -10,6 +11,7 @@ import TextField from "../TextField";
 import TablePaginationActions from "../TablePagination";
 import Select from '../Select'
 import DownloadButton from '../DownloadButton'
+import Spinner from '../Spinner'
 
 import { Order } from '../../../types/order'
 import functions from '../../../utils/Functions'
@@ -207,89 +209,104 @@ const CustomTable: React.FC<any> = (props) => {
 	}
 
 	return (
-		<Grid container item direction="column" spacing={3}>
-			<Grid container item direction="row">
-				{ props.showColumns ? 
-					<Grid item xs={3}>
-						<ColumnsSelect 
-							columns={columns}
-							changeEvent={(cols: any) => { 
-								setColumns(cols) 
-								setVisibleColumns(cols.filter((c: any) => c.show === undefined || c.show === true))
-							}}
-							downloadData={downloadData}
-						/>
-					</Grid>
-				: null }
-				{ downloadData !== undefined ?
-					<Grid item xs={3}>
-						<DownloadButton onClick={(downloadData)}>Descargar Excel</DownloadButton>
-					</Grid> : null
-				}
-			</Grid>
-			<Grid item style={{ width: "100%", overflowX: "auto" }}>
-				<TableContainer>
-					<Table stickyHeader>
-						<TableHead>
-							<TableRow>
-								{selectableRows ? <TableCell style={{ minWidth: '50px' }} key={'select'}>
-									<Checkbox
-										color="secondary"
-										checked={functions.arrayContains(selectedIds, props.data.map((row: any) => row.id))}
-										onChange={e => {
-											if (props.onSelectedIds){
-												props.data.map((row: any) => props.onSelectedIds(row.id, e.target.checked))
-											}
-										}}
-									/>
-								</TableCell> : null }
-								{visibleColumns.map((column) => (
-									<TableCell style={{ minWidth: '200px' }} key={column.dataField}>
-										{ column.sort === false ? getCell(column) : 
-											<Grid container direction="row" spacing={2}>
-												{ getCell(column) }
-												<Grid item xs>
-													<TableSortLabel
-														active={orderBy === column.dataField}
-														direction={orderBy === column.dataField ? order : 'asc'}
-														onClick={createSortHandler(column.dataField)}
-														classes={{
-															icon: classes.sortLabelIcon,
-															active: classes.sortLabelIcon
-														}}
-													/>
+		<div> 
+		{ props.loading ? <Spinner/> : 
+			<Grid container item direction="column" spacing={3}>
+				<Grid container item direction="row">
+					{ props.showColumns ? 
+						<Grid item xs={3}>
+							<ColumnsSelect 
+								columns={columns}
+								changeEvent={(cols: any) => { 
+									setColumns(cols) 
+									setVisibleColumns(cols.filter((c: any) => c.show === undefined || c.show === true))
+								}}
+								downloadData={downloadData}
+							/>
+						</Grid>
+					: null }
+					{ downloadData !== undefined ?
+						<Grid item xs={3}>
+							<DownloadButton onClick={(downloadData)}>Descargar Excel</DownloadButton>
+						</Grid> : null
+					}
+				</Grid>
+				<Grid item style={{ width: "100%", overflowX: "auto" }}>
+					<TableContainer>
+						<Table stickyHeader>
+							<TableHead>
+								<TableRow>
+									{selectableRows ? <TableCell style={{ minWidth: '50px' }} key={'select'}>
+										<Checkbox
+											color="secondary"
+											checked={functions.arrayContains(selectedIds, props.data.map((row: any) => row.id))}
+											onChange={e => {
+												if (props.onSelectedIds){
+													props.data.map((row: any) => props.onSelectedIds(row.id, e.target.checked))
+												}
+											}}
+										/>
+									</TableCell> : null }
+									{visibleColumns.map((column) => (
+										<TableCell style={{ minWidth: '200px' }} key={column.dataField}>
+											{ column.sort === false ? getCell(column) : 
+												<Grid container direction="row" spacing={2}>
+													{ getCell(column) }
+													<Grid item xs>
+														<TableSortLabel
+															active={orderBy === column.dataField}
+															direction={orderBy === column.dataField ? order : 'asc'}
+															onClick={createSortHandler(column.dataField)}
+															classes={{
+																icon: classes.sortLabelIcon,
+																active: classes.sortLabelIcon
+															}}
+														/>
+													</Grid>
 												</Grid>
-											</Grid>
-										}
-									</TableCell>
-								))}
-							</TableRow>
-						</TableHead>
-						<TableBody>
-						{
-							props.data.map((row:any) => (
-								<TableRow hover key={row.id}>
-									{ getRowData(row) }
+											}
+										</TableCell>
+									))}
 								</TableRow>
-							))
-						}
-						</TableBody>
-						
-					</Table>
-				</TableContainer>
-				<TablePagination
-					rowsPerPageOptions={[5, 10, 25]}
-					component="div"
-					count={props.total}
-					page={page}
-					rowsPerPage={pageSize}
-					onPageChange={handlePageChange}
-					onRowsPerPageChange={handlePageSizeChange}
-					ActionsComponent={TablePaginationActions}
-				/>
+							</TableHead>
+							<TableBody>
+							{
+								props.data.map((row:any) => (
+									<TableRow hover key={row.id}>
+										{ getRowData(row) }
+									</TableRow>
+								))
+							}
+							</TableBody>
+							
+						</Table>
+					</TableContainer>
+					<TablePagination
+						rowsPerPageOptions={[5, 10, 25]}
+						component="div"
+						count={props.total}
+						page={page}
+						rowsPerPage={pageSize}
+						onPageChange={handlePageChange}
+						onRowsPerPageChange={handlePageSizeChange}
+						ActionsComponent={TablePaginationActions}
+					/>
+				</Grid>
 			</Grid>
-		</Grid>
+		}
+		</div>
 	)
 }
 
-export default withTheme(CustomTable)
+function mapStateToProps(state: any) {
+	return {
+        loading: state.api_reducer.loading
+    };
+}
+
+
+export default connect(
+	mapStateToProps
+)(withTheme(CustomTable))
+
+// export default withTheme(CustomTable)

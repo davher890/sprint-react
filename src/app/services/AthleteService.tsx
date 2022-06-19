@@ -50,8 +50,3 @@ export const downloadExcel = (columns: any, filters: any, endpoint: string = "/a
     
     return postExcelRequest(endpoint + filtersParams, columns, 'athletes.xlsx')
 }
-
-// Sportdata
-export const addAthleteSportdata = (body: any) => {
-    return postRequest("/sportdata", body)
-}

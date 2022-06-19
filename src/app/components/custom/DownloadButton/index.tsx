@@ -11,7 +11,6 @@ const DownloadButton: React.FC<any> = (props) => {
 	return (
 	<div> { props.loading ? <Spinner/> : 
 		<Button color={props.color || "secondary"} {...props} onClick={() => {
-				props.apiCall();
 				props.onClick();
 			}}>
 			<Icon />{props.children || 'Descargar'}
@@ -28,11 +27,6 @@ function mapStateToProps(state: any) {
     };
 }
 
-const mapDispatchToProps = {
-    apiCall
-}
-
 export default connect(
-	mapStateToProps,
-	mapDispatchToProps
+	mapStateToProps
 )(DownloadButton);
