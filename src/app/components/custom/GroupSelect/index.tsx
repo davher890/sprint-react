@@ -23,12 +23,11 @@ class GroupSelect extends React.Component<any, any> {
             this.setState({
                 sportSchoolId: this.props.sportSchoolId.toString()
             })
-            this.props.getSportSchoolGroups(this.props.sportSchoolId, true)
-            this.props.getSportSchoolGroups(this.props.sportSchoolId, false)
+            this.props.getSportSchoolGroups(this.props.sportSchoolId)
         }
         if (this.props.groupId !== prevProps.groupId){
             this.setState({
-                groupId: this.props.groupId.toString()
+                groupId: this.props.groupId
             })
         }
     }
@@ -42,29 +41,39 @@ class GroupSelect extends React.Component<any, any> {
         }
     }
 
+    getGroups = (specialization: boolean) =>{
+        return this.props.groups.filter((gr: any) => {
+            return gr.specialization === specialization
+        })
+    }
+
     render() {
         return (
             <Grid container direction="row" spacing={2}>
+                { this.getGroups(true).length > 0 ?
                 <Grid item xs>
                     <RadioList title="Especialización"
                         disabled={this.props.disabled || false}
-                        options={this.props.specialization_groups}
+                        options={this.getGroups(true)}
                         value={this.state.groupId}
                         onChange={(value: number) => {
                             this.groupOnChange(value, true)
                         }}
                     />
                 </Grid>
+                : null }
+                { this.getGroups(false).length > 0 ?
                 <Grid item xs>
                     <RadioList title="No especialización"
                         disabled={this.props.disabled || false}
-                        options={this.props.not_specialization_groups}
+                        options={this.getGroups(false)}
                         value={this.state.groupId}
                         onChange={(value: number) => {
                             this.groupOnChange(value, false)
                         }}
                     />
                 </Grid>
+                : null }
             </Grid>
         )
     }
@@ -76,8 +85,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: any) => {
     return {
-        specialization_groups: state.group_reducer.specialization_groups,
-        not_specialization_groups: state.group_reducer.not_specialization_groups,
+        groups: state.group_reducer.groups
     };
 };
 

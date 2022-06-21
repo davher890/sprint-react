@@ -9,14 +9,6 @@ export const findById = (id: number) => {
     return getRequest("/groups/" + id)
 }
 
-export const findSpecializationGroups = () => {
-    return getRequest("/groups/all?specialization=true")
-}
-
-export const findNotSpecializationGroups = () => {
-    return getRequest("/groups/all?specialization=false")
-}
-
 export const findGroupSchedules = (id: number) => {
     return getRequest("/groups/" + id + "/schedules")
 }

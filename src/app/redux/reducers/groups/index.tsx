@@ -24,7 +24,7 @@ function rootReducer(state = initialState, action: { type: string, payload: any,
             groups: action.payload
         }
     }
-    else if (action.type === ACTION_TYPES.SPORT_SCHOOL_GROUPS) {
+    else if (action.type === ACTION_TYPES.GET_SPORT_SCHOOL_GROUPS) {
         let sportSchoolGroups:any = state.sport_schools_groups
         sportSchoolGroups["sport_school_" + action.sport_school_id] = action.payload
         return {
@@ -32,18 +32,6 @@ function rootReducer(state = initialState, action: { type: string, payload: any,
             groups: action.payload,
             sport_schools_groups: sportSchoolGroups
         }
-    }
-    else if (action.type === ACTION_TYPES.SPECIALIZATION_GROUPS) {
-        return {
-            ...state,
-            specialization_groups: action.payload
-        };
-    }
-    else if (action.type === ACTION_TYPES.NOT_SPECIALIZATION_GROUPS) {
-        return {
-            ...state,
-            not_specialization_groups: action.payload
-        };
     }
     else if (action.type === ACTION_TYPES.GROUP_SCHEDULES) {
         return {

@@ -38,16 +38,11 @@ export function getSportSchool(id: number) {
     }
 }
 
-export function getSportSchoolGroups(id: number, specialization: boolean) {
+export function getSportSchoolGroups(id: number) {
     return function (dispatch: any)  {
-        return findSportSchoolGroups(id, specialization)
+        return findSportSchoolGroups(id)
             .then(json => { 
-                if (specialization == null){
-                    dispatch({ type: ACTION_TYPES.SPORT_SCHOOL_GROUPS, payload: json, sport_school_id: id })
-                }
-                else {
-                    dispatch({ type: specialization ? ACTION_TYPES.SPECIALIZATION_GROUPS : ACTION_TYPES.NOT_SPECIALIZATION_GROUPS, payload: json }); 
-                }
+                dispatch({ type: ACTION_TYPES.GET_SPORT_SCHOOL_GROUPS, payload: json, sport_school_id: id })
             })
     }
 }

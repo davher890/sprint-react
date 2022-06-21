@@ -9,6 +9,10 @@ export const isAdmin = (): boolean => {
     return sessionStorage.getItem('is_admin') === 'true'
 }
 
+export const isManager = (): boolean => {
+    return sessionStorage.getItem('is_manager') === 'true'
+}
+
 export const getUserId = (): number => {
     return +(sessionStorage.getItem('user_id') || 0 )
 }

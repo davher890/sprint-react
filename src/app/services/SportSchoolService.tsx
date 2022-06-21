@@ -13,12 +13,8 @@ export const findById = (id: number) => {
     return getRequest("/sport_schools/" + id)
 }
 
-export const findSportSchoolGroups = (id: number, specialization: boolean) => {
-    let endpoint = "/sport_schools/" + id + "/groups"
-    if (specialization !== undefined){
-        endpoint = endpoint + "?specialization=" + specialization
-    }
-    return getRequest(endpoint)
+export const findSportSchoolGroups = (id: number) => {
+    return getRequest("/sport_schools/" + id + "/groups")
 }
 
 export const findSportSchoolTrainers = (id: number) => {

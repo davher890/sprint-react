@@ -20,7 +20,6 @@ import GroupSwap from './components/groups/GroupSwap';
 import FamilyTable from './components/families/FamilyTable';
 import FamilyData from './components/families/FamilyData';
 import Login from './components/login';
-import AdminPage from './components/admin';
 
 import CustomAppBar from './components/custom/AppBar'
 
@@ -38,7 +37,6 @@ const AppBar: React.FC<any> = (props) => {
     <Router>
         <Routes>
           <Route path="/login" element={<Login/>}/>
-          <Route path="/admin" element={<Protected isAuthenticated={isAuthenticated()}><AdminPage isAdmin={isAdmin()}/></Protected>}/>
           <Route path="/admin/users/:id" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><UserData /></Box></Protected>}/>
           <Route path="/admin/users/list" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><UserTable /></Box></Protected>}/>
           <Route path="/users/me" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><UserData /></Box></Protected>}/>

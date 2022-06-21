@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { Formik } from 'formik';
 
-import { Grid, Snackbar, AppBar, Toolbar, Box, Button } from "@material-ui/core";
+import { Grid, Snackbar, AppBar, Toolbar, Box, Button, Checkbox } from "@material-ui/core";
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
 
@@ -18,7 +18,7 @@ import { getAllSportSchools, getSportSchoolGroups } from "../../redux/actions/sp
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
 
-import { getUserId, isAdmin } from "../../services/LoginService";
+import { getUserId, isAdmin, isManager } from "../../services/LoginService";
 
 class ConnectedForm extends React.Component<any, any> {
     constructor(props: any) {
@@ -54,6 +54,7 @@ class ConnectedForm extends React.Component<any, any> {
                         sportSchoolIds: this.props.user.sportSchoolIds || [],
                         groupIds: this.props.user.groupIds || [],
                         admin: this.props.user.admin || false,
+                        manager: this.props.user.manager || false,
 
                         openChangePassword: false,
                         oldPassword: this.props.user.oldPassword,
@@ -147,7 +148,29 @@ class ConnectedForm extends React.Component<any, any> {
                                             </Grid>
                                         </Card>
                                     </Grid>
+                                    { isAdmin() || isManager() ?
+                                        <Grid item xs={3}>
+                                            <Checkbox name="manager" checked={values.manager === true} 
+                                                onChange={e => {
+                                                    setFieldValue('manager', e.target.checked)
+                                                }}
+                                            />
+                                            Manager
+                                        </Grid>
+                                        : null
+                                    }
                                     { isAdmin() ?
+                                        <Grid item xs={3}>
+                                            <Checkbox name="admin" checked={values.admin === true} 
+                                                onChange={e => {
+                                                    setFieldValue('admin', e.target.checked)
+                                                }}
+                                            />
+                                            Admin
+                                        </Grid>
+                                        : null
+                                    }
+                                    { isAdmin() || isManager() ?
                                             <Grid item xs>
                                                 <SportSchoolMultiSelect 
                                                     sportSchools={this.props.sportSchools}
@@ -160,7 +183,7 @@ class ConnectedForm extends React.Component<any, any> {
                                             </Grid>
                                         : null }
                                 </Grid>
-                                { isAdmin() ?
+                                { isAdmin() || isManager()?
                                 <Grid container item direction="row" spacing={3}>
                                     {values.sportSchoolIds.map((id:number) => {
                                         return <GroupMultiSelect

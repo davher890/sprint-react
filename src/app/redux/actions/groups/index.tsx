@@ -2,7 +2,7 @@ import * as ACTION_TYPES from "../../constants/action_types";
 
 import { Order } from '../../../types/order'
 
-import { findSpecializationGroups, findNotSpecializationGroups, findGroupSchedules, downloadGroupSchedulesExcel, addData, findById, findGroupAttendance, deleteGroup, findGroupAthletes, swapGroupsAthletes, swapGroupAthletes } from "../../../services/GroupService"
+import { findGroupSchedules, downloadGroupSchedulesExcel, addData, findById, findGroupAttendance, deleteGroup, findGroupAthletes, swapGroupsAthletes, swapGroupAthletes } from "../../../services/GroupService"
 import { findGroupDataPagination, findGroupAthletesDataPagination } from "../../../services/TableService"
 
 export function getGroupTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
@@ -39,14 +39,6 @@ export function downloadGroupAttendance(groupId: number, month: number, sportSch
         return findGroupAttendance(groupId, month, sportSchoolId).then(json => {
             dispatch({ type: ACTION_TYPES.DOWNLOAD_GROUP_ATTENDANCE, payload: json });
         });
-    }
-}
-
-export function getGroups(sportSchoolId: number, specialization: boolean) {
-    return function (dispatch: any)  {
-        return specialization ?
-            findSpecializationGroups().then(json => { dispatch({ type: ACTION_TYPES.SPECIALIZATION_GROUPS, payload: json }); })
-            : findNotSpecializationGroups().then(json => { dispatch({ type: ACTION_TYPES.NOT_SPECIALIZATION_GROUPS, payload: json }); });
     }
 }
 
