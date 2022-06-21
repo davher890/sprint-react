@@ -185,7 +185,9 @@ class AthleteSportdata extends React.Component<any, any> {
                                         </Grid>
                                         <Grid item xs={3}>
                                             <DeleteButton color="secondary" 
-                                                onClick={() => {this.props.deleteSportdata(values.id)}}>Borrar</DeleteButton>
+                                                onClick={() => {this.props.deleteSportdata(values.id).then(() => {
+                                                    this.props.getAthleteTableSportdataTable(this.state.athleteId);
+                                                })}}>Borrar</DeleteButton>
                                         </Grid>
                                     </Grid>
                                 </Grid>

@@ -33,8 +33,8 @@ const GroupAttendante: React.FC<any> = (props) => {
 
     return (
         <CustomCard>
-            <Grid container>
-                <Grid container item direction="column" xs>
+            <Grid container spacing={3}>
+                <Grid container item direction="column" xs={2}>
                     <Grid item xs>
                         <SportSchoolSelect sportSchoolId={sportSchoolId}
                             onChange={(sportSchoolId: number) => {

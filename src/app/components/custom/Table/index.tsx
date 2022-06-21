@@ -308,5 +308,3 @@ function mapStateToProps(state: any) {
 export default connect(
 	mapStateToProps
 )(withTheme(CustomTable))
-
-// export default withTheme(CustomTable)
