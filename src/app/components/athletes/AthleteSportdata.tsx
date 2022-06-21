@@ -2,7 +2,8 @@ import * as React from "react"
 
 import { Grid } from '@material-ui/core';
 
-import Button from '../custom/SaveButton'
+import SaveButton from '../custom/SaveButton'
+import DeleteButton from '../custom/DeleteButton'
 import Table from "../custom/Table";
 import TextField from "../custom/TextField"
 import Utils from "../../utils/TableUtils";
@@ -10,7 +11,9 @@ import Utils from "../../utils/TableUtils";
 import { Formik } from 'formik';
 
 import { connect } from "react-redux";
-import { getAthleteTableSportdataTable, addSportdata } from "../../redux/actions/athletes";
+import { getAthleteTableSportdataTable } from "../../redux/actions/athletes";
+import { addSportdata } from "../../redux/actions/sportdata";
+import { deleteSportdata } from "../../redux/actions/sportdata";
 
 class AthleteSportdata extends React.Component<any, any> {
 
@@ -49,7 +52,9 @@ class AthleteSportdata extends React.Component<any, any> {
             technicalLevel: row.technicalLevel,
             motivations: row.motivations,
             outstandingResults: row.outstandingResults,
-            injuries: row.injuries
+            injuries: row.injuries,
+            observations: row.observations,
+            num_competitions: row.num_competitions
         })
     }
 
@@ -64,7 +69,9 @@ class AthleteSportdata extends React.Component<any, any> {
             technicalLevel: '',
             motivations: '',
             outstandingResults: '',
-            injuries: ''
+            injuries: '',
+            observations: '',
+            num_competitions: ''
         })
     }
 
@@ -96,7 +103,9 @@ class AthleteSportdata extends React.Component<any, any> {
                             technicalLevel: this.state.technicalLevel || '',
                             motivations: this.state.motivations || '',
                             outstandingResults: this.state.outstandingResults || '',
-                            injuries: this.state.injuries || ''
+                            injuries: this.state.injuries || '',
+                            observations: this.state.observations || '',
+                            num_competitions: this.state.num_competitions || ''
                         }}
                         validate={(values) => {
                             let errors: any = {};
@@ -108,6 +117,8 @@ class AthleteSportdata extends React.Component<any, any> {
                             if (values.motivations === '') errors.motivations = true;
                             if (values.outstandingResults === '') errors.outstandingResults = true;
                             if (values.injuries === '') errors.injuries = true;
+                            if (values.observations === '') errors.observations = true
+                            if (values.num_competitions === '') errors.num_competitions = true
 
                             //check if my values have errors
                             return errors;
@@ -121,50 +132,65 @@ class AthleteSportdata extends React.Component<any, any> {
                         {({ handleSubmit, values, touched, setFieldValue, errors, handleChange }) => (
 
                             <form onSubmit={handleSubmit}>
-                                {/* <CustomCard> */}
-                                    <Grid container direction="column" spacing={5}>
-                                        <Grid container item spacing={1}>
-                                            <Grid item xs>
-                                                <TextField name="season" label="Temporada" value={values.season} type="number"
-                                                    error={touched.season && errors.season} onChange={handleChange} />
-                                            </Grid>
-                                            <Grid item xs>
-                                                <TextField name="attitude" label="Actitud" value={values.attitude}
-                                                    error={touched.attitude && errors.attitude} onChange={handleChange} />
-                                            </Grid>
-                                            <Grid item xs>
-                                                <TextField name="implication" label="Implicación" value={values.implication}
-                                                    error={touched.implication && errors.implication} onChange={handleChange} />
-                                            </Grid>
-                                            <Grid item xs>
-                                                <TextField name="technicalLevel" label="Nivel técnico" value={values.technicalLevel}
-                                                    error={touched.technicalLevel && errors.technicalLevel} onChange={handleChange} />
-                                            </Grid>
+                                <Grid container direction="column" spacing={2}>
+                                    <Grid container item spacing={1}>
+                                        <Grid item xs>
+                                            <TextField name="season" label="Temporada" value={values.season} type="number"
+                                                error={touched.season && errors.season} onChange={handleChange} />
                                         </Grid>
-                                        <Grid container item spacing={1}>
-                                            <Grid item xs={3}>
-                                                <TextField name="motivations" label="Motivaciones" value={values.motivations}
-                                                    error={touched.motivations && errors.motivations} onChange={handleChange} />
-                                            </Grid>
-                                            <Grid item xs={3}>
-                                                <TextField name="outstandingResults" label="Resultados destacados" value={values.outstandingResults}
-                                                    error={touched.outstandingResults && errors.outstandingResults} onChange={handleChange} />
-                                            </Grid>
-                                            <Grid item xs={3}>
-                                                <TextField name="injuries" label="Lesiones" value={values.injuries}
-                                                    error={touched.injuries && errors.injuries} onChange={handleChange} />
-                                            </Grid>
+                                        <Grid item xs>
+                                            <TextField name="attitude" label="Actitud" value={values.attitude}
+                                                error={touched.attitude && errors.attitude} onChange={handleChange} />
                                         </Grid>
-                                        <Grid container spacing={1}>
-                                            <Grid item xs={3}>
-                                                <Button type="submit"/>
-                                            </Grid>
-                                            <Grid item xs={3}>
-                                                <Button text="Reset" color="secondary" onClick={this.cleanForm}/>
-                                            </Grid>
+                                        <Grid item xs>
+                                            <TextField name="implication" label="Implicación" value={values.implication}
+                                                error={touched.implication && errors.implication} onChange={handleChange} />
+                                        </Grid>
+                                        <Grid item xs>
+                                            <TextField name="technicalLevel" label="Nivel técnico" value={values.technicalLevel}
+                                                error={touched.technicalLevel && errors.technicalLevel} onChange={handleChange} />
                                         </Grid>
                                     </Grid>
-                                {/* </CustomCard> */}
+                                    <Grid container item spacing={1}>
+                                        <Grid item xs={3}>
+                                            <TextField name="motivations" label="Motivaciones" value={values.motivations}
+                                                error={touched.motivations && errors.motivations} onChange={handleChange} />
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <TextField name="outstandingResults" label="Resultados destacados" value={values.outstandingResults}
+                                                error={touched.outstandingResults && errors.outstandingResults} onChange={handleChange} />
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <TextField name="injuries" label="Lesiones" value={values.injuries}
+                                                error={touched.injuries && errors.injuries} onChange={handleChange} />
+                                        </Grid>
+                                        
+                                    </Grid>
+                                    <Grid container item spacing={1}>
+                                        <Grid item xs>
+                                            <TextField name="num_competitions" label="Competiciones en la temporada" value={values.num_competitions}
+                                                error={touched.num_competitions && errors.num_competitions} onChange={handleChange} />
+                                        </Grid>
+                                        <Grid item xs>
+                                            <TextField name="observations" label="Observaciones" value={values.observations}
+                                                error={touched.observations && errors.observations} onChange={handleChange} />
+                                        </Grid>
+                                    </Grid>
+                                    <Grid container spacing={1}>
+                                        <Grid item xs={3}>
+                                            <SaveButton type="submit"/>
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <DeleteButton color="secondary" onClick={this.cleanForm}>Reset</DeleteButton>
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <DeleteButton color="secondary" 
+                                                onClick={() => {this.props.deleteSportdata(values.id).then(() => {
+                                                    this.props.getAthleteTableSportdataTable(this.state.athleteId);
+                                                })}}>Borrar</DeleteButton>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
                             </form>
                         )}
                     </Formik>
@@ -185,7 +211,9 @@ function mapStateToProps(state: any) {
 }
 
 const mapDispatchToProps = {
-    getAthleteTableSportdataTable, addSportdata
+    getAthleteTableSportdataTable, 
+    addSportdata,
+    deleteSportdata
 }
 
 export default connect(

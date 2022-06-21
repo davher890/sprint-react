@@ -7,6 +7,7 @@ import { Order } from '../../../types/order'
 
 export function getSportSchoolTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
     return function (dispatch: any)  {
+        dispatch({ type: ACTION_TYPES.API_CALL})
         return findSportSchoolDataPagination(page, size, filters, sort, sortDirection).then(json => {
             dispatch({ type: ACTION_TYPES.LOAD_SPORTSCHOOL_TABLE, payload: json });
         });
@@ -37,10 +38,12 @@ export function getSportSchool(id: number) {
     }
 }
 
-export function getSportSchoolGroups(id: number, specialization: boolean) {
+export function getSportSchoolGroups(id: number) {
     return function (dispatch: any)  {
-        return findSportSchoolGroups(id, specialization)
-            .then(json => { dispatch({ type: specialization ? ACTION_TYPES.SPECIALIZATION_GROUPS : ACTION_TYPES.NOT_SPECIALIZATION_GROUPS, payload: json }); })
+        return findSportSchoolGroups(id)
+            .then(json => { 
+                dispatch({ type: ACTION_TYPES.GET_SPORT_SCHOOL_GROUPS, payload: json, sport_school_id: id })
+            })
     }
 }
 
@@ -53,6 +56,7 @@ export function getSportSchoolTrainers(id: number) {
 
 export function downloadSportSchools(columns: any, filters:any) {
     return function (dispatch: any)  {
+        dispatch({ type: ACTION_TYPES.API_CALL})
         return downloadExcel(columns, filters, "/sport_schools/excel").then(json => {
             dispatch({ type: ACTION_TYPES.DOWNLOAD_SPORTSCHOOLS, payload: json });
         });

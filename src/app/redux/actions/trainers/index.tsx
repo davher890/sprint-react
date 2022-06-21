@@ -15,6 +15,7 @@ export function getAllTrainers() {
 
 export function getTrainerTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
     return function (dispatch: any)  {
+        dispatch({ type: ACTION_TYPES.API_CALL})
         return findTrainerDataPagination(page, size, filters, sort, sortDirection).then(json => {
             dispatch({ type: ACTION_TYPES.LOAD_TRAINER_TABLE, payload: json });
         });
@@ -31,6 +32,7 @@ export function getTrainer(id: number) {
 
 export function downloadTrainers(columns: any) {
     return function (dispatch: any) {
+        dispatch({ type: ACTION_TYPES.API_CALL})
         return downloadExcel(columns).then(json => {
             dispatch({ type: ACTION_TYPES.DOWNLOAD_TRAINERS, payload: json });
         });

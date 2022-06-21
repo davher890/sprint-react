@@ -20,16 +20,14 @@ import GroupSwap from './components/groups/GroupSwap';
 import FamilyTable from './components/families/FamilyTable';
 import FamilyData from './components/families/FamilyData';
 import Login from './components/login';
-import AdminPage from './components/admin';
 
 import CustomAppBar from './components/custom/AppBar'
 
 import GroupAthletesTable from './components/listings/GroupAthletesTable';
 import GroupAttendance from './components/listings/GroupAttendance';
 import { Box } from '@material-ui/core';
-import Protected from "./components/custom/Protected";
-
-import { isAdmin, isAuthenticated } from "./services/LoginService";
+import AuthenticatedProtected from "./components/custom/AuthenticatedProtected";
+import AdminProtected from "./components/custom/AdminProtected";
 
 
 const AppBar: React.FC<any> = (props) => {
@@ -38,33 +36,33 @@ const AppBar: React.FC<any> = (props) => {
     <Router>
         <Routes>
           <Route path="/login" element={<Login/>}/>
-          <Route path="/admin" element={<Protected isAuthenticated={isAuthenticated()}><AdminPage isAdmin={isAdmin()}/></Protected>}/>
-          <Route path="/admin/users/:id" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><UserData /></Box></Protected>}/>
-          <Route path="/users/me" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><UserData /></Box></Protected>}/>
-          <Route path="/sport_schools/list" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><SportSchoolTable/></Box></Protected>}/>
-          <Route path="/sport_schools/:id" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><SportSchoolData/></Box></Protected>}/>
-          <Route path="/sport_schools" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><SportSchoolData/></Box></Protected>}/>
-          <Route path="/families/list" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><FamilyTable/></Box></Protected>}/>
-          <Route path="/families/:id" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><FamilyData/></Box></Protected>}/>
-          <Route path="/families" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><FamilyData/></Box></Protected>}/>
-          <Route path="/athletes/list" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><AthleteTable/></Box></Protected>}/>
-          <Route path="/athletes/:id/historic" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><AthleteData/></Box></Protected>} />
-          <Route path="/athletes/:id/sport_data" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><AthleteSportdata/></Box></Protected>} />
-          <Route path="/athletes/historic" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><HistoricTable/></Box></Protected>} />
-          <Route path="/athletes/:id" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><AthleteData/></Box></Protected>} />
-          <Route path="/athletes" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><AthleteData/></Box></Protected>} />
-          <Route path="/groups/attendance" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><GroupAttendance/></Box></Protected>}/>
-          <Route path="/groups/athletes" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><GroupAthletesTable/></Box></Protected>}/>
-          <Route path="/groups/swap" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><GroupSwap/></Box></Protected>}/>
-          <Route path="/groups/list" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><GroupTable/></Box></Protected>}/>
-          <Route path="/groups/:id" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><GroupData/></Box></Protected>}/>
-          <Route path="/groups" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><GroupData/></Box></Protected>} />
-          <Route path="/schedules/list" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><ScheduleTable/></Box></Protected>}/>
-          <Route path="/schedules/:id" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><ScheduleData/></Box></Protected>}/>
-          <Route path="/schedules" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><ScheduleData/></Box></Protected>}/>
-          <Route path="/trainers/list" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><TrainerTable/></Box></Protected>}/>
-          <Route path="/trainers/:id" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><TrainerData/></Box></Protected>}/>
-          <Route path="/trainers" element={<Protected isAuthenticated={isAuthenticated()}><CustomAppBar/><Box m="2%" display="flex"><TrainerData/></Box></Protected>}/>
+          <Route path="/admin/users/:id" element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><UserData /></Box></AuthenticatedProtected></AdminProtected>}/>
+          <Route path="/admin/users/list" element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><UserTable /></Box></AuthenticatedProtected></AdminProtected>}/>
+          <Route path="/users/me" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><UserData /></Box></AuthenticatedProtected>}/>
+          <Route path="/sport_schools/list" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><SportSchoolTable/></Box></AuthenticatedProtected>}/>
+          <Route path="/sport_schools/:id" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><SportSchoolData/></Box></AuthenticatedProtected>}/>
+          <Route path="/sport_schools" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><SportSchoolData/></Box></AuthenticatedProtected>}/>
+          <Route path="/families/list" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><FamilyTable/></Box></AuthenticatedProtected>}/>
+          <Route path="/families/:id" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><FamilyData/></Box></AuthenticatedProtected>}/>
+          <Route path="/families" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><FamilyData/></Box></AuthenticatedProtected>}/>
+          <Route path="/athletes/list" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><AthleteTable/></Box></AuthenticatedProtected>}/>
+          <Route path="/athletes/:id/historic" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><AthleteData/></Box></AuthenticatedProtected>} />
+          <Route path="/athletes/:id/sport_data" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><AthleteSportdata/></Box></AuthenticatedProtected>} />
+          <Route path="/athletes/historic" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><HistoricTable/></Box></AuthenticatedProtected>} />
+          <Route path="/athletes/:id" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><AthleteData/></Box></AuthenticatedProtected>} />
+          <Route path="/athletes" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><AthleteData/></Box></AuthenticatedProtected>} />
+          <Route path="/groups/attendance" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><GroupAttendance/></Box></AuthenticatedProtected>}/>
+          <Route path="/groups/athletes" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><GroupAthletesTable/></Box></AuthenticatedProtected>}/>
+          <Route path="/groups/swap" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><GroupSwap/></Box></AuthenticatedProtected>}/>
+          <Route path="/groups/list" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><GroupTable/></Box></AuthenticatedProtected>}/>
+          <Route path="/groups/:id" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><GroupData/></Box></AuthenticatedProtected>}/>
+          <Route path="/groups" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><GroupData/></Box></AuthenticatedProtected>} />
+          <Route path="/schedules/list" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ScheduleTable/></Box></AuthenticatedProtected>}/>
+          <Route path="/schedules/:id" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ScheduleData/></Box></AuthenticatedProtected>}/>
+          <Route path="/schedules" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ScheduleData/></Box></AuthenticatedProtected>}/>
+          <Route path="/trainers/list" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><TrainerTable/></Box></AuthenticatedProtected>}/>
+          <Route path="/trainers/:id" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><TrainerData/></Box></AuthenticatedProtected>}/>
+          <Route path="/trainers" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><TrainerData/></Box></AuthenticatedProtected>}/>
           </Routes>
       
     </Router>

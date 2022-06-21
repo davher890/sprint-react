@@ -28,13 +28,13 @@ const GroupAttendante: React.FC<any> = (props) => {
     const [sportSchoolId, setsportSchoolId] = useState<number>(0)
 
 	const handleFormSubmit = () => {
-        props.downloadGroupAttendance(groupId, month)
+        props.downloadGroupAttendance(groupId, month, sportSchoolId)
     }
 
     return (
         <CustomCard>
-            <Grid container>
-                <Grid container item direction="column" xs>
+            <Grid container spacing={3}>
+                <Grid container item direction="column" xs={2}>
                     <Grid item xs>
                         <SportSchoolSelect sportSchoolId={sportSchoolId}
                             onChange={(sportSchoolId: number) => {

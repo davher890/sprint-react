@@ -1,4 +1,4 @@
-import { LOAD_USER_TABLE, ADD_USER, GET_USER, CURRENT_USER_ID } from "../../constants/action_types";
+import { LOAD_USER_TABLE, ADD_USER, GET_USER, CURRENT_USER_ID, API_CALL } from "../../constants/action_types";
 
 import { findUserDataPagination } from "../../../services/TableService"
 import { addData, changePassword, findById } from "../../../services/UserService"
@@ -8,6 +8,7 @@ import { Order } from '../../../types/order'
 
 export function getUserTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
     return function (dispatch: any)  {
+        dispatch({ type: API_CALL})
         return findUserDataPagination(page, size, filters, sort, sortDirection).then(json => {
             dispatch({ type: LOAD_USER_TABLE, payload: json });
         });

@@ -40,10 +40,10 @@ class GroupAthletesTable extends React.Component<any, any> {
 
 	render() {
 		return (
-            <Grid container direction="column" spacing={2}>
+            <Grid container direction="column" spacing={3}>
                 <Grid item xs>
                     <CustomCard>
-                        <Grid container direction="column" spacing={1}>
+                        <Grid container direction="column" spacing={3}>
                             <Grid container item spacing={1}>
                                 <Grid item xs={2}>
                                     <SportSchoolSelect sportSchoolId={this.state.sportSchoolId}

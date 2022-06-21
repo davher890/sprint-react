@@ -2,7 +2,7 @@ import * as React from "react";
 import { AppBar, Toolbar, Menu, MenuItem, Typography, Link, IconButton } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
-import * as UserService from '../../../services/UserService'
+import * as LoginService from '../../../services/LoginService'
 
 const CustomAppBar: React.FC<any> = (props) => {
 
@@ -78,10 +78,12 @@ const CustomAppBar: React.FC<any> = (props) => {
                     <MenuItem><Link href="/groups/attendance">Asistencia</Link></MenuItem>
                     <MenuItem><Link href="/groups/athletes">Atletas-Grupos</Link></MenuItem>
                 </Menu>
+                { LoginService.isAdmin() || LoginService.isManager() ? 
+                    <Typography variant="button">
+                        <Link href="/admin/users/list" color="inherit">Usuarios</Link>
+                    </Typography>
+                 : null}
                 {/* <Typography variant="button">
-                    <Link href="/users/list" color="inherit">Usuarios</Link>
-                </Typography>
-                <Typography variant="button">
                     <Link href="/social" color="inherit">Red Social</Link>
                 </Typography> */}
                 <IconButton

@@ -9,6 +9,10 @@ export const isAdmin = (): boolean => {
     return sessionStorage.getItem('is_admin') === 'true'
 }
 
+export const isManager = (): boolean => {
+    return sessionStorage.getItem('is_manager') === 'true'
+}
+
 export const getUserId = (): number => {
     return +(sessionStorage.getItem('user_id') || 0 )
 }
@@ -20,7 +24,7 @@ export const signup = (email: string, password: string) => {
         if (lastUrl){
             window.open(lastUrl, "_self");
         } else {
-            window.open("/athletes", "_self");
+            window.open("/athletes/list", "_self");
         }
     })
 }

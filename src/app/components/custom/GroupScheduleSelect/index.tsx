@@ -66,7 +66,7 @@ class GroupScheduleSelect extends React.Component<any, any> {
 
     render() {
         return (
-            <Grid container direction="row" spacing={2}>
+            <Grid container item direction="row" spacing={2}>
                 <Grid item xs>
                     <GroupSelect
                         disabled={this.props.disabled || false}
@@ -77,7 +77,7 @@ class GroupScheduleSelect extends React.Component<any, any> {
                         }}
                     />
                 </Grid>
-                <Grid item xs>
+                <Grid item xs={3}>
                     <ScheduleSelect
                         disabled={this.props.disabled || false}
                         schedules={this.props.group_schedules}

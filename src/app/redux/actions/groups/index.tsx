@@ -2,11 +2,12 @@ import * as ACTION_TYPES from "../../constants/action_types";
 
 import { Order } from '../../../types/order'
 
-import { findAllGroups, findSpecializationGroups, findNotSpecializationGroups, findGroupSchedules, downloadGroupSchedulesExcel, addData, findById, findGroupAttendance, deleteGroup, findGroupAthletes, swapGroupsAthletes, swapGroupAthletes } from "../../../services/GroupService"
+import { findGroupSchedules, downloadGroupSchedulesExcel, addData, findById, findGroupAttendance, deleteGroup, findGroupAthletes, swapGroupsAthletes, swapGroupAthletes } from "../../../services/GroupService"
 import { findGroupDataPagination, findGroupAthletesDataPagination } from "../../../services/TableService"
 
 export function getGroupTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
     return function (dispatch: any) {
+        dispatch({ type: ACTION_TYPES.API_CALL})
         return findGroupDataPagination(page, size, filters, sort, sortDirection).then(json => {
             dispatch({ type: ACTION_TYPES.LOAD_GROUP_TABLE, payload: json });
         });
@@ -15,6 +16,7 @@ export function getGroupTable(page: number, size: number, filters: any, sort: st
 
 export function getGroupAthleteTable(groupId: number, scheduleIds: number[], page: number, size: number, filters: any, sort: string, sortDirection: Order) {
     return function (dispatch: any) {
+        dispatch({ type: ACTION_TYPES.API_CALL})
         return findGroupAthletesDataPagination(groupId, scheduleIds, page, size, filters, sort, sortDirection).then(json => {
             dispatch({ type: ACTION_TYPES.LOAD_GROUP_ATHLETES_TABLE, payload: json });
         });
@@ -23,6 +25,7 @@ export function getGroupAthleteTable(groupId: number, scheduleIds: number[], pag
 
 export function downloadGroupSchedulesAthletes(groupId: number, scheduleIds: number[], columns: any, filters:any) {
     return function (dispatch: any) {
+        dispatch({ type: ACTION_TYPES.API_CALL})
         return downloadGroupSchedulesExcel(groupId, scheduleIds, columns, filters).then(json => {
             dispatch({ type: ACTION_TYPES.DOWNLOAD_GROUP_ATHLETES, payload: json });
         });
@@ -30,26 +33,12 @@ export function downloadGroupSchedulesAthletes(groupId: number, scheduleIds: num
 }
 
 
-export function downloadGroupAttendance(groupId: number, month: number) {
+export function downloadGroupAttendance(groupId: number, month: number, sportSchoolId: number) {
     return function (dispatch: any)  {
-        return findGroupAttendance(groupId, month).then(json => {
+        dispatch({ type: ACTION_TYPES.API_CALL})
+        return findGroupAttendance(groupId, month, sportSchoolId).then(json => {
             dispatch({ type: ACTION_TYPES.DOWNLOAD_GROUP_ATTENDANCE, payload: json });
         });
-    }
-}
-
-
-export function getAllGroups() {
-    return function (dispatch: any)  {
-        return findAllGroups().then(json => { dispatch({ type: ACTION_TYPES.LOAD_GROUPS, payload: json }); });
-    }
-}
-
-export function getGroups(sportSchoolId: number, specialization: boolean) {
-    return function (dispatch: any)  {
-        return specialization ?
-            findSpecializationGroups().then(json => { dispatch({ type: ACTION_TYPES.SPECIALIZATION_GROUPS, payload: json }); })
-            : findNotSpecializationGroups().then(json => { dispatch({ type: ACTION_TYPES.NOT_SPECIALIZATION_GROUPS, payload: json }); });
     }
 }
 

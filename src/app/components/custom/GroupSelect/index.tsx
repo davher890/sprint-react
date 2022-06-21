@@ -8,66 +8,66 @@ import { Grid } from '@material-ui/core';
 import { connect } from "react-redux";
 import { getSportSchoolGroups } from "../../../redux/actions/sportSchools";
 
-class GroupSelect extends React.Component<any, any> {
+const GroupSelect: React.FC<any> = (props) => {
 
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            sportSchoolId: props.sportSchoolId,
-            groupId: props.groupId,
-        };
-    }
+    const [sportSchoolId, setSportSchoolId] = React.useState(props.sportSchoolId)
+    const [groupId, setGroupId] = React.useState(props.groupId)
 
-    componentDidUpdate = (prevProps: any) => {
-        if (this.props.sportSchoolId !== prevProps.sportSchoolId && this.props.sportSchoolId){
-            this.setState({
-                sportSchoolId: this.props.sportSchoolId.toString()
-            })
-            this.props.getSportSchoolGroups(this.props.sportSchoolId, true)
-            this.props.getSportSchoolGroups(this.props.sportSchoolId, false)
+    React.useEffect(() => {
+        if (sportSchoolId !== props.sportSchoolId){
+            setSportSchoolId(props.sportSchoolId)
+            props.getSportSchoolGroups(props.sportSchoolId)
         }
-        if (this.props.groupId !== prevProps.groupId){
-            this.setState({
-                groupId: this.props.groupId.toString()
-            })
+        if (groupId !== props.groupId){
+            console.log('new group id')
+            setGroupId(props.groupId)
         }
-    }
+    }, [props.sportSchoolId, props.groupId, sportSchoolId, groupId])
 
-    groupOnChange = (groupId: number, specialization: boolean) => {
-        if (this.props.onChange){
-            this.props.onChange(groupId, specialization)
+    const groupOnChange = (groupId: number, specialization: boolean) => {
+        if (props.onChange){
+            props.onChange(groupId, specialization)
         }
         else {
-            this.setState({ groupId: groupId })
+            setGroupId(groupId)
         }
     }
 
-    render() {
-        return (
-            <Grid container direction="row" spacing={2}>
-                <Grid item xs>
-                    <RadioList title="Especialización"
-                        disabled={this.props.disabled || false}
-                        options={this.props.specialization_groups}
-                        value={this.state.groupId}
-                        onChange={(value: number) => {
-                            this.groupOnChange(value, true)
-                        }}
-                    />
-                </Grid>
-                <Grid item xs>
-                    <RadioList title="No especialización"
-                        disabled={this.props.disabled || false}
-                        options={this.props.not_specialization_groups}
-                        value={this.state.groupId}
-                        onChange={(value: number) => {
-                            this.groupOnChange(value, false)
-                        }}
-                    />
-                </Grid>
-            </Grid>
-        )
+    const getGroups = (specialization: boolean) =>{
+        return props.groups.filter((gr: any) => {
+            return gr.specialization === specialization
+        })
     }
+    
+    return (
+        <Grid container direction="row" spacing={3}>
+            {/* { getGroups(true).length > 0 ? */}
+            <Grid item xs>
+                <RadioList title="Especialización"
+                    disabled={props.disabled || false}
+                    options={getGroups(true)}
+                    value={groupId}
+                    onChange={(value: number) => {
+                        groupOnChange(value, true)
+                    }}
+                />
+            </Grid>
+            {/* : null } */}
+            {/* { getGroups(false).length > 0 ? */}
+            <Grid item xs>
+                <RadioList title="No especialización"
+                    disabled={props.disabled || false}
+                    options={getGroups(false)}
+                    value={groupId}
+                    onChange={(value: number) => {
+                        groupOnChange(value, false)
+                    }}
+                />
+            </Grid>
+            {/* : null } */}
+        </Grid>
+    )
+
 }
 
 const mapDispatchToProps = {
@@ -76,8 +76,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: any) => {
     return {
-        specialization_groups: state.group_reducer.specialization_groups,
-        not_specialization_groups: state.group_reducer.not_specialization_groups,
+        groups: state.group_reducer.groups
     };
 };
 
