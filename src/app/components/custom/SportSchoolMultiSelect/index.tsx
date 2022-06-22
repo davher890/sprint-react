@@ -17,9 +17,9 @@ const SportSchoolMultiSelect: React.FC<any> = (props) => {
         }
     }, [props.sportSchools, props.sportSchoolIds, sportSchools, sportSchoolIds])
 
-    const onChange = (sportSchoolIds: number[]) => {
+    const onChange = (sportSchoolIds: number[], sportSchoolId: number, checked: boolean) => {
         if (props.onChange){
-            props.onChange(sportSchoolIds)
+            props.onChange(sportSchoolIds, sportSchoolId, checked)
         }
     }
 
@@ -43,7 +43,7 @@ const SportSchoolMultiSelect: React.FC<any> = (props) => {
                                                 const idx = sportSchoolIds.indexOf(sch.id);
                                                 sportSchoolIds.splice(idx, 1);
                                             }
-                                            onChange(sportSchoolIds)
+                                            onChange(sportSchoolIds, sch.id, e.target.checked)
                                         }}
                                     />
                                     {sch.name}

@@ -54,7 +54,7 @@ class AthleteSportdata extends React.Component<any, any> {
             outstandingResults: row.outstandingResults,
             injuries: row.injuries,
             observations: row.observations,
-            num_competitions: row.num_competitions
+            numCompetitions: row.numCompetitions
         })
     }
 
@@ -71,7 +71,7 @@ class AthleteSportdata extends React.Component<any, any> {
             outstandingResults: '',
             injuries: '',
             observations: '',
-            num_competitions: ''
+            numCompetitions: ''
         })
     }
 
@@ -105,7 +105,7 @@ class AthleteSportdata extends React.Component<any, any> {
                             outstandingResults: this.state.outstandingResults || '',
                             injuries: this.state.injuries || '',
                             observations: this.state.observations || '',
-                            num_competitions: this.state.num_competitions || ''
+                            numCompetitions: this.state.numCompetitions || ''
                         }}
                         validate={(values) => {
                             let errors: any = {};
@@ -118,7 +118,7 @@ class AthleteSportdata extends React.Component<any, any> {
                             if (values.outstandingResults === '') errors.outstandingResults = true;
                             if (values.injuries === '') errors.injuries = true;
                             if (values.observations === '') errors.observations = true
-                            if (values.num_competitions === '') errors.num_competitions = true
+                            if (values.numCompetitions === '') errors.numCompetitions = true
 
                             //check if my values have errors
                             return errors;
@@ -168,8 +168,8 @@ class AthleteSportdata extends React.Component<any, any> {
                                     </Grid>
                                     <Grid container item spacing={1}>
                                         <Grid item xs>
-                                            <TextField name="num_competitions" label="Competiciones en la temporada" value={values.num_competitions}
-                                                error={touched.num_competitions && errors.num_competitions} onChange={handleChange} />
+                                            <TextField name="numCompetitions" label="Competiciones en la temporada" value={values.numCompetitions}
+                                                error={touched.numCompetitions && errors.numCompetitions} onChange={handleChange} />
                                         </Grid>
                                         <Grid item xs>
                                             <TextField name="observations" label="Observaciones" value={values.observations}
