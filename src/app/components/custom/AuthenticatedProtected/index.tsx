@@ -4,7 +4,7 @@ import { isAuthenticated } from "../../../services/LoginService";
 
 const AuthenticatedProtected: React.FC<any> = (props) => {
     
-    if (!isAuthenticated) {
+    if (!isAuthenticated()) {
         return <Navigate to="/login" replace />;
     }
 

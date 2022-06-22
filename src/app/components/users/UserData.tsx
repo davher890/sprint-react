@@ -13,7 +13,7 @@ import SportSchoolMultiSelect from "../custom/SportSchoolMultiSelect";
 import GroupMultiSelect from "../custom/GroupMultiSelect";
 
 import { addUser, getUser, changeUserPassword } from "../../redux/actions/users";
-import { getAllSportSchools, getSportSchoolGroups } from "../../redux/actions/sportSchools";
+import { getAllSportSchools } from "../../redux/actions/sportSchools";
 
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
@@ -77,7 +77,9 @@ class ConnectedForm extends React.Component<any, any> {
                         this.handleFormSubmit()
                     }}
                 >
-                {({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, errors, isSubmitting }) => (
+                {({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, errors, isSubmitting }) => {
+
+                    return (
 
                     <form onSubmit={handleSubmit}>
                         <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
@@ -122,7 +124,6 @@ class ConnectedForm extends React.Component<any, any> {
                                 <Button 
                                     onClick={(a: any) => {
                                         this.props.changeUserPassword(values);
-                                        // setFieldValue('openChangePassword', false)
                                     }}
                                 >Guardar</Button>
                                 <Button 
@@ -144,11 +145,17 @@ class ConnectedForm extends React.Component<any, any> {
                                                     <TextField name="email" label="Email" value={values.email} onChange={handleChange}
                                                         error={touched.email && errors.email} />
                                                 </Grid>
+                                                { values.id === 0 ? 
+                                                    <Grid item xs>
+                                                        <TextField name="password" label="Contraseña" type="password" value={values.password} onChange={handleChange}
+                                                            error={touched.password && errors.password} />
+                                                    </Grid>
+                                                : null }
                                             </Grid>
                                         </Card>
                                     </Grid>
                                     { isAdmin() || isManager() ?
-                                        <Grid item xs={3}>
+                                        <Grid item xs={2}>
                                             <Checkbox name="manager" checked={values.manager === true} 
                                                 onChange={e => {
                                                     setFieldValue('manager', e.target.checked)
@@ -159,7 +166,7 @@ class ConnectedForm extends React.Component<any, any> {
                                         : null
                                     }
                                     { isAdmin() ?
-                                        <Grid item xs={3}>
+                                        <Grid item xs={2}>
                                             <Checkbox name="admin" checked={values.admin === true} 
                                                 onChange={e => {
                                                     setFieldValue('admin', e.target.checked)
@@ -176,7 +183,7 @@ class ConnectedForm extends React.Component<any, any> {
                                                     sportSchoolIds={values.sportSchoolIds}
                                                     onChange={(sportSchoolIds: number[]) => {
                                                         setFieldValue('sportSchoolIds', sportSchoolIds)
-                                                        setFieldTouched('sportSchoolIds', true, true)
+                                                        // setFieldTouched('sportSchoolIds', true, true)
                                                     }}
                                                 />
                                             </Grid>
@@ -184,25 +191,26 @@ class ConnectedForm extends React.Component<any, any> {
                                 </Grid>
                                 { isAdmin() || isManager()?
                                 <Grid container item direction="row" spacing={3}>
-                                    {values.sportSchoolIds.map((id:number) => {
+                                    {values.sportSchoolIds ? values.sportSchoolIds.map((id:number) => {
                                         return <GroupMultiSelect
                                             key={`sport_school_${id}`}
                                             sportSchool={this.props.sportSchools.find((sportSchool: any) => sportSchool.id === id )}
+                                            sportSchoolId={id}
                                             selectedGroupIds={values.groupIds}
                                             onChange={(selectedGroupIds: number[], groupId: number, checked: boolean) => {
-                                                let selectedIds = JSON.parse(JSON.stringify(values.groupIds))
-                                                if (checked){
-                                                    selectedIds.push(groupId)
-                                                }
-                                                else {
-                                                    const idx = selectedIds.indexOf(groupId);
-                                                    selectedIds.splice(idx, 1);
-                                                }
-                                                setFieldValue('groupIds', Array.from(new Set(selectedIds)))
+                                                // let selectedIds = JSON.parse(JSON.stringify(values.groupIds))
+                                                // if (checked){
+                                                //     selectedIds.push(groupId)
+                                                // }
+                                                // else {
+                                                //     const idx = selectedIds.indexOf(groupId);
+                                                //     selectedIds.splice(idx, 1);
+                                                // }
+                                                // setFieldValue('groupIds', Array.from(new Set(selectedIds)))
                                             }}
                                         />
                                         
-                                    })}
+                                    }) : null}
                                 </Grid>
                                 : null }
                             </Grid>
@@ -211,15 +219,18 @@ class ConnectedForm extends React.Component<any, any> {
                             <Toolbar>
                                 <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
                             </Toolbar>
-                            <Toolbar>
-                                <SaveButton onClick={() => {
-                                    setFieldValue("openChangePassword", true)
-                                }} >Cambiar contraseña</SaveButton>
-                            </Toolbar>
+                            { values.id > 0 ? 
+                                <Toolbar>
+                                    <SaveButton onClick={() => {
+                                        setFieldValue("openChangePassword", true)
+                                    }} >Cambiar contraseña</SaveButton>
+                                </Toolbar>
+                            : null }
                         </AppBar>
                     </form>
-                )}
-                </Formik>
+                )}}
+            </Formik>
+
             </React.Suspense>
         );
     }
@@ -230,14 +241,12 @@ const mapDispatchToProps = {
     getUser,
     getAllSportSchools,
     changeUserPassword,
-    getSportSchoolGroups
 }
 
 const mapStateToProps = (state: any) => {
     return { 
         user: state.user_reducer.user,
         sportSchools: state.sport_school_reducer.sport_schools,
-        groups: state.group_reducer.groups
     };
 };
 
@@ -245,10 +254,9 @@ const ConnectedComponent = connect(mapStateToProps, mapDispatchToProps)(Connecte
 
 const WithRouterWrapper = () => {
     let { id } = useParams()
-    if (!id){
+    if (id && id === 'me'){
         id = getUserId().toString()
     }
-
     return (
         <ConnectedComponent id={id}></ConnectedComponent>
     )
