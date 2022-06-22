@@ -90,126 +90,126 @@ class CreateAthlete extends React.Component<any, any> {
             <React.Suspense fallback={<div>Cargando...</div>}>
 
                 <Formik enableReinitialize
-                initialValues={{
-                    id: this.props.athlete.id || 0,
-                    code: this.props.athlete.code || 0,
-                    familyCode: this.props.athlete.familyCode || 0,
-                    historic: this.props.athlete.historic || [],
-                    // Extra fields
-                    sportSchools: this.props.sportSchools || [],
-                    feeTypes: this.state.feeTypes || [],
-                    age: this.props.athlete.age || 0,
-                    // Personal info
-                    sportSchoolId: this.props.athlete.sportSchoolId || '',
-                    imageAuth: this.props.athlete.imageAuth,
-                    observations: this.props.athlete.observations || [],
-                    name: this.props.athlete.name || '',
-                    firstSurname: this.props.athlete.firstSurname || '',
-                    secondSurname: this.props.athlete.secondSurname || '',
-                    birthDate: this.props.athlete.birthDate || '',
-                    birthDateStr: this.props.athlete.birthDateStr || '',
-                    birthPlace: this.props.athlete.birthPlace || '',
-                    dni: this.props.athlete.dni || '',
-                    nationality: this.props.athlete.nationality || '',
-                    gender: this.props.athlete.gender || 'male',
-                    // Familiar info
-                    familiarOneName: this.props.athlete.familiarOneName || '',
-                    familiarOneFirstSurname: this.props.athlete.familiarOneFirstSurname || '',
-                    familiarOneSecondSurname: this.props.athlete.familiarOneSecondSurname || '',
-                    familiarOneDni: this.props.athlete.familiarOneDni || '',
-                    familiarOneMail: this.props.athlete.familiarOneMail || '',
-                    familiarTwoName: this.props.athlete.familiarTwoName || '',
-                    familiarTwoFirstSurname: this.props.athlete.familiarTwoFirstSurname || '',
-                    familiarTwoSecondSurname: this.props.athlete.familiarTwoSecondSurname || '',
-                    familiarTwoDni: this.props.athlete.familiarTwoDni || '',
-                    familiarTwoMail: this.props.athlete.familiarTwoMail || '',
-                    // Sport info
-                    category: this.props.athlete.category || '',
-                    nextCategory: this.props.athlete.nextCategory || '',
-                    dorsalCategory: this.props.athlete.dorsalCategory || '',
-                    dorsalNumber: this.props.athlete.dorsalNumber || '',
-                    license: this.props.athlete.license || '',
-                    licenseType: this.props.athlete.licenseType || '',
-                    specialization: this.props.athlete.specialization || false,
-                    groupId: this.props.athlete.groupId || '',
-                    scheduleIds: this.props.athlete.scheduleIds || [],
-                    scheduleIdsStr: this.props.athlete.scheduleIds ? this.props.athlete.scheduleIds.join(".") || "" : "",
-                    // Contact info
-                    mail: this.props.athlete.mail || '',
-                    phone1: this.props.athlete.phone1 || '',
-                    phone2: this.props.athlete.phone2 || '',
-                    phone3: this.props.athlete.phone3 || '',
-                    municipality: this.props.athlete.municipality || '',
-                    postalCode: this.props.athlete.postalCode || '',
-                    address: this.props.athlete.address || '',
-                    // Bank info
-                    iban: this.props.athlete.iban || '',
-                    paymentType: this.props.athlete.paymentType || '',
-                    feeType: this.props.athlete.feeType || '',
-                    holderName: this.props.athlete.holderName || '',
-                    holderFirstSurname: this.props.athlete.holderFirstSurname || '',
-                    holderSecondSurname: this.props.athlete.holderSecondSurname || '',
-                    holderDni: this.props.athlete.holderDni || '',
-                    //Calculated Fee
-                    enrollmentFee: (this.props.athlete_fee ? this.props.athlete_fee.enrollmentFee : 0) || 0,
-                    membershipFee: (this.props.athlete_fee ? this.props.athlete_fee.membershipFee : 0) || 0,
-                    monthlyFee: (this.props.athlete_fee ? this.props.athlete_fee.monthlyFee : 0) || 0,
-                    // Dialogs
-                    registerDate: moment(new Date()).format("YYYY-MM-DD"),
-                    registerDateStr: moment(new Date()).format("YYYY-MM-DD"),
-                    registerObservations: '',
-                    openRegisterDialog: false,
-                    openSportdataDialog: false,
-                    openMatchingAthletes: false,
-                    openDeleteDialog: false,
-                    selectedCategory: false,
-                    
-                    exit: this.props.athlete.exit || false,
+                    initialValues={{
+                        id: this.props.athlete.id || 0,
+                        code: this.props.athlete.code || 0,
+                        familyCode: this.props.athlete.familyCode || 0,
+                        historic: this.props.athlete.historic || [],
+                        // Extra fields
+                        sportSchools: this.props.sportSchools || [],
+                        feeTypes: this.state.feeTypes || [],
+                        age: this.props.athlete.age || 0,
+                        // Personal info
+                        sportSchoolId: this.props.athlete.sportSchoolId || '',
+                        imageAuth: this.props.athlete.imageAuth,
+                        observations: this.props.athlete.observations || [],
+                        name: this.props.athlete.name || '',
+                        firstSurname: this.props.athlete.firstSurname || '',
+                        secondSurname: this.props.athlete.secondSurname || '',
+                        birthDate: this.props.athlete.birthDate || '',
+                        birthDateStr: this.props.athlete.birthDateStr || '',
+                        birthPlace: this.props.athlete.birthPlace || '',
+                        dni: this.props.athlete.dni || '',
+                        nationality: this.props.athlete.nationality || '',
+                        gender: this.props.athlete.gender || 'male',
+                        // Familiar info
+                        familiarOneName: this.props.athlete.familiarOneName || '',
+                        familiarOneFirstSurname: this.props.athlete.familiarOneFirstSurname || '',
+                        familiarOneSecondSurname: this.props.athlete.familiarOneSecondSurname || '',
+                        familiarOneDni: this.props.athlete.familiarOneDni || '',
+                        familiarOneMail: this.props.athlete.familiarOneMail || '',
+                        familiarTwoName: this.props.athlete.familiarTwoName || '',
+                        familiarTwoFirstSurname: this.props.athlete.familiarTwoFirstSurname || '',
+                        familiarTwoSecondSurname: this.props.athlete.familiarTwoSecondSurname || '',
+                        familiarTwoDni: this.props.athlete.familiarTwoDni || '',
+                        familiarTwoMail: this.props.athlete.familiarTwoMail || '',
+                        // Sport info
+                        category: this.props.athlete.category || '',
+                        nextCategory: this.props.athlete.nextCategory || '',
+                        dorsalCategory: this.props.athlete.dorsalCategory || '',
+                        dorsalNumber: this.props.athlete.dorsalNumber || '',
+                        license: this.props.athlete.license || '',
+                        licenseType: this.props.athlete.licenseType || '',
+                        specialization: this.props.athlete.specialization || false,
+                        groupId: this.props.athlete.groupId || '',
+                        scheduleIds: this.props.athlete.scheduleIds || [],
+                        scheduleIdsStr: this.props.athlete.scheduleIds ? this.props.athlete.scheduleIds.join(".") || "" : "",
+                        // Contact info
+                        mail: this.props.athlete.mail || '',
+                        phone1: this.props.athlete.phone1 || '',
+                        phone2: this.props.athlete.phone2 || '',
+                        phone3: this.props.athlete.phone3 || '',
+                        municipality: this.props.athlete.municipality || '',
+                        postalCode: this.props.athlete.postalCode || '',
+                        address: this.props.athlete.address || '',
+                        // Bank info
+                        iban: this.props.athlete.iban || '',
+                        paymentType: this.props.athlete.paymentType || '',
+                        feeType: this.props.athlete.feeType || '',
+                        holderName: this.props.athlete.holderName || '',
+                        holderFirstSurname: this.props.athlete.holderFirstSurname || '',
+                        holderSecondSurname: this.props.athlete.holderSecondSurname || '',
+                        holderDni: this.props.athlete.holderDni || '',
+                        //Calculated Fee
+                        enrollmentFee: (this.props.athlete_fee ? this.props.athlete_fee.enrollmentFee : 0) || 0,
+                        membershipFee: (this.props.athlete_fee ? this.props.athlete_fee.membershipFee : 0) || 0,
+                        monthlyFee: (this.props.athlete_fee ? this.props.athlete_fee.monthlyFee : 0) || 0,
+                        // Dialogs
+                        registerDate: moment(new Date()).format("YYYY-MM-DD"),
+                        registerDateStr: moment(new Date()).format("YYYY-MM-DD"),
+                        registerObservations: '',
+                        openRegisterDialog: false,
+                        openSportdataDialog: false,
+                        openMatchingAthletes: false,
+                        openDeleteDialog: false,
+                        selectedCategory: false,
+                        
+                        exit: this.props.athlete.exit || false,
 
-                    errorMessage: this.props.athlete.errorMessage || '',
-                    successMessage: this.props.athlete.successMessage || '',
-                }}
-                validate={(values) => {
-                    let errors: any = {};
+                        errorMessage: this.props.athlete.errorMessage || '',
+                        successMessage: this.props.athlete.successMessage || '',
+                    }}
+                    validate={(values) => {
+                        let errors: any = {};
 
-                    if (values.sportSchoolId  === '') errors.sportSchoolId = true;
-                    if (values.imageAuth  === '') errors.imageAuth = true;
-                    if (values.name  === '') errors.name = true;
-                    if (values.firstSurname  === '') errors.firstSurname = true;
-                    if (values.birthDate  === '') errors.birthDate = true;
-                    if (values.gender  === '') errors.gender = true;
-                    if (values.phone1  === '' && values.phone2  === '' && values.phone3  === '') errors.phone1 = true;
-                    if (values.age >= 18 && values.mail  === '') errors.mail = true;
-                    if (values.municipality  === '') errors.municipality = true;
-                    if (values.postalCode  === '') errors.postalCode = true;
-                    if (values.address  === '') errors.address = true;
-                    if (values.paymentType  === '') errors.paymentType = true;
-                    if (values.feeType  === '') errors.feeType = true;
-                                    
-                    if (values.iban === '' && values.paymentType === "DOM") {
-                        errors.iban = true;
-                    }
-                    if (values.holderName === '' && values.paymentType === "DOM") {
-                        errors.holderName = true;
-                    }
-                    if (values.holderFirstSurname === '' && values.paymentType === "DOM") {
-                        errors.holderFirstSurname = true;
-                    }
-                    if ((values.holderDni === '' || !utils.isValidDni(values.holderDni)) && values.paymentType === "DOM" ) {
-                        errors.holderDni = true;
-                    }
-                    if (values.age >= 14 && !utils.isValidDni(values.dni)){
-                        errors.dni = true
-                    }
-             
-                    return errors;
-                }}
-                onSubmit={(values, { setSubmitting }) => {
-                    this.setState(values)
-                    setSubmitting(false);
-                    this.handleFormSubmit()
-                }}
-            >
+                        if (values.sportSchoolId  === '') errors.sportSchoolId = true;
+                        if (values.imageAuth  === '') errors.imageAuth = true;
+                        if (values.name  === '') errors.name = true;
+                        if (values.firstSurname  === '') errors.firstSurname = true;
+                        if (values.birthDate  === '') errors.birthDate = true;
+                        if (values.gender  === '') errors.gender = true;
+                        if (values.phone1  === '' && values.phone2  === '' && values.phone3  === '') errors.phone1 = true;
+                        if (values.age >= 18 && values.mail  === '') errors.mail = true;
+                        if (values.municipality  === '') errors.municipality = true;
+                        if (values.postalCode  === '') errors.postalCode = true;
+                        if (values.address  === '') errors.address = true;
+                        if (values.paymentType  === '') errors.paymentType = true;
+                        if (values.feeType  === '') errors.feeType = true;
+                                        
+                        if (values.iban === '' && values.paymentType === "DOM") {
+                            errors.iban = true;
+                        }
+                        if (values.holderName === '' && values.paymentType === "DOM") {
+                            errors.holderName = true;
+                        }
+                        if (values.holderFirstSurname === '' && values.paymentType === "DOM") {
+                            errors.holderFirstSurname = true;
+                        }
+                        if ((values.holderDni === '' || !utils.isValidDni(values.holderDni)) && values.paymentType === "DOM" ) {
+                            errors.holderDni = true;
+                        }
+                        if (values.age >= 14 && !utils.isValidDni(values.dni)){
+                            errors.dni = true
+                        }
+                
+                        return errors;
+                    }}
+                    onSubmit={(values, { setSubmitting }) => {
+                        this.setState(values)
+                        setSubmitting(false);
+                        this.handleFormSubmit()
+                    }}
+                >
                 {({ handleSubmit, values, touched, setFieldValue, errors, handleChange, isSubmitting, setFieldError, setFieldTouched }) => {
                     
                     return (

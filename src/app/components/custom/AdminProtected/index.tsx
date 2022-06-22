@@ -4,7 +4,7 @@ import { isAdmin } from "../../../services/LoginService";
 
 const AdminProtected: React.FC<any> = (props) => {
     
-    if (!isAdmin) {
+    if (!isAdmin()) {
         return <Navigate to="/login" replace />;
     }
 
