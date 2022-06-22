@@ -9,6 +9,8 @@ import { connect } from "react-redux";
 import { getUserTable } from "../../redux/actions/users";
 import Utils from "../../utils/TableUtils";
 
+import { isAdmin, isManager } from "../../services/LoginService";
+
 class UserTable extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
@@ -25,9 +27,11 @@ class UserTable extends React.Component<any, any> {
 		return (
 			<React.Suspense fallback={<div>Cargando...</div>}>
 				<Grid container direction="column" spacing={3}>
-					<Grid item xs>
-						<Button text="Nuevo Usuario" href={'/users'}/>
-					</Grid>
+					{ isAdmin() || isManager() ?
+						<Grid item xs>
+							<Button text="Nuevo Usuario" href={'/admin/users'}/>
+						</Grid>
+					: null }
 					<Grid item xs>
 						<Table 
 							data={this.props.table_data}
