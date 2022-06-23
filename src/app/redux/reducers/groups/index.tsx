@@ -25,12 +25,15 @@ function rootReducer(state = initialState, action: { type: string, payload: any,
         }
     }
     else if (action.type === ACTION_TYPES.GET_SPORT_SCHOOL_GROUPS) {
-        let sportSchoolGroups:any = state.sport_schools_groups
-        sportSchoolGroups["sport_school_" + action.sport_school_id] = action.payload
         return {
             ...state,
-            groups: action.payload,
-            sport_schools_groups: sportSchoolGroups
+            groups: action.payload
+        }
+    }
+    else if (action.type === ACTION_TYPES.GET_SPORT_SCHOOLS_GROUPS) {
+        return {
+            ...state,
+            sport_schools_groups: action.payload
         }
     }
     else if (action.type === ACTION_TYPES.GROUP_SCHEDULES) {

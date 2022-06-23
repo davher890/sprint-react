@@ -5,54 +5,55 @@ import { Grid, Checkbox } from '@material-ui/core';
 
 const SportSchoolMultiSelect: React.FC<any> = (props) => {
 
-    const [sportSchools, setSportSchools] = React.useState(props.sportSchools)
-    const [sportSchoolIds, setSportSchoolIds] = React.useState(props.sportSchoolIds)
+    const [sportSchools, setSportSchools] = React.useState<any[]>(props.sportSchools || [])
+    const [sportSchoolIds, setSportSchoolIds] = React.useState<number[]>(props.sportSchoolIds || [])
 
     React.useEffect(() => {
-        if (JSON.stringify(props.sportSchools) !== JSON.stringify(sportSchools)){
-            setSportSchools(props.sportSchools)
-        }
-        if (JSON.stringify(props.sportSchoolIds) !== JSON.stringify(sportSchoolIds)){
-            setSportSchoolIds(props.sportSchoolIds)
-        }
-    }, [props.sportSchools, props.sportSchoolIds, sportSchools, sportSchoolIds])
+        // if (JSON.stringify(props.sportSchools) !== JSON.stringify(sportSchools)){
+        setSportSchools(props.sportSchools)
+        // }
+        // if (JSON.stringify(props.sportSchoolIds) !== JSON.stringify(sportSchoolIds)){
+        setSportSchoolIds(props.sportSchoolIds || [])
+        // }
+    }, [props.sportSchoolIds, props.sportSchools])
 
-    const onChange = (sportSchoolIds: number[], sportSchoolId: number, checked: boolean) => {
+    // You can use the first argument to keep track of the list of selected ids
+    // or you can use the second and the third argument to see the last id checked or unchecked
+    const onChange = (spIds: number[], lastSpId: number, checked: boolean) => {
         if (props.onChange){
-            props.onChange(sportSchoolIds, sportSchoolId, checked)
+            props.onChange(spIds, lastSpId, checked)
         }
     }
 
     return (
-        <Grid container>
-            <Grid item xs>
-                <CustomCard title="Escuelas deportivas">
-                    {  
-                        sportSchools.map((sch: {id: number, name: string}) => {
-                            return (
-                                <Grid item key={`row_sch${sch.id}`} >
-                                    <Checkbox
-                                        disabled={props.disabled}
-                                        name="sportSchoolIds"
-                                        key={`ssch${sch.id}`}
-                                        checked={sportSchoolIds.includes(sch.id)}
-                                        onChange={e => {
-                                            if (e.target.checked) {
-                                                sportSchoolIds.push(sch.id)
-                                            } else {
-                                                const idx = sportSchoolIds.indexOf(sch.id);
-                                                sportSchoolIds.splice(idx, 1);
-                                            }
-                                            onChange(sportSchoolIds, sch.id, e.target.checked)
-                                        }}
-                                    />
-                                    {sch.name}
-                                </Grid>
-                            )
-                        })
-                    }
-                </CustomCard>
-            </Grid>
+        <Grid container item xs>
+            <CustomCard title="Escuelas deportivas">
+                {  
+                    sportSchools.map((ss: {id: number, name: string}) => {
+                        return (
+                            <Grid item key={`row_sch${ss.id}`} >
+                                <Checkbox
+                                    disabled={props.disabled}
+                                    name="sportSchoolIds"
+                                    key={`ssch${ss.id}`}
+                                    checked={sportSchoolIds.includes(ss.id)}
+                                    onChange={e => {
+                                        let spIds = JSON.parse(JSON.stringify(sportSchoolIds))
+                                        if (e.target.checked) {
+                                            spIds.push(ss.id)
+                                        } else {
+                                            const idx = spIds.indexOf(ss.id);
+                                            spIds.splice(idx, 1);
+                                        }
+                                        onChange(spIds, ss.id, e.target.checked)
+                                    }}
+                                />
+                                {ss.name}
+                            </Grid>
+                        )
+                    })
+                }
+            </CustomCard>
         </Grid>
     )
 }
