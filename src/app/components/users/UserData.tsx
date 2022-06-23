@@ -193,6 +193,7 @@ class ConnectedForm extends React.Component<any, any> {
                                                             }
                                                             setFieldValue('groupIds', grIds)
                                                         }
+
                                                     }}
                                                 />
                                             </Grid>
