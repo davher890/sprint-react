@@ -17,6 +17,10 @@ export const findSportSchoolGroups = (id: number) => {
     return getRequest("/sport_schools/" + id + "/groups")
 }
 
+export const findSportSchoolsGroups = (ids: number[]) => {
+    return getRequest("/sport_schools/groups?ids=" + ids)
+}
+
 export const findSportSchoolTrainers = (id: number) => {
     return getRequest("/sport_schools/" + id + "/trainers")
 }

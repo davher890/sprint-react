@@ -9,16 +9,16 @@ import { Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/
 import TextField from "../custom/TextField";
 import Card from "../custom/Card";
 import SaveButton from "../custom/SaveButton";
-import SportSchoolMultiSelect from "../custom/SportSchoolMultiSelect";
-import GroupMultiSelect from "../custom/GroupMultiSelect";
 
 import { addUser, getUser, changeUserPassword } from "../../redux/actions/users";
-import { getAllSportSchools } from "../../redux/actions/sportSchools";
+import { getAllSportSchools, getSportSchoolsGroups } from "../../redux/actions/sportSchools";
 
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
 
 import { getUserId, isAdmin, isManager } from "../../services/LoginService";
+import SportSchoolMultiSelect from "../custom/SportSchoolMultiSelect";
+import GroupMultiSelect from "../custom/GroupMultiSelect";
 
 class ConnectedForm extends React.Component<any, any> {
     constructor(props: any) {
@@ -28,13 +28,17 @@ class ConnectedForm extends React.Component<any, any> {
     }
 
     componentDidMount(){
+        this.props.getAllSportSchools()
         if (this.props.id) {
             let id = this.props.id
-            if (id) {
-                this.props.getUser(id)
-            }
+            this.getUser(id)
         }
-        this.props.getAllSportSchools()
+    }
+
+    getUser(id: number){
+        this.props.getUser(id).then((u:any) => {
+            this.props.getSportSchoolsGroups(this.props.user.sportSchoolIds)
+        })
     }
 
     handleFormSubmit() {
@@ -145,12 +149,12 @@ class ConnectedForm extends React.Component<any, any> {
                                                     <TextField name="email" label="Email" value={values.email} onChange={handleChange}
                                                         error={touched.email && errors.email} />
                                                 </Grid>
-                                                { values.id === 0 ? 
+                                                { values.id > 0 ? null :
                                                     <Grid item xs>
                                                         <TextField name="password" label="Contraseña" type="password" value={values.password} onChange={handleChange}
                                                             error={touched.password && errors.password} />
                                                     </Grid>
-                                                : null }
+                                                }
                                             </Grid>
                                         </Card>
                                     </Grid>
@@ -165,7 +169,7 @@ class ConnectedForm extends React.Component<any, any> {
                                         </Grid>
                                         : null
                                     }
-                                    { isAdmin() ?
+                                    { !isAdmin() ? null :
                                         <Grid item xs={2}>
                                             <Checkbox name="admin" checked={values.admin === true} 
                                                 onChange={e => {
@@ -174,55 +178,42 @@ class ConnectedForm extends React.Component<any, any> {
                                             />
                                             Admin
                                         </Grid>
-                                        : null
                                     }
-                                    { isAdmin() || isManager() ?
-                                            <Grid item xs>
-                                                <SportSchoolMultiSelect 
-                                                    sportSchools={this.props.sport_schools}
-                                                    sportSchoolIds={values.sportSchoolIds}
-                                                    onChange={(sportSchoolIds: number[], sportSchoolId: number, checked: boolean) => {
-                                                        setFieldValue('sportSchoolIds', sportSchoolIds)
-                                                        if (!checked){
-                                                            // Remove the groupIds from the unchecked sportSchool
-                                                            let grIds = values.groupIds
-
-                                                            let sportSchoolGroups = this.props.sport_schools_groups['sport_school_' + sportSchoolId] || []
-                                                            for (let gr of sportSchoolGroups){
-                                                                grIds = grIds.filter((e: number) => e!== gr.id)
-                                                            }
-                                                            setFieldValue('groupIds', grIds)
+                                </Grid>
+                                
+                                { isAdmin() || isManager() ? 
+                                    <Grid container item direction="row" spacing={3}>
+                                        <Grid item xs>
+                                            <SportSchoolMultiSelect
+                                                sportSchools={this.props.sport_schools}
+                                                sportSchoolIds={values.sportSchoolIds}
+                                                onChange={((ssIds: number[]) => {
+                                                    setFieldValue('sportSchoolIds', ssIds)
+                                                    this.props.getSportSchoolsGroups(ssIds).then(() => {
+                                                        // Check that every id in groupIds is in groups.id
+                                                        if (Object.keys(this.props.sport_schools_groups).length > 0){
+                                                            let grIds = this.props.sport_schools_groups.map((gr: {id:number}) => gr.id)
+                                                            let auxIds = values.groupIds.filter((id: number) => {
+                                                                return grIds.includes(id)
+                                                            })
+                                                            setFieldValue('groupIds', auxIds)
                                                         }
-
-                                                    }}
-                                                />
-                                            </Grid>
-                                        : null }
-                                </Grid>
-                                { isAdmin() || isManager()?
-                                <Grid container item direction="row" spacing={3}>
-                                    {values.sportSchoolIds ? values.sportSchoolIds.map((id:number) => {
-                                        return <GroupMultiSelect
-                                            key={`sport_school_${id}`}
-                                            sportSchool={this.props.sport_schools.find((sportSchool: any) => sportSchool.id === id )}
-                                            sportSchoolId={id}
-                                            selectedGroupIds={values.groupIds}
-                                            onChange={(selectedGroupIds: number[], groupId: number, checked: boolean) => {
-                                                let selectedIds = JSON.parse(JSON.stringify(values.groupIds))
-                                                if (checked){
-                                                    selectedIds.push(groupId)
-                                                }
-                                                else {
-                                                    const idx = selectedIds.indexOf(groupId);
-                                                    selectedIds.splice(idx, 1);
-                                                }
-                                                setFieldValue('groupIds', Array.from(new Set(selectedIds)))
-                                            }}
-                                        />
-                                        
-                                    }) : null}
-                                </Grid>
-                                : null }
+                                                    })
+                                                })}
+                                            />
+                                        </Grid>
+                                        <Grid item xs>
+                                             <GroupMultiSelect
+                                                groups={this.props.sport_schools_groups || []}
+                                                 groupIds={values.groupIds}
+                                                 onChange={((grIds: number[], grId: number, checked: boolean) => {
+                                                    setFieldValue('groupIds', grIds)
+                                                })}
+                                             />
+                                        </Grid>
+                                    </Grid>
+                                : null}
+                                
                             </Grid>
                         </Box>
                         <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
@@ -249,8 +240,9 @@ class ConnectedForm extends React.Component<any, any> {
 const mapDispatchToProps = {
     addUser,
     getUser,
-    getAllSportSchools,
     changeUserPassword,
+    getAllSportSchools,
+    getSportSchoolsGroups
 }
 
 const mapStateToProps = (state: any) => {
