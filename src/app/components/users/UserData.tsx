@@ -179,11 +179,21 @@ class ConnectedForm extends React.Component<any, any> {
                                     { isAdmin() || isManager() ?
                                             <Grid item xs>
                                                 <SportSchoolMultiSelect 
-                                                    sportSchools={this.props.sportSchools}
+                                                    sportSchools={this.props.sport_schools}
                                                     sportSchoolIds={values.sportSchoolIds}
-                                                    onChange={(sportSchoolIds: number[]) => {
+                                                    onChange={(sportSchoolIds: number[], sportSchoolId: number, checked: boolean) => {
                                                         setFieldValue('sportSchoolIds', sportSchoolIds)
-                                                        // setFieldTouched('sportSchoolIds', true, true)
+                                                        if (!checked){
+                                                            // Remove the groupIds from the unchecked sportSchool
+                                                            let grIds = values.groupIds
+
+                                                            let sportSchoolGroups = this.props.sport_schools_groups['sport_school_' + sportSchoolId] || []
+                                                            for (let gr of sportSchoolGroups){
+                                                                grIds = grIds.filter((e: number) => e!== gr.id)
+                                                            }
+                                                            setFieldValue('groupIds', grIds)
+                                                        }
+
                                                     }}
                                                 />
                                             </Grid>
@@ -194,19 +204,19 @@ class ConnectedForm extends React.Component<any, any> {
                                     {values.sportSchoolIds ? values.sportSchoolIds.map((id:number) => {
                                         return <GroupMultiSelect
                                             key={`sport_school_${id}`}
-                                            sportSchool={this.props.sportSchools.find((sportSchool: any) => sportSchool.id === id )}
+                                            sportSchool={this.props.sport_schools.find((sportSchool: any) => sportSchool.id === id )}
                                             sportSchoolId={id}
                                             selectedGroupIds={values.groupIds}
                                             onChange={(selectedGroupIds: number[], groupId: number, checked: boolean) => {
-                                                // let selectedIds = JSON.parse(JSON.stringify(values.groupIds))
-                                                // if (checked){
-                                                //     selectedIds.push(groupId)
-                                                // }
-                                                // else {
-                                                //     const idx = selectedIds.indexOf(groupId);
-                                                //     selectedIds.splice(idx, 1);
-                                                // }
-                                                // setFieldValue('groupIds', Array.from(new Set(selectedIds)))
+                                                let selectedIds = JSON.parse(JSON.stringify(values.groupIds))
+                                                if (checked){
+                                                    selectedIds.push(groupId)
+                                                }
+                                                else {
+                                                    const idx = selectedIds.indexOf(groupId);
+                                                    selectedIds.splice(idx, 1);
+                                                }
+                                                setFieldValue('groupIds', Array.from(new Set(selectedIds)))
                                             }}
                                         />
                                         
@@ -246,7 +256,8 @@ const mapDispatchToProps = {
 const mapStateToProps = (state: any) => {
     return { 
         user: state.user_reducer.user,
-        sportSchools: state.sport_school_reducer.sport_schools,
+        sport_schools: state.sport_school_reducer.sport_schools,
+        sport_schools_groups: state.group_reducer.sport_schools_groups
     };
 };
 

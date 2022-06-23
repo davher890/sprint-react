@@ -15,7 +15,6 @@ const GroupMultiSelect: React.FC<any> = (props) => {
 
     React.useEffect(() => {
         if (props.sportSchoolId !== sportSchoolId){
-            props.getSportSchoolGroups(props.sportSchoolId)
             setSportSchool(props.sportSchool)
             setSportSchoolId(props.sportSchoolId)
         }
@@ -36,7 +35,7 @@ const GroupMultiSelect: React.FC<any> = (props) => {
     return (
         <Grid container item xs={2}>
             <CustomCard title={sportSchool?.name} >
-                {   
+                {
                     props.sport_schools_groups && sportSchoolId ?
                     (props.sport_schools_groups['sport_school_' + sportSchoolId] || []).map((gr: {id: number, name: string}) => {
                         return (
