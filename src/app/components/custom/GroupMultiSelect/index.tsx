@@ -10,16 +10,7 @@ const GroupMultiSelect: React.FC<any> = (props) => {
     
     React.useEffect(() => {
         setGroups(props.groups || [])
-        // setGroupIds(props.groupIds || [])
-
-        // Check that every id in groupIds is in groups.id
-        if (Object.keys(props.groups).length > 0){
-            let grIds = props.groups.map((gr: {id:number}) => gr.id)
-            let auxIds = props.groupIds.filter((id: number) => {
-                return grIds.includes(id)
-            })
-            setGroupIds(auxIds)
-        }
+        setGroupIds(props.groupIds || [])
     }, [props.groupIds, props.groups])
 
     // You can use the first argument to keep track of the list of selected ids
