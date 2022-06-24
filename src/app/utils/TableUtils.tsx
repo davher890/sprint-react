@@ -106,7 +106,7 @@ const Utils = {
             { dataField: 'outstandingResults', text: 'Resultados destacados' },
             { dataField: 'injuries', text: 'Lesiones' },
             { dataField: 'observations', text: 'Observaciones' },
-            { dataField: 'num_competitions', text: 'Num Competiciones' }
+            { dataField: 'numCompetitions', text: 'Num Competiciones' }
         ]
     },
 

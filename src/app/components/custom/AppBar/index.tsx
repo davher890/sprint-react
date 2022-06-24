@@ -91,7 +91,7 @@ const CustomAppBar: React.FC<any> = (props) => {
                     aria-label="account of current user"
                     aria-controls="menu-appbar"
                     aria-haspopup="true"
-                    href={"/users/me"}
+                    href={"/users/" + LoginService.getUserId()}
                     // onClick={handleMenu}
                     color="inherit"
                 >   
