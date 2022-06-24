@@ -125,7 +125,8 @@ function sportDataConversor(d: any){
         observations: d.observations,
         outstandingResults: d.outstandingResults,
         season: d.season,
-        technicalLevel: d.technicalLevel
+        technicalLevel: d.technicalLevel,
+        numCompetitions: d.numCompetitions
     }
 }
 

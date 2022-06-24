@@ -129,7 +129,7 @@ class AthleteSportdata extends React.Component<any, any> {
                             this.saveData()
                         }}
                         >
-                        {({ handleSubmit, values, touched, setFieldValue, errors, handleChange }) => (
+                        {({ handleSubmit, values, touched, errors, handleChange }) => (
 
                             <form onSubmit={handleSubmit}>
                                 <Grid container direction="column" spacing={2}>

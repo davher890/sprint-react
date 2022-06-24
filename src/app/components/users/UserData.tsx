@@ -29,8 +29,14 @@ class ConnectedForm extends React.Component<any, any> {
 
     componentDidMount(){
         this.props.getAllSportSchools()
+
+        console.log(this.props.id)
         if (this.props.id) {
             let id = this.props.id
+
+            if (id && id === 'me'){
+                id = getUserId().toString()
+            }
             this.getUser(id)
         }
     }
@@ -257,9 +263,6 @@ const ConnectedComponent = connect(mapStateToProps, mapDispatchToProps)(Connecte
 
 const WithRouterWrapper = () => {
     let { id } = useParams()
-    if (id && id === 'me'){
-        id = getUserId().toString()
-    }
     return (
         <ConnectedComponent id={id}></ConnectedComponent>
     )
