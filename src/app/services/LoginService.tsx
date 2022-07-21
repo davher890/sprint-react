@@ -1,5 +1,5 @@
 import { loginRequest } from "./ApiService"
-
+import session from "../utils/Session";
 
 export const isAuthenticated = (): boolean => {
     return sessionStorage.getItem('token') != null
@@ -20,11 +20,19 @@ export const getUserId = (): number => {
 export const signup = (email: string, password: string) => {
     return loginRequest("/login", { email: email, password: password}).then((res: any) => {
 
-        const lastUrl = sessionStorage.getItem('last_url')
-        if (lastUrl){
-            window.open(lastUrl, "_self");
-        } else {
-            window.open("/athletes/list", "_self");
+        let json:any = {}
+        if (res.status !== 200){
+            json.errorMessage = "Email o contraseña incorrectos"
         }
+        else {
+            session.saveToken(res.headers)
+            const lastUrl = sessionStorage.getItem('last_url')
+            if (lastUrl){
+                window.open(lastUrl, "_self");
+            } else {
+                window.open("/athletes/list", "_self");
+            }
+        }
+        return json
     })
 }

@@ -28,7 +28,7 @@ const CustomTable: React.FC<any> = (props) => {
 			// }
 			// width: "100%",
 			// marginTop: theme.spacing.unit * 3,
-			overflowX: "auto"
+			overflowX: "visible"
 		},
 		focused: {
 			color : props.theme.palette.secondary.main,
@@ -124,7 +124,7 @@ const CustomTable: React.FC<any> = (props) => {
 		let rowChecked = selectedIds.indexOf(rowId) > -1
 		if (selectableRows){
 			cells.push(
-				<TableCell style={{ minWidth: '50px' }}  key={'select'}>
+				<TableCell key={'select'}>
 					<Checkbox
 						color="primary"
 						checked={rowChecked}
@@ -152,65 +152,93 @@ const CustomTable: React.FC<any> = (props) => {
 		}
     };
 
+	const getTableHead = () => {
+		return <TableHead>
+			<TableRow>
+				{selectableRows ? <TableCell style={{ minWidth: '50px' }} key={'select'}>
+					<Checkbox
+						color="secondary"
+						checked={functions.arrayContains(selectedIds, props.data.map((row: any) => row.id))}
+						onChange={e => {
+							if (props.onSelectedIds){
+								props.data.map((row: any) => props.onSelectedIds(row.id, e.target.checked))
+							}
+						}}
+					/>
+				</TableCell> : null }
+				{visibleColumns.map((column) => (
+					<TableCell style={{ minWidth: '250px' }} key={column.dataField}>
+						{ column.sort === false ? getCell(column) : 
+							<Grid container direction="row">
+								<Grid item xs>
+									{ getCell(column) }
+								</Grid>
+								<Grid item xs>
+									<TableSortLabel
+										active={orderBy === column.dataField}
+										direction={orderBy === column.dataField ? order : 'asc'}
+										onClick={createSortHandler(column.dataField)}
+										classes={{
+											icon: classes.sortLabelIcon,
+											active: classes.sortLabelIcon
+										}}
+									/>
+								</Grid>
+							</Grid>
+						}
+					</TableCell>
+				))}
+			</TableRow>
+		</TableHead>
+
+	}
+
 	const getCell = (column: any) => { 
 		return (() => {
 			if (column.filter){
 				if (column.filter.options && column.filter.options.length > 0){
-					return <Grid item xs>
-						<Select name={column.dataField} label={column.text} 
-							InputLabelProps={{
-								classes: {
-									root: classes.root,
-									// focused: classes.yellowText,
-									// active: classes.yellowText,
-									// focusVisible: classes.yellowText,
-									// selected: classes.yellowText,
-								},
-							}}
-							InputProps={{ 
-								classes: {
-									root: classes.yellowText,
-									focused: classes.yellowText,
-									active: classes.yellowText,
-									focusVisible: classes.yellowText,
-									selected: classes.yellowText,
-								},
-							}}
-							options={column.filter.options} value={1}
-							onChange={(value: string, item: any) => {
-								handleFilterChange(column.filter.type, column.dataField, item ? item.id : '')
-							}}
-						/>
-					</Grid>
+					return <Select name={column.dataField} label={column.text} 
+						InputLabelProps={{
+							classes: {
+								root: classes.root,
+								// focused: classes.yellowText,
+								// active: classes.yellowText,
+								// focusVisible: classes.yellowText,
+								// selected: classes.yellowText,
+							},
+						}}
+						options={column.filter.options} value={1}
+						onChange={(value: string, item: any) => {
+							handleFilterChange(column.filter.type, column.dataField, item ? item.id : '')
+						}}
+					/>
 				}
 				else {
-					return <Grid item xs>
-						<TextField label={column.text} className={classes.root} 
-							InputProps={{ 
-								className: classes.input
-							}} 
-							InputLabelProps={{
-								classes: {
-									root: classes.root,
-									focused: classes.focused
-								},
-							}}
-							onChange={(e: any) => {
-								handleFilterChange(column.filter.type, column.dataField, e.target.value)
-							}} 
-						/>
-					</Grid>
+					return <TextField label={column.text} className={classes.root} 
+						InputProps={{ 
+							className: classes.input
+						}} 
+						InputLabelProps={{
+							classes: {
+								root: classes.root,
+								focused: classes.focused
+							},
+						}}
+						onChange={(e: any) => {
+							handleFilterChange(column.filter.type, column.dataField, e.target.value)
+						}} 
+					/>
 				}
 			}
 			else {
-				return <div>{column.text}</div>
+				return <strong>{column.text}</strong>
 			}
 		})()
 	}
 
 	return (
 		<div> 
-		{ props.loading ? <Spinner/> : 
+		{ false && props.loading ? <Spinner/> : 
 			<Grid container item direction="column" spacing={3}>
 				<Grid container item direction="row">
 					{ props.showColumns ? 
@@ -231,44 +259,10 @@ const CustomTable: React.FC<any> = (props) => {
 						</Grid> : null
 					}
 				</Grid>
-				<Grid item style={{ width: "100%", overflowX: "auto" }}>
+				<Grid item >
 					<TableContainer>
-						<Table stickyHeader>
-							<TableHead>
-								<TableRow>
-									{selectableRows ? <TableCell style={{ minWidth: '50px' }} key={'select'}>
-										<Checkbox
-											color="secondary"
-											checked={functions.arrayContains(selectedIds, props.data.map((row: any) => row.id))}
-											onChange={e => {
-												if (props.onSelectedIds){
-													props.data.map((row: any) => props.onSelectedIds(row.id, e.target.checked))
-												}
-											}}
-										/>
-									</TableCell> : null }
-									{visibleColumns.map((column) => (
-										<TableCell style={{ minWidth: '200px' }} key={column.dataField}>
-											{ column.sort === false ? getCell(column) : 
-												<Grid container direction="row" spacing={2}>
-													{ getCell(column) }
-													<Grid item xs>
-														<TableSortLabel
-															active={orderBy === column.dataField}
-															direction={orderBy === column.dataField ? order : 'asc'}
-															onClick={createSortHandler(column.dataField)}
-															classes={{
-																icon: classes.sortLabelIcon,
-																active: classes.sortLabelIcon
-															}}
-														/>
-													</Grid>
-												</Grid>
-											}
-										</TableCell>
-									))}
-								</TableRow>
-							</TableHead>
+						<Table stickyHeader size="small">
+							{ getTableHead() }
 							<TableBody>
 							{
 								props.data.map((row:any) => (
@@ -278,7 +272,6 @@ const CustomTable: React.FC<any> = (props) => {
 								))
 							}
 							</TableBody>
-							
 						</Table>
 					</TableContainer>
 					<TablePagination

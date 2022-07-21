@@ -37,7 +37,13 @@ const theme = createTheme({
   overrides : {
     MuiButton: {
       root: {
+        color: secondary,
         borderRadius: 15
+      }
+    },
+    MuiIconButton: {
+      root: {
+        color: secondary
       }
     },
     MuiTableContainer: {

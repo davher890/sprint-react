@@ -198,6 +198,12 @@ class CreateAthlete extends React.Component<any, any> {
                         if ((values.holderDni === '' || !utils.isValidDni(values.holderDni)) && values.paymentType === "DOM" ) {
                             errors.holderDni = true;
                         }
+                        if (values.familiarOneDni != '' && !utils.isValidDni(values.familiarOneDni)) {
+                            errors.familiarOneDni = true;
+                        }
+                        if (values.familiarTwoDni != '' && !utils.isValidDni(values.familiarTwoDni)) {
+                            errors.familiarTwoDni = true;
+                        }
                         if (values.age >= 14 && !utils.isValidDni(values.dni)){
                             errors.dni = true
                         }
@@ -439,6 +445,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                             <TextField value={values.birthDateStr} margin="dense"
                                                                 label="Fecha de nacimiento" type="date"
                                                                 error={touched.birthDateStr && errors.birthDateStr}
+                                                                InputProps={{inputProps: { min: "1940-01-01", max: moment(new Date()).format("YYYY-MM-DD")} }}
                                                                 onChange={(e: any) => {
                                                                     let d: Moment = moment(e.target.value, "YYYY-MM-DD")
                                                                     let age: number = utils.ageCalculator(parseInt(d.format('x')))
@@ -460,12 +467,11 @@ class CreateAthlete extends React.Component<any, any> {
                                                     </Grid>
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs>
-                                                            <TextField name="dni" label="DNI/NIE" type="text" value={values.dni}
-                                                                error={touched.dni && errors.dni} onChange={handleChange}
+                                                            <TextField name="dni" label="Dni/Nie" type="text" value={values.dni} error={touched.dni && errors.dni} onChange={handleChange}
                                                                 onBlur={() => {
                                                                     if (!utils.isValidDni(values.dni)){
                                                                         setFieldTouched("dni", true, false);
-                                                                        setFieldError("dni", "DNI/NIE incorrecto");
+                                                                        setFieldError("dni", "Dni/Nie incorrecto");
                                                                     }
                                                                 }}
                                                             />
@@ -548,7 +554,13 @@ class CreateAthlete extends React.Component<any, any> {
                                                     </Grid>
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs>
-                                                            <TextField name="familiarOneDni" type="text" label="Dni" value={values.familiarOneDni} margin="dense" onChange={handleChange} />
+                                                            <TextField name="familiarOneDni" type="text" label="Dni" value={values.familiarOneDni} error={touched.familiarOneDni && errors.familiarOneDni} margin="dense" onChange={handleChange}
+                                                                onBlur={() => {
+                                                                    if (values.familiarOneDni && !utils.isValidDni(values.familiarOneDni)){
+                                                                        setFieldTouched("familiarOneDni", true, false);
+                                                                        setFieldError("familiarOneDni", "Dni/Nie incorrecto");
+                                                                    }
+                                                                }} />
                                                         </Grid>
                                                         <Grid item xs>
                                                             <TextField name="familiarOneMail" type="text" label="Email" value={values.familiarOneMail} margin="dense" onChange={handleChange} />
@@ -568,7 +580,13 @@ class CreateAthlete extends React.Component<any, any> {
                                                     </Grid>
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs>
-                                                            <TextField name="familiarTwoDni" type="text" label="Dni" value={values.familiarTwoDni} margin="dense" onChange={handleChange} />
+                                                            <TextField name="familiarTwoDni" type="text" label="Dni" value={values.familiarTwoDni} error={touched.familiarTwoDni && errors.familiarTwoDni} margin="dense" onChange={handleChange} 
+                                                                onBlur={() => {
+                                                                    if (values.familiarTwoDni && !utils.isValidDni(values.familiarTwoDni)){
+                                                                        setFieldTouched("familiarTwoDni", true, false);
+                                                                        setFieldError("familiarTwoDni", "Dni/Nie incorrecto");
+                                                                    }
+                                                                }}/>
                                                         </Grid>
                                                         <Grid item xs>
                                                             <TextField name="familiarTwoMail" type="text" label="Email" value={values.familiarTwoMail} margin="dense" onChange={handleChange} />
@@ -623,8 +641,13 @@ class CreateAthlete extends React.Component<any, any> {
                                                     </Grid>
                                                     <Grid container item spacing={1}>
                                                         <Grid item xs={3}>
-                                                            <TextField name="holderDni" label="Dni/Nie" value={values.holderDni} onChange={handleChange}
-                                                                error={touched.holderDni && errors.holderDni}
+                                                            <TextField name="holderDni" label="Dni/Nie" type="text" value={values.holderDni} error={touched.holderDni && errors.holderDni} onChange={handleChange}
+                                                                onBlur={() => {
+                                                                    if (values.holderDni && !utils.isValidDni(values.holderDni)){
+                                                                        setFieldTouched("holderDni", true, false);
+                                                                        setFieldError("holderDni", "Dni/Nie incorrecto");
+                                                                    }
+                                                                }}
                                                             />
                                                         </Grid>
                                                     </Grid>

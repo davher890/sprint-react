@@ -1,12 +1,13 @@
 import { createStore, applyMiddleware, compose, combineReducers } from "redux";
-import sportSchoolReducer from "./sportSchools/index";
+import apiReducer from "./api/index";
+import authReducer from "./authentication/index";
 import athleteReducer from "./athletes/index";
 import groupReducer from "./groups/index";
 import scheduleReducer from "./schedules/index";
+import sportSchoolReducer from "./sportSchools/index";
+import tableReducer from "./table/index";
 import trainerReducer from "./trainers/index";
 import userReducer from "./users/index";
-import tableReducer from "./table/index";
-import apiReducer from "./api/index";
 import thunk from "redux-thunk";
 
 declare global {
@@ -18,14 +19,15 @@ const storeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export default createStore(
   combineReducers({
-    sport_school_reducer: sportSchoolReducer,
+    api_reducer: apiReducer,
+    auth_reducer: authReducer,
     athlete_reducer: athleteReducer,
     group_reducer: groupReducer,
     schedule_reducer: scheduleReducer,
-    trainer_reducer: trainerReducer,
-    user_reducer: userReducer,
+    sport_school_reducer: sportSchoolReducer,
     table_reducer: tableReducer,
-    api_reducer: apiReducer
+    trainer_reducer: trainerReducer,
+    user_reducer: userReducer
   }),
   storeEnhancers(applyMiddleware(thunk))
 );

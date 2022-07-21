@@ -25,7 +25,7 @@ const GroupMultiSelect: React.FC<any> = (props) => {
         <Grid container item xs>
             <CustomCard title="Grupos" >
                 {   
-                    (Object.keys(groups).length == 0 ? [] : groups).map((gr: {id: number, name: string}) => {
+                    (Object.keys(groups).length === 0 ? [] : groups).map((gr: {id: number, name: string}) => {
                         return (
                             <Grid item key={`row_gr${gr.id}`} >
                                 <Checkbox
