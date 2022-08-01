@@ -35,6 +35,7 @@ const AppBar: React.FC<any> = (props) => {
   return (
     <Router>
         <Routes>
+          <Route path="/" element={<Login/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/admin/users"              element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" ><UserData/></Box></AuthenticatedProtected></AdminProtected>}/>
           <Route path="/admin/users/:id"          element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" ><UserData/></Box></AuthenticatedProtected></AdminProtected>}/>
