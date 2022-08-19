@@ -16,6 +16,8 @@ import { addSportSchool, getSportSchool, removeSportSchool } from "../../redux/a
 import DeleteButton from "../custom/DeleteButton";
 import ConfirmDialog from "../custom/ConfirmDialog";
 
+import { isManager, isAdmin } from "../../services/LoginService";
+
 class ConnectedForm extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
@@ -124,15 +126,17 @@ class ConnectedForm extends React.Component<any, any> {
                                 </Grid>
                             </Grid>
                         </Box>
-                        <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
-                            <Toolbar>
-                                <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
-                                {(this.props.id) ? 
-                                    <DeleteButton text='Borrar' onClick={() => setFieldValue("openDeleteDialog", true)}/>
-                                    : null
-                                }
-                            </Toolbar>
-                        </AppBar>
+                        { (isAdmin() || isManager()) &&
+                            <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
+                                <Toolbar>
+                                    <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
+                                    {(this.props.id) ? 
+                                        <DeleteButton text='Borrar' onClick={() => setFieldValue("openDeleteDialog", true)}/>
+                                        : null
+                                    }
+                                </Toolbar>
+                            </AppBar>
+                        }
                     </form>
                 )}
                 </Formik>

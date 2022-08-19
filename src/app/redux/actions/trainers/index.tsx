@@ -1,7 +1,7 @@
 import * as ACTION_TYPES from "../../constants/action_types";
 
 import { findTrainerDataPagination } from "../../../services/TableService"
-import { findAll, addData, findById, downloadExcel } from "../../../services/TrainerService"
+import { findAll, addData, findById, downloadExcel, deleteTrainer } from "../../../services/TrainerService"
 
 import { Order } from '../../../types/order'
 
@@ -35,6 +35,14 @@ export function downloadTrainers(columns: any) {
         dispatch({ type: ACTION_TYPES.API_CALL})
         return downloadExcel(columns).then(json => {
             dispatch({ type: ACTION_TYPES.DOWNLOAD_TRAINERS, payload: json });
+        });
+    }
+}
+
+export function removeTrainer(id: number) {
+    return function (dispatch: any)  {
+        return deleteTrainer(id).then(json => {
+            dispatch({ type: ACTION_TYPES.DELETE_TRAINER, payload: json });
         });
     }
 }

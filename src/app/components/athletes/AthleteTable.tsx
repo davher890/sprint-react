@@ -17,6 +17,8 @@ import GroupSelect from "../custom/GroupSelect";
 import ConfirmDialog from "../custom/ConfirmDialog";
 import SportSchoolSelect from "../custom/SportSchoolSelect";
 
+import { isManager, isAdmin } from "../../services/LoginService";
+
 class AthleteTable extends React.Component<any, any> {
 	constructor(props: any) {
         super(props);
@@ -100,17 +102,19 @@ class AthleteTable extends React.Component<any, any> {
 					</DialogActions>
 				</Dialog>
 				<Grid container direction="column" spacing={3}>
-					<Grid container item >
-						<Grid item xs={3}>
-							<Button text="Nuevo Atleta" href={'/athletes'}/>
-						</Grid>
-						{this.state.selectedIds.length > 0 ? 
+					{ (isAdmin() || isManager()) &&
+						<Grid container item >
 							<Grid item xs={3}>
-								<Button text="Cambiar de grupo" 
-									onClick={() => this.setState({openGroupChangeDialog: true})}/>
+								<Button text="Nuevo Atleta" href={'/athletes'}/>
 							</Grid>
-						: null}
-					</Grid>
+							{this.state.selectedIds.length > 0 ? 
+								<Grid item xs={3}>
+									<Button text="Cambiar de grupo" 
+										onClick={() => this.setState({openGroupChangeDialog: true})}/>
+								</Grid>
+							: null}
+						</Grid>
+					}
 					<Grid container item xs>
 						<Table 
 							data={this.props.table_data}

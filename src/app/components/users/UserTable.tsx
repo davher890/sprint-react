@@ -9,6 +9,8 @@ import { connect } from "react-redux";
 import { getUserTable } from "../../redux/actions/users";
 import Utils from "../../utils/TableUtils";
 
+import { Order } from '../../types/order'
+
 import { isAdmin, isManager } from "../../services/LoginService";
 
 class UserTable extends React.Component<any, any> {
@@ -40,8 +42,8 @@ class UserTable extends React.Component<any, any> {
 							total={this.props.total}
 							columns={this.state.columns} 
 							showColumns={true}
-							onPaginationFilterChange={(page: number, size: number, filters:any) => {
-								this.props.getUserTable(page, size, filters);
+							onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
+								this.props.getUserTable(page, size, filters, sort, sortDirection);
 							}}
 							onRowClick={(id: number) => {
 								window.open("/admin/users/" + id, "_self");

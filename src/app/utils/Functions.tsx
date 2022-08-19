@@ -123,6 +123,15 @@ const functions = {
         ]
     },
 
+    getLicenseTypes: function() {
+        return [
+            { id: "NATIONAL", name: "Nacional" }, 
+            { id: "TERRITORIAL", name: "Territorial" },
+            { id: "NATIONALTRAIL", name: "Nacional Trail" }, 
+            { id: "TERRITORIALTRAIL", name: "Territorial Trail" }
+        ]
+    },
+
     getDorsalCategories: function () {
         return [
             // { id: "", name: "" },

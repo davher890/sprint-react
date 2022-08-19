@@ -19,7 +19,6 @@ const GroupSelect: React.FC<any> = (props) => {
             props.getSportSchoolGroups(props.sportSchoolId)
         }
         if (groupId !== props.groupId){
-            console.log('new group id')
             setGroupId(props.groupId)
         }
     }, [props.sportSchoolId, props.groupId, sportSchoolId, groupId])

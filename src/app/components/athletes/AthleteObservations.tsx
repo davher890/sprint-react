@@ -9,6 +9,8 @@ import { addObservations } from "../../redux/actions/observations";
 
 import SaveButton from "../custom/SaveButton";
 
+import { isManager, isAdmin } from "../../services/LoginService";
+
 const AthleteObservations: React.FC<any> = (props) => {
     
     const [obsText, setObsText] = React.useState<string>("")
@@ -66,9 +68,11 @@ const AthleteObservations: React.FC<any> = (props) => {
                     <TextField fullWidth name="obsText" value={obsText} label="Observaciones" multiline 
                         onChange={(e: any) => setObsText(e.target.value) } />
                 </Grid>
-                <Grid item xs>
-                    <SaveButton onClick={() => saveObservations() }/>
-                </Grid>
+                { (isAdmin() || isManager()) && 
+                    <Grid item xs>
+                        <SaveButton onClick={() => saveObservations() }/>
+                    </Grid>
+                }
             </Grid>
         </Grid>
     )

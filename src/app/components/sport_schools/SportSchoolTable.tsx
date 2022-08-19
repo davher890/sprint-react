@@ -11,6 +11,8 @@ import Utils from "../../utils/TableUtils";
 
 import { Order } from '../../types/order'
 
+import { isManager, isAdmin } from "../../services/LoginService";
+
 class SportSchoolTable extends React.Component<any, any> {
 	constructor(props: any) {
 		super(props);
@@ -32,9 +34,11 @@ class SportSchoolTable extends React.Component<any, any> {
 		return (
 			<React.Suspense fallback={<div>Cargando...</div>}>
 				<Grid container direction="column" spacing={3}>
-					<Grid item xs>
-						<Button text="Nueva Escuela Deportiva" href={'/sport_schools'} />
-					</Grid>
+					{ (isAdmin() || isManager()) &&
+						<Grid item xs>
+							<Button text="Nueva Escuela Deportiva" href={'/sport_schools'} />
+						</Grid>
+					}
 					<Grid item xs>
 						<Table
 							data={this.props.table_data}

@@ -7,11 +7,13 @@ import { Formik } from 'formik';
 import TextField from "../custom/TextField";
 import Card from "../custom/Card";
 import SaveButton from "../custom/SaveButton";
+import DeleteButton from '../custom/DeleteButton'
+import ConfirmDialog from "../custom/ConfirmDialog";
 
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
 
-import { addTrainer, getTrainer } from "../../redux/actions/trainers";
+import { addTrainer, getTrainer , removeTrainer} from "../../redux/actions/trainers";
 
 import SportSchoolSelect from "../custom/SportSchoolSelect";
 
@@ -31,6 +33,10 @@ class ConnectedForm extends React.Component<any, any> {
         }
     }
 
+    deleteTrainer(trainerId: number) {
+        this.props.removeTrainer(trainerId)
+    }
+
     handleFormSubmit() {
         this.props.addTrainer(this.state);
     }
@@ -45,6 +51,8 @@ class ConnectedForm extends React.Component<any, any> {
                         name: this.props.trainer.name || '',
                         mail: this.props.trainer.mail || '',
                         sportSchoolId: this.props.trainer.sportSchoolId || '',
+
+                        openDeleteDialog: false,
 
                         errorMessage: this.props.trainer.errorMessage || '',
                         successMessage: this.props.trainer.successMessage || ''
@@ -66,6 +74,14 @@ class ConnectedForm extends React.Component<any, any> {
                 {({ handleSubmit, handleChange, values, touched, setFieldValue, errors, isSubmitting }) => (
 
                     <form onSubmit={handleSubmit}>
+                        <ConfirmDialog open={values.openDeleteDialog} 
+                                confirm={() => {
+                                    this.deleteTrainer(this.props.id); 
+                                    setFieldValue("openDeleteDialog", false);
+                                    window.open("/trainers/list", "_self");
+                                }}
+                                cancel={() => setFieldValue("openDeleteDialog", false)}
+                            />
                         <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
                             anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
                             <Alert severity="error" onClose={() => { 
@@ -113,6 +129,10 @@ class ConnectedForm extends React.Component<any, any> {
                         <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
                             <Toolbar>
                                 <SaveButton type="submit" disabled={isSubmitting}/>
+                                {(this.props.id) ? 
+                                    <DeleteButton text='Borrar' onClick={() => setFieldValue("openDeleteDialog", true)}/>
+                                    : null
+                                }
                                 </Toolbar>
                         </AppBar>
                     </form>
@@ -125,7 +145,8 @@ class ConnectedForm extends React.Component<any, any> {
 
 const mapDispatchToProps = {
     addTrainer,
-    getTrainer
+    getTrainer,
+    removeTrainer
 }
 
 const mapStateToProps = (state: any) => {

@@ -1,5 +1,6 @@
 import * as React from "react";
 import { AppBar, Toolbar, Menu, MenuItem, Typography, Link, IconButton } from '@material-ui/core';
+import { Link as Link1 } from "react-router-dom";
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import * as LoginService from '../../../services/LoginService'
@@ -49,8 +50,8 @@ const CustomAppBar: React.FC<any> = (props) => {
                         keepMounted
                         open={Boolean(athletesAnchorEl)}
                         onClose={handleAthletesMenuClose}>
-                    <MenuItem><Link href="/athletes/list">Gestión</Link></MenuItem>
-                    <MenuItem><Link href="/athletes/historic">Histórico</Link></MenuItem>
+                    <MenuItem component={Link1} to="/athletes/list">Gestión</MenuItem>
+                    <MenuItem component={Link1} to="/athletes/historic">Histórico</MenuItem>
                 </Menu>
 
                 <Typography variant="button" aria-controls="groups-menu" aria-haspopup="true" onClick={handleGroupsMenuClick}>
@@ -61,13 +62,13 @@ const CustomAppBar: React.FC<any> = (props) => {
                         keepMounted
                         open={Boolean(groupsAnchorEl)}
                         onClose={handleGroupsMenuClose}>
-                    <MenuItem><Link href="/groups/list">Gestión</Link></MenuItem>
-                    <MenuItem><Link href="/groups/swap">Intercambio Masivo</Link></MenuItem>
-                    <MenuItem><Link href="/schedules/list">Horarios</Link></MenuItem>
-                    <MenuItem><Link href="/trainers/list">Entrenadores</Link></MenuItem>
+                    <MenuItem component={Link1} to="/groups/list">Gestión</MenuItem>
+                    { (LoginService.isAdmin() || LoginService.isManager()) && <MenuItem component={Link1} to="/groups/swap">Intercambio Masivo</MenuItem> }
+                    { (LoginService.isAdmin() || LoginService.isManager()) &&<MenuItem component={Link1} to="/schedules/list">Horarios</MenuItem> }
+                    { (LoginService.isAdmin() || LoginService.isManager()) && <MenuItem component={Link1} to="/trainers/list">Entrenadores</MenuItem> }
                 </Menu>
                 <Typography variant="button" aria-controls="listings-menu" aria-haspopup="true" onClick={handleListingsMenuClick}>
-                    <Link color="inherit">Listados</Link>
+                    Listados
                 </Typography>
                 <Menu id="listings-menu"
                         anchorEl={listingsAnchorEl}
@@ -75,13 +76,11 @@ const CustomAppBar: React.FC<any> = (props) => {
                         open={Boolean(listingsAnchorEl)}
                         onClose={handleListingsMenuClose}
                 >
-                    <MenuItem><Link href="/groups/attendance">Asistencia</Link></MenuItem>
-                    <MenuItem><Link href="/groups/athletes">Atletas-Grupos</Link></MenuItem>
+                    <MenuItem component={Link1} to="/groups/attendance">Asistencia</MenuItem>
+                    <MenuItem component={Link1} to="/groups/athletes">Atletas-Grupos</MenuItem>
                 </Menu>
                 { LoginService.isAdmin() || LoginService.isManager() ? 
-                    <Typography variant="button">
-                        <Link href="/admin/users/list" color="inherit">Usuarios</Link>
-                    </Typography>
+                    <Typography variant="button" component={Link1} to="/admin/users/list" color="inherit">Usuarios</Typography>
                  : null}
                 {/* <Typography variant="button">
                     <Link href="/social" color="inherit">Red Social</Link>

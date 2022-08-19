@@ -22,7 +22,6 @@ import PhoneCard from '../custom/PhoneCard'
 import AthletesList from '../custom/Athletes/AthletesList'
 import AthletesObservations from './AthleteObservations'
 
-
 import AthleteSportdata from './AthleteSportdata'
 
 // Redux
@@ -31,6 +30,8 @@ import { addAthlete, getAthlete, getAthletesByPhone, getAthletesBySurnames, doRe
 import { getSportSchoolFeeTypes } from "../../redux/actions/sportSchools";
 import DeleteButton from "../custom/DeleteButton";
 import ConfirmDialog from "../custom/ConfirmDialog";
+
+import { isManager, isAdmin } from "../../services/LoginService";
 
 class CreateAthlete extends React.Component<any, any> {
 
@@ -342,42 +343,44 @@ class CreateAthlete extends React.Component<any, any> {
                                                 return <Typography variant="subtitle1" gutterBottom component="div">{historic.type === 'REGISTER' ? 'Alta' : 'Baja'}: {moment(new Date(historic.date)).format('DD/MM/YYYY')}</Typography>
                                             })}
                                         </Grid>
-                                        <Grid item xs={1}>
-                                            {values.id ? <Button onClick={() => { setFieldValue('openRegisterDialog', true) }} >{utils.isRegistered(values.historic) ? 'Dar de baja' : 'Dar de alta'}</Button> : null}
-                                            <Dialog fullWidth={true} open={values.openRegisterDialog} aria-labelledby="form-dialog-title"
-                                                onClose={() => {
-                                                    setFieldValue('openRegisterDialog', false)
-                                                }}
-                                            >
-                                                <DialogTitle id="form-dialog-title">Fecha de {utils.isRegistered(values.historic) ? 'baja' : 'alta'}</DialogTitle>
-                                                <DialogContent>
-                                                    <DialogContentText>
-                                                        Introduce la fecha de {utils.isRegistered(values.historic) ? 'baja' : 'alta'}.
-                                                </DialogContentText>
-                                                    <TextField name="registerDateStr" value={values.registerDateStr} margin="dense" onChange={(e: any) => {
-                                                                let d: Moment = moment(e.target.value, "YYYY-MM-DD")
-                                                                setFieldValue('registerDateStr', e.target.value);
-                                                                setFieldValue('registerDate', d.toDate().getTime());
-                                                            }}
-                                                        type="date" />
-                                                    <TextField fullWidth name="registerObservations" label="Observaciones" multiline
-                                                            value={values.registerObservations} onChange={handleChange}/>
-                                                </DialogContent>
-                                                <DialogActions>
-                                                    <Button onClick={() => {
-                                                        if (utils.isRegistered(values.historic)){
-                                                            this.props.doUnregisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
-                                                            .then(() => window.open("/athletes/list", "_self"))
-                                                        }
-                                                        else {
-                                                            this.props.doRegisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
-                                                            .then(() => window.open("/athletes/list", "_self"))
-                                                        }
-                                                    }}>Guardar</Button>
-                                                    <Button onClick={() => { setFieldValue('openRegisterDialog', false) }}>Cancelar</Button>
-                                                </DialogActions>
-                                            </Dialog>
-                                        </Grid>
+                                        { (isAdmin() || isManager()) &&
+                                            <Grid item xs={1}>
+                                                {values.id ? <Button onClick={() => { setFieldValue('openRegisterDialog', true) }} >{utils.isRegistered(values.historic) ? 'Dar de baja' : 'Dar de alta'}</Button> : null}
+                                                <Dialog fullWidth={true} open={values.openRegisterDialog} aria-labelledby="form-dialog-title"
+                                                    onClose={() => {
+                                                        setFieldValue('openRegisterDialog', false)
+                                                    }}
+                                                >
+                                                    <DialogTitle id="form-dialog-title">Fecha de {utils.isRegistered(values.historic) ? 'baja' : 'alta'}</DialogTitle>
+                                                    <DialogContent>
+                                                        <DialogContentText>
+                                                            Introduce la fecha de {utils.isRegistered(values.historic) ? 'baja' : 'alta'}.
+                                                    </DialogContentText>
+                                                        <TextField name="registerDateStr" value={values.registerDateStr} margin="dense" onChange={(e: any) => {
+                                                                    let d: Moment = moment(e.target.value, "YYYY-MM-DD")
+                                                                    setFieldValue('registerDateStr', e.target.value);
+                                                                    setFieldValue('registerDate', d.toDate().getTime());
+                                                                }}
+                                                            type="date" />
+                                                        <TextField fullWidth name="registerObservations" label="Observaciones" multiline
+                                                                value={values.registerObservations} onChange={handleChange}/>
+                                                    </DialogContent>
+                                                    <DialogActions>
+                                                        <Button onClick={() => {
+                                                            if (utils.isRegistered(values.historic)){
+                                                                this.props.doUnregisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
+                                                                .then(() => window.open("/athletes/list", "_self"))
+                                                            }
+                                                            else {
+                                                                this.props.doRegisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
+                                                                .then(() => window.open("/athletes/list", "_self"))
+                                                            }
+                                                        }}>Guardar</Button>
+                                                        <Button onClick={() => { setFieldValue('openRegisterDialog', false) }}>Cancelar</Button>
+                                                    </DialogActions>
+                                                </Dialog>
+                                            </Grid>
+                                        }
                                         <Grid item xs={1}>
                                             {values.id ? <Button onClick={() => { setFieldValue('openSportdataDialog', true) }} >Histórico deportivo</Button> : null}
                                             <Dialog fullWidth={true} maxWidth="xl" open={values.openSportdataDialog} aria-labelledby="form-dialog-title"
@@ -517,22 +520,26 @@ class CreateAthlete extends React.Component<any, any> {
                                                                 })
                                                             }
                                                         }} />
-                                                    <Grid container item spacing={1}>
-                                                        <Grid item xs>
-                                                            <TextField name="municipality" label="Municipio" value={values.municipality} onChange={handleChange}
-                                                                error={touched.municipality && errors.municipality} />
-                                                        </Grid>
-                                                        <Grid item xs>
-                                                            <TextField name="postalCode" label="C.P." value={values.postalCode} onChange={handleChange}
-                                                                error={touched.postalCode && errors.postalCode} />
-                                                        </Grid>
-                                                    </Grid>
-                                                    <Grid container item spacing={1}>
-                                                        <Grid item xs>
-                                                            <TextField fullWidth name="address" label="Dirección" value={values.address} onChange={handleChange}
-                                                                error={touched.address && errors.address} />
-                                                        </Grid>
-                                                    </Grid>
+                                                    { (isAdmin() || isManager()) &&
+                                                        <> 
+                                                            <Grid container item spacing={1}>
+                                                                <Grid item xs>
+                                                                    <TextField name="municipality" label="Municipio" value={values.municipality} onChange={handleChange}
+                                                                        error={touched.municipality && errors.municipality} />
+                                                                </Grid>
+                                                                <Grid item xs>
+                                                                    <TextField name="postalCode" label="C.P." value={values.postalCode} onChange={handleChange}
+                                                                        error={touched.postalCode && errors.postalCode} />
+                                                                </Grid>
+                                                            </Grid>
+                                                            <Grid container item spacing={1}>
+                                                                <Grid item xs>
+                                                                    <TextField fullWidth name="address" label="Dirección" value={values.address} onChange={handleChange}
+                                                                        error={touched.address && errors.address} />
+                                                                </Grid>
+                                                            </Grid>
+                                                        </>
+                                                    }
                                                 </Grid>
                                             </CustomCard>
                                         </Grid>
@@ -596,65 +603,67 @@ class CreateAthlete extends React.Component<any, any> {
                                                 </Grid>
                                             </CustomCard>
                                         </Grid>
-                                        <Grid item xs>
-                                            <CustomCard title="Datos Bancarios" >
-                                                <Grid container direction="column" spacing={2}>
-                                                    <Grid container item spacing={1}>
-                                                        <Grid item xs>
-                                                            <Select fullWidth name="paymentType" label="Forma de pago"
-                                                                options={utils.getPaymentTypes()} value={values.paymentType} error={touched.paymentType && errors.paymentType}
-                                                                onChange={(e: any, value: any) => {
-                                                                    setFieldValue('paymentType', value ? value.id : "")
-                                                                }}
-                                                            />
+                                        { (isAdmin() || isManager()) && 
+                                            <Grid item xs>
+                                                <CustomCard title="Datos Bancarios" >
+                                                    <Grid container direction="column" spacing={2}>
+                                                        <Grid container item spacing={1}>
+                                                            <Grid item xs>
+                                                                <Select fullWidth name="paymentType" label="Forma de pago"
+                                                                    options={utils.getPaymentTypes()} value={values.paymentType} error={touched.paymentType && errors.paymentType}
+                                                                    onChange={(e: any, value: any) => {
+                                                                        setFieldValue('paymentType', value ? value.id : "")
+                                                                    }}
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <Select fullWidth name="feeType" label="Tipo de cuota"
+                                                                    options={this.props.fee_types} value={values.feeType} error={touched.feeType && errors.feeType}
+                                                                    onChange={(e: any, value: any) => {
+                                                                        setFieldValue('feeType', value ? value.id : "")
+                                                                    }}
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField name="iban" label="Iban" value={values.iban} onChange={handleChange}
+                                                                    error={touched.iban && errors.iban}
+                                                                />
+                                                            </Grid>
                                                         </Grid>
-                                                        <Grid item xs>
-                                                            <Select fullWidth name="feeType" label="Tipo de cuota"
-                                                                options={this.props.fee_types} value={values.feeType} error={touched.feeType && errors.feeType}
-                                                                onChange={(e: any, value: any) => {
-                                                                    setFieldValue('feeType', value ? value.id : "")
-                                                                }}
-                                                            />
+                                                        <CardHeader subheader="Titular de la cuenta" />
+                                                        <Grid container item spacing={1}>
+                                                            <Grid item xs>
+                                                                <TextField name="holderName" label="Nombre" value={values.holderName} onChange={handleChange}
+                                                                    error={touched.holderName && errors.holderName}
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField name="holderFirstSurname" label="Primer apellido" value={values.holderFirstSurname} onChange={handleChange}
+                                                                    error={touched.holderFirstSurname && errors.holderFirstSurname}
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField name="holderSecondSurname" label="Segundo apellido" value={values.holderSecondSurname} onChange={handleChange}
+                                                                    error={touched.holderSecondSurname && errors.holderSecondSurname}
+                                                                />
+                                                            </Grid>
                                                         </Grid>
-                                                        <Grid item xs>
-                                                            <TextField name="iban" label="Iban" value={values.iban} onChange={handleChange}
-                                                                error={touched.iban && errors.iban}
-                                                            />
+                                                        <Grid container item spacing={1}>
+                                                            <Grid item xs={3}>
+                                                                <TextField name="holderDni" label="Dni/Nie" type="text" value={values.holderDni} error={touched.holderDni && errors.holderDni} onChange={handleChange}
+                                                                    onBlur={() => {
+                                                                        if (values.holderDni && !utils.isValidDni(values.holderDni)){
+                                                                            setFieldTouched("holderDni", true, false);
+                                                                            setFieldError("holderDni", "Dni/Nie incorrecto");
+                                                                        }
+                                                                    }}
+                                                                />
+                                                            </Grid>
                                                         </Grid>
                                                     </Grid>
-                                                    <CardHeader subheader="Titular de la cuenta" />
-                                                    <Grid container item spacing={1}>
-                                                        <Grid item xs>
-                                                            <TextField name="holderName" label="Nombre" value={values.holderName} onChange={handleChange}
-                                                                error={touched.holderName && errors.holderName}
-                                                            />
-                                                        </Grid>
-                                                        <Grid item xs>
-                                                            <TextField name="holderFirstSurname" label="Primer apellido" value={values.holderFirstSurname} onChange={handleChange}
-                                                                error={touched.holderFirstSurname && errors.holderFirstSurname}
-                                                            />
-                                                        </Grid>
-                                                        <Grid item xs>
-                                                            <TextField name="holderSecondSurname" label="Segundo apellido" value={values.holderSecondSurname} onChange={handleChange}
-                                                                error={touched.holderSecondSurname && errors.holderSecondSurname}
-                                                            />
-                                                        </Grid>
-                                                    </Grid>
-                                                    <Grid container item spacing={1}>
-                                                        <Grid item xs={3}>
-                                                            <TextField name="holderDni" label="Dni/Nie" type="text" value={values.holderDni} error={touched.holderDni && errors.holderDni} onChange={handleChange}
-                                                                onBlur={() => {
-                                                                    if (values.holderDni && !utils.isValidDni(values.holderDni)){
-                                                                        setFieldTouched("holderDni", true, false);
-                                                                        setFieldError("holderDni", "Dni/Nie incorrecto");
-                                                                    }
-                                                                }}
-                                                            />
-                                                        </Grid>
-                                                    </Grid>
-                                                </Grid>
-                                            </CustomCard>
-                                        </Grid>
+                                                </CustomCard>
+                                            </Grid>
+                                        }  
                                     </Grid>
                                     <Grid container item style={{ display: values.sportSchoolId > 0 && values.feeType !== 'SOCIO' ? "block" : "none" }}>
                                         <Grid item>
@@ -688,7 +697,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                 <Grid container item spacing={1}>
                                                     <Grid item xs={2}>
                                                         <Select fullWidth name="licenseType" label="Tipo de Licencia"
-                                                            value={values.licenseType} options={[{ id: "National", name: "Nacional" }, { id: "Territorial", name: "Territorial" }]}
+                                                            value={values.licenseType} options={utils.getLicenseTypes()}
                                                             onChange={(e: any, value: any) => setFieldValue('licenseType', value ? value.id : "")}
                                                         />
                                                     </Grid>
@@ -716,11 +725,6 @@ class CreateAthlete extends React.Component<any, any> {
                                             </CustomCard>
                                         </Grid>
                                     </Grid>
-                                    <Grid container item style={{ display: values.feeType !== "SOCIO" ? "block" : "none" }}>
-                                        <Grid item>
-                                            <FeeInfo {...values} />
-                                        </Grid>
-                                    </Grid>
                                     <Grid container item style={{ display: "block" }}>
                                         <Grid item>
                                             <CustomCard>
@@ -743,21 +747,28 @@ class CreateAthlete extends React.Component<any, any> {
                                 </Grid>
                             </Grid>
                         </Box>
-                        <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
-                            <Toolbar>
-                                <SaveButton type="submit" 
-                                    onClick={() => {
-                                        setFieldValue('exit', true)
-                                        return false;
-                                    }}
-                                >Guardar y salir</SaveButton>
-                                <SaveButton type="submit" disabled={isSubmitting}>Guardar y continuar</SaveButton>
-                                {(this.props.id) ? 
-                                    <DeleteButton text='Borrar' onClick={() => setFieldValue("openDeleteDialog", true)}/>
-                                    : null
-                                }
-                            </Toolbar>
-                        </AppBar>
+                        { (isAdmin() || isManager()) && 
+                            <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
+                                <Grid container style={{ display: values.feeType !== "SOCIO" ? "block" : "none" }}>
+                                    <Grid item>
+                                        <FeeInfo {...values} />
+                                    </Grid>
+                                </Grid>
+                                <Toolbar>
+                                    <SaveButton type="submit" 
+                                        onClick={() => {
+                                            setFieldValue('exit', true)
+                                            return false;
+                                        }}
+                                    >Guardar y salir</SaveButton>
+                                    <SaveButton type="submit" disabled={isSubmitting}>Guardar y continuar</SaveButton>
+                                    {(this.props.id) ? 
+                                        <DeleteButton text='Borrar' onClick={() => setFieldValue("openDeleteDialog", true)}/>
+                                        : null
+                                    }
+                                </Toolbar>
+                            </AppBar>
+                        }
                     </form>
                 )}}
             </Formik>

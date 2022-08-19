@@ -21,6 +21,12 @@ const LoginForm: React.FC<any> = (props) => {
     const handlePasswordChange = (event: any) => {
         setPassword(event.target.value)
     }
+
+    const handleKeyPress = (event: any) => {
+        if(event.key === 'Enter'){
+            props.signUp(email, password)
+        }
+      }
     
     return (
         <Grid container>
@@ -42,6 +48,7 @@ const LoginForm: React.FC<any> = (props) => {
                     </Grid>
                     <Grid item xs>
                         <TextField name="password" value={password} label="Contraseña" type="password"
+                            onKeyPress={handleKeyPress}
                             onChange={handlePasswordChange}/>
                     </Grid>
                     <Grid item xs>

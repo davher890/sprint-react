@@ -11,6 +11,8 @@ import Utils from "../../utils/TableUtils";
 
 import { Order } from '../../types/order'
 
+import { isManager, isAdmin } from "../../services/LoginService";
+
 class GroupTable extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
@@ -27,9 +29,11 @@ class GroupTable extends React.Component<any, any> {
 		return (
 			<React.Suspense fallback={<div>Cargando...</div>}>
 				<Grid container direction="column" spacing={3}>
-					<Grid item xs>
-						<Button text="Nuevo Grupo" href={'/groups'}/>
-					</Grid>
+					{ (isAdmin() || isManager()) &&	
+						<Grid item xs>
+							<Button text="Nuevo Grupo" href={'/groups'}/>
+						</Grid>
+					}
 					<Grid item xs>
 						<Table 
 							data={this.props.table_data}

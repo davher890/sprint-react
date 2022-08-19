@@ -187,7 +187,7 @@ class ConnectedForm extends React.Component<any, any> {
                                     }
                                 </Grid>
                                 
-                                { isAdmin() || isManager() ? 
+                                { (isAdmin() || isManager()) && 
                                     <Grid container item direction="row" spacing={3}>
                                         <Grid item xs>
                                             <SportSchoolMultiSelect
@@ -218,8 +218,7 @@ class ConnectedForm extends React.Component<any, any> {
                                              />
                                         </Grid>
                                     </Grid>
-                                : null}
-                                
+                                }
                             </Grid>
                         </Box>
                         <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>

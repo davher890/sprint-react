@@ -14,8 +14,9 @@ const session = {
         sessionStorage.setItem('is_admin', decoded.is_admin || '');
         sessionStorage.setItem('is_manager', decoded.is_manager || '');
         sessionStorage.setItem('user_id', decoded.user_id || 0)
-        let sportSchools = (decoded.sport_school_ids || []).map(function(e: number, i: number) {
-            return {id: e.toString(), name: decoded.sport_school_names[i]}
+        let sportSchoolMap = JSON.parse(decoded.sport_school_map)
+        let sportSchools = Object.keys(sportSchoolMap).map((id: string) => {
+            return {id: id, name: sportSchoolMap[id]}
         });
         sessionStorage.setItem('sport_schools', JSON.stringify(sportSchools))
     }

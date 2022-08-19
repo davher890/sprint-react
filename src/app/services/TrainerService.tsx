@@ -1,4 +1,4 @@
-import { getRequest, postRequest } from "./ApiService"
+import { getRequest, postRequest, deleteRequest } from "./ApiService"
 
 
 export const findAll = () => {
@@ -13,6 +13,9 @@ export const findById = (id: number) => {
     return getRequest("/trainers/" + id)
 }
 
+export const deleteTrainer = (id: number) => {
+    return deleteRequest("/trainers/" + id)
+}
 export const downloadExcel = (columns: any) => {
     const requestOptions = {
         method: 'POST',
