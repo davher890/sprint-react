@@ -17,15 +17,10 @@ class TrainerTable extends React.Component<any, any> {
         this.state = {
         	columns : Utils.getTrainerColumns()
         }
-		this.downloadData = this.downloadData.bind(this)
     }
 
 	componentDidMount() {
 		this.props.getTrainerTable();
-	}
-
-	downloadData(columns: any) {
-		this.props.downloadTrainers(columns)
 	}
 
 	render() {
@@ -42,8 +37,6 @@ class TrainerTable extends React.Component<any, any> {
 							size={this.props.size}
 							total={this.props.total}
 							columns={this.state.columns} 
-							downloadData={this.downloadData}
-							showColumns={true}
 							onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
 								this.props.getTrainerTable(page, size, filters, sort, sortDirection);
 							}}

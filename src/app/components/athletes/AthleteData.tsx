@@ -103,6 +103,7 @@ class CreateAthlete extends React.Component<any, any> {
                         // Personal info
                         sportSchoolId: this.props.athlete.sportSchoolId || '',
                         imageAuth: this.props.athlete.imageAuth,
+                        enrollmentFeePaid: this.props.athlete.enrollmentFeePaid,
                         observations: this.props.athlete.observations || [],
                         name: this.props.athlete.name || '',
                         firstSurname: this.props.athlete.firstSurname || '',
@@ -174,6 +175,7 @@ class CreateAthlete extends React.Component<any, any> {
                         let errors: any = {};
 
                         if (values.sportSchoolId  === '') errors.sportSchoolId = true;
+                        if (values.enrollmentFeePaid === '') errors.enrollmentFeePaid = true;
                         if (values.imageAuth  === '') errors.imageAuth = true;
                         if (values.name  === '') errors.name = true;
                         if (values.firstSurname  === '') errors.firstSurname = true;
@@ -373,7 +375,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                             }
                                                             else {
                                                                 this.props.doRegisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
-                                                                .then(() => window.open("/athletes/list", "_self"))
+                                                                .then(() => window.open("/athletes/" + values.id, "_self"))
                                                             }
                                                         }}>Guardar</Button>
                                                         <Button onClick={() => { setFieldValue('openRegisterDialog', false) }}>Cancelar</Button>
@@ -398,6 +400,14 @@ class CreateAthlete extends React.Component<any, any> {
                                                     <Button onClick={() => { setFieldValue('openSportdataDialog', false) }}>Cerrar</Button>
                                                 </DialogActions>
                                             </Dialog>
+                                        </Grid>
+                                        <Grid item xs={1}>
+                                            <Checkbox name="enrollmentFeePaid" checked={values.enrollmentFeePaid === true} 
+                                                onChange={e => {
+                                                    setFieldValue('enrollmentFeePaid', e.target.checked)
+                                                }}
+                                            />
+                                            Matricula pagada
                                         </Grid>
                                     </Grid>
                                     <Grid container item spacing={2}>
@@ -608,7 +618,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                 <CustomCard title="Datos Bancarios" >
                                                     <Grid container direction="column" spacing={2}>
                                                         <Grid container item spacing={1}>
-                                                            <Grid item xs>
+                                                            <Grid item xs={4}>
                                                                 <Select fullWidth name="paymentType" label="Forma de pago"
                                                                     options={utils.getPaymentTypes()} value={values.paymentType} error={touched.paymentType && errors.paymentType}
                                                                     onChange={(e: any, value: any) => {
@@ -616,7 +626,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                                     }}
                                                                 />
                                                             </Grid>
-                                                            <Grid item xs>
+                                                            <Grid item xs={2}>
                                                                 <Select fullWidth name="feeType" label="Tipo de cuota"
                                                                     options={this.props.fee_types} value={values.feeType} error={touched.feeType && errors.feeType}
                                                                     onChange={(e: any, value: any) => {
@@ -624,8 +634,8 @@ class CreateAthlete extends React.Component<any, any> {
                                                                     }}
                                                                 />
                                                             </Grid>
-                                                            <Grid item xs>
-                                                                <TextField name="iban" label="Iban" value={values.iban} onChange={handleChange}
+                                                            <Grid item xs={6}>
+                                                                <TextField fullWidth name="iban" label="Iban" value={values.iban} onChange={handleChange}
                                                                     error={touched.iban && errors.iban}
                                                                 />
                                                             </Grid>
@@ -744,16 +754,16 @@ class CreateAthlete extends React.Component<any, any> {
                                             </CustomCard>
                                         </Grid>
                                     </Grid>
+                                    <Grid container item style={{ display: values.feeType !== "SOCIO" ? "block" : "none" }}>
+                                        <Grid item>
+                                            <FeeInfo {...values} />
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
                             </Grid>
                         </Box>
                         { (isAdmin() || isManager()) && 
                             <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
-                                <Grid container style={{ display: values.feeType !== "SOCIO" ? "block" : "none" }}>
-                                    <Grid item>
-                                        <FeeInfo {...values} />
-                                    </Grid>
-                                </Grid>
                                 <Toolbar>
                                     <SaveButton type="submit" 
                                         onClick={() => {

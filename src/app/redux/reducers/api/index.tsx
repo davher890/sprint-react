@@ -12,6 +12,7 @@ function rootReducer(state = initialState, action: { type: string, payload: any 
         || action.type === ACTION_TYPES.DOWNLOAD_SPORTSCHOOLS
         || action.type === ACTION_TYPES.DOWNLOAD_TRAINERS
         || action.type === ACTION_TYPES.LOAD_ATHLETE_TABLE
+        || action.type === ACTION_TYPES.LOAD_PAYMENT_ATHLETE_TABLE
         || action.type === ACTION_TYPES.LOAD_GROUP_TABLE
         || action.type === ACTION_TYPES.LOAD_SPORTSCHOOL_TABLE
         || action.type === ACTION_TYPES.LOAD_GROUP_ATHLETES_TABLE

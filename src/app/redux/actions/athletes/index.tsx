@@ -1,12 +1,21 @@
 import * as ACTION_TYPES from "../../constants/action_types";
 
 import { addData, findById, findAthleteFee, downloadExcel, findByPhone, findBySurnames, registerAthlete, unregisterAthlete, findAthleteObservations, findAthleteHistoric, deleteAthlete } from "../../../services/AthleteService"
-import { findHistoricDataPagination, findAthleteDataPagination, findAthleteSportdataPagination, findDuplicatedAthletesDataPagination } from "../../../services/TableService"
+import { findHistoricDataPagination, findPaymentAthleteDataPagination, findAthleteDataPagination, findAthleteSportdataPagination, findDuplicatedAthletesDataPagination } from "../../../services/TableService"
 
 import utils from "../../../utils/Functions"
 import moment from 'moment'
 
 import { Order } from '../../../types/order'
+
+export function getPaymentAthleteTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
+    return function (dispatch: any) {
+        dispatch({ type: ACTION_TYPES.API_CALL})
+        return findPaymentAthleteDataPagination(page, size, filters, sort, sortDirection).then(json => {
+            dispatch({ type: ACTION_TYPES.LOAD_PAYMENT_ATHLETE_TABLE, payload: json });
+        });
+    }
+}
 
 export function getAthleteTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
     return function (dispatch: any) {
@@ -97,6 +106,15 @@ export function downloadAthletes(columns: any, filters:any) {
     return function (dispatch: any) {
         dispatch({ type: ACTION_TYPES.API_CALL})
         return downloadExcel(columns, filters, "/registered_athletes/excel").then(json => {
+            dispatch({ type: ACTION_TYPES.DOWNLOAD_ATHLETES, payload: json });
+        });
+    }
+}
+
+export function downloadPaymentAthletes(columns: any, filters:any, concept: string) {
+    return function (dispatch: any) {
+        dispatch({ type: ACTION_TYPES.API_CALL})
+        return downloadExcel(columns, filters, "/payment_athletes/excel?concept=" + concept).then(json => {
             dispatch({ type: ACTION_TYPES.DOWNLOAD_ATHLETES, payload: json });
         });
     }

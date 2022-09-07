@@ -5,7 +5,7 @@ import { findAll, findById, addData } from "../../../services/ScheduleService"
 
 import { Order } from '../../../types/order'
 
-export function getScheduleTable(page: number, size: number, filters: any, sort: string="day", sortDirection: Order) {
+export function getScheduleTable(page: number, size: number, filters: any, sort: string="dayNumber", sortDirection: Order = 'asc') {
     return function (dispatch: any)  {
         dispatch({ type: ACTION_TYPES.API_CALL})
         return findScheduleDataPagination(page, size, filters, sort, sortDirection).then(json => {

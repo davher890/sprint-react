@@ -45,8 +45,13 @@ export const downloadExcel = (columns: any, filters: any, endpoint: string = "/a
     
     let filtersParams = '';
     if (filters && Object.keys(filters).length > 0){
-        filtersParams = "?filters=" + utils.getFilterParams(filters)
+        if (endpoint.includes("?")){
+            filtersParams = "&"
+        }
+        else {
+            filtersParams = "?"
+        }
+        filtersParams = filtersParams + "filters=" + utils.getFilterParams(filters)
     }
-    
     return postExcelRequest(endpoint + filtersParams, columns, 'athletes.xlsx')
 }

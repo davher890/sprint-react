@@ -43,7 +43,38 @@ function groupDataConversor(d: { id: number, name: string, sportSchoolName: stri
     return {
         id : d.id,
         name : d.name,
-        sportSchoolName : d.sportSchoolName
+        sportSchoolId: d.sportSchoolName, 
+    }
+}
+
+function paymentAthleteDataConversor(d: any) {
+    return {
+        id : d.id,
+        name : d.name || '', 
+        firstSurname : d.firstSurname || '', 
+        secondSurname : d.secondSurname || '', 
+        lastRegisterDate: d.lastRegisterDate ? new Intl.DateTimeFormat('sq-AL').format(new Date(d.lastRegisterDate)) : '',
+        
+        category: d.category,
+        license: d.license,
+        licenseType: d.licenseType,
+        dorsalNumber: d.dorsalNumber,
+        dorsalCategory: d.dorsalCategory,
+        
+        iban: d.iban,
+        sportSchoolId: d.sportSchoolName, 
+        groupName: d.groupName,
+        days: d.days !== null && d.days.length > 0 ? d.days.split(',').map((day: String) => daysMap.get(day.toLowerCase())).join(','): '',
+        numDays: d.numDays,
+        code: d.code,
+
+        specialization: d.specialization,
+
+        paymentType: d.paymentType,
+        feeType: d.feeType,
+        monthlyFee: d.monthlyFee,
+        enrollmentFee: d.enrollmentFee,
+        membershipFee: d.membershipFee
     }
 }
 
@@ -99,10 +130,11 @@ function scheduleDataConversor(d: {id: number, day: string, startHour: number, s
     }
 }
 
-function trainerDataConversor(d: { id: number, name: string }){
+function trainerDataConversor(d: { id: number, name: string, sportSchoolName: string }){
     return {
         id : d.id, 
-        name: d.name
+        name: d.name,
+        sportSchoolId: d.sportSchoolName
     }
 }
 
@@ -146,6 +178,11 @@ const Utils = (action: { type: string, payload: any }) => {
         action.type === ACTION_TYPES.LOAD_GROUP_ATHLETES_TABLE || action.type === ACTION_TYPES.LOAD_HISTORIC_TABLE){
         items = action.payload.content.map((d: any) => {
             return athleteDataConversor(d)
+        })
+    }
+    else if (action.type === ACTION_TYPES.LOAD_PAYMENT_ATHLETE_TABLE){
+        items = action.payload.content.map((d: any) => {
+            return paymentAthleteDataConversor(d)
         })
     }
     else if (action.type === ACTION_TYPES.LOAD_FAMILY_TABLE){

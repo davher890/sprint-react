@@ -14,7 +14,7 @@ const FeeInfo: React.FC<any> = (props) => {
 
     React.useEffect(() => {
         props.getAthleteFee(props)
-    }, [props.getAthleteFee, props.scheduleIds, props.scheduleIdsStr, props.paymentType])
+    }, [props.getAthleteFee, props.scheduleIds, props.scheduleIdsStr, props.paymentType, props.licenseType, props.category])
 
 
     return (

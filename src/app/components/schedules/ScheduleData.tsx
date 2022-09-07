@@ -46,6 +46,7 @@ class ConnectedForm extends React.Component<any, any> {
                     initialValues={{
                         id: this.props.schedule.id || 0,
                         day: this.props.schedule.day || '',
+                        dayNumber: this.props.schedule.dayNumber || 0,
                         startHour: this.props.schedule.startHour || 0,
                         startMinute: this.props.schedule.startMinute || 0,
                         endHour: this.props.schedule.endHour || 0,
@@ -86,8 +87,7 @@ class ConnectedForm extends React.Component<any, any> {
                             anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
                             <Alert severity="success" onClose={() => { 
                                     setFieldValue("successMessage", "") 
-                                    this.props.history.push("/schedules/list");
-                                    window.location.reload(); 
+                                    window.open("/schedules/list", "_self");
                                 }}>
                                 <AlertTitle>Ok!</AlertTitle>
                                 <strong>{values.successMessage}</strong>
@@ -96,18 +96,18 @@ class ConnectedForm extends React.Component<any, any> {
                         <Card title="Horario">
                             <Grid container direction="row" spacing={2}>
                                 <Grid item xs>
-                                    <Select fullWidth name="day" label="Día de la semana" error={touched.day && errors.day}
+                                    <Select fullWidth name="dayNumber" label="Día de la semana" error={touched.dayNumber && errors.dayNumber}
                                         options={[
-                                            { id: "MONDAY", name: "Lunes" }, 
-                                            { id: "TUESDAY", name: "Martes" }, 
-                                            { id: "WEDNESDAY", name: "Miércoles" }, 
-                                            { id: "THURSDAY", name: "Jueves" }, 
-                                            { id: "FRIDAY", name: "Viernes" }, 
-                                            { id: "SATURDAY", name: "Sábado" }, 
-                                            { id: "SUNDAY", name: "Domingo" }
-                                        ]} 
-                                        value={values.day}
-                                        onChange={(e: any, value: any) => setFieldValue('day', value ? value.id : "")}
+                                            { id: 1, name: "Lunes" }, 
+                                            { id: 2, name: "Martes" }, 
+                                            { id: 3, name: "Miércoles" }, 
+                                            { id: 4, name: "Jueves" }, 
+                                            { id: 5, name: "Viernes" }, 
+                                            { id: 6, name: "Sábado" }, 
+                                            { id: 7, name: "Domingo" }
+                                        ]}
+                                        value={values.dayNumber}
+                                        onChange={(e: any, value: any) => setFieldValue('dayNumber', value ? value.id : 0)}
                                     />
                                 </Grid>
                                 <Grid container item xs spacing={2}>

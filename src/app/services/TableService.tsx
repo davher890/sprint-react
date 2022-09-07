@@ -2,6 +2,9 @@ import utils from '../utils/TableUtils'
 import { getRequest } from './ApiService'
 import { Order } from '../types/order'
 
+export const findPaymentAthleteDataPagination = (page: number, size: number, filters: any, sort: string, sortDirection: Order) => {
+    return findDataPagination("payment_athletes", page, size, filters, sort, sortDirection)
+}
 export const findAthleteDataPagination = (page: number, size: number, filters: any, sort: string, sortDirection: Order) => {
     return findDataPagination("registered_athletes", page, size, filters, sort, sortDirection)
 }

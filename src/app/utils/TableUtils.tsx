@@ -53,6 +53,24 @@ const Utils = {
         ]
     },
 
+    getPaymentColumns: () => {
+        return [{ dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
+        { dataField: 'firstSurname', text : 'Primer apellido', filter: { type: "text" } }, 
+        { dataField: 'secondSurname', text : 'Segundo apellido', filter: { type: "text" } }, 
+        { dataField: 'lastRegisterDate', text : 'Fecha incorporacion' },
+        { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
+            type: "options",
+            options : functions.getSportSchools()
+        }},
+        { dataField: 'groupName', text : 'Grupo', filter: { type: "text" } }, 
+        { dataField: 'days', text : 'Dias' }, 
+        { dataField: 'numDays', text : 'Num. Dias' }, 
+        { dataField: 'monthlyFee', text : 'Mensualidad' }, 
+        { dataField: 'enrollmentFee', text : 'Matricula' }, 
+        { dataField: 'membershipFee', text : 'Cuota de socio' }, 
+        ] 
+    },
+
     getGroupAthleteColumns: () => {
         return [
             { dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
@@ -112,7 +130,11 @@ const Utils = {
 
     getTrainerColumns: () => {
         return [
-            { dataField: 'name', text: 'Nombre', filter: { type: "text" } }
+            { dataField: 'name', text: 'Nombre', filter: { type: "text" } },
+            { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
+                type: "options",
+                options : functions.getSportSchools()
+            }}
         ]
     },
 

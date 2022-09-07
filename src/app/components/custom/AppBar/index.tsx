@@ -79,9 +79,12 @@ const CustomAppBar: React.FC<any> = (props) => {
                     <MenuItem component={Link1} to="/groups/attendance">Asistencia</MenuItem>
                     <MenuItem component={Link1} to="/groups/athletes">Atletas-Grupos</MenuItem>
                 </Menu>
-                { LoginService.isAdmin() || LoginService.isManager() ? 
+                { (LoginService.isAdmin() || LoginService.isManager()) &&
                     <Typography variant="button" component={Link1} to="/admin/users/list" color="inherit">Usuarios</Typography>
-                 : null}
+                }
+                { (LoginService.isAdmin() || LoginService.isManager()) &&
+                    <Typography variant="button" component={Link1} to="/admin/payments" color="inherit">Pagos</Typography>
+                }
                 {/* <Typography variant="button">
                     <Link href="/social" color="inherit">Red Social</Link>
                 </Typography> */}

@@ -4,7 +4,8 @@ const functions = {
 
     isValidDni: function(dni: string) {
         
-        const dniRegex = /^[0-9]{8,8}[A-Za-z]$/
+        const dniRegex = /^[0-9]{8,8}[A-Za-z]$/i
+        const nieRegex = /^[XYZ][0-9]{7}[A-Z]$/i
         
         if(dniRegex.test(dni)){
             var number = Number.parseInt(dni.substr(0, dni.length-1));
@@ -17,6 +18,9 @@ const functions = {
             }else{
                 return true
             }
+        }
+        else if (nieRegex.test(dni)){
+            return true
         }
         else{
             return false

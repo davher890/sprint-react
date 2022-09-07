@@ -249,14 +249,13 @@ const CustomTable: React.FC<any> = (props) => {
 									setColumns(cols) 
 									setVisibleColumns(cols.filter((c: any) => c.show === undefined || c.show === true))
 								}}
-								downloadData={downloadData}
 							/>
 						</Grid>
 					: null }
-					{ downloadData !== undefined ?
+					{ props.downloadData &&
 						<Grid item xs={3}>
 							<DownloadButton onClick={(downloadData)}>Descargar Excel</DownloadButton>
-						</Grid> : null
+						</Grid>
 					}
 				</Grid>
 				<Grid item >
