@@ -153,6 +153,18 @@ const Utils = {
         ]
     },
 
+    getIncidenceColumns: () => {
+        return [
+            { dataField: 'id', text: 'Id', show: false },
+            { dataField: 'title', text: 'Title', filter: { type: "text" } },
+            { dataField: 'description', text: 'Descripcion', filter: { type: "text" } },
+            { dataField: 'status', text : 'Estado', filter: { 
+                type: "options",
+                options : functions.getIncidenceStatus()
+            }},
+        ]
+    },
+
     getScheduleColumns: () => {
         return [ 
             { dataField: 'day', text : 'Día' }, 

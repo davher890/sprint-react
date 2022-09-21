@@ -22,7 +22,8 @@ function rootReducer(state = initialState, action: { type: string, payload: any 
         || action.type === ACTION_TYPES.LOAD_ATHLETE_SPORTDATA_TABLE
         || action.type === ACTION_TYPES.LOAD_SCHEDULE_TABLE
         || action.type === ACTION_TYPES.LOAD_HISTORIC_TABLE
-        || action.type === ACTION_TYPES.LOAD_FAMILY_TABLE) {
+        || action.type === ACTION_TYPES.LOAD_FAMILY_TABLE
+        || action.type === ACTION_TYPES.LOAD_INCIDENCE_TABLE) {
         return {
             ...state,
             loading: false

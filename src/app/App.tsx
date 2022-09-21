@@ -11,6 +11,9 @@ import TrainerTable from './components/trainers/TrainerTable';
 import ScheduleData from './components/schedules/ScheduleData';
 import ScheduleTable from './components/schedules/ScheduleTable';
 
+import IncidenceData from './components/incidences/IncidenceData';
+import IncidenceTable from './components/incidences/IncidenceTable';
+
 import SportSchoolData from './components/sport_schools/SportSchoolData';
 import SportSchoolTable from './components/sport_schools/SportSchoolTable';
 
@@ -78,6 +81,10 @@ const AppBar: React.FC<any> = (props) => {
           <Route path="/schedules/list"           element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ScheduleTable/></Box></AuthenticatedProtected>}/>
           <Route path="/schedules/:id"            element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ScheduleData/></Box></AuthenticatedProtected>}/>
           <Route path="/schedules"                element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ScheduleData/></Box></AuthenticatedProtected>}/>
+          
+          <Route path="/incidences/list"          element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><IncidenceTable/></Box></AuthenticatedProtected>}/>
+          <Route path="/incidences/:id"           element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><IncidenceData/></Box></AuthenticatedProtected>}/>
+          <Route path="/incidences"               element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><IncidenceData/></Box></AuthenticatedProtected>}/>
           
           <Route path="/trainers/list"            element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><TrainerTable/></Box></AuthenticatedProtected>}/>
           <Route path="/trainers/:id"             element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><TrainerData/></Box></AuthenticatedProtected>}/>

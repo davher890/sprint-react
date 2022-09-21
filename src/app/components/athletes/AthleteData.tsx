@@ -14,6 +14,7 @@ import CustomCard from '../custom/Card'
 import GroupScheduleSelect from '../custom/GroupScheduleSelect'
 import SportSchoolSelect from '../custom/SportSchoolSelect'
 import SaveButton from '../custom/SaveButton'
+import ReturnButton from '../custom/ReturnButton'
 import Select from '../custom/Select'
 import TextField from '../custom/TextField'
 import FeeInfo from '../custom/FeeInfo'
@@ -326,6 +327,10 @@ class CreateAthlete extends React.Component<any, any> {
                                                                             setFieldValue('feeType', values.feeType);
                                                                         }
                                                                     })
+                                                                }
+                                                                if (sportSchoolId !== values.sportSchoolId){
+                                                                    setFieldValue('groupId', 0);
+                                                                    setFieldValue('schedueIds', []);
                                                                 }
                                                             }}
                                                         />
@@ -773,9 +778,10 @@ class CreateAthlete extends React.Component<any, any> {
                                     >Guardar y salir</SaveButton>
                                     <SaveButton type="submit" disabled={isSubmitting}>Guardar y continuar</SaveButton>
                                     {(this.props.id) ? 
-                                        <DeleteButton text='Borrar' onClick={() => setFieldValue("openDeleteDialog", true)}/>
+                                        <DeleteButton onClick={() => setFieldValue("openDeleteDialog", true)}/>
                                         : null
                                     }
+                                    <ReturnButton onClick={() => window.open("/athletes/list", "_self")}/>
                                 </Toolbar>
                             </AppBar>
                         }

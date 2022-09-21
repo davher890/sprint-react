@@ -1,5 +1,5 @@
 import * as ACTION_TYPES from "../../constants/action_types";
-import getTableItems from "../../utils/conversors"
+import getTableItems from "../../../utils/Conversors"
 
 const initialState = {
     table_data : [],
@@ -21,7 +21,8 @@ function rootReducer(state = initialState, action: { type: string, payload: any 
         action.type === ACTION_TYPES.LOAD_USER_TABLE ||
         action.type === ACTION_TYPES.LOAD_GROUP_ATHLETES_TABLE ||
         action.type === ACTION_TYPES.LOAD_ATHLETE_SPORTDATA_TABLE || 
-        action.type === ACTION_TYPES.LOAD_DUPLICATED_ATHLETES_TABLE) {
+        action.type === ACTION_TYPES.LOAD_DUPLICATED_ATHLETES_TABLE ||
+        action.type === ACTION_TYPES.LOAD_INCIDENCE_TABLE) {
             
         let items = getTableItems(action)
 

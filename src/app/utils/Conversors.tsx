@@ -1,34 +1,6 @@
-import * as ACTION_TYPES from "../../constants/action_types";
+import * as ACTION_TYPES from "../redux/constants/action_types";
 
-let daysMap = new Map([
-    ["monday", "Lunes"],
-    ["tuesday", "Martes"],
-    ["wednesday", "Miércoles"],
-    ["thursday", "Jueves"],
-    ["friday", "Viernes"],
-    ["saturday", "Sábado"],
-    ["sunday", "Domingo"]
-])
-
-// let daysLetterMap = new Map([
-//     ["monday", "L"],
-//     ["tuesday", "M"],
-//     ["wednesday", "X"],
-//     ["thursday", "J"],
-//     ["friday", "V"],
-//     ["saturday", "S"],
-//     ["sunday", "D"]
-// ])
-
-// function getSchedulesString(schedules: any[]){
-   
-//     return schedules.map((d: any) => {
-//         let startMinute = parseInt(d.startMinute) < 10 ? '0' + d.startMinute : d.startMinute
-//         let endMinute = parseInt(d.endMinute) < 10 ? '0' + d.endMinute : d.endMinute
-    
-//         return daysLetterMap.get(d.day.toLowerCase()) + ' ' + d.startHour + ':' + startMinute + '-' + d.endHour + ':' + endMinute
-//     }).join(' , ')
-// }
+import functions from "./Functions";
 
 function sportSchoolDataConversor(d: { id: number, name: string, municipality: string, address: string }) {
     return {
@@ -55,16 +27,16 @@ function paymentAthleteDataConversor(d: any) {
         secondSurname : d.secondSurname || '', 
         lastRegisterDate: d.lastRegisterDate ? new Intl.DateTimeFormat('sq-AL').format(new Date(d.lastRegisterDate)) : '',
         
-        category: d.category,
+        category: functions?.getCategories().find(c => c.id === d.category)?.name,
         license: d.license,
         licenseType: d.licenseType,
         dorsalNumber: d.dorsalNumber,
-        dorsalCategory: d.dorsalCategory,
+        dorsalCategory: functions?.getDorsalCategories().find(c => c.id === d.dorsalCategory)?.name,
         
         iban: d.iban,
         sportSchoolId: d.sportSchoolName, 
         groupName: d.groupName,
-        days: d.days !== null && d.days.length > 0 ? d.days.split(',').map((day: String) => daysMap.get(day.toLowerCase())).join(','): '',
+        days: d.days,
         numDays: d.numDays,
         code: d.code,
 
@@ -93,15 +65,15 @@ function athleteDataConversor(d: any) {
         nationality: d.nationality,
         birthPlace: d.birthPlace,
         postalCode: d.postalCode,
-        category: d.category,
+        category: functions?.getCategories().find(c => c.id === d.category)?.name,
         license: d.license,
         licenseType: d.licenseType,
         dorsalNumber: d.dorsalNumber,
-        dorsalCategory: d.dorsalCategory,
+        dorsalCategory: functions?.getDorsalCategories().find(c => c.id === d.dorsalCategory)?.name,
         iban: d.iban,
         sportSchoolId: d.sportSchoolName, 
         groupName: d.groupName,
-        days: d.days !== null && d.days.length > 0 ? d.days.split(',').map((day: String) => daysMap.get(day.toLowerCase())).join(','): '',
+        days: d.days,
         numDays: d.numDays,
         code: d.code,
         lastRegisterDate: d.lastRegisterDate ? new Intl.DateTimeFormat('sq-AL').format(new Date(d.lastRegisterDate)) : '',
@@ -121,10 +93,10 @@ function familyDataConversor(d: { id: number, code: number, count: number }) {
     }
 }
 
-function scheduleDataConversor(d: {id: number, day: string, startHour: number, startMinute: number, endHour: number, endMinute: number}){
+function scheduleDataConversor(d: {id: number, day: string, startHour: number, startMinute: number, endHour: number, endMinute: number, dayTranslate: string}){
     return {
         id : d.id, 
-        day: daysMap.get(d.day.toLowerCase()), 
+        day: d.dayTranslate, 
         start: d.startHour + ':' + (d.startMinute.toString().length < 2 ? (d.startMinute + '0') : d.startMinute),
         end: d.endHour + ':' + (d.endMinute.toString().length < 2 ? (d.endMinute + '0') : d.endMinute)
     }
@@ -150,7 +122,7 @@ function sportDataConversor(d: any){
         id: d.id,
         athleteId: d.athleteId,
         attitude: d.attitude,
-        category: d.category,
+        category: functions?.getCategories().find(c => c.id === d.category)?.name,
         implication: d.implication,
         injuries: d.injuries,
         motivations: d.motivations,
@@ -159,6 +131,16 @@ function sportDataConversor(d: any){
         season: d.season,
         technicalLevel: d.technicalLevel,
         numCompetitions: d.numCompetitions
+    }
+}
+
+function incidenceConversor(d: any){
+    return {
+        id: d.id,
+        title: d.title,
+        description: d.description,
+        status: functions?.getIncidenceStatus().find(c => c.id === d.status)?.name,
+        
     }
 }
 
@@ -208,6 +190,11 @@ const Utils = (action: { type: string, payload: any }) => {
     else if (action.type === ACTION_TYPES.LOAD_ATHLETE_SPORTDATA_TABLE){
         items = action.payload.content.map((d: any) => {
             return sportDataConversor(d)
+        })
+    }
+    else if (action.type === ACTION_TYPES.LOAD_INCIDENCE_TABLE){
+        items = action.payload.content.map((d: any) => {
+            return incidenceConversor(d)
         })
     }
     return items;

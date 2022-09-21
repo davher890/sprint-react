@@ -9,6 +9,10 @@ export const findAthleteDataPagination = (page: number, size: number, filters: a
     return findDataPagination("registered_athletes", page, size, filters, sort, sortDirection)
 }
 
+export const findIncidenceDataPagination = (page: number, size: number, filters: any, sort: string, sortDirection: Order) => {
+    return findDataPagination("incidences", page, size, filters, sort, sortDirection)
+}
+
 export const findHistoricDataPagination = (page: number, size: number, filters: any, sort: string, sortDirection: Order) => {
     return findDataPagination("unregistered_athletes", page, size, filters, sort, sortDirection)
 }

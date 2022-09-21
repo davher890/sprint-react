@@ -59,50 +59,47 @@ const functions = {
                 case 3:
                 case 4:
                 case 5:
-                    category = "CHUPETIN"
+                    category = "chupetin"
                     break;
                 case 6:
                 case 7:
-                    category = "SUB8"
+                    category = "sub8"
                     break;
                 case 8:
                 case 9:
-                    category = "SUB10"
+                    category = "sub10"
                     break;
                 case 10:
                 case 11:
-                    category = "SUB12"
+                    category = "sub12"
                     break;
                 case 12:
                 case 13:
-                    category = "SUB14"
+                    category = "sub14"
                     break;
                 case 14:
                 case 15:
-                    category = "SUB16"
+                    category = "sub16"
                     break;
                 case 16:
                 case 17:
-                    category = "SUB18"
+                    category = "sub18"
                     break;
                 case 18:
                 case 19:
-                    category = "SUB20"
+                    category = "sub20"
                     break;
                 case 20:
                 case 21:
                 case 22:
-                    category = "SUB23"
+                    category = "sub23"
                     break;
                 default:
-                    if (currentYear - year < 6) {
-                        category = "SUB8"
-                    }
-                    if (currentYear - year <= 35) {
-                        category = "SENIOR"
+                    if (currentYear - year  > 22 && currentYear - year < 35) {
+                        category = "senior"
                     }
                     else {
-                        category = "MASTER"
+                        category = "master"
                     }
                     break;
             }
@@ -113,17 +110,17 @@ const functions = {
     getCategories: function () {
         return [
             // { id: "", name: "" },
-            { id: "MASTER", name: "MASTER" },
-            { id: "SENIOR", name: "SENIOR" },
-            { id: "SUB23", name: "SUB23" },
-            { id: "SUB20", name: "SUB20" },
-            { id: "SUB18", name: "SUB18" },
-            { id: "SUB16", name: "SUB16" },
-            { id: "SUB14", name: "SUB14" },
-            { id: "SUB12", name: "SUB12" },
-            { id: "SUB10", name: "SUB10" },
-            { id: "SUB8", name: "SUB8" },
-            { id: "CHUPETIN", name: "CHUPETIN"}
+            { id: "master", name: "MASTER" },
+            { id: "senior", name: "SENIOR" },
+            { id: "sub23", name: "SUB23" },
+            { id: "sub20", name: "SUB20" },
+            { id: "sub18", name: "SUB18" },
+            { id: "sub16", name: "SUB16" },
+            { id: "sub14", name: "SUB14" },
+            { id: "sub12", name: "SUB12" },
+            { id: "sub10", name: "SUB10" },
+            { id: "sub8", name: "SUB8" },
+            { id: "chupetin", name: "CHUPETIN"}
         ]
     },
 
@@ -139,21 +136,28 @@ const functions = {
     getDorsalCategories: function () {
         return [
             // { id: "", name: "" },
-            { id: "MM", name: "MM" },
-            { id: "SM", name: "SM" },
-            { id: "SF", name: "SF" },
-            { id: "U23M", name: "U23M" },
-            { id: "U20F", name: "U20F" },
-            { id: "U18F", name: "U18F" },
-            { id: "U20M", name: "U20M" },
-            { id: "U16M", name: "U16M" },
-            { id: "U23F", name: "U23F" },
-            { id: "U14M", name: "U14M" },
-            { id: "U10M", name: "U10M" },
-            { id: "U14F", name: "U14F" },
-            { id: "U10F", name: "U10F" },
-            { id: "U18M", name: "U18M" },
-            { id: "U12M", name: "U12M" }
+            { id: "mm", name: "MM" },
+            { id: "sm", name: "SM" },
+            { id: "sf", name: "SF" },
+            { id: "u23m", name: "U23M" },
+            { id: "u20f", name: "U20F" },
+            { id: "u18f", name: "U18F" },
+            { id: "u20m", name: "U20M" },
+            { id: "u16m", name: "U16M" },
+            { id: "u23f", name: "U23F" },
+            { id: "u14m", name: "U14M" },
+            { id: "u10m", name: "U10M" },
+            { id: "u14f", name: "U14F" },
+            { id: "u10f", name: "U10F" },
+            { id: "u18m", name: "U18M" },
+            { id: "u12m", name: "U12M" }
+        ]
+    },
+
+    getIncidenceStatus: function () {
+        return [ 
+            {id: "open", name: "Abierta"}, 
+            { id: "solved", name: "Resuelta"} 
         ]
     },
 

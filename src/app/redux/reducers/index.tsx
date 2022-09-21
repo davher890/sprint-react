@@ -8,6 +8,7 @@ import sportSchoolReducer from "./sportSchools/index";
 import tableReducer from "./table/index";
 import trainerReducer from "./trainers/index";
 import userReducer from "./users/index";
+import incidenceReducer from "./incidences/index";
 import thunk from "redux-thunk";
 
 declare global {
@@ -27,7 +28,8 @@ export default createStore(
     sport_school_reducer: sportSchoolReducer,
     table_reducer: tableReducer,
     trainer_reducer: trainerReducer,
-    user_reducer: userReducer
+    user_reducer: userReducer,
+    incidence_reducer: incidenceReducer
   }),
   storeEnhancers(applyMiddleware(thunk))
 );

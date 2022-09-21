@@ -26,7 +26,7 @@ const LoginForm: React.FC<any> = (props) => {
         if(event.key === 'Enter'){
             props.signUp(email, password)
         }
-      }
+    }
     
     return (
         <Grid container>
