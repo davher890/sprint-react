@@ -8,6 +8,8 @@ import Card from '../custom/Card';
 import SaveButton from '../custom/SaveButton'
 import Select from '../custom/Select'
 
+import Functions from "../../utils/Functions";
+
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
 
@@ -66,7 +68,7 @@ const NewIncidenceForm: React.FC<any> = (props) => {
                                 </Grid>
                                 <Grid item xs>
                                     <Select name="status" label="Estado" 
-                                        options={[{ id: "open", name: "Abierta"}, { id: "solved", name: "Resuelta"}]} value={status}
+                                        options={Functions.getIncidenceStatus()} value={status}
                                         onChange={(value: string, item: any) => {
                                             setStatus(item.id)
                                         }}

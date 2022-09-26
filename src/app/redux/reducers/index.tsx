@@ -9,6 +9,7 @@ import tableReducer from "./table/index";
 import trainerReducer from "./trainers/index";
 import userReducer from "./users/index";
 import incidenceReducer from "./incidences/index";
+import receiptReducer from "./receipts/index";
 import thunk from "redux-thunk";
 
 declare global {
@@ -29,7 +30,8 @@ export default createStore(
     table_reducer: tableReducer,
     trainer_reducer: trainerReducer,
     user_reducer: userReducer,
-    incidence_reducer: incidenceReducer
+    incidence_reducer: incidenceReducer,
+    receipt_reducer: receiptReducer
   }),
   storeEnhancers(applyMiddleware(thunk))
 );

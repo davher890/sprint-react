@@ -14,6 +14,9 @@ import ScheduleTable from './components/schedules/ScheduleTable';
 import IncidenceData from './components/incidences/IncidenceData';
 import IncidenceTable from './components/incidences/IncidenceTable';
 
+import ReceiptData from './components/receipts/ReceiptData';
+import ReceiptTable from './components/receipts/ReceiptTable';
+
 import SportSchoolData from './components/sport_schools/SportSchoolData';
 import SportSchoolTable from './components/sport_schools/SportSchoolTable';
 
@@ -52,7 +55,7 @@ const AppBar: React.FC<any> = (props) => {
           
           <Route path="/admin/payments"           element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" ><Payment/></Box></AuthenticatedProtected>}/>
           
-          <Route path="/admin/users/:id"          element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" ><UserData/></Box></AuthenticatedProtected></AdminProtected>}/>
+          <Route path="/admin/users/:id"          element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%"><UserData/></Box></AuthenticatedProtected></AdminProtected>}/>
           <Route path="/admin/users/list"         element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><UserTable/></Box></AuthenticatedProtected>}/>
           <Route path="/users/:id"                element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><UserData/></Box></AuthenticatedProtected>}/>
           
@@ -85,6 +88,10 @@ const AppBar: React.FC<any> = (props) => {
           <Route path="/incidences/list"          element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><IncidenceTable/></Box></AuthenticatedProtected>}/>
           <Route path="/incidences/:id"           element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><IncidenceData/></Box></AuthenticatedProtected>}/>
           <Route path="/incidences"               element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><IncidenceData/></Box></AuthenticatedProtected>}/>
+          
+          <Route path="/receipts/list"            element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptTable/></Box></AuthenticatedProtected></AdminProtected>}/>
+          <Route path="/receipts/:id"             element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptData/></Box></AuthenticatedProtected></AdminProtected>}/>
+          <Route path="/receipts"                 element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptData/></Box></AuthenticatedProtected></AdminProtected>}/>
           
           <Route path="/trainers/list"            element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><TrainerTable/></Box></AuthenticatedProtected>}/>
           <Route path="/trainers/:id"             element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><TrainerData/></Box></AuthenticatedProtected>}/>

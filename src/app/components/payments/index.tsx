@@ -2,7 +2,6 @@ import React, { useState } from "react"
 
 import moment, { Moment } from 'moment'
 import { Grid, AppBar, Toolbar, Snackbar } from "@material-ui/core";
-import { Alert, AlertTitle } from '@material-ui/lab';
 
 import Table from "../custom/Table";
 import TextField from '../custom/TextField';
@@ -59,7 +58,7 @@ const NewPaymentForm: React.FC<any> = (props) => {
 
     return (
         <React.Suspense fallback={<div>Cargando...</div>}>
-            <Snackbar open={successMessage !== undefined && successMessage !== ''}
+            {/* <Snackbar open={successMessage !== undefined && successMessage !== ''}
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
                 <Alert severity="success" onClose={() => { 
                         setSuccessMessage(""); 
@@ -67,7 +66,7 @@ const NewPaymentForm: React.FC<any> = (props) => {
                     <AlertTitle>Ok!</AlertTitle>
                     <strong>{successMessage}</strong>
                 </Alert>
-            </Snackbar>
+            </Snackbar> */}
 
             <Grid container direction="column">
                 <Grid container item direction='row' spacing={3}>
@@ -112,7 +111,7 @@ const NewPaymentForm: React.FC<any> = (props) => {
                             page={props.page}
                             size={props.size}
                             total={props.total}
-                            columns={Utils.getPaymentColumns()} 
+                            // columns={Utils.getPaymentColumns()} 
                             downloadData={downloadData}
                         />
                     </Grid>

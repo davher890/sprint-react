@@ -53,7 +53,7 @@ const Utils = {
         ]
     },
 
-    getPaymentColumns: () => {
+    getReceiptAthleteColumns: () => {
         return [{ dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
         { dataField: 'firstSurname', text : 'Primer apellido', filter: { type: "text" } }, 
         { dataField: 'secondSurname', text : 'Segundo apellido', filter: { type: "text" } }, 
@@ -162,6 +162,18 @@ const Utils = {
                 type: "options",
                 options : functions.getIncidenceStatus()
             }},
+        ]
+    },
+
+    getReceiptColumns: () => {
+        return [
+            { dataField: 'id', text: 'Id', show: false },
+            { dataField: 'collection', text: 'Remesa', filter: { type: "text" } },
+            { dataField: 'createdAt', text: 'Fecha creación', filter: { type: "text" } },
+            { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
+                type: "options",
+                options : functions.getSportSchools()
+            }}
         ]
     },
 

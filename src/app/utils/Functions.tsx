@@ -161,6 +161,23 @@ const functions = {
         ]
     },
 
+    getReceiptCollections: function () {
+        return [ 
+            { id: "september", name: "Septiembre" },
+            { id: "october", name: "Octubre" },
+            { id: "january", name: "Enero" },
+            { id: "april", name: "Abril" },
+            { id: "july", name: "Julio"} 
+        ]
+    },
+
+    getReceiptStatuses: function () { 
+        return [ 
+            { id: "pending", name: "Pendiente" },
+            { id: "paid", name: "Pagado" }
+        ]
+    },
+
     getSportSchools: function() {
         return JSON.parse(sessionStorage.getItem('sport_schools') || '[]')
     },

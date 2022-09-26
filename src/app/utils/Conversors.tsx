@@ -2,6 +2,8 @@ import * as ACTION_TYPES from "../redux/constants/action_types";
 
 import functions from "./Functions";
 
+import moment from 'moment'
+
 function sportSchoolDataConversor(d: { id: number, name: string, municipality: string, address: string }) {
     return {
         id: d.id,
@@ -19,7 +21,16 @@ function groupDataConversor(d: { id: number, name: string, sportSchoolName: stri
     }
 }
 
-function paymentAthleteDataConversor(d: any) {
+function receiptDataConversor(d: { id: number, collection: string, sportSchoolName: string, createdAt: number }) {
+    return {
+        id : d.id,
+        collection: functions?.getReceiptCollections().find(c => c.id === d.collection)?.name,
+        sportSchoolId: d.sportSchoolName, 
+        createdAt: moment(d.createdAt).format("YYYY-MM-DD hh:mm:ss")
+    }
+}
+
+function receiptAthleteDataConversor(d: any) {
     return {
         id : d.id,
         name : d.name || '', 
@@ -162,9 +173,9 @@ const Utils = (action: { type: string, payload: any }) => {
             return athleteDataConversor(d)
         })
     }
-    else if (action.type === ACTION_TYPES.LOAD_PAYMENT_ATHLETE_TABLE){
+    else if (action.type === ACTION_TYPES.LOAD_RECEIPT_ATHLETE_TABLE){
         items = action.payload.content.map((d: any) => {
-            return paymentAthleteDataConversor(d)
+            return receiptAthleteDataConversor(d)
         })
     }
     else if (action.type === ACTION_TYPES.LOAD_FAMILY_TABLE){
@@ -195,6 +206,11 @@ const Utils = (action: { type: string, payload: any }) => {
     else if (action.type === ACTION_TYPES.LOAD_INCIDENCE_TABLE){
         items = action.payload.content.map((d: any) => {
             return incidenceConversor(d)
+        })
+    }
+    else if (action.type === ACTION_TYPES.LOAD_RECEIPT_TABLE){
+        items = action.payload.content.map((d: any) => {
+            return receiptDataConversor(d)
         })
     }
     return items;

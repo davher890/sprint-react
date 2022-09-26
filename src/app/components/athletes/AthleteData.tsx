@@ -22,7 +22,7 @@ import PhoneCard from '../custom/PhoneCard'
 
 import AthletesList from '../custom/Athletes/AthletesList'
 import AthletesObservations from './AthleteObservations'
-
+import AthleteReceipts from './AthleteReceipts'
 import AthleteSportdata from './AthleteSportdata'
 
 // Redux
@@ -58,8 +58,6 @@ class CreateAthlete extends React.Component<any, any> {
     handleFormSubmit() {
         this.props.addAthlete(this.state)
     }
-
-    
 
     getPhoneList(phone1: string, phone2: string, phone3: string): string[] {
 
@@ -163,6 +161,7 @@ class CreateAthlete extends React.Component<any, any> {
                         registerObservations: '',
                         openRegisterDialog: false,
                         openSportdataDialog: false,
+                        openReceiptsDialog: false,
                         openMatchingAthletes: false,
                         openDeleteDialog: false,
                         selectedCategory: false,
@@ -202,10 +201,10 @@ class CreateAthlete extends React.Component<any, any> {
                         if ((values.holderDni === '' || !utils.isValidDni(values.holderDni)) && values.paymentType === "DOM" ) {
                             errors.holderDni = true;
                         }
-                        if (values.familiarOneDni != '' && !utils.isValidDni(values.familiarOneDni)) {
+                        if (values.familiarOneDni !== '' && !utils.isValidDni(values.familiarOneDni)) {
                             errors.familiarOneDni = true;
                         }
-                        if (values.familiarTwoDni != '' && !utils.isValidDni(values.familiarTwoDni)) {
+                        if (values.familiarTwoDni !== '' && !utils.isValidDni(values.familiarTwoDni)) {
                             errors.familiarTwoDni = true;
                         }
                         if (values.age >= 14 && !utils.isValidDni(values.dni)){
@@ -388,23 +387,43 @@ class CreateAthlete extends React.Component<any, any> {
                                                 </Dialog>
                                             </Grid>
                                         }
-                                        <Grid item xs={1}>
-                                            {values.id ? <Button onClick={() => { setFieldValue('openSportdataDialog', true) }} >Histórico deportivo</Button> : null}
-                                            <Dialog fullWidth={true} maxWidth="xl" open={values.openSportdataDialog} aria-labelledby="form-dialog-title"
-                                                onClose={() => {
-                                                    setFieldValue('openSportdataDialog', false)
-                                                }}
-                                            >
-                                                <DialogTitle id="form-dialog-title">Histórico deportivo</DialogTitle>
-                                                <DialogContent>
-                                                    <Grid container>
-                                                        <AthleteSportdata id={values.id} />
-                                                    </Grid>
-                                                </DialogContent>
-                                                <DialogActions>
-                                                    <Button onClick={() => { setFieldValue('openSportdataDialog', false) }}>Cerrar</Button>
-                                                </DialogActions>
-                                            </Dialog>
+                                        <Grid container item direction="column" xs={1}>
+                                            <Grid item xs>
+                                                {values.id ? <Button onClick={() => { setFieldValue('openSportdataDialog', true) }} >Histórico deportivo</Button> : null}
+                                                <Dialog fullWidth={true} maxWidth="xl" open={values.openSportdataDialog} aria-labelledby="form-dialog-title"
+                                                    onClose={() => {
+                                                        setFieldValue('openSportdataDialog', false)
+                                                    }}
+                                                >
+                                                    <DialogTitle id="form-dialog-title">Histórico deportivo</DialogTitle>
+                                                    <DialogContent>
+                                                        <Grid container>
+                                                            <AthleteSportdata id={values.id} />
+                                                        </Grid>
+                                                    </DialogContent>
+                                                    <DialogActions>
+                                                        <Button onClick={() => { setFieldValue('openSportdataDialog', false) }}>Cerrar</Button>
+                                                    </DialogActions>
+                                                </Dialog>
+                                            </Grid>
+                                            <Grid item xs>
+                                                {values.id ? <Button onClick={() => { setFieldValue('openReceiptsDialog', true) }} >Recibos</Button> : null}
+                                                <Dialog fullWidth={true} maxWidth="xl" open={values.openReceiptsDialog} aria-labelledby="form-dialog-title"
+                                                    onClose={() => {
+                                                        setFieldValue('openReceiptsDialog', false)
+                                                    }}
+                                                >
+                                                    <DialogTitle id="form-dialog-title">Recibos</DialogTitle>
+                                                    <DialogContent>
+                                                        <Grid container>
+                                                            <AthleteReceipts id={values.id} />
+                                                        </Grid>
+                                                    </DialogContent>
+                                                    <DialogActions>
+                                                        <Button onClick={() => { setFieldValue('openReceiptsDialog', false) }}>Cerrar</Button>
+                                                    </DialogActions>
+                                                </Dialog>
+                                            </Grid>
                                         </Grid>
                                         <Grid item xs={1}>
                                             <Checkbox name="enrollmentFeePaid" checked={values.enrollmentFeePaid === true} 
