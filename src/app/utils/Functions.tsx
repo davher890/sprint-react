@@ -156,7 +156,7 @@ const functions = {
 
     getIncidenceStatus: function () {
         return [ 
-            {id: "open", name: "Abierta"}, 
+            { id: "open", name: "Abierta"}, 
             { id: "solved", name: "Resuelta"} 
         ]
     },

@@ -21,6 +21,7 @@ import FeeInfo from '../custom/FeeInfo'
 import PhoneCard from '../custom/PhoneCard'
 
 import AthletesList from '../custom/Athletes/AthletesList'
+import AthleteFamilyData from './AthleteFamilyData'
 import AthletesObservations from './AthleteObservations'
 import AthleteReceipts from './AthleteReceipts'
 import AthleteSportdata from './AthleteSportdata'
@@ -355,6 +356,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                 <Dialog fullWidth={true} open={values.openRegisterDialog} aria-labelledby="form-dialog-title"
                                                     onClose={() => {
                                                         setFieldValue('openRegisterDialog', false)
+                                                        this.getAthlete(values.id)
                                                     }}
                                                 >
                                                     <DialogTitle id="form-dialog-title">Fecha de {utils.isRegistered(values.historic) ? 'baja' : 'alta'}</DialogTitle>
@@ -581,59 +583,52 @@ class CreateAthlete extends React.Component<any, any> {
                                     <Grid container item spacing={2}>
                                         <Grid item xs>
                                             <CustomCard title="Datos Familiares">
-                                                <Typography color="textSecondary">Familiar 1</Typography>
-                                                <Grid container direction="column" spacing={2}>
-                                                    <Grid container item spacing={1}>
-                                                        <Grid item xs>
-                                                            <TextField name="familiarOneName" label="Nombre" value={values.familiarOneName} margin="dense" onChange={handleChange} />
-                                                        </Grid>
-                                                        <Grid item xs>
-                                                            <TextField name="familiarOneFirstSurname" label="Primer Apellido" value={values.familiarOneFirstSurname} margin="dense" onChange={handleChange} />
-                                                        </Grid>
-                                                        <Grid item xs>
-                                                            <TextField name="familiarOneSecondSurname" label="Segundo Apellido" value={values.familiarOneSecondSurname} margin="dense" onChange={handleChange} />
-                                                        </Grid>
+                                                <Grid container item direction="column" spacing={2}>
+                                                    <Grid container alignItems="flex-start">
+                                                        <Typography color="textSecondary">Familiar 1</Typography>
+                                                        <Button style={{maxWidth: '30%'}} onClick={() => {
+                                                            setFieldValue('holderName', values.familiarOneName)
+                                                            setFieldValue('holderFirstSurname', values.familiarOneFirstSurname)
+                                                            setFieldValue('holderSecondSurname', values.familiarOneSecondSurname)
+                                                            setFieldValue('holderDni', values.familiarOneDni)
+                                                        }}>Titular de la cuenta</Button>
                                                     </Grid>
-                                                    <Grid container item spacing={1}>
-                                                        <Grid item xs>
-                                                            <TextField name="familiarOneDni" type="text" label="Dni" value={values.familiarOneDni} error={touched.familiarOneDni && errors.familiarOneDni} margin="dense" onChange={handleChange}
-                                                                onBlur={() => {
-                                                                    if (values.familiarOneDni && !utils.isValidDni(values.familiarOneDni)){
-                                                                        setFieldTouched("familiarOneDni", true, false);
-                                                                        setFieldError("familiarOneDni", "Dni/Nie incorrecto");
-                                                                    }
-                                                                }} />
-                                                        </Grid>
-                                                        <Grid item xs>
-                                                            <TextField name="familiarOneMail" type="text" label="Email" value={values.familiarOneMail} margin="dense" onChange={handleChange} />
-                                                        </Grid>
+                                                    <AthleteFamilyData key={`familiar-one-${values.id}`} name={values.familiarOneName} firstSurname={values.familiarOneFirstSurname} secondSurname={values.familiarOneSecondSurname}
+                                                        dni={values.familiarOneDni} touchedDni={touched.familiarOneDni} errorsDni={errors.familiarOneDni}
+                                                        mail={values.familiarOneMail}
+                                                        dniOnBlur={() => {
+                                                            if (values.familiarOneDni && !utils.isValidDni(values.familiarOneDni)){
+                                                                setFieldTouched("familiarOneDni", true, false);
+                                                                setFieldError("familiarOneDni", "Dni/Nie incorrecto");
+                                                            }
+                                                        }} 
+                                                        onChange={(p: { name: string, value: string }) => {
+                                                            setFieldValue('familiarOne' + p.name, p.value)
+                                                        }}
+                                                    />
+                                                    <Grid container alignItems="flex-start">
+                                                        <Typography color="textSecondary">Familiar 2</Typography>
+                                                        <Button style={{maxWidth: '30%'}} onClick={() => {
+                                                            setFieldValue('holderName', values.familiarTwoName)
+                                                            setFieldValue('holderFirstSurname', values.familiarTwoFirstSurname)
+                                                            setFieldValue('holderSecondSurname', values.familiarTwoSecondSurname)
+                                                            setFieldValue('holderDni', values.familiarTwoDni)
+                                                        }}>Titular de la cuenta</Button>
                                                     </Grid>
-                                                    <Typography color="textSecondary">Familiar 2</Typography>
-                                                    <Grid container item spacing={1}>
-                                                        <Grid item xs>
-                                                            <TextField name="familiarTwoName" type="text" label="Nombre" value={values.familiarTwoName} margin="dense" onChange={handleChange} />
-                                                        </Grid>
-                                                        <Grid item xs>
-                                                            <TextField name="familiarTwoFirstSurname" type="text" label="Primer Apellido" value={values.familiarTwoFirstSurname} margin="dense" onChange={handleChange} />
-                                                        </Grid>
-                                                        <Grid item xs>
-                                                            <TextField name="familiarTwoSecondSurname" type="text" label="Segundo Apellido" value={values.familiarTwoSecondSurname} margin="dense" onChange={handleChange} />
-                                                        </Grid>
-                                                    </Grid>
-                                                    <Grid container item spacing={1}>
-                                                        <Grid item xs>
-                                                            <TextField name="familiarTwoDni" type="text" label="Dni" value={values.familiarTwoDni} error={touched.familiarTwoDni && errors.familiarTwoDni} margin="dense" onChange={handleChange} 
-                                                                onBlur={() => {
-                                                                    if (values.familiarTwoDni && !utils.isValidDni(values.familiarTwoDni)){
-                                                                        setFieldTouched("familiarTwoDni", true, false);
-                                                                        setFieldError("familiarTwoDni", "Dni/Nie incorrecto");
-                                                                    }
-                                                                }}/>
-                                                        </Grid>
-                                                        <Grid item xs>
-                                                            <TextField name="familiarTwoMail" type="text" label="Email" value={values.familiarTwoMail} margin="dense" onChange={handleChange} />
-                                                        </Grid>
-                                                    </Grid>
+                                                    <AthleteFamilyData key={`familiar-two-${values.id}`} name={values.familiarTwoName} firstSurname={values.familiarTwoFirstSurname} secondSurname={values.familiarTwoSecondSurname}
+                                                        dni={values.familiarTwoDni} touchedDni={touched.familiarTwoDni} errorsDni={errors.familiarTwoDni}
+                                                        mail={values.familiarTwoMail}
+                                                        dniOnBlur={() => {
+                                                            if (values.familiarTwoDni && !utils.isValidDni(values.familiarTwoDni)){
+                                                                setFieldTouched("familiarTwoDni", true, false);
+                                                                setFieldError("familiarTwoDni", "Dni/Nie incorrecto");
+                                                            }
+                                                        }} 
+                                                        onChange={(p: { name: string, value: string }) => {
+                                                            setFieldValue('familiarTwo' + p.name, p.value)
+                                                        }}
+
+                                                    />
                                                 </Grid>
                                             </CustomCard>
                                         </Grid>

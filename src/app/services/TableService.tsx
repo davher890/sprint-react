@@ -92,7 +92,7 @@ export const findGroupAthletesDataPagination = (groupId: number, scheduleIds: nu
 
     let endpoint = "groups/" + groupId + "/athletes"
     if (scheduleIds && scheduleIds.length > 0){
-        endpoint = "groups/" + groupId + "/schedules/" + scheduleIds.join("_") + "/athletes"
+        endpoint = "groups/" + groupId + "/schedules/" + scheduleIds.join(",") + "/athletes"
     }
     return findDataPagination(endpoint, page, size, filters, sort, sortDirection)
 }

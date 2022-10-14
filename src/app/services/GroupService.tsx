@@ -30,7 +30,7 @@ export const deleteGroup = (id: number) => {
 }
 
 export const downloadGroupSchedulesExcel = (groupId: number, scheduleIds: number[], columns: any, filters:any) => {
-    let endpoint = "/groups/" + groupId + "/schedules/" + scheduleIds.join("_") + "/athletes/excel"
+    let endpoint = "/groups/" + groupId + "/schedules/" + scheduleIds.join(",") + "/athletes/excel"
     let filtersParams = '';
     if (filters && Object.keys(filters).length > 0){
         filtersParams = "?filters=" + utils.getFilterParams(filters)
