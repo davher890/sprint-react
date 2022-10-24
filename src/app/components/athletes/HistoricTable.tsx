@@ -11,48 +11,39 @@ import { getHistoricTable, downloadHistoricAthletes } from "../../redux/actions/
 
 import { Order } from '../../types/order'
 
-class HistoricTableComponent extends React.Component<any, any> {
-    constructor(props: any) {
-        super(props);
-        this.state = {
-			columns : Utils.getAthleteColumns()
-		}
-		this.downloadData = this.downloadData.bind(this)
-    }
+const HistoricTableComponent: React.FC<any> = (props) => {
 
-	componentDidMount() {
-		this.props.getHistoricTable();
+	React.useEffect(() => {
+		props.getHistoricTable();
+	}, [])
+
+	const downloadData = (columns: any, filters: any) => {
+		props.downloadHistoricAthletes(columns, filters)
 	}
 
-	downloadData(columns: any, filters: any) {
-		this.props.downloadHistoricAthletes(columns, filters)
-	}
-
-	render() {
-		return (
-			<React.Suspense fallback={<div>Cargando...</div>}>
-				<Grid container direction="column">
-					<Grid item xs >
-						<Table 
-							data={this.props.table_data}
-							page={this.props.page}
-							size={this.props.size}
-							total={this.props.total}
-							columns={this.state.columns} 
-							downloadData={this.downloadData}
-							showColumns={true}
-							onPaginationFilterChange={(page: number, size: number, filters: any, sort: string, sortDirection: Order) => {
-								this.props.getHistoricTable(page, size, filters, sort, sortDirection);
-							}}
-							onRowClick={(id: number) => {
-								window.open("/athletes/" + id, "_self");
-							}}>
-						</Table>
-					</Grid>
+	return (
+		<React.Suspense fallback={<div>Cargando...</div>}>
+			<Grid container direction="column">
+				<Grid item xs >
+					<Table 
+						data={props.table_data}
+						page={props.page}
+						size={props.size}
+						total={props.total}
+						columns={Utils.getAthleteColumns()} 
+						downloadData={downloadData}
+						showColumns={true}
+						onPaginationFilterChange={(page: number, size: number, filters: any, sort: string, sortDirection: Order) => {
+							props.getHistoricTable(page, size, filters, sort, sortDirection);
+						}}
+						onRowClick={(id: number) => {
+							window.open("/athletes/" + id, "_self");
+						}}>
+					</Table>
 				</Grid>
-			</React.Suspense>
-		)
-	}
+			</Grid>
+		</React.Suspense>
+	)
 }
 
 function mapStateToProps(state: any) {

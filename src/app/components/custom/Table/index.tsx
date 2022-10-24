@@ -2,8 +2,7 @@ import * as React from "react"
 
 import { connect } from "react-redux";
 import { withTheme } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import { Table, TableBody, TableHead, TableRow, TablePagination, TableCell, TableContainer, TableSortLabel, Checkbox } from '@material-ui/core';
+import { Box, Grid, Table, TableBody, TableHead, TableRow, TablePagination, TableCell, TableContainer, TableSortLabel, Checkbox } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import ColumnsSelect from "../ColumnsSelect";
@@ -65,9 +64,6 @@ const CustomTable: React.FC<any> = (props) => {
 	const [orderBy, setOrderBy] = React.useState<string>('id')
     const [order, setOrder] = React.useState<Order>('asc')
 
-	const [selectableRows, setSelectableRows] = React.useState<boolean>(props.selectableRows || false)
-	const [selectedIds, setSelectedIds] = React.useState<number[]>(props.selectedIds || []);
-
 	const handleFilterChange = (filterType: string, filterField: string, filterValue: string, filterOptions?: any[]) => {
 
 		if (!filterValue || filterValue === ''){
@@ -121,8 +117,9 @@ const CustomTable: React.FC<any> = (props) => {
 		let rowId = row.id
 		let columnNames : string[] = visibleColumns.map((c: any) => c.dataField)
 		let cells = []
-		let rowChecked = selectedIds.indexOf(rowId) > -1
-		if (selectableRows){
+		let rowChecked = false 
+		if (props.selectableRows){
+			rowChecked = props.selectedIds.indexOf(rowId) > -1
 			cells.push(
 				<TableCell key={'select'}>
 					<Checkbox
@@ -130,7 +127,7 @@ const CustomTable: React.FC<any> = (props) => {
 						checked={rowChecked}
 						onChange={e => {
 							if (props.onSelectedIds){
-								props.onSelectedIds(rowId, e.target.checked)
+								props.onSelectedIds(rowId, e.target.checked, row)
 							}
 						}}
 					/>
@@ -155,10 +152,10 @@ const CustomTable: React.FC<any> = (props) => {
 	const getTableHead = () => {
 		return <TableHead>
 			<TableRow>
-				{selectableRows ? <TableCell style={{ minWidth: '50px' }} key={'select'}>
+				{props.selectableRows ? <TableCell style={{ minWidth: '50px' }} key={'select'}>
 					<Checkbox
 						color="secondary"
-						checked={functions.arrayContains(selectedIds, props.data.map((row: any) => row.id))}
+						checked={functions.arrayContains(props.selectedIds, props.data.map((row: any) => row.id))}
 						onChange={e => {
 							if (props.onSelectedIds){
 								props.data.map((row: any) => props.onSelectedIds(row.id, e.target.checked))
@@ -237,7 +234,7 @@ const CustomTable: React.FC<any> = (props) => {
 	}
 
 	return (
-		<div> 
+		<Box width="100%" overflow="auto">
 		{ false && props.loading ? <Spinner/> : 
 			<Grid container item direction="column" spacing={3}>
 				<Grid container item direction="row">
@@ -286,7 +283,7 @@ const CustomTable: React.FC<any> = (props) => {
 				</Grid>
 			</Grid>
 		}
-		</div>
+		</Box>
 	)
 }
 

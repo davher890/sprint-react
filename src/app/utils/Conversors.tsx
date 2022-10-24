@@ -33,6 +33,7 @@ function receiptDataConversor(d: { id: number, collection: string, sportSchoolNa
 function receiptAthleteDataConversor(d: any) {
     return {
         id : d.id,
+        athleteId : d.athleteId,
         name : d.name || '', 
         firstSurname : d.firstSurname || '', 
         secondSurname : d.secondSurname || '', 

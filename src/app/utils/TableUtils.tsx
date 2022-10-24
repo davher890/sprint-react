@@ -54,7 +54,9 @@ const Utils = {
     },
 
     getReceiptAthleteColumns: () => {
-        return [{ dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
+        return [
+        { dataField: 'athlete_id', text: 'athlete_id', show: false },
+        { dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
         { dataField: 'firstSurname', text : 'Primer apellido', filter: { type: "text" } }, 
         { dataField: 'secondSurname', text : 'Segundo apellido', filter: { type: "text" } }, 
         { dataField: 'lastRegisterDate', text : 'Fecha incorporacion' },

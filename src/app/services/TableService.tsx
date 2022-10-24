@@ -6,10 +6,6 @@ export const findPaymentAthleteDataPagination = (page: number, size: number, fil
     return findDataPagination("payment_athletes", page, size, filters, sort, sortDirection)
 }
 
-export const findReceiptAthleteDataPagination = (collection: string, sportSchoolId: number, page: number, size: number, filters: any, sort: string, sortDirection: Order) => {
-    return findDataPagination("receipts/athletes?collection="+collection+"&sportSchoolId="+sportSchoolId, page, size, filters, sort, sortDirection)
-}
-
 export const findReceiptIdAthleteDataPagination = (id: number, page: number, size: number, filters: any, sort: string, sortDirection: Order) => {
     return findDataPagination("receipts/" + id + "/athletes", page, size, filters, sort, sortDirection)
 }

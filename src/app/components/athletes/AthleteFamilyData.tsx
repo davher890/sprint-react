@@ -1,21 +1,8 @@
 import * as React from "react"
-import { connect } from "react-redux";
-import moment from 'moment'
-
-import { Grid, Typography } from '@material-ui/core'
-
-import { getAthleteObservations, getAthleteHistoric } from "../../redux/actions/athletes";
-import { addObservations, removeObservation } from "../../redux/actions/observations";
-
-import utils from "../../utils/Functions"
+import { Grid,  } from '@material-ui/core'
 
 import TextField from "../custom/TextField"
-import CustomCard from '../custom/Card'
-import SaveButton from "../custom/SaveButton";
-import DeleteButton from '../custom/DeleteButton'
-import ConfirmDialog from "../custom/ConfirmDialog";
 
-import { isManager, isAdmin } from "../../services/LoginService";
 
 const AthleteFamilyData: React.FC<any> = (props) => {
 

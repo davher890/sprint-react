@@ -1,7 +1,8 @@
 import * as ACTION_TYPES from "../../constants/action_types";
 
 const initialState = {
-    receipt: {},
+    receipts: [],
+    receipt: {}
 };
 
 function rootReducer(state = initialState, action: { type: string, payload: any }) {
@@ -11,6 +12,13 @@ function rootReducer(state = initialState, action: { type: string, payload: any 
             receipt: action.payload
         }
     }
+    else if (action.type === ACTION_TYPES.LOAD_RECEIPTS) {
+        return {
+            ...state,
+            receipts: action.payload
+        };
+    }
+    
     return state;
 };
 

@@ -1,23 +1,16 @@
 import * as React from "react"
 import moment from 'moment'
 import { Grid, Typography } from '@material-ui/core'
-import TextField from "../custom/TextField"
 
 import { connect } from "react-redux";
 import { getAthleteReceipts } from "../../redux/actions/athletes";
 import { saveReceipt } from "../../redux/actions/receipts";
 
 import SaveButton from "../custom/SaveButton";
-import DeleteButton from '../custom/DeleteButton'
-import ConfirmDialog from "../custom/ConfirmDialog";
-
 import Functions from "../../utils/Functions";
 
-import { isManager, isAdmin } from "../../services/LoginService";
 
 const AthleteReceipts: React.FC<any> = (props) => {
-    
-    const [collection, setCollection] = React.useState<string>("")
     
     React.useEffect(() => {
         if (props.id){

@@ -1,7 +1,7 @@
 import * as ACTION_TYPES from "../../constants/action_types";
 
-import { addData, findById, deleteReceipt, saveData, downloadExcel } from "../../../services/ReceiptService"
-import { findReceiptAthleteDataPagination, findReceiptDataPagination, findReceiptIdAthleteDataPagination } from "../../../services/TableService"
+import { addData, findAll, findById, deleteReceiptAthletes, deleteReceipt, downloadExcel, saveData } from "../../../services/ReceiptService"
+import { findReceiptDataPagination, findReceiptIdAthleteDataPagination } from "../../../services/TableService"
 
 import { Order } from '../../../types/order'
 
@@ -13,11 +13,10 @@ export function getReceiptTable(page: number, size: number, filters: any, sort: 
     }
 }
 
-export function getReceiptAthleteTable(collection: string, sportSchoolId: number, page: number, size: number, filters: any, sort: string, sortDirection: Order) {
-    return function (dispatch: any) {
-        dispatch({ type: ACTION_TYPES.API_CALL})
-        return findReceiptAthleteDataPagination(collection, sportSchoolId, page, size, filters, sort, sortDirection).then(json => {
-            dispatch({ type: ACTION_TYPES.LOAD_RECEIPT_ATHLETE_TABLE, payload: json });
+export function getAllReceipts() {
+    return function (dispatch: any)  {
+        return findAll().then(json => {
+            dispatch({ type: ACTION_TYPES.LOAD_RECEIPTS, payload: json });
         });
     }
 }
@@ -65,6 +64,13 @@ export function removeReceipt(id: number) {
     }
 }
 
+export function removeReceiptAthletes(id: number, athleteIds: number[]) {
+    return function (dispatch: any)  {
+        return deleteReceiptAthletes(id, athleteIds).then(json => {
+            dispatch({ type: ACTION_TYPES.DELETE_RECEIPT_ATHLETES, payload: json });
+        });
+    }
+}
 export function downloadReceiptAthletes(id: number) {
     return function (dispatch: any) {
         dispatch({ type: ACTION_TYPES.API_CALL})

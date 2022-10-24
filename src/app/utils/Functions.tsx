@@ -163,11 +163,10 @@ const functions = {
 
     getReceiptCollections: function () {
         return [ 
-            { id: "september", name: "Septiembre" },
             { id: "october", name: "Octubre" },
+            { id: "november", name: "Noviembre" },
             { id: "january", name: "Enero" },
-            { id: "april", name: "Abril" },
-            { id: "july", name: "Julio"} 
+            { id: "may", name: "Mayo"} 
         ]
     },
 

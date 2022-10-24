@@ -5,8 +5,6 @@ import Icon from '@material-ui/icons/CloudDownload';
 import Spinner from '../Spinner'
 import { connect } from "react-redux";
 
-import { apiCall } from "../../../redux/actions/api";
-
 const DownloadButton: React.FC<any> = (props) => {
 
 	return (
