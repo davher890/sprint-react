@@ -10,7 +10,9 @@ import Card from '../custom/Card';
 import Select from '../custom/Select'
 import ConfirmDialog from "../custom/ConfirmDialog";
 
+import SelectButton from '../custom/SelectButton'
 import SaveButton from '../custom/SaveButton'
+import RefreshButton from '../custom/RefreshButton'
 import SearchButton from '../custom/SearchButton'
 import DeleteButton from '../custom/DeleteButton'
 
@@ -41,15 +43,9 @@ const NewReceiptForm: React.FC<any> = (props) => {
     
     const saveReceipt = () => {
         if (receipt.name && receipt.collection && receipt.sportSchoolId > 0 && receipt.lastRegisterDate){
-            // if (props.receipt && props.receipt.id){
-            //     receipt.id = props.receipt.id
-            // }
-            // else {
-            //     receipt.year = year
-            // }
-            let d = moment(receipt.lastRegisterDate, 'YYYY-MM-DD').toDate();
-            console.log(d)
-            props.addReceipt({ ...receipt, lastRegisterDate: d })
+            let lastRegister = moment(receipt.lastRegisterDate, 'YYYY-MM-DD').toDate();
+            let lastUnregister = moment(receipt.lastUnregisterDate, 'YYYY-MM-DD').toDate();
+            props.addReceipt({ ...receipt, lastRegisterDate: lastRegister, lastUnregisterDate: lastUnregister })
         }
     }
 
@@ -65,7 +61,9 @@ const NewReceiptForm: React.FC<any> = (props) => {
 
     React.useEffect(() => {
         if (props.receipt.id){
-            setReceipt({ ...props.receipt, lastRegisterDate: moment.unix(props.receipt.lastRegisterDate/1000).format("YYYY-MM-DD") })
+            setReceipt({ ...props.receipt, 
+                lastRegisterDate: moment.unix(props.receipt.lastRegisterDate/1000).format("YYYY-MM-DD"),
+                lastUnregisterDate: moment.unix(props.receipt.lastUnregisterDate/1000).format("YYYY-MM-DD") })
             getReceiptIdAthletes()
         }
     }, [props.receipt])
@@ -91,9 +89,9 @@ const NewReceiptForm: React.FC<any> = (props) => {
             <Grid container direction="column" spacing={1}>
                 <Grid item xs>
                     <Card title="Datos del recibo">
-                        <Grid container direction="column" spacing={4}>
+                        <Grid container direction="column" spacing={2}>
                             <Grid container item xs spacing={4}>
-                                <Grid item xs={3}>
+                                <Grid item xs={2}>
                                     <TextField name="name" label="Nombre de la remesa" type="text" value={receipt.name}
                                         error={!receipt.name} onChange={(e:any) => {
                                             setReceipt({ ...receipt, name: e.target.value })
@@ -107,8 +105,6 @@ const NewReceiptForm: React.FC<any> = (props) => {
                                         }}
                                     />
                                 </Grid>
-                            </Grid>
-                            <Grid container item xs direction="row" spacing={4}>
                                 <Grid item xs={2}>
                                     <Select name="collection" label="Remesa" error={!receipt.collection}
                                         options={Functions.getReceiptCollections()} value={receipt.collection}
@@ -119,21 +115,57 @@ const NewReceiptForm: React.FC<any> = (props) => {
                                         }}
                                     />
                                 </Grid>
+                                <Grid container item xs spacing={4}>
+                                    <Grid item xs={3}>
+                                        {(props.loading ? <Spinner/> : !props.receipt.id && <SearchButton onClick={() => {
+                                            saveReceipt()
+                                        }}>Guardar</SearchButton>)
+                                        }
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Grid container item xs>
+                                <Grid container item direction="column" xs>
+                                    <Grid container item xs spacing={4}>
+                                        <Grid item xs={3}>
+                                            <span>Atletas cuya fecha de alta sea anterior a: </span>
+                                        </Grid>
+                                        <Grid item xs={1}>
+                                            <TextField value={receipt.lastRegisterDate} margin="dense"
+                                                type="date" error={!receipt.lastRegisterDate} InputProps={{inputProps: { min: "1940-01-01", max: moment(new Date()).format("YYYY-MM-DD")} }}
+                                                onChange={(e: any) => {
+                                                    setReceipt({ ...receipt, lastRegisterDate: e.target.value});
+                                                }}
+                                            />
+                                        </Grid>
+                                    </Grid>
+                                    <Grid container item xs spacing={4}>
+                                        <Grid item xs={3}>
+                                            <span>Atletas cuya fecha de baja sea posterior a: </span>
+                                        </Grid>
+                                        <Grid item xs={1}>
+                                            <TextField value={receipt.lastUnregisterDate}
+                                                type="date" error={!receipt.lastUnregisterDate} InputProps={{inputProps: { min: "1940-01-01", max: moment(new Date()).format("YYYY-MM-DD")} }}
+                                                onChange={(e: any) => {
+                                                    setReceipt({ ...receipt, lastUnregisterDate: e.target.value});
+                                                }}
+                                            />
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
                                 <Grid item xs={2}>
-                                    <TextField value={receipt.lastRegisterDate} margin="dense"
-                                        label="Fecha de alta" type="date" error={!receipt.lastRegisterDate}
-                                        InputProps={{inputProps: { min: "1940-01-01", max: moment(new Date()).format("YYYY-MM-DD")} }}
-                                        onChange={(e: any) => {
-                                            setReceipt({ ...receipt, lastRegisterDate: e.target.value});
-                                        }}
-                                    />
+                                    <Card title="Estado">
+                                        <h3>{Functions.getReceiptStatuses().find(st => st.id === receipt.status)?.name}</h3>
+                                    </Card>
                                 </Grid>
-                                <Grid item xs={3}>
-                                    {(props.loading ? <Spinner/> : !props.receipt.id && <SearchButton onClick={() => {
-                                        saveReceipt()
-                                    }}>Guardar</SearchButton>)
-                                    }
-                                </Grid>
+                                { receipt.status === 'pending' && 
+                                    <Grid item xs={2}>
+                                        <SelectButton onClick={async () => {
+                                            await setReceipt({ ...receipt, status: 'validated' });
+                                            saveReceipt()
+                                        }}>Validar</SelectButton>
+                                    </Grid>
+                                }
                             </Grid>
                         </Grid>
                     </Card>
@@ -142,6 +174,7 @@ const NewReceiptForm: React.FC<any> = (props) => {
                     <Grid item xs>
                         <Card title="Atletas">
                             <>
+                                <RefreshButton onClick={() => getReceiptIdAthletes()}>Refrescar datos</RefreshButton>
                                 { selectedIds && selectedIds.length > 0 && <DeleteButton onClick={() => setOpenDeleteAthletesDialog(true)}>Eliminar de la remesa</DeleteButton> }
                                 <Table 
                                     data={props.table_data}

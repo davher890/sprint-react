@@ -23,6 +23,10 @@ export const deleteReceiptAthletes = (id: number, athleteIds: number[]) => {
     return deleteRequest("/receipts/" + id + "/athletes?athlete_ids=" + athleteIds)
 }
 
+export const addReceiptAthletes = (id: number, athleteIds: number[]) => {
+    return deleteRequest("/receipts/" + id + "/athletes/add?athlete_ids=" + athleteIds)
+}
+
 export const downloadExcel = (id: number) => {
     return postExcelRequest('/receipts/' + id + '/excel', {}, 'receipt.xlsx')
 }

@@ -10,6 +10,7 @@ import Utils from "../../utils/TableUtils";
 
 import { connect } from "react-redux";
 import { getAthleteTable, downloadAthletes } from "../../redux/actions/athletes";
+import { saveReceiptAthletes } from "../../redux/actions/receipts";
 import { swapGroup } from "../../redux/actions/groups";
 
 import { Order } from '../../types/order'
@@ -98,7 +99,9 @@ const AthleteTable: React.FC<any> = (props) => {
 				<DialogActions>
 					<Button text="Aceptar"
 						onClick={(a: any) => {
+							props.saveReceiptAthletes(receiptId, selectedIds)
 							setOpenAddReceiptDialog(false)
+							props.getAthleteTable();
 						}}
 					></Button>
 				</DialogActions>
@@ -168,7 +171,7 @@ function mapStateToProps(state: any) {
 }
 
 const mapDispatchToProps = {
-	getAthleteTable, downloadAthletes, swapGroup
+	getAthleteTable, downloadAthletes, swapGroup, saveReceiptAthletes
 }
 
 export default connect(

@@ -59,17 +59,18 @@ const Utils = {
         { dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
         { dataField: 'firstSurname', text : 'Primer apellido', filter: { type: "text" } }, 
         { dataField: 'secondSurname', text : 'Segundo apellido', filter: { type: "text" } }, 
-        { dataField: 'lastRegisterDate', text : 'Fecha incorporacion' },
+        { dataField: 'lastRegisterDate', text : 'Fecha incorporacion', sort: false },
         { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
             type: "options",
             options : functions.getSportSchools()
         }},
         { dataField: 'groupName', text : 'Grupo', filter: { type: "text" } }, 
-        { dataField: 'days', text : 'Dias' }, 
-        { dataField: 'numDays', text : 'Num. Dias' }, 
-        { dataField: 'monthlyFee', text : 'Mensualidad' }, 
-        { dataField: 'enrollmentFee', text : 'Matricula' }, 
-        { dataField: 'membershipFee', text : 'Cuota de socio' }, 
+        { dataField: 'days', text : 'Dias', sort: false }, 
+        { dataField: 'numDays', text : 'Num. Dias', sort: false }, 
+        { dataField: 'monthlyFee', text : 'Mensualidad', sort: false }, 
+        { dataField: 'enrollmentFee', text : 'Matricula', sort: false }, 
+        { dataField: 'membershipFee', text : 'Cuota de socio', sort: false }, 
+        { dataField: 'paymentType', text : 'Forma de pago' },
         ] 
     },
 
@@ -170,6 +171,7 @@ const Utils = {
     getReceiptColumns: () => {
         return [
             { dataField: 'id', text: 'Id', show: false },
+            { dataField: 'name', text: 'Nombre', filter: { type: "text" } },
             { dataField: 'collection', text: 'Remesa', filter: { type: "text" } },
             { dataField: 'createdAt', text: 'Fecha creación', filter: { type: "text" } },
             { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
