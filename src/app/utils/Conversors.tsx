@@ -21,13 +21,14 @@ function groupDataConversor(d: { id: number, name: string, sportSchoolName: stri
     }
 }
 
-function receiptDataConversor(d: { id: number, name: string, collection: string, sportSchoolName: string, createdAt: number }) {
+function receiptDataConversor(d: { id: number, name: string, collection: string, sportSchoolName: string, createdAt: number, status: string }) {
     return {
         id : d.id,
         name: d.name,
         collection: functions?.getReceiptCollections().find(c => c.id === d.collection)?.name,
         sportSchoolId: d.sportSchoolName, 
-        createdAt: moment(d.createdAt).format("YYYY-MM-DD hh:mm:ss")
+        createdAt: moment(d.createdAt).format("YYYY-MM-DD hh:mm:ss"),
+        status: functions?.getReceiptStatus().find(c => c.id === d.status)?.name
     }
 }
 

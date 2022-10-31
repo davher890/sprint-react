@@ -170,7 +170,7 @@ const functions = {
         ]
     },
 
-    getReceiptStatuses: function () { 
+    getReceiptStatus: function () { 
         return [ 
             { id: "processing", name: "Procesando cuota de atletas" },
             { id: "pending", name: "Pendiente" },

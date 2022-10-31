@@ -1,6 +1,6 @@
 import * as React from "react"
 import moment from 'moment'
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, Box } from '@material-ui/core'
 
 import { connect } from "react-redux";
 import { getAthleteReceipts } from "../../redux/actions/athletes";
@@ -25,32 +25,44 @@ const AthleteReceipts: React.FC<any> = (props) => {
 
     return (
         <>
-            <Grid container direction="column" spacing={1}>
+            <Grid container direction="column" spacing={3}>
                 <Grid container direction="row">
                     <Grid item xs>
-                        <Typography variant="h5">Cuota de socio</Typography>
+                        <Box sx={{ fontWeight: 'bold'}}><h3>Nombre</h3></Box>
                     </Grid>
                     <Grid item xs>
-                        <Typography variant="h5">Mensualidad</Typography>
+                        <Box sx={{ fontWeight: 'bold' }}><h3>Remesa</h3></Box>
                     </Grid>
                     <Grid item xs>
-                        <Typography variant="h5">Matricula</Typography>
+                        <Box sx={{ fontWeight: 'bold' }}><h3>Fecha de creación</h3></Box>
                     </Grid>
                     <Grid item xs>
-                        <Typography variant="h5">Remesa</Typography>
+                        <Box sx={{ fontWeight: 'bold' }}><h3>Cuota de socio</h3></Box>
                     </Grid>
                     <Grid item xs>
-                        <Typography variant="h5">Fecha de creación</Typography>
+                        <Box sx={{ fontWeight: 'bold' }}><h3>Mensualidad</h3></Box>
                     </Grid>
                     <Grid item xs>
-                        <Typography variant="h5">Estado</Typography>
+                        <Box sx={{ fontWeight: 'bold' }}><h3>Matricula</h3></Box>
                     </Grid>
                     <Grid item xs>
+                        <Box sx={{ fontWeight: 'bold' }}><h3>Estado</h3></Box>
                     </Grid>
+                    <Grid item xs></Grid>
+                    
                 </Grid>
                 { 
                 props.receipts.map((receipt : any) => {
                     return <Grid container direction="row">
+                        <Grid item xs>
+                            { receipt.receiptName }
+                        </Grid>
+                        <Grid item xs>
+                            { Functions?.getReceiptCollections().find(c => c.id === receipt.receiptCollection)?.name }
+                        </Grid>
+                        <Grid item xs>
+                            { moment(receipt.receiptCreatedAt).format("YYYY-MM-DD hh:mm:ss") }
+                        </Grid>
                         <Grid item xs>
                             { receipt.membershipFee }
                         </Grid>
@@ -61,13 +73,7 @@ const AthleteReceipts: React.FC<any> = (props) => {
                             { receipt.enrollmentFee }
                         </Grid>
                         <Grid item xs>
-                            { Functions?.getReceiptCollections().find(c => c.id === receipt.receiptCollection)?.name }
-                        </Grid>
-                        <Grid item xs>
-                            { moment(receipt.receiptCreatedAt).format("YYYY-MM-DD hh:mm:ss") }
-                        </Grid>
-                        <Grid item xs>
-                            { Functions?.getReceiptStatuses().find(c => c.id === receipt.status)?.name }
+                            { Functions?.getReceiptStatus().find(c => c.id === receipt.status)?.name }
                         </Grid>
                         <Grid item xs>
                         { (receipt.status === 'pending') && 
@@ -76,6 +82,8 @@ const AthleteReceipts: React.FC<any> = (props) => {
                                 }}>Pagar</SaveButton>
                         }
                         </Grid>
+                        
+                        
                     </Grid>
                 })}
             </Grid>

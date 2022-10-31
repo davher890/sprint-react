@@ -15,8 +15,8 @@ import SaveButton from '../custom/SaveButton'
 import RefreshButton from '../custom/RefreshButton'
 import SearchButton from '../custom/SearchButton'
 import DeleteButton from '../custom/DeleteButton'
+import DownloadButton from '../custom/DownloadButton'
 
-// import Table from "../custom/Table";
 import SportSchoolSelect from "../custom/SportSchoolSelect";
 import Spinner from '../custom/Spinner'
 
@@ -41,16 +41,20 @@ const NewReceiptForm: React.FC<any> = (props) => {
     const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false)
     const [openDeleteAthletesDialog, setOpenDeleteAthletesDialog] = useState<boolean>(false)
     
-    const saveReceipt = () => {
-        if (receipt.name && receipt.collection && receipt.sportSchoolId > 0 && receipt.lastRegisterDate){
-            let lastRegister = moment(receipt.lastRegisterDate, 'YYYY-MM-DD').toDate();
-            let lastUnregister = moment(receipt.lastUnregisterDate, 'YYYY-MM-DD').toDate();
-            props.addReceipt({ ...receipt, lastRegisterDate: lastRegister, lastUnregisterDate: lastUnregister })
+    const saveReceipt = (r: any) => {
+        if (r.name && r.collection && r.sportSchoolId > 0 && r.lastRegisterDate){
+            let lastRegister = moment(r.lastRegisterDate, 'YYYY-MM-DD').toDate();
+            let lastUnregister = moment(r.lastUnregisterDate, 'YYYY-MM-DD').toDate();
+            props.addReceipt({ ...r, lastRegisterDate: lastRegister, lastUnregisterDate: lastUnregister })
         }
     }
 
     const getReceiptIdAthletes = () => {
         props.getReceiptIdAthleteTable(props.receipt.id, 0, 10, null, "id", "asc");
+    }
+
+    const downloadData = () => {
+        props.downloadReceiptAthletes(receipt.id)
     }
 
     React.useEffect(() => {
@@ -118,7 +122,7 @@ const NewReceiptForm: React.FC<any> = (props) => {
                                 <Grid container item xs spacing={4}>
                                     <Grid item xs={3}>
                                         {(props.loading ? <Spinner/> : !props.receipt.id && <SearchButton onClick={() => {
-                                            saveReceipt()
+                                            saveReceipt(receipt)
                                         }}>Guardar</SearchButton>)
                                         }
                                     </Grid>
@@ -155,14 +159,14 @@ const NewReceiptForm: React.FC<any> = (props) => {
                                 </Grid>
                                 <Grid item xs={2}>
                                     <Card title="Estado">
-                                        <h3>{Functions.getReceiptStatuses().find(st => st.id === receipt.status)?.name}</h3>
+                                        <h3>{Functions.getReceiptStatus().find(st => st.id === receipt.status)?.name}</h3>
                                     </Card>
                                 </Grid>
                                 { receipt.status === 'pending' && 
                                     <Grid item xs={2}>
                                         <SelectButton onClick={async () => {
-                                            await setReceipt({ ...receipt, status: 'validated' });
-                                            saveReceipt()
+                                            setReceipt({ ...receipt, status: 'validated' });
+                                            saveReceipt({ ...receipt, status: 'validated' })
                                         }}>Validar</SelectButton>
                                     </Grid>
                                 }
@@ -174,8 +178,12 @@ const NewReceiptForm: React.FC<any> = (props) => {
                     <Grid item xs>
                         <Card title="Atletas">
                             <>
-                                <RefreshButton onClick={() => getReceiptIdAthletes()}>Refrescar datos</RefreshButton>
-                                { selectedIds && selectedIds.length > 0 && <DeleteButton onClick={() => setOpenDeleteAthletesDialog(true)}>Eliminar de la remesa</DeleteButton> }
+                                <Grid container>
+                                    <RefreshButton onClick={() => getReceiptIdAthletes()}>Refrescar datos</RefreshButton>
+                                    { selectedIds && selectedIds.length > 0 && <DeleteButton onClick={() => setOpenDeleteAthletesDialog(true)}>Eliminar de la remesa</DeleteButton> }
+                                    { receipt.status === 'validated' && <DownloadButton onClick={(downloadData)}>Descargar Excel</DownloadButton>
+                                    }
+                                </Grid>
                                 <Table 
                                     data={props.table_data}
                                     page={props.page}
@@ -186,9 +194,6 @@ const NewReceiptForm: React.FC<any> = (props) => {
                                         if (props.receipt.id){
                                             props.getReceiptIdAthleteTable(props.receipt.id, page, size, filters, sort, sortDirection);
                                         }
-                                        // else if (receipt.collection &&  receipt.sportSchoolId > 0){
-                                        //     props.getReceiptAthleteTable(receipt.collection, receipt.sportSchoolId, page, size, filters, sort, sortDirection);
-                                        // }
                                     }}
                                     selectableRows={true}
                                     selectedIds={selectedIds}

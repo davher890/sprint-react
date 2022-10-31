@@ -310,6 +310,73 @@ class CreateAthlete extends React.Component<any, any> {
                             </DialogActions>
                         </Dialog>
 
+                        <Dialog fullWidth={true} open={values.openRegisterDialog} aria-labelledby="form-dialog-title"
+                            onClose={() => {
+                                setFieldValue('openRegisterDialog', false)
+                                this.getAthlete(values.id)
+                            }}
+                        >
+                            <DialogTitle id="form-dialog-title">Fecha de {utils.isRegistered(values.historic) ? 'baja' : 'alta'}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>
+                                    Introduce la fecha de {utils.isRegistered(values.historic) ? 'baja' : 'alta'}.
+                            </DialogContentText>
+                                <TextField name="registerDateStr" value={values.registerDateStr} margin="dense" onChange={(e: any) => {
+                                            let d: Moment = moment(e.target.value, "YYYY-MM-DD")
+                                            setFieldValue('registerDateStr', e.target.value);
+                                            setFieldValue('registerDate', d.toDate().getTime());
+                                        }}
+                                    type="date" />
+                                <TextField fullWidth name="registerObservations" label="Observaciones" multiline
+                                        value={values.registerObservations} onChange={handleChange}/>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => {
+                                    if (utils.isRegistered(values.historic)){
+                                        this.props.doUnregisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
+                                        .then(() => window.open("/athletes/list", "_self"))
+                                    }
+                                    else {
+                                        this.props.doRegisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
+                                        .then(() => window.open("/athletes/" + values.id, "_self"))
+                                    }
+                                }}>Guardar</Button>
+                                <Button onClick={() => { setFieldValue('openRegisterDialog', false) }}>Cancelar</Button>
+                            </DialogActions>
+                        </Dialog>
+
+                        <Dialog fullWidth={true} maxWidth="xl" open={values.openSportdataDialog} aria-labelledby="form-dialog-title"
+                            onClose={() => {
+                                setFieldValue('openSportdataDialog', false)
+                            }}
+                        >
+                            <DialogTitle id="form-dialog-title">Histórico deportivo</DialogTitle>
+                            <DialogContent>
+                                <Grid container>
+                                    <AthleteSportdata id={values.id} />
+                                </Grid>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => { setFieldValue('openSportdataDialog', false) }}>Cerrar</Button>
+                            </DialogActions>
+                        </Dialog>
+
+                        <Dialog fullWidth={true} maxWidth="xl" open={values.openReceiptsDialog} aria-labelledby="form-dialog-title"
+                            onClose={() => {
+                                setFieldValue('openReceiptsDialog', false)
+                            }}
+                        >
+                            <DialogTitle id="form-dialog-title">Recibos</DialogTitle>
+                            <DialogContent>
+                                <Grid container>
+                                    <AthleteReceipts id={values.id} />
+                                </Grid>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => { setFieldValue('openReceiptsDialog', false) }}>Cerrar</Button>
+                            </DialogActions>
+                        </Dialog>
+                        
                         <Box paddingBottom={7}>
                             <Grid container spacing={3}>
                                 <Grid container item spacing={3}>
@@ -353,78 +420,14 @@ class CreateAthlete extends React.Component<any, any> {
                                         { (isAdmin() || isManager()) &&
                                             <Grid item xs={1}>
                                                 {values.id ? <Button onClick={() => { setFieldValue('openRegisterDialog', true) }} >{utils.isRegistered(values.historic) ? 'Dar de baja' : 'Dar de alta'}</Button> : null}
-                                                <Dialog fullWidth={true} open={values.openRegisterDialog} aria-labelledby="form-dialog-title"
-                                                    onClose={() => {
-                                                        setFieldValue('openRegisterDialog', false)
-                                                        this.getAthlete(values.id)
-                                                    }}
-                                                >
-                                                    <DialogTitle id="form-dialog-title">Fecha de {utils.isRegistered(values.historic) ? 'baja' : 'alta'}</DialogTitle>
-                                                    <DialogContent>
-                                                        <DialogContentText>
-                                                            Introduce la fecha de {utils.isRegistered(values.historic) ? 'baja' : 'alta'}.
-                                                    </DialogContentText>
-                                                        <TextField name="registerDateStr" value={values.registerDateStr} margin="dense" onChange={(e: any) => {
-                                                                    let d: Moment = moment(e.target.value, "YYYY-MM-DD")
-                                                                    setFieldValue('registerDateStr', e.target.value);
-                                                                    setFieldValue('registerDate', d.toDate().getTime());
-                                                                }}
-                                                            type="date" />
-                                                        <TextField fullWidth name="registerObservations" label="Observaciones" multiline
-                                                                value={values.registerObservations} onChange={handleChange}/>
-                                                    </DialogContent>
-                                                    <DialogActions>
-                                                        <Button onClick={() => {
-                                                            if (utils.isRegistered(values.historic)){
-                                                                this.props.doUnregisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
-                                                                .then(() => window.open("/athletes/list", "_self"))
-                                                            }
-                                                            else {
-                                                                this.props.doRegisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
-                                                                .then(() => window.open("/athletes/" + values.id, "_self"))
-                                                            }
-                                                        }}>Guardar</Button>
-                                                        <Button onClick={() => { setFieldValue('openRegisterDialog', false) }}>Cancelar</Button>
-                                                    </DialogActions>
-                                                </Dialog>
                                             </Grid>
                                         }
                                         <Grid container item direction="column" xs={1}>
                                             <Grid item xs>
                                                 {values.id ? <Button onClick={() => { setFieldValue('openSportdataDialog', true) }} >Histórico deportivo</Button> : null}
-                                                <Dialog fullWidth={true} maxWidth="xl" open={values.openSportdataDialog} aria-labelledby="form-dialog-title"
-                                                    onClose={() => {
-                                                        setFieldValue('openSportdataDialog', false)
-                                                    }}
-                                                >
-                                                    <DialogTitle id="form-dialog-title">Histórico deportivo</DialogTitle>
-                                                    <DialogContent>
-                                                        <Grid container>
-                                                            <AthleteSportdata id={values.id} />
-                                                        </Grid>
-                                                    </DialogContent>
-                                                    <DialogActions>
-                                                        <Button onClick={() => { setFieldValue('openSportdataDialog', false) }}>Cerrar</Button>
-                                                    </DialogActions>
-                                                </Dialog>
                                             </Grid>
                                             <Grid item xs>
                                                 {values.id ? <Button onClick={() => { setFieldValue('openReceiptsDialog', true) }} >Recibos</Button> : null}
-                                                <Dialog fullWidth={true} maxWidth="xl" open={values.openReceiptsDialog} aria-labelledby="form-dialog-title"
-                                                    onClose={() => {
-                                                        setFieldValue('openReceiptsDialog', false)
-                                                    }}
-                                                >
-                                                    <DialogTitle id="form-dialog-title">Recibos</DialogTitle>
-                                                    <DialogContent>
-                                                        <Grid container>
-                                                            <AthleteReceipts id={values.id} />
-                                                        </Grid>
-                                                    </DialogContent>
-                                                    <DialogActions>
-                                                        <Button onClick={() => { setFieldValue('openReceiptsDialog', false) }}>Cerrar</Button>
-                                                    </DialogActions>
-                                                </Dialog>
                                             </Grid>
                                         </Grid>
                                         <Grid item xs={1}>

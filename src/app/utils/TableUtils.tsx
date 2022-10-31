@@ -177,6 +177,10 @@ const Utils = {
             { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
                 type: "options",
                 options : functions.getSportSchools()
+            }},
+            { dataField: 'status', text: 'Estado', filter: { 
+                type: "options",
+                options : functions.getReceiptStatus()
             }}
         ]
     },
