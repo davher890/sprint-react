@@ -1,12 +1,14 @@
 import React, { useState } from "react"
 
-import { Grid, AppBar, Toolbar } from '@material-ui/core';
-import moment, { Moment } from 'moment'
+import { Grid, AppBar, Toolbar, Snackbar } from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
+import moment from 'moment'
 
 import TextField from '../custom/TextField';
 import Card from '../custom/Card';
 import SaveButton from '../custom/SaveButton'
-import Select from '../custom/Select'
+
+import Functions from "../../utils/Functions";
 
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
@@ -19,12 +21,20 @@ const NewIncidenceForm: React.FC<any> = (props) => {
     const [title, setTitle] = useState<string>('')
     const [description, setDescription] = useState<string>('')
     const [message, setMessage] = useState<string>('')
-    const [status, setStatus] = useState<string>('')
+    const [status, setStatus] = useState<string>('open')
     
     const saveIncidence = () => {
         if (title && description){
             props.addIncidence({ title: title,  description: description, status: status, id: props.incidence.id })
         }
+    }
+
+    const openIncidence = async () => {
+        props.addIncidence({ title: title,  description: description, status: 'open', id: props.incidence.id })
+    }
+
+    const solveIncidence = async () => {
+        props.addIncidence({ title: title,  description: description, status: 'solved', id: props.incidence.id })
     }
 
     const saveIncidenceComment = () => {
@@ -36,8 +46,20 @@ const NewIncidenceForm: React.FC<any> = (props) => {
         }
     }
 
+    const getStatusName = () => {
+        let st = Functions.getIncidenceStatus().find(d => d.id === status)
+        if (st){
+            return st.name
+        }
+        else {
+            return null
+        }
+    }
+
     React.useEffect(() => {
-        props.getIncidence(props.id)
+        if (props.id){
+            props.getIncidence(props.id)
+        }
     }, [props.id])
 
     React.useEffect(() => {
@@ -51,6 +73,22 @@ const NewIncidenceForm: React.FC<any> = (props) => {
 
     return (
         <>
+            <Snackbar open={props.incidence && props.incidence.errorMessage !== undefined && props.incidence.errorMessage !== ''}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                <Alert severity="error">
+                    <AlertTitle>Error</AlertTitle>
+                    <strong>{props.incidence.errorMessage}</strong>
+                </Alert>
+            </Snackbar>
+            <Snackbar open={props.incidence && props.incidence.successMessage !== undefined && props.incidence.successMessage !== ''}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                <Alert severity="success" onClose={() => { 
+                        window.open("/incidences/" + props.incidence.id, "_self");
+                    }}>
+                    <AlertTitle>Ok!</AlertTitle>
+                    <strong>{props.incidence.successMessage}</strong>
+                </Alert>
+            </Snackbar>
             <Grid container direction="column" spacing={3}>
                 <Grid item xs>
                     <Card title="Datos de la Incidencia">
@@ -59,24 +97,39 @@ const NewIncidenceForm: React.FC<any> = (props) => {
                                 <Grid item xs>
                                     <TextField name="title" label="Titulo" value={title}
                                         error={!title}
+                                        InputProps={{
+                                            readOnly: props.incidence && props.incidence.id
+                                        }}
                                         onChange={(e: any) => {
                                             setTitle(e.target.value);
                                         }} 
                                     />
                                 </Grid>
                                 <Grid item xs>
-                                    <Select name="status" label="Estado" 
-                                        options={[{ id: "open", name: "Abierta"}, { id: "solved", name: "Resuelta"}]} value={status}
+                                    <TextField name="status" label="Estado" value={getStatusName()}
+                                        error={!status}
+                                        InputProps={{
+                                            readOnly: true,
+                                        }}
+                                        onChange={(e: any) => {
+                                            setStatus(e.target.value);
+                                        }} 
+                                    />
+                                    {/* <Select name="status" label="Estado" 
+                                        options={Functions.getIncidenceStatus()} value={status}
                                         onChange={(value: string, item: any) => {
                                             setStatus(item.id)
                                         }}
-                                    />
+                                    /> */}
                                 </Grid>
                             </Grid>
                             <Grid item xs>
                                 <TextField fullWidth name="description" label="Description" 
                                     error={!description} rows={20}
                                     value={description} multiline 
+                                    InputProps={{
+                                        readOnly: props.incidence && props.incidence.id,
+                                    }}
                                     onChange={(e: any) => {
                                         setDescription(e.target.value);
                                     }}
@@ -116,7 +169,9 @@ const NewIncidenceForm: React.FC<any> = (props) => {
             </Grid>
             <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
                 <Toolbar>
-                    <SaveButton text='Guardar' onClick={saveIncidence} />
+                    { (!props.incidence || !props.incidence.id) && <SaveButton onClick={saveIncidence} /> }
+                    { props.incidence && props.incidence.status === 'open' && <SaveButton onClick={solveIncidence}>Resuelta</SaveButton> }
+                    { props.incidence && props.incidence.status === 'solved' && <SaveButton onClick={openIncidence}>Reabrir</SaveButton> }
                 </Toolbar>
             </AppBar>
         </>

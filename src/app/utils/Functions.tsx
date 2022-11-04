@@ -156,8 +156,26 @@ const functions = {
 
     getIncidenceStatus: function () {
         return [ 
-            {id: "open", name: "Abierta"}, 
+            { id: "open", name: "Abierta"}, 
             { id: "solved", name: "Resuelta"} 
+        ]
+    },
+
+    getReceiptCollections: function () {
+        return [ 
+            { id: "october", name: "Octubre" },
+            { id: "november", name: "Noviembre" },
+            { id: "january", name: "Enero" },
+            { id: "may", name: "Mayo"} 
+        ]
+    },
+
+    getReceiptStatus: function () { 
+        return [ 
+            { id: "processing", name: "Procesando cuota de atletas" },
+            { id: "pending", name: "Pendiente" },
+            { id: "validated", name: "Validado" },
+            { id: "paid", name: "Pagado" }
         ]
     },
 

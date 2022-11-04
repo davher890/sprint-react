@@ -25,6 +25,10 @@ export const findAthleteObservations = (id: number) => {
     return getRequest("/athletes/" + id + "/observations")
 }
 
+export const findAthleteReceipts = (id: number) => {
+    return getRequest("/athletes/" + id + "/receipts")
+}
+
 export const findAthleteHistoric = (id: number) => {
     return getRequest("/athletes/" + id + "/historic")
 }

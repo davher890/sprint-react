@@ -6,6 +6,7 @@ const initialState = {
     athlete: {},
     athlete_fee: {},
     athlete_observations: [],
+    athlete_receipts: [],
     athlete_historic: [],
     athlete_sportdata: {}
 };
@@ -39,6 +40,12 @@ function rootReducer(state = initialState, action: { type: string, payload: any 
         return {
             ...state,
             athlete_observations: action.payload
+        };
+    }
+    else if (action.type === ACTION_TYPES.GET_ATHLETE_RECEIPTS) {
+        return {
+            ...state,
+            athlete_receipts: action.payload
         };
     }
     else if (action.type === ACTION_TYPES.GET_ATHLETE_HISTORIC) {

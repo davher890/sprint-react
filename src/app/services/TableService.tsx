@@ -5,6 +5,15 @@ import { Order } from '../types/order'
 export const findPaymentAthleteDataPagination = (page: number, size: number, filters: any, sort: string, sortDirection: Order) => {
     return findDataPagination("payment_athletes", page, size, filters, sort, sortDirection)
 }
+
+export const findReceiptIdAthleteDataPagination = (id: number, page: number, size: number, filters: any, sort: string, sortDirection: Order) => {
+    return findDataPagination("receipts/" + id + "/athletes", page, size, filters, sort, sortDirection)
+}
+
+export const findReceiptDataPagination = (page: number, size: number, filters: any, sort: string, sortDirection: Order) => {
+    return findDataPagination("receipts", page, size, filters, sort, sortDirection)
+}
+
 export const findAthleteDataPagination = (page: number, size: number, filters: any, sort: string, sortDirection: Order) => {
     return findDataPagination("registered_athletes", page, size, filters, sort, sortDirection)
 }
@@ -79,7 +88,7 @@ export const findGroupAthletesDataPagination = (groupId: number, scheduleIds: nu
 
     let endpoint = "groups/" + groupId + "/athletes"
     if (scheduleIds && scheduleIds.length > 0){
-        endpoint = "groups/" + groupId + "/schedules/" + scheduleIds.join("_") + "/athletes"
+        endpoint = "groups/" + groupId + "/schedules/" + scheduleIds.join(",") + "/athletes"
     }
     return findDataPagination(endpoint, page, size, filters, sort, sortDirection)
 }

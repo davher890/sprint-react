@@ -1,6 +1,6 @@
 import * as ACTION_TYPES from "../../constants/action_types";
 
-import { addData, findById, findAthleteFee, downloadExcel, findByPhone, findBySurnames, registerAthlete, unregisterAthlete, findAthleteObservations, findAthleteHistoric, deleteAthlete } from "../../../services/AthleteService"
+import { addData, findById, findAthleteFee, downloadExcel, findByPhone, findBySurnames, registerAthlete, unregisterAthlete, findAthleteObservations, findAthleteReceipts, findAthleteHistoric, deleteAthlete } from "../../../services/AthleteService"
 import { findHistoricDataPagination, findPaymentAthleteDataPagination, findAthleteDataPagination, findAthleteSportdataPagination, findDuplicatedAthletesDataPagination } from "../../../services/TableService"
 
 import utils from "../../../utils/Functions"
@@ -90,6 +90,14 @@ export function getAthleteObservations(id: number) {
     return function (dispatch: any) {
         return findAthleteObservations(id).then(json => {
             dispatch({ type: ACTION_TYPES.GET_ATHLETE_OBSERVATIONS, payload: json });
+        });
+    }
+}
+
+export function getAthleteReceipts(id: number) {
+    return function (dispatch: any) {
+        return findAthleteReceipts(id).then(json => {
+            dispatch({ type: ACTION_TYPES.GET_ATHLETE_RECEIPTS, payload: json });
         });
     }
 }

@@ -7,6 +7,7 @@ const initialState = {
 function rootReducer(state = initialState, action: { type: string, payload: any }) {
     if (action.type === ACTION_TYPES.DOWNLOAD_GROUP_ATTENDANCE 
         || action.type === ACTION_TYPES.DOWNLOAD_ATHLETES
+        || action.type === ACTION_TYPES.DOWNLOAD_RECEIPT_ATHLETES
         || action.type === ACTION_TYPES.DOWNLOAD_GROUP_ATHLETES
         || action.type === ACTION_TYPES.DOWNLOAD_HISTORIC
         || action.type === ACTION_TYPES.DOWNLOAD_SPORTSCHOOLS
@@ -23,7 +24,10 @@ function rootReducer(state = initialState, action: { type: string, payload: any 
         || action.type === ACTION_TYPES.LOAD_SCHEDULE_TABLE
         || action.type === ACTION_TYPES.LOAD_HISTORIC_TABLE
         || action.type === ACTION_TYPES.LOAD_FAMILY_TABLE
-        || action.type === ACTION_TYPES.LOAD_INCIDENCE_TABLE) {
+        || action.type === ACTION_TYPES.LOAD_INCIDENCE_TABLE
+        || action.type === ACTION_TYPES.LOAD_RECEIPT_TABLE
+        || action.type === ACTION_TYPES.LOAD_RECEIPT_ATHLETE_TABLE
+        || action.type === ACTION_TYPES.ADD_RECEIPT) {
         return {
             ...state,
             loading: false

@@ -21,8 +21,9 @@ import FeeInfo from '../custom/FeeInfo'
 import PhoneCard from '../custom/PhoneCard'
 
 import AthletesList from '../custom/Athletes/AthletesList'
+import AthleteFamilyData from './AthleteFamilyData'
 import AthletesObservations from './AthleteObservations'
-
+import AthleteReceipts from './AthleteReceipts'
 import AthleteSportdata from './AthleteSportdata'
 
 // Redux
@@ -58,8 +59,6 @@ class CreateAthlete extends React.Component<any, any> {
     handleFormSubmit() {
         this.props.addAthlete(this.state)
     }
-
-    
 
     getPhoneList(phone1: string, phone2: string, phone3: string): string[] {
 
@@ -163,6 +162,7 @@ class CreateAthlete extends React.Component<any, any> {
                         registerObservations: '',
                         openRegisterDialog: false,
                         openSportdataDialog: false,
+                        openReceiptsDialog: false,
                         openMatchingAthletes: false,
                         openDeleteDialog: false,
                         selectedCategory: false,
@@ -202,10 +202,10 @@ class CreateAthlete extends React.Component<any, any> {
                         if ((values.holderDni === '' || !utils.isValidDni(values.holderDni)) && values.paymentType === "DOM" ) {
                             errors.holderDni = true;
                         }
-                        if (values.familiarOneDni != '' && !utils.isValidDni(values.familiarOneDni)) {
+                        if (values.familiarOneDni !== '' && !utils.isValidDni(values.familiarOneDni)) {
                             errors.familiarOneDni = true;
                         }
-                        if (values.familiarTwoDni != '' && !utils.isValidDni(values.familiarTwoDni)) {
+                        if (values.familiarTwoDni !== '' && !utils.isValidDni(values.familiarTwoDni)) {
                             errors.familiarTwoDni = true;
                         }
                         if (values.age >= 14 && !utils.isValidDni(values.dni)){
@@ -310,6 +310,73 @@ class CreateAthlete extends React.Component<any, any> {
                             </DialogActions>
                         </Dialog>
 
+                        <Dialog fullWidth={true} open={values.openRegisterDialog} aria-labelledby="form-dialog-title"
+                            onClose={() => {
+                                setFieldValue('openRegisterDialog', false)
+                                this.getAthlete(values.id)
+                            }}
+                        >
+                            <DialogTitle id="form-dialog-title">Fecha de {utils.isRegistered(values.historic) ? 'baja' : 'alta'}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>
+                                    Introduce la fecha de {utils.isRegistered(values.historic) ? 'baja' : 'alta'}.
+                            </DialogContentText>
+                                <TextField name="registerDateStr" value={values.registerDateStr} margin="dense" onChange={(e: any) => {
+                                            let d: Moment = moment(e.target.value, "YYYY-MM-DD")
+                                            setFieldValue('registerDateStr', e.target.value);
+                                            setFieldValue('registerDate', d.toDate().getTime());
+                                        }}
+                                    type="date" />
+                                <TextField fullWidth name="registerObservations" label="Observaciones" multiline
+                                        value={values.registerObservations} onChange={handleChange}/>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => {
+                                    if (utils.isRegistered(values.historic)){
+                                        this.props.doUnregisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
+                                        .then(() => window.open("/athletes/list", "_self"))
+                                    }
+                                    else {
+                                        this.props.doRegisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
+                                        .then(() => window.open("/athletes/" + values.id, "_self"))
+                                    }
+                                }}>Guardar</Button>
+                                <Button onClick={() => { setFieldValue('openRegisterDialog', false) }}>Cancelar</Button>
+                            </DialogActions>
+                        </Dialog>
+
+                        <Dialog fullWidth={true} maxWidth="xl" open={values.openSportdataDialog} aria-labelledby="form-dialog-title"
+                            onClose={() => {
+                                setFieldValue('openSportdataDialog', false)
+                            }}
+                        >
+                            <DialogTitle id="form-dialog-title">Histórico deportivo</DialogTitle>
+                            <DialogContent>
+                                <Grid container>
+                                    <AthleteSportdata id={values.id} />
+                                </Grid>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => { setFieldValue('openSportdataDialog', false) }}>Cerrar</Button>
+                            </DialogActions>
+                        </Dialog>
+
+                        <Dialog fullWidth={true} maxWidth="xl" open={values.openReceiptsDialog} aria-labelledby="form-dialog-title"
+                            onClose={() => {
+                                setFieldValue('openReceiptsDialog', false)
+                            }}
+                        >
+                            <DialogTitle id="form-dialog-title">Recibos</DialogTitle>
+                            <DialogContent>
+                                <Grid container>
+                                    <AthleteReceipts id={values.id} />
+                                </Grid>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => { setFieldValue('openReceiptsDialog', false) }}>Cerrar</Button>
+                            </DialogActions>
+                        </Dialog>
+                        
                         <Box paddingBottom={7}>
                             <Grid container spacing={3}>
                                 <Grid container item spacing={3}>
@@ -353,58 +420,15 @@ class CreateAthlete extends React.Component<any, any> {
                                         { (isAdmin() || isManager()) &&
                                             <Grid item xs={1}>
                                                 {values.id ? <Button onClick={() => { setFieldValue('openRegisterDialog', true) }} >{utils.isRegistered(values.historic) ? 'Dar de baja' : 'Dar de alta'}</Button> : null}
-                                                <Dialog fullWidth={true} open={values.openRegisterDialog} aria-labelledby="form-dialog-title"
-                                                    onClose={() => {
-                                                        setFieldValue('openRegisterDialog', false)
-                                                    }}
-                                                >
-                                                    <DialogTitle id="form-dialog-title">Fecha de {utils.isRegistered(values.historic) ? 'baja' : 'alta'}</DialogTitle>
-                                                    <DialogContent>
-                                                        <DialogContentText>
-                                                            Introduce la fecha de {utils.isRegistered(values.historic) ? 'baja' : 'alta'}.
-                                                    </DialogContentText>
-                                                        <TextField name="registerDateStr" value={values.registerDateStr} margin="dense" onChange={(e: any) => {
-                                                                    let d: Moment = moment(e.target.value, "YYYY-MM-DD")
-                                                                    setFieldValue('registerDateStr', e.target.value);
-                                                                    setFieldValue('registerDate', d.toDate().getTime());
-                                                                }}
-                                                            type="date" />
-                                                        <TextField fullWidth name="registerObservations" label="Observaciones" multiline
-                                                                value={values.registerObservations} onChange={handleChange}/>
-                                                    </DialogContent>
-                                                    <DialogActions>
-                                                        <Button onClick={() => {
-                                                            if (utils.isRegistered(values.historic)){
-                                                                this.props.doUnregisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
-                                                                .then(() => window.open("/athletes/list", "_self"))
-                                                            }
-                                                            else {
-                                                                this.props.doRegisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
-                                                                .then(() => window.open("/athletes/" + values.id, "_self"))
-                                                            }
-                                                        }}>Guardar</Button>
-                                                        <Button onClick={() => { setFieldValue('openRegisterDialog', false) }}>Cancelar</Button>
-                                                    </DialogActions>
-                                                </Dialog>
                                             </Grid>
                                         }
-                                        <Grid item xs={1}>
-                                            {values.id ? <Button onClick={() => { setFieldValue('openSportdataDialog', true) }} >Histórico deportivo</Button> : null}
-                                            <Dialog fullWidth={true} maxWidth="xl" open={values.openSportdataDialog} aria-labelledby="form-dialog-title"
-                                                onClose={() => {
-                                                    setFieldValue('openSportdataDialog', false)
-                                                }}
-                                            >
-                                                <DialogTitle id="form-dialog-title">Histórico deportivo</DialogTitle>
-                                                <DialogContent>
-                                                    <Grid container>
-                                                        <AthleteSportdata id={values.id} />
-                                                    </Grid>
-                                                </DialogContent>
-                                                <DialogActions>
-                                                    <Button onClick={() => { setFieldValue('openSportdataDialog', false) }}>Cerrar</Button>
-                                                </DialogActions>
-                                            </Dialog>
+                                        <Grid container item direction="column" xs={1}>
+                                            <Grid item xs>
+                                                {values.id ? <Button onClick={() => { setFieldValue('openSportdataDialog', true) }} >Histórico deportivo</Button> : null}
+                                            </Grid>
+                                            <Grid item xs>
+                                                {values.id ? <Button onClick={() => { setFieldValue('openReceiptsDialog', true) }} >Recibos</Button> : null}
+                                            </Grid>
                                         </Grid>
                                         <Grid item xs={1}>
                                             <Checkbox name="enrollmentFeePaid" checked={values.enrollmentFeePaid === true} 
@@ -562,59 +586,52 @@ class CreateAthlete extends React.Component<any, any> {
                                     <Grid container item spacing={2}>
                                         <Grid item xs>
                                             <CustomCard title="Datos Familiares">
-                                                <Typography color="textSecondary">Familiar 1</Typography>
-                                                <Grid container direction="column" spacing={2}>
-                                                    <Grid container item spacing={1}>
-                                                        <Grid item xs>
-                                                            <TextField name="familiarOneName" label="Nombre" value={values.familiarOneName} margin="dense" onChange={handleChange} />
-                                                        </Grid>
-                                                        <Grid item xs>
-                                                            <TextField name="familiarOneFirstSurname" label="Primer Apellido" value={values.familiarOneFirstSurname} margin="dense" onChange={handleChange} />
-                                                        </Grid>
-                                                        <Grid item xs>
-                                                            <TextField name="familiarOneSecondSurname" label="Segundo Apellido" value={values.familiarOneSecondSurname} margin="dense" onChange={handleChange} />
-                                                        </Grid>
+                                                <Grid container item direction="column" spacing={2}>
+                                                    <Grid container alignItems="flex-start">
+                                                        <Typography color="textSecondary">Familiar 1</Typography>
+                                                        <Button style={{maxWidth: '30%'}} onClick={() => {
+                                                            setFieldValue('holderName', values.familiarOneName)
+                                                            setFieldValue('holderFirstSurname', values.familiarOneFirstSurname)
+                                                            setFieldValue('holderSecondSurname', values.familiarOneSecondSurname)
+                                                            setFieldValue('holderDni', values.familiarOneDni)
+                                                        }}>Titular de la cuenta</Button>
                                                     </Grid>
-                                                    <Grid container item spacing={1}>
-                                                        <Grid item xs>
-                                                            <TextField name="familiarOneDni" type="text" label="Dni" value={values.familiarOneDni} error={touched.familiarOneDni && errors.familiarOneDni} margin="dense" onChange={handleChange}
-                                                                onBlur={() => {
-                                                                    if (values.familiarOneDni && !utils.isValidDni(values.familiarOneDni)){
-                                                                        setFieldTouched("familiarOneDni", true, false);
-                                                                        setFieldError("familiarOneDni", "Dni/Nie incorrecto");
-                                                                    }
-                                                                }} />
-                                                        </Grid>
-                                                        <Grid item xs>
-                                                            <TextField name="familiarOneMail" type="text" label="Email" value={values.familiarOneMail} margin="dense" onChange={handleChange} />
-                                                        </Grid>
+                                                    <AthleteFamilyData key={`familiar-one-${values.id}`} name={values.familiarOneName} firstSurname={values.familiarOneFirstSurname} secondSurname={values.familiarOneSecondSurname}
+                                                        dni={values.familiarOneDni} touchedDni={touched.familiarOneDni} errorsDni={errors.familiarOneDni}
+                                                        mail={values.familiarOneMail}
+                                                        dniOnBlur={() => {
+                                                            if (values.familiarOneDni && !utils.isValidDni(values.familiarOneDni)){
+                                                                setFieldTouched("familiarOneDni", true, false);
+                                                                setFieldError("familiarOneDni", "Dni/Nie incorrecto");
+                                                            }
+                                                        }} 
+                                                        onChange={(p: { name: string, value: string }) => {
+                                                            setFieldValue('familiarOne' + p.name, p.value)
+                                                        }}
+                                                    />
+                                                    <Grid container alignItems="flex-start">
+                                                        <Typography color="textSecondary">Familiar 2</Typography>
+                                                        <Button style={{maxWidth: '30%'}} onClick={() => {
+                                                            setFieldValue('holderName', values.familiarTwoName)
+                                                            setFieldValue('holderFirstSurname', values.familiarTwoFirstSurname)
+                                                            setFieldValue('holderSecondSurname', values.familiarTwoSecondSurname)
+                                                            setFieldValue('holderDni', values.familiarTwoDni)
+                                                        }}>Titular de la cuenta</Button>
                                                     </Grid>
-                                                    <Typography color="textSecondary">Familiar 2</Typography>
-                                                    <Grid container item spacing={1}>
-                                                        <Grid item xs>
-                                                            <TextField name="familiarTwoName" type="text" label="Nombre" value={values.familiarTwoName} margin="dense" onChange={handleChange} />
-                                                        </Grid>
-                                                        <Grid item xs>
-                                                            <TextField name="familiarTwoFirstSurname" type="text" label="Primer Apellido" value={values.familiarTwoFirstSurname} margin="dense" onChange={handleChange} />
-                                                        </Grid>
-                                                        <Grid item xs>
-                                                            <TextField name="familiarTwoSecondSurname" type="text" label="Segundo Apellido" value={values.familiarTwoSecondSurname} margin="dense" onChange={handleChange} />
-                                                        </Grid>
-                                                    </Grid>
-                                                    <Grid container item spacing={1}>
-                                                        <Grid item xs>
-                                                            <TextField name="familiarTwoDni" type="text" label="Dni" value={values.familiarTwoDni} error={touched.familiarTwoDni && errors.familiarTwoDni} margin="dense" onChange={handleChange} 
-                                                                onBlur={() => {
-                                                                    if (values.familiarTwoDni && !utils.isValidDni(values.familiarTwoDni)){
-                                                                        setFieldTouched("familiarTwoDni", true, false);
-                                                                        setFieldError("familiarTwoDni", "Dni/Nie incorrecto");
-                                                                    }
-                                                                }}/>
-                                                        </Grid>
-                                                        <Grid item xs>
-                                                            <TextField name="familiarTwoMail" type="text" label="Email" value={values.familiarTwoMail} margin="dense" onChange={handleChange} />
-                                                        </Grid>
-                                                    </Grid>
+                                                    <AthleteFamilyData key={`familiar-two-${values.id}`} name={values.familiarTwoName} firstSurname={values.familiarTwoFirstSurname} secondSurname={values.familiarTwoSecondSurname}
+                                                        dni={values.familiarTwoDni} touchedDni={touched.familiarTwoDni} errorsDni={errors.familiarTwoDni}
+                                                        mail={values.familiarTwoMail}
+                                                        dniOnBlur={() => {
+                                                            if (values.familiarTwoDni && !utils.isValidDni(values.familiarTwoDni)){
+                                                                setFieldTouched("familiarTwoDni", true, false);
+                                                                setFieldError("familiarTwoDni", "Dni/Nie incorrecto");
+                                                            }
+                                                        }} 
+                                                        onChange={(p: { name: string, value: string }) => {
+                                                            setFieldValue('familiarTwo' + p.name, p.value)
+                                                        }}
+
+                                                    />
                                                 </Grid>
                                             </CustomCard>
                                         </Grid>

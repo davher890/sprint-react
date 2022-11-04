@@ -81,7 +81,7 @@ const AthleteObservations: React.FC<any> = (props) => {
             <Grid container direction="column" spacing={1}>
                 { 
                 allObs.map((obs : any) => {
-                    return <Grid container direction="row">
+                    return <Grid key={`obs-${obs.id}`} container direction="row">
                         <Grid item xs>
                             { moment(new Date(obs.date)).format('DD/MM/YYYY')} : {obs.type} {obs.text}
                         </Grid>

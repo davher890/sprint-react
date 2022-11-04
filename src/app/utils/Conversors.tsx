@@ -2,6 +2,8 @@ import * as ACTION_TYPES from "../redux/constants/action_types";
 
 import functions from "./Functions";
 
+import moment from 'moment'
+
 function sportSchoolDataConversor(d: { id: number, name: string, municipality: string, address: string }) {
     return {
         id: d.id,
@@ -19,9 +21,21 @@ function groupDataConversor(d: { id: number, name: string, sportSchoolName: stri
     }
 }
 
-function paymentAthleteDataConversor(d: any) {
+function receiptDataConversor(d: { id: number, name: string, collection: string, sportSchoolName: string, createdAt: number, status: string }) {
     return {
         id : d.id,
+        name: d.name,
+        collection: functions?.getReceiptCollections().find(c => c.id === d.collection)?.name,
+        sportSchoolId: d.sportSchoolName, 
+        createdAt: moment(d.createdAt).format("YYYY-MM-DD hh:mm:ss"),
+        status: functions?.getReceiptStatus().find(c => c.id === d.status)?.name
+    }
+}
+
+function receiptAthleteDataConversor(d: any) {
+    return {
+        id : d.id,
+        athleteId : d.athleteId,
         name : d.name || '', 
         firstSurname : d.firstSurname || '', 
         secondSurname : d.secondSurname || '', 
@@ -42,7 +56,7 @@ function paymentAthleteDataConversor(d: any) {
 
         specialization: d.specialization,
 
-        paymentType: d.paymentType,
+        paymentType: functions.getPaymentTypes().find(st => st.id === d.paymentType)?.name,
         feeType: d.feeType,
         monthlyFee: d.monthlyFee,
         enrollmentFee: d.enrollmentFee,
@@ -162,9 +176,9 @@ const Utils = (action: { type: string, payload: any }) => {
             return athleteDataConversor(d)
         })
     }
-    else if (action.type === ACTION_TYPES.LOAD_PAYMENT_ATHLETE_TABLE){
+    else if (action.type === ACTION_TYPES.LOAD_RECEIPT_ATHLETE_TABLE){
         items = action.payload.content.map((d: any) => {
-            return paymentAthleteDataConversor(d)
+            return receiptAthleteDataConversor(d)
         })
     }
     else if (action.type === ACTION_TYPES.LOAD_FAMILY_TABLE){
@@ -195,6 +209,11 @@ const Utils = (action: { type: string, payload: any }) => {
     else if (action.type === ACTION_TYPES.LOAD_INCIDENCE_TABLE){
         items = action.payload.content.map((d: any) => {
             return incidenceConversor(d)
+        })
+    }
+    else if (action.type === ACTION_TYPES.LOAD_RECEIPT_TABLE){
+        items = action.payload.content.map((d: any) => {
+            return receiptDataConversor(d)
         })
     }
     return items;
