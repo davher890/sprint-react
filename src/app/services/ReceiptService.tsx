@@ -15,6 +15,10 @@ export const findById = (id: number) => {
     return getRequest("/receipts/" + id)
 }
 
+export const validateData = (id: number) => {
+    return getRequest("/receipts/" + id + "/validate")
+}
+
 export const deleteReceipt = (id: number) => {
     return deleteRequest("/receipts/" + id)
 }

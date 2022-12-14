@@ -29,6 +29,10 @@ export const findAthleteReceipts = (id: number) => {
     return getRequest("/athletes/" + id + "/receipts")
 }
 
+export const updateAthleteReceiptStatus = (id: number, receiptId: number, status: string) => {
+    return getRequest("/athletes/" + id + "/receipts/" + receiptId + "/status?status=" + status)
+}
+
 export const findAthleteHistoric = (id: number) => {
     return getRequest("/athletes/" + id + "/historic")
 }

@@ -175,7 +175,8 @@ const functions = {
             { id: "processing", name: "Procesando cuota de atletas" },
             { id: "pending", name: "Pendiente" },
             { id: "validated", name: "Validado" },
-            { id: "paid", name: "Pagado" }
+            { id: "paid", name: "Pagado" },
+            { id: "return", name: "Devuelto" }
         ]
     },
 

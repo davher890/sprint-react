@@ -12,8 +12,6 @@ import { Order } from '../../types/order'
 import Utils from "../../utils/TableUtils";
 
 const ReceiptTable: React.FC<any> = (props) => {
-	
-	const [columns, setColumns] = useState<any[]>(Utils.getReceiptColumns())
     
 	React.useEffect(() => {
 		props.getReceiptTable();
@@ -30,7 +28,7 @@ const ReceiptTable: React.FC<any> = (props) => {
 					page={props.page}
 					size={props.size}
 					total={props.total}
-					columns={columns}
+					columns={Utils.getReceiptColumns()}
 					showColumns={false}
 					onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
 						props.getReceiptTable(page, size, filters, sort, sortDirection);

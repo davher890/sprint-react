@@ -1,6 +1,6 @@
 import * as ACTION_TYPES from "../../constants/action_types";
 
-import { addData, addReceiptAthletes, findAll, findById, deleteReceiptAthletes, deleteReceipt, downloadExcel, saveData } from "../../../services/ReceiptService"
+import { addData, addReceiptAthletes, findAll, findById, deleteReceiptAthletes, deleteReceipt, downloadExcel, saveData, validateData } from "../../../services/ReceiptService"
 import { findReceiptDataPagination, findReceiptIdAthleteDataPagination } from "../../../services/TableService"
 
 import { Order } from '../../../types/order'
@@ -85,6 +85,14 @@ export function downloadReceiptAthletes(id: number) {
         dispatch({ type: ACTION_TYPES.API_CALL})
         return downloadExcel(id).then(json => {
             dispatch({ type: ACTION_TYPES.DOWNLOAD_RECEIPT_ATHLETES, payload: json });
+        });
+    }
+}
+
+export function validateReceipt(id: number) {
+    return function (dispatch: any) {
+        return validateData(id).then(json => {
+            dispatch({ type: ACTION_TYPES.VALIDATE_RECEIPT, payload: json });
         });
     }
 }

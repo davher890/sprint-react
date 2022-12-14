@@ -89,9 +89,9 @@ const AppBar: React.FC<any> = (props) => {
           <Route path="/incidences/:id"           element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><IncidenceData/></Box></AuthenticatedProtected>}/>
           <Route path="/incidences"               element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><IncidenceData/></Box></AuthenticatedProtected>}/>
           
-          <Route path="/receipts/list"            element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptTable/></Box></AuthenticatedProtected></AdminProtected>}/>
-          <Route path="/receipts/:id"             element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptData/></Box></AuthenticatedProtected></AdminProtected>}/>
-          <Route path="/receipts"                 element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptData/></Box></AuthenticatedProtected></AdminProtected>}/>
+          <Route path="/receipts/list"            element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptTable/></Box></AuthenticatedProtected>}/>
+          <Route path="/receipts/:id"             element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptData/></Box></AuthenticatedProtected>}/>
+          <Route path="/receipts"                 element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptData/></Box></AuthenticatedProtected>}/>
           
           <Route path="/trainers/list"            element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><TrainerTable/></Box></AuthenticatedProtected>}/>
           <Route path="/trainers/:id"             element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><TrainerData/></Box></AuthenticatedProtected>}/>

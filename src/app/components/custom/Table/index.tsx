@@ -158,7 +158,7 @@ const CustomTable: React.FC<any> = (props) => {
 						checked={functions.arrayContains(props.selectedIds, props.data.map((row: any) => row.id))}
 						onChange={e => {
 							if (props.onSelectedIds){
-								props.data.map((row: any) => props.onSelectedIds(row.id, e.target.checked))
+								props.data.map((row: any) => props.onSelectedIds(row.id, e.target.checked, row))
 							}
 						}}
 					/>
@@ -234,7 +234,7 @@ const CustomTable: React.FC<any> = (props) => {
 	}
 
 	return (
-		<Box width="100%" overflow="auto">
+		<>
 		{ false && props.loading ? <Spinner/> : 
 			<Grid container item direction="column" spacing={3}>
 				<Grid container item direction="row">
@@ -255,35 +255,37 @@ const CustomTable: React.FC<any> = (props) => {
 						</Grid>
 					}
 				</Grid>
-				<Grid item >
-					<TableContainer>
-						<Table stickyHeader size="small">
-							{ getTableHead() }
-							<TableBody>
-							{
-								props.data.map((row:any) => (
-									<TableRow hover key={row.id}>
-										{ getRowData(row) }
-									</TableRow>
-								))
-							}
-							</TableBody>
-						</Table>
-					</TableContainer>
-					<TablePagination
-						rowsPerPageOptions={[5, 10, 25]}
-						component="div"
-						count={props.total}
-						page={page}
-						rowsPerPage={pageSize}
-						onPageChange={handlePageChange}
-						onRowsPerPageChange={handlePageSizeChange}
-						ActionsComponent={TablePaginationActions}
-					/>
+				<Grid item xs>
+					<Box width="100%" overflow="auto">
+						<TableContainer>
+							<Table stickyHeader size="small">
+								{ getTableHead() }
+								<TableBody>
+								{
+									props.data.map((row:any) => (
+										<TableRow hover key={row.id}>
+											{ getRowData(row) }
+										</TableRow>
+									))
+								}
+								</TableBody>
+							</Table>
+						</TableContainer>
+						<TablePagination
+							rowsPerPageOptions={[5, 10, 25]}
+							component="div"
+							count={props.total}
+							page={page}
+							rowsPerPage={pageSize}
+							onPageChange={handlePageChange}
+							onRowsPerPageChange={handlePageSizeChange}
+							ActionsComponent={TablePaginationActions}
+						/>
+					</Box>
 				</Grid>
 			</Grid>
 		}
-		</Box>
+		</>
 	)
 }
 

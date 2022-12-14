@@ -25,11 +25,13 @@ import Functions from "../../utils/Functions";
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
 
-import { addReceipt, getReceipt, getReceiptIdAthleteTable, removeReceipt, downloadReceiptAthletes, removeReceiptAthletes } from "../../redux/actions/receipts";
+import { addReceipt, getReceipt, getReceiptIdAthleteTable, removeReceipt, downloadReceiptAthletes, removeReceiptAthletes, validateReceipt } from "../../redux/actions/receipts";
 
 import { Order } from '../../types/order'
 
 import Utils from "../../utils/TableUtils"
+
+import { isAdmin } from "../../services/LoginService";
 
 const NewReceiptForm: React.FC<any> = (props) => {
 
@@ -88,7 +90,7 @@ const NewReceiptForm: React.FC<any> = (props) => {
                     setOpenDeleteAthletesDialog(false)
                     getReceiptIdAthletes()
                 }}
-                cancel={() => setOpenDeleteDialog(false)}
+                cancel={() => setOpenDeleteAthletesDialog(false)}
             />
             <Grid container direction="column" spacing={1}>
                 <Grid item xs>
@@ -121,7 +123,7 @@ const NewReceiptForm: React.FC<any> = (props) => {
                                 </Grid>
                                 <Grid container item xs spacing={4}>
                                     <Grid item xs={3}>
-                                        {(props.loading ? <Spinner/> : !props.receipt.id && <SearchButton onClick={() => {
+                                        {(props.loading ? <Spinner/> : (isAdmin() || !props.receipt.id) && <SearchButton onClick={() => {
                                             saveReceipt(receipt)
                                         }}>Guardar</SearchButton>)
                                         }
@@ -165,8 +167,7 @@ const NewReceiptForm: React.FC<any> = (props) => {
                                 { receipt.status === 'pending' && 
                                     <Grid item xs={2}>
                                         <SelectButton onClick={async () => {
-                                            setReceipt({ ...receipt, status: 'validated' });
-                                            saveReceipt({ ...receipt, status: 'validated' })
+                                            props.validateReceipt(props.id)
                                         }}>Validar</SelectButton>
                                     </Grid>
                                 }
@@ -181,8 +182,7 @@ const NewReceiptForm: React.FC<any> = (props) => {
                                 <Grid container>
                                     <RefreshButton onClick={() => getReceiptIdAthletes()}>Refrescar datos</RefreshButton>
                                     { selectedIds && selectedIds.length > 0 && <DeleteButton onClick={() => setOpenDeleteAthletesDialog(true)}>Eliminar de la remesa</DeleteButton> }
-                                    { receipt.status === 'validated' && <DownloadButton onClick={(downloadData)}>Descargar Excel</DownloadButton>
-                                    }
+                                    { <DownloadButton onClick={(downloadData)}>Descargar Excel</DownloadButton> }
                                 </Grid>
                                 <Table 
                                     data={props.table_data}
@@ -223,9 +223,6 @@ const NewReceiptForm: React.FC<any> = (props) => {
             </Grid>
             <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
                 <Toolbar>
-                    {!props.receipt && !props.receipt.id &&
-                        <SaveButton onClick={saveReceipt} />
-                    }
                     {props.receipt.id &&
                         <DeleteButton text='Borrar' 
                             onClick={() => setOpenDeleteDialog(true)}
@@ -239,6 +236,7 @@ const NewReceiptForm: React.FC<any> = (props) => {
 
 const mapDispatchToProps = {
     addReceipt,
+    validateReceipt,
     downloadReceiptAthletes,
     getReceipt,
     getReceiptIdAthleteTable,

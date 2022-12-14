@@ -8,7 +8,7 @@ const Utils = {
             { dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
             { dataField: 'firstSurname', text : 'Primer apellido', filter: { type: "text" } }, 
             { dataField: 'secondSurname', text : 'Segundo apellido', filter: { type: "text" } }, 
-            { dataField: 'birthDate', text : 'Fecha de Nacimiento' }, 
+            { dataField: 'birthDate', text : 'Fecha de Nacimiento', type: "date" }, 
             { dataField: 'gender', text : 'Género', filter: { 
                 type: "options",
                 options : [
@@ -17,8 +17,8 @@ const Utils = {
                 ]
             }}, 
             { dataField: 'dni', text : 'Dni', filter: { type: "text" } }, 
-            { dataField: 'lastRegisterDate', text : 'Fecha incorporacion' },
-            { dataField: 'lastUnregisterDate', text : 'Fecha baja' },
+            { dataField: 'lastRegisterDate', text : 'Fecha incorporacion', type: "date" },
+            { dataField: 'lastUnregisterDate', text : 'Fecha baja', type: "date" },
             { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
                 type: "options",
                 options : functions.getSportSchools()
@@ -59,7 +59,7 @@ const Utils = {
         { dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
         { dataField: 'firstSurname', text : 'Primer apellido', filter: { type: "text" } }, 
         { dataField: 'secondSurname', text : 'Segundo apellido', filter: { type: "text" } }, 
-        { dataField: 'lastRegisterDate', text : 'Fecha incorporacion', sort: false },
+        { dataField: 'lastRegisterDate', text : 'Fecha incorporacion', sort: false, type: "date" },
         { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
             type: "options",
             options : functions.getSportSchools()
@@ -70,7 +70,8 @@ const Utils = {
         { dataField: 'monthlyFee', text : 'Mensualidad', sort: false }, 
         { dataField: 'enrollmentFee', text : 'Matricula', sort: false }, 
         { dataField: 'membershipFee', text : 'Cuota de socio', sort: false }, 
-        { dataField: 'paymentType', text : 'Forma de pago' },
+        { dataField: 'status', text : 'Estado' },
+        { dataField: 'paymentType', text : 'Forma de pago' }
         ] 
     },
 
@@ -79,7 +80,7 @@ const Utils = {
             { dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
             { dataField: 'firstSurname', text : 'Primer apellido', filter: { type: "text" } }, 
             { dataField: 'secondSurname', text : 'Segundo apellido', filter: { type: "text" } }, 
-            { dataField: 'birthDate', text : 'Fecha de Nacimiento' }, 
+            { dataField: 'birthDate', text : 'Fecha de Nacimiento', type: "date" }, 
             { dataField: 'gender', text : 'Género', filter: { 
                 type: "options",
                 options : [
@@ -88,8 +89,8 @@ const Utils = {
                 ]
             }}, 
             { dataField: 'dni', text : 'Dni', filter: { type: "text" } }, 
-            { dataField: 'lastRegisterDate', text : 'Fecha incorporacion' },
-            { dataField: 'lastUnregisterDate', text : 'Fecha baja' },
+            { dataField: 'lastRegisterDate', text : 'Fecha incorporacion', type: "date" },
+            { dataField: 'lastUnregisterDate', text : 'Fecha baja', type: "date" },
             { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
                 type: "options",
                 options : functions.getSportSchools()
@@ -173,7 +174,7 @@ const Utils = {
             { dataField: 'id', text: 'Id', show: false },
             { dataField: 'name', text: 'Nombre', filter: { type: "text" } },
             { dataField: 'collection', text: 'Remesa', filter: { type: "text" } },
-            { dataField: 'createdAt', text: 'Fecha creación', filter: { type: "text" } },
+            { dataField: 'createdAt', text: 'Fecha creación', filter: { type: "text" }, type: "date" },
             { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
                 type: "options",
                 options : functions.getSportSchools()

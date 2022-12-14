@@ -3,8 +3,7 @@ import moment from 'moment'
 import { Grid, Box } from '@material-ui/core'
 
 import { connect } from "react-redux";
-import { getAthleteReceipts } from "../../redux/actions/athletes";
-import { saveReceipt } from "../../redux/actions/receipts";
+import { getAthleteReceipts, setAthleteReceiptStatus } from "../../redux/actions/athletes";
 
 import SaveButton from "../custom/SaveButton";
 import Functions from "../../utils/Functions";
@@ -76,10 +75,17 @@ const AthleteReceipts: React.FC<any> = (props) => {
                             { Functions?.getReceiptStatus().find(c => c.id === receipt.status)?.name }
                         </Grid>
                         <Grid item xs>
-                        { (receipt.status === 'pending') && 
-                                <SaveButton onClick={() => {
-                                    props.saveReceipt(receipt.id, { ...receipt, status: 'paid'})
+                        { (receipt.status === 'return') && 
+                                <SaveButton onClick={async () => {
+                                    await props.setAthleteReceiptStatus(props.id, receipt.receiptId, 'paid')
+                                    props.getAthleteReceipts(props.id)
                                 }}>Pagar</SaveButton>
+                        }
+                        { (receipt.status === 'paid') && 
+                                <SaveButton onClick={async () => {
+                                    await props.setAthleteReceiptStatus(props.id, receipt.receiptId, 'return')
+                                    props.getAthleteReceipts(props.id)
+                                }}>Devuelto</SaveButton>
                         }
                         </Grid>
                         
@@ -100,7 +106,7 @@ function mapStateToProps(state: any) {
 
 const mapDispatchToProps = {
     getAthleteReceipts,
-    saveReceipt
+    setAthleteReceiptStatus
 }
 
 export default connect(

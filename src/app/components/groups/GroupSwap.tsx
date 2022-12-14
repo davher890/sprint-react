@@ -31,6 +31,7 @@ const GroupSwap: React.FC<any> = (props) => {
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
                 <Alert severity="success" onClose={() => { 
                         setSuccess(false)
+                        window.open("/athletes/list", "_self");
                     }}>
                     <AlertTitle>Cambios guardados!</AlertTitle>
                 </Alert>
