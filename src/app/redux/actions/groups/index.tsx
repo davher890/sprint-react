@@ -48,9 +48,15 @@ export function getGroupSchedules(id: number) {
     }
 }
 
-export function getGroupAthletes(id: number) {
+export function getGroupAAthletes(id: number) {
+    return getGroupAthletes(id, ACTION_TYPES.GROUP_A_ATHLETES)
+}
+export function getGroupBAthletes(id: number) {
+    return getGroupAthletes(id, ACTION_TYPES.GROUP_B_ATHLETES)
+}
+export function getGroupAthletes(id: number, type=ACTION_TYPES.GROUP_ATHLETES) {
     return function (dispatch: any)  {
-        return findGroupAthletes(id).then(json => { dispatch({ type: ACTION_TYPES.GROUP_ATHLETES, payload: json }); });
+        return findGroupAthletes(id).then(json => { dispatch({ type: type, payload: json }); });
     }
 }
 

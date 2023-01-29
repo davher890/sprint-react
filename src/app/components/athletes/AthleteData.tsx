@@ -104,6 +104,7 @@ class CreateAthlete extends React.Component<any, any> {
                         sportSchoolId: this.props.athlete.sportSchoolId || '',
                         imageAuth: this.props.athlete.imageAuth,
                         enrollmentFeePaid: this.props.athlete.enrollmentFeePaid,
+                        membershipFeePaid: this.props.athlete.membershipFeePaid,
                         observations: this.props.athlete.observations || [],
                         name: this.props.athlete.name || '',
                         firstSurname: this.props.athlete.firstSurname || '',
@@ -128,7 +129,7 @@ class CreateAthlete extends React.Component<any, any> {
                         // Sport info
                         category: this.props.athlete.category || '',
                         nextCategory: this.props.athlete.nextCategory || '',
-                        dorsalCategory: this.props.athlete.dorsalCategory || '',
+                        dorsalCategory: this.props.athlete.dorsalCategory ? this.props.athlete.dorsalCategory : utils.calculateDorsalCategory(new Date(this.props.athlete.birthDate).getFullYear(), this.props.athlete.gender),
                         dorsalNumber: this.props.athlete.dorsalNumber || '',
                         license: this.props.athlete.license || '',
                         licenseType: this.props.athlete.licenseType || '',
@@ -166,6 +167,7 @@ class CreateAthlete extends React.Component<any, any> {
                         openMatchingAthletes: false,
                         openDeleteDialog: false,
                         selectedCategory: false,
+                        selectedDorsalCategory: false,
                         
                         exit: this.props.athlete.exit || false,
 
@@ -225,15 +227,6 @@ class CreateAthlete extends React.Component<any, any> {
                     return (
 
                     <form onSubmit={handleSubmit}>
-
-                        <ConfirmDialog open={values.openDeleteDialog} 
-                            confirm={() => {
-                                this.props.removeAthlete(values.id);
-                                setFieldValue("openDeleteDialog", false);
-                                window.open("/athletes/list", "_self");
-                            }}
-                            cancel={() => setFieldValue("openDeleteDialog", false)}
-                        />
                         <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
                             anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
                             <Alert severity="error" onClose={() => { setFieldValue("errorMessage", "") }}>
@@ -256,6 +249,14 @@ class CreateAthlete extends React.Component<any, any> {
                                 <strong>{values.successMessage}</strong>
                             </Alert>
                         </Snackbar>
+                        <ConfirmDialog open={values.openDeleteDialog} 
+                            confirm={() => {
+                                this.props.removeAthlete(values.id);
+                                setFieldValue("openDeleteDialog", false);
+                                window.open("/athletes/list", "_self");
+                            }}
+                            cancel={() => setFieldValue("openDeleteDialog", false)}
+                        />
 
                         <Dialog fullWidth={true} maxWidth="xl" open={values.openMatchingAthletes} aria-labelledby="form-dialog-title"
                             onClose={() => {
@@ -430,13 +431,23 @@ class CreateAthlete extends React.Component<any, any> {
                                                 {values.id ? <Button onClick={() => { setFieldValue('openReceiptsDialog', true) }} >Recibos</Button> : null}
                                             </Grid>
                                         </Grid>
-                                        <Grid item xs={1}>
-                                            <Checkbox name="enrollmentFeePaid" checked={values.enrollmentFeePaid === true} 
-                                                onChange={e => {
-                                                    setFieldValue('enrollmentFeePaid', e.target.checked)
-                                                }}
-                                            />
-                                            Matricula pagada
+                                        <Grid item xs>
+                                            <Grid item xs>
+                                                <Checkbox name="enrollmentFeePaid" checked={values.enrollmentFeePaid === true} 
+                                                    onChange={e => {
+                                                        setFieldValue('enrollmentFeePaid', e.target.checked)
+                                                    }}
+                                                />
+                                                Matricula pagada
+                                            </Grid>
+                                            <Grid item xs>
+                                                <Checkbox name="membershipFeePaid" checked={values.membershipFeePaid === true} 
+                                                    onChange={e => {
+                                                        setFieldValue('membershipFeePaid', e.target.checked)
+                                                    }}
+                                                />
+                                                Cuota de socio pagada
+                                            </Grid>
                                         </Grid>
                                     </Grid>
                                     <Grid container item spacing={2}>
@@ -718,8 +729,11 @@ class CreateAthlete extends React.Component<any, any> {
                                                     </Grid>
                                                     <Grid item xs={2}>
                                                         <Select fullWidth name="dorsalCategory" label="Categoría dorsal"
-                                                            options={utils.getDorsalCategories()} value={values.dorsalCategory}
-                                                            onChange={(e: any, value: any) => setFieldValue('dorsalCategory', value ? value.id : "")}
+                                                            options={utils.getDorsalCategories()} value={values.selectedDorsalCategory ? values.dorsalCategory : utils.calculateDorsalCategory(new Date(values.birthDate).getFullYear(), values.gender)}
+                                                            onChange={(e: any, value: any) => {
+                                                                setFieldValue('selectedDorsalCategory', 'true')
+                                                                setFieldValue('dorsalCategory', value ? value.id : "")
+                                                            }}
                                                         />
                                                     </Grid>
                                                     <Grid item xs={2}>

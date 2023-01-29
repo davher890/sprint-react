@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 
 import { Grid } from '@material-ui/core';
 
@@ -20,7 +20,7 @@ const ReceiptTable: React.FC<any> = (props) => {
 	return (
 		<Grid container direction="column" spacing={3}>
 			<Grid item xs>
-				<Button text="Nuevo recibo" href={'/receipts'} />
+				<Button text="Nueva remesa" href={'/receipts'} />
 			</Grid>
 			<Grid item xs>
 				<Table

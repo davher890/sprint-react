@@ -4,6 +4,7 @@ import { Grid, Box } from '@material-ui/core'
 
 import { connect } from "react-redux";
 import { getAthleteReceipts, setAthleteReceiptStatus } from "../../redux/actions/athletes";
+import { getSportSchoolCollections } from "../../redux/actions/sportSchools";
 
 import SaveButton from "../custom/SaveButton";
 import Functions from "../../utils/Functions";
@@ -13,6 +14,7 @@ const AthleteReceipts: React.FC<any> = (props) => {
     
     React.useEffect(() => {
         if (props.id){
+            props.getSportSchoolCollections(props.id)
             props.getAthleteReceipts(props.id)
         }
     }, [props.id])
@@ -57,7 +59,7 @@ const AthleteReceipts: React.FC<any> = (props) => {
                             { receipt.receiptName }
                         </Grid>
                         <Grid item xs>
-                            { Functions?.getReceiptCollections().find(c => c.id === receipt.receiptCollection)?.name }
+                            { props.fees && props.fees.find((c:any) => c.id === receipt.receiptCollection)?.name }
                         </Grid>
                         <Grid item xs>
                             { moment(receipt.receiptCreatedAt).format("YYYY-MM-DD hh:mm:ss") }
@@ -101,12 +103,14 @@ function mapStateToProps(state: any) {
 	return {
         receipts: state.athlete_reducer.athlete_receipts,
         receipt: state.receipt_reducer.receipt,
+        collections: state.sport_school_reducer.collections
 	};
 }
 
 const mapDispatchToProps = {
     getAthleteReceipts,
-    setAthleteReceiptStatus
+    setAthleteReceiptStatus,
+    getSportSchoolCollections
 }
 
 export default connect(

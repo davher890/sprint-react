@@ -47,13 +47,59 @@ const functions = {
         return Math.max(Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25)), 0)
     },
 
+    calculateDorsalCategory: function(year: number, gender: string) {
+
+        let dorsalCategory = null
+        let category = this.calculateCategory(year)
+        switch (category) {
+            case 'master':
+                dorsalCategory = 'm'
+                break
+            case 'senior':
+                dorsalCategory = 's'
+                break
+            case 'sub8':
+                dorsalCategory = 'u8'
+                break
+            case 'sub10':
+                dorsalCategory = 'u10'
+                break
+            case 'sub12':
+                dorsalCategory = 'u12'
+                break
+            case 'sub14':
+                dorsalCategory = 'u14'
+                break
+            case 'sub16':
+                dorsalCategory = 'u16'
+                break
+            case 'sub18':
+                dorsalCategory = 'u18'
+                break
+            case 'sub20':
+                dorsalCategory = 'u20'
+                break
+            case 'sub23':
+                dorsalCategory = 'u23'
+                break
+            default:
+                dorsalCategory = null
+        }
+        if (dorsalCategory){
+            if (gender === 'male'){
+                dorsalCategory += 'm'
+            }
+            else {
+                dorsalCategory += 'f'
+            }
+        }
+        return dorsalCategory
+    },
+
     calculateCategory: function (year: number) {
         const currentYear = new Date().getFullYear()
         let category = null
-        if (!year){
-            return category;
-        }
-        else {
+        if (year){
             switch (currentYear - year) {
                 case 2:
                 case 3:
@@ -103,8 +149,8 @@ const functions = {
                     }
                     break;
             }
-            return category
         }
+        return category
     },
 
     getCategories: function () {
@@ -137,20 +183,25 @@ const functions = {
         return [
             // { id: "", name: "" },
             { id: "mm", name: "MM" },
+            { id: "mf", name: "MF" },
             { id: "sm", name: "SM" },
             { id: "sf", name: "SF" },
             { id: "u23m", name: "U23M" },
-            { id: "u20f", name: "U20F" },
-            { id: "u18f", name: "U18F" },
-            { id: "u20m", name: "U20M" },
-            { id: "u16m", name: "U16M" },
             { id: "u23f", name: "U23F" },
-            { id: "u14m", name: "U14M" },
-            { id: "u10m", name: "U10M" },
-            { id: "u14f", name: "U14F" },
-            { id: "u10f", name: "U10F" },
+            { id: "u20m", name: "U20M" },
+            { id: "u20f", name: "U20F" },
             { id: "u18m", name: "U18M" },
-            { id: "u12m", name: "U12M" }
+            { id: "u18f", name: "U18F" },
+            { id: "u16m", name: "U16M" },
+            { id: "u16f", name: "U16F" },
+            { id: "u14m", name: "U14M" },
+            { id: "u14f", name: "U14F" },
+            { id: "u12m", name: "U12M" },
+            { id: "u12f", name: "U12F" },
+            { id: "u10m", name: "U10M" },
+            { id: "u10f", name: "U10F" },
+            { id: "u8m", name: "U8M" },
+            { id: "u8f", name: "U8F" }
         ]
     },
 
@@ -158,15 +209,6 @@ const functions = {
         return [ 
             { id: "open", name: "Abierta"}, 
             { id: "solved", name: "Resuelta"} 
-        ]
-    },
-
-    getReceiptCollections: function () {
-        return [ 
-            { id: "october", name: "Octubre" },
-            { id: "november", name: "Noviembre" },
-            { id: "january", name: "Enero" },
-            { id: "may", name: "Mayo"} 
         ]
     },
 

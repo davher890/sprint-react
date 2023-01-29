@@ -7,12 +7,16 @@ export const addData = (body: any) => {
 export const findAll = () => {
     return getRequest("/receipts/all")
 }
-export const saveData = (id: number, body: any) => {
-    return postRequest("/receipts/" + id, body)
+export const saveReceiptAthlete = (body: any) => {
+    return postRequest("/receipts/athletes", body)
 }
 
 export const findById = (id: number) => {
     return getRequest("/receipts/" + id)
+}
+
+export const findReceiptAthleteById = (id: number) => {
+    return getRequest("/receipts/athletes/" + id)
 }
 
 export const validateData = (id: number) => {

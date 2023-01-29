@@ -2,14 +2,16 @@ import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 import apiReducer from "./api/index";
 import authReducer from "./authentication/index";
 import athleteReducer from "./athletes/index";
+import incidenceReducer from "./incidences/index";
+import feeReducer from "./fees/index";
 import groupReducer from "./groups/index";
+import receiptReducer from "./receipts/index";
 import scheduleReducer from "./schedules/index";
 import sportSchoolReducer from "./sportSchools/index";
 import tableReducer from "./table/index";
 import trainerReducer from "./trainers/index";
 import userReducer from "./users/index";
-import incidenceReducer from "./incidences/index";
-import receiptReducer from "./receipts/index";
+
 import thunk from "redux-thunk";
 
 declare global {
@@ -24,14 +26,15 @@ export default createStore(
     api_reducer: apiReducer,
     auth_reducer: authReducer,
     athlete_reducer: athleteReducer,
+    incidence_reducer: incidenceReducer,
+    fee_reducer: feeReducer,
     group_reducer: groupReducer,
+    receipt_reducer: receiptReducer,
     schedule_reducer: scheduleReducer,
     sport_school_reducer: sportSchoolReducer,
     table_reducer: tableReducer,
     trainer_reducer: trainerReducer,
-    user_reducer: userReducer,
-    incidence_reducer: incidenceReducer,
-    receipt_reducer: receiptReducer
+    user_reducer: userReducer
   }),
   storeEnhancers(applyMiddleware(thunk))
 );

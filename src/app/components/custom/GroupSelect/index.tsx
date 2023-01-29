@@ -10,18 +10,14 @@ import { getSportSchoolGroups } from "../../../redux/actions/sportSchools";
 
 const GroupSelect: React.FC<any> = (props) => {
 
-    const [sportSchoolId, setSportSchoolId] = React.useState(props.sportSchoolId)
     const [groupId, setGroupId] = React.useState(props.groupId)
 
     React.useEffect(() => {
-        if (sportSchoolId !== props.sportSchoolId){
-            setSportSchoolId(props.sportSchoolId)
-            props.getSportSchoolGroups(props.sportSchoolId)
-        }
+        props.getSportSchoolGroups(props.sportSchoolId)
         if (groupId !== props.groupId){
             setGroupId(props.groupId)
         }
-    }, [props.sportSchoolId, props.groupId, sportSchoolId, groupId])
+    }, [props.sportSchoolId, props.groupId, groupId])
 
     const groupOnChange = (groupId: number, specialization: boolean) => {
         if (props.onChange){
@@ -40,30 +36,29 @@ const GroupSelect: React.FC<any> = (props) => {
     
     return (
         <Grid container direction="row" spacing={3}>
-            {/* { getGroups(true).length > 0 ? */}
-            <Grid item xs>
-                <RadioList title="Especialización"
-                    disabled={props.disabled || false}
-                    options={getGroups(true)}
-                    value={groupId}
-                    onChange={(value: number) => {
-                        groupOnChange(value, true)
-                    }}
-                />
-            </Grid>
-            {/* : null } */}
-            {/* { getGroups(false).length > 0 ? */}
-            <Grid item xs>
-                <RadioList title="No especialización"
-                    disabled={props.disabled || false}
-                    options={getGroups(false)}
-                    value={groupId}
-                    onChange={(value: number) => {
-                        groupOnChange(value, false)
-                    }}
-                />
-            </Grid>
-            {/* : null } */}
+            { props.sportSchoolId > 0 && <>
+                <Grid item xs>
+                    <RadioList title="Especialización"
+                        disabled={props.disabled || false}
+                        options={getGroups(true)}
+                        value={groupId}
+                        onChange={(value: number) => {
+                            groupOnChange(value, true)
+                        }}
+                    />
+                </Grid>
+                <Grid item xs>
+                    <RadioList title="No especialización"
+                        disabled={props.disabled || false}
+                        options={getGroups(false)}
+                        value={groupId}
+                        onChange={(value: number) => {
+                            groupOnChange(value, false)
+                        }}
+                    />
+                </Grid>
+            </>
+            }
         </Grid>
     )
 

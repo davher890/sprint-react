@@ -86,7 +86,7 @@ const CustomAppBar: React.FC<any> = (props) => {
                     <Typography variant="button" component={Link1} to="/admin/payments" color="inherit">Pagos</Typography>
                 } */}
                 { LoginService.isManager() &&
-                    <Typography variant="button" component={Link1} to="/receipts/list" color="inherit">Recibos</Typography>
+                    <Typography variant="button" component={Link1} to="/receipts/list" color="inherit">Remesas de recibos</Typography>
                 }
                 <Typography variant="button" component={Link1} to="/incidences/list" color="inherit">Incidencias</Typography>
                 {/* <Typography variant="button">

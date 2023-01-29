@@ -1,6 +1,6 @@
 import * as ACTION_TYPES from "../../constants/action_types";
 
-import { addData, addReceiptAthletes, findAll, findById, deleteReceiptAthletes, deleteReceipt, downloadExcel, saveData, validateData } from "../../../services/ReceiptService"
+import { addData, addReceiptAthletes, findAll, findById, findReceiptAthleteById, deleteReceiptAthletes, deleteReceipt, downloadExcel, saveReceiptAthlete, validateData } from "../../../services/ReceiptService"
 import { findReceiptDataPagination, findReceiptIdAthleteDataPagination } from "../../../services/TableService"
 
 import { Order } from '../../../types/order'
@@ -30,6 +30,14 @@ export function getReceiptIdAthleteTable(id: number, page: number, size: number,
     }
 }
 
+export function getReceiptAthlete(id: number) {
+    return function (dispatch: any) {
+        return findReceiptAthleteById(id).then(json => {
+            dispatch({ type: ACTION_TYPES.GET_RECEIPT_ATHLETE, payload: json });
+        });
+    }
+}
+
 export function getReceipt(id: number) {
     return function (dispatch: any) {
         return findById(id).then(json => {
@@ -47,11 +55,11 @@ export function addReceipt(data: any) {
     }
 }
 
-export function saveReceipt(id: number, data: any) {
+export function addReceiptAthlete(data: any) {
     return function (dispatch: any) {
         dispatch({ type: ACTION_TYPES.API_CALL})
-        return saveData(id, data).then(json => {
-            dispatch({ type: ACTION_TYPES.ADD_RECEIPT, payload: json });
+        return saveReceiptAthlete(data).then(json => {
+            dispatch({ type: ACTION_TYPES.ADD_RECEIPT_ATHLETE, payload: json });
         });
     }
 }
@@ -92,6 +100,9 @@ export function downloadReceiptAthletes(id: number) {
 export function validateReceipt(id: number) {
     return function (dispatch: any) {
         return validateData(id).then(json => {
+            if (!json.errorMessage) {
+                json.successMessage = "Remesa validada!"
+            }
             dispatch({ type: ACTION_TYPES.VALIDATE_RECEIPT, payload: json });
         });
     }

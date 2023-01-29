@@ -2,7 +2,8 @@ import React, { useState } from "react"
 
 import moment from 'moment'
 
-import { Grid, AppBar, Toolbar } from '@material-ui/core';
+import { Grid, AppBar, Snackbar, Toolbar } from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 import Table from '../custom/Table';
 import TextField from '../custom/TextField';
@@ -11,7 +12,6 @@ import Select from '../custom/Select'
 import ConfirmDialog from "../custom/ConfirmDialog";
 
 import SelectButton from '../custom/SelectButton'
-import SaveButton from '../custom/SaveButton'
 import RefreshButton from '../custom/RefreshButton'
 import SearchButton from '../custom/SearchButton'
 import DeleteButton from '../custom/DeleteButton'
@@ -26,6 +26,7 @@ import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
 
 import { addReceipt, getReceipt, getReceiptIdAthleteTable, removeReceipt, downloadReceiptAthletes, removeReceiptAthletes, validateReceipt } from "../../redux/actions/receipts";
+import { getSportSchoolCollections } from "../../redux/actions/sportSchools";
 
 import { Order } from '../../types/order'
 
@@ -76,6 +77,22 @@ const NewReceiptForm: React.FC<any> = (props) => {
 
     return (
         <>
+            <Snackbar open={props.receipt.errorMessage !== undefined && props.receipt.errorMessage !== ''}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                <Alert severity="error">
+                    <AlertTitle>Error</AlertTitle>
+                    <strong>{props.receipt.errorMessage}</strong>
+                </Alert>
+            </Snackbar>
+            <Snackbar open={props.receipt.successMessage !== undefined && props.receipt.successMessage !== ''}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                <Alert severity="success" onClose={() => {
+                        window.open("/receipts/" + props.receipt.id, "_self");
+                    }}>
+                    <AlertTitle>Ok!</AlertTitle>
+                    <strong>{props.receipt.successMessage}</strong>
+                </Alert>
+            </Snackbar>
             <ConfirmDialog open={openDeleteDialog} 
                 confirm={() => {
                     props.removeReceipt(props.receipt.id); 
@@ -94,7 +111,7 @@ const NewReceiptForm: React.FC<any> = (props) => {
             />
             <Grid container direction="column" spacing={1}>
                 <Grid item xs>
-                    <Card title="Datos del recibo">
+                    <Card title="Datos de la remesa">
                         <Grid container direction="column" spacing={2}>
                             <Grid container item xs spacing={4}>
                                 <Grid item xs={2}>
@@ -108,12 +125,13 @@ const NewReceiptForm: React.FC<any> = (props) => {
                                     <SportSchoolSelect sportSchoolId={receipt.sportSchoolId} error={receipt.sportSchoolId===0}
                                         onChange={(id: number) => {
                                             setReceipt({ ...receipt, sportSchoolId: id });
+                                            props.getSportSchoolCollections(id)
                                         }}
                                     />
                                 </Grid>
                                 <Grid item xs={2}>
                                     <Select name="collection" label="Remesa" error={!receipt.collection}
-                                        options={Functions.getReceiptCollections()} value={receipt.collection}
+                                        options={props.collections} value={receipt.collection}
                                         onChange={(value: string, item: any) => {
                                             if (item){
                                                 setReceipt({ ...receipt, collection: item.id })
@@ -195,7 +213,7 @@ const NewReceiptForm: React.FC<any> = (props) => {
                                             props.getReceiptIdAthleteTable(props.receipt.id, page, size, filters, sort, sortDirection);
                                         }
                                     }}
-                                    selectableRows={true}
+                                    selectableRows={props.receipt.status !== 'validated'}
                                     selectedIds={selectedIds}
                                     onSelectedIds={(id: number, checked: boolean, row: any) =>{
                                         let ids = selectedIds
@@ -213,7 +231,9 @@ const NewReceiptForm: React.FC<any> = (props) => {
                                         setSelectedIds(ids)
                                         setSelectedAthleteIds(athleteIds)
                                     }}
-                                    // downloadData={downloadData}
+                                    onRowClick={(id: number) => {
+                                        window.open("/receipts/athletes/" + id, "_self");
+                                    }}
                                 />
                             </>
                         </Card>
@@ -241,12 +261,14 @@ const mapDispatchToProps = {
     getReceipt,
     getReceiptIdAthleteTable,
     removeReceipt,
-    removeReceiptAthletes
+    removeReceiptAthletes,
+    getSportSchoolCollections
 }
 
 const mapStateToProps = (state: any) => {
     return { 
         receipt: state.receipt_reducer.receipt,
+        collections: state.sport_school_reducer.collections,
         table_data: state.table_reducer.table_data,
 		page: state.table_reducer.page,
 		size: state.table_reducer.size,

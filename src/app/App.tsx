@@ -16,6 +16,7 @@ import IncidenceTable from './components/incidences/IncidenceTable';
 
 import ReceiptData from './components/receipts/ReceiptData';
 import ReceiptTable from './components/receipts/ReceiptTable';
+import ReceiptAthleteData from './components/receipts/ReceiptAthleteData';
 
 import SportSchoolData from './components/sport_schools/SportSchoolData';
 import SportSchoolTable from './components/sport_schools/SportSchoolTable';
@@ -92,7 +93,8 @@ const AppBar: React.FC<any> = (props) => {
           <Route path="/receipts/list"            element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptTable/></Box></AuthenticatedProtected>}/>
           <Route path="/receipts/:id"             element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptData/></Box></AuthenticatedProtected>}/>
           <Route path="/receipts"                 element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptData/></Box></AuthenticatedProtected>}/>
-          
+          <Route path="/receipts/athletes/:id"    element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptAthleteData/></Box></AuthenticatedProtected>}/>
+
           <Route path="/trainers/list"            element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><TrainerTable/></Box></AuthenticatedProtected>}/>
           <Route path="/trainers/:id"             element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><TrainerData/></Box></AuthenticatedProtected>}/>
           <Route path="/trainers"                 element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><TrainerData/></Box></AuthenticatedProtected>}/>

@@ -25,8 +25,16 @@ export const findSportSchoolTrainers = (id: number) => {
     return getRequest("/sport_schools/" + id + "/trainers")
 }
 
+export const findSportSchoolFee = (id: number) => {
+    return getRequest("/sport_schools/" + id + "/fee")
+}
+
 export const findFeeTypesById = (id: number) => {
     return getRequest("/sport_schools/" + id + "/fee_types")
+}
+
+export const findCollectionsById = (id: number) => {
+    return getRequest("/sport_schools/" + id + "/collections")
 }
 
 export const deleteSportSchool = (id: number) => {

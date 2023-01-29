@@ -10,7 +10,7 @@ import AthletesList from '../custom/Athletes/GroupSwapAthletesList'
 import SportSchoolSelect from "../custom/SportSchoolSelect";
 
 import { connect } from "react-redux";
-import { getGroupAthletes, swapGroups } from "../../redux/actions/groups";
+import { getGroupAAthletes, getGroupBAthletes, swapGroups } from "../../redux/actions/groups";
 
 const GroupSwap: React.FC<any> = (props) => {
 
@@ -24,6 +24,22 @@ const GroupSwap: React.FC<any> = (props) => {
 
     const [groupAAthletes, setGroupAAthletes] = useState<any[]>([])
     const [groupBAthletes, setGroupBAthletes] = useState<any[]>([])
+
+    React.useEffect(() => {
+        setGroupAAthletes(props.group_a_athletes)
+    }, [props.group_a_athletes])
+
+    React.useEffect(() => {
+        setGroupBAthletes(props.group_b_athletes)
+    }, [props.group_b_athletes])
+
+    React.useEffect(() => {
+        props.getGroupAAthletes(groupAId)
+    }, [groupAId])
+
+    React.useEffect(() => {
+        props.getGroupBAthletes(groupBId)
+    }, [groupBId])
     
     return (
         <Grid>
@@ -53,10 +69,7 @@ const GroupSwap: React.FC<any> = (props) => {
                                         sportSchoolId={sportSchoolAId}
                                         groupId={groupAId}
                                         onChange={(groupId: number, specialization: boolean, scheduleIds: number[]) => {
-                                            props.getGroupAthletes(groupId).then(() => {
-                                                setGroupAId(groupId)
-                                                setGroupAAthletes([...props.group_athletes])
-                                            })
+                                            setGroupAId(groupId)
                                         }}
                                     />
                                 </Grid>
@@ -79,10 +92,7 @@ const GroupSwap: React.FC<any> = (props) => {
                                             sportSchoolId={sportSchoolBId}
                                             groupId={groupBId}
                                             onChange={(groupId: number, specialization: boolean, scheduleIds: number[]) => {
-                                                props.getGroupAthletes(groupId).then(() => {
-                                                    setGroupBId(groupId)
-                                                    setGroupBAthletes([...props.group_athletes])
-                                                })
+                                                setGroupBId(groupId)
                                             }}
                                         />
                                     </Grid>
@@ -91,7 +101,7 @@ const GroupSwap: React.FC<any> = (props) => {
                         </Grid>
                     : null }
                 </Grid>
-                <Grid container item direction="row" spacing={2} style={{ display: groupBId ? "" : "none" }}>
+                <Grid container item direction="row" spacing={2}>
                     <Grid item xs>
                         <AthletesList athletes={groupAAthletes}
                             onRowClick={(athlete: any) => {
@@ -134,13 +144,16 @@ const GroupSwap: React.FC<any> = (props) => {
 
 function mapStateToProps(state: any) {
 	return {
-		group_athletes: state.group_reducer.group_athletes,
-        groups: state.group_reducer.groups
+		group_a_athletes: state.group_reducer.group_a_athletes,
+        group_b_athletes: state.group_reducer.group_b_athletes,
+        group_a: state.group_reducer.group_a,
+        group_b: state.group_reducer.group_b
 	};
 }
 
 const mapDispatchToProps = {
-    getGroupAthletes,
+    getGroupAAthletes,
+    getGroupBAthletes,
     swapGroups
 }
 

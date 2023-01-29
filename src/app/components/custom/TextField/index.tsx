@@ -6,6 +6,10 @@ const CustomTextField: React.FC<any> = (props) => (
     <TextField 
 
         {...props}
+        
+        InputLabelProps={{
+            shrink: true,
+        }}
     
         // name={props.name}
         // label={props.label}
