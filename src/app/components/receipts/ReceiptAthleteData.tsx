@@ -10,6 +10,7 @@ import SaveButton from '../custom/SaveButton'
 import TextField from '../custom/TextField';
 
 import { getReceiptAthlete, addReceiptAthlete } from "../../redux/actions/receipts";
+import SearchButton from "../custom/SearchButton";
 
 const ReceiptAthleteData: React.FC<any> = (props) => {
 
@@ -80,6 +81,7 @@ const ReceiptAthleteData: React.FC<any> = (props) => {
             </Grid>
             <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
                 <Toolbar>
+                    <SearchButton onClick={() => window.open("/athletes/" + receiptAthlete.athleteId, "_self")}>Ir al atleta</SearchButton>
                     <SaveButton text='Guardar' onClick={saveReceiptAthlete} />
                 </Toolbar>
             </AppBar>

@@ -136,7 +136,6 @@ class CreateAthlete extends React.Component<any, any> {
                         specialization: this.props.athlete.specialization || false,
                         groupId: this.props.athlete.groupId || '',
                         scheduleIds: this.props.athlete.scheduleIds || [],
-                        scheduleIdsStr: this.props.athlete.scheduleIds ? this.props.athlete.scheduleIds.join(".") || "" : "",
                         // Contact info
                         mail: this.props.athlete.mail || '',
                         phone1: this.props.athlete.phone1 || '',
@@ -761,7 +760,6 @@ class CreateAthlete extends React.Component<any, any> {
                                                             scheduleIds={values.scheduleIds}
                                                             onChange={(groupId: number, specialization: boolean, scheduleIds: number[]) => {
                                                                 setFieldValue('scheduleIds', scheduleIds)
-                                                                setFieldValue('scheduleIdsStr', scheduleIds.join("."))
                                                                 setFieldValue('specialization', specialization)
                                                                 setFieldValue('groupId', groupId)
                                                             }}

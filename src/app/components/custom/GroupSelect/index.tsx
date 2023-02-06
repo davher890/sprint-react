@@ -10,21 +10,15 @@ import { getSportSchoolGroups } from "../../../redux/actions/sportSchools";
 
 const GroupSelect: React.FC<any> = (props) => {
 
-    const [groupId, setGroupId] = React.useState(props.groupId)
-
     React.useEffect(() => {
-        props.getSportSchoolGroups(props.sportSchoolId)
-        if (groupId !== props.groupId){
-            setGroupId(props.groupId)
+        if (props.sportSchoolId){
+            props.getSportSchoolGroups(props.sportSchoolId)
         }
-    }, [props.sportSchoolId, props.groupId, groupId])
+    }, [props.sportSchoolId])
 
     const groupOnChange = (groupId: number, specialization: boolean) => {
         if (props.onChange){
             props.onChange(groupId, specialization)
-        }
-        else {
-            setGroupId(groupId)
         }
     }
 
@@ -41,7 +35,7 @@ const GroupSelect: React.FC<any> = (props) => {
                     <RadioList title="Especialización"
                         disabled={props.disabled || false}
                         options={getGroups(true)}
-                        value={groupId}
+                        value={props.groupId}
                         onChange={(value: number) => {
                             groupOnChange(value, true)
                         }}
@@ -51,7 +45,7 @@ const GroupSelect: React.FC<any> = (props) => {
                     <RadioList title="No especialización"
                         disabled={props.disabled || false}
                         options={getGroups(false)}
-                        value={groupId}
+                        value={props.groupId}
                         onChange={(value: number) => {
                             groupOnChange(value, false)
                         }}

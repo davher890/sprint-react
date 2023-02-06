@@ -13,10 +13,13 @@ const SportSchoolSelect: React.FC<any> = (props) => {
     const [sportSchoolId, setSportSchoolId] = React.useState<number>(props.sportSchoolId)
 
     React.useEffect(() => {
+        props.getAllSportSchools()
+    }, [])
+
+    React.useEffect(() => {
         if (props.sportSchoolId !== sportSchoolId){
             setSportSchoolId(props.sportSchoolId)
         }
-        props.getAllSportSchools()
     }, [props.sportSchoolId, props.getAllSportSchools, sportSchoolId])
 
     const onChange = (value: String, item: any) => {

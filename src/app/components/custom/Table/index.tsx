@@ -19,32 +19,22 @@ const CustomTable: React.FC<any> = (props) => {
 
 	const styles = makeStyles({
 		root: {
-			// background: props.theme.palette.primary.main,
-			color : props.theme.palette.secondary.main,
-			borderColor: props.theme.palette.secondary.main,
-			// "&.Mui-focused": {
-			// 	color: props.theme.palette.secondary.main
-			// }
-			// width: "100%",
-			// marginTop: theme.spacing.unit * 3,
-			overflowX: "visible"
-		},
-		focused: {
-			color : props.theme.palette.secondary.main,
-			borderColor: props.theme.palette.secondary.main,
-			borderBottomColor: props.theme.palette.secondary.main,
-		},
-		input: {
-			// borderWidth: "2px",
-			// borderColor: props.theme.palette.secondary.main,
-			color : props.theme.palette.secondary.main,
-			// background: props.theme.palette.primary.main,
-		},
-		yellowText: {
-			// borderWidth: "2px",
-			// borderColor: props.theme.palette.secondary.main,
-			color : props.theme.palette.secondary.main,
-			// background: props.theme.palette.primary.main,
+			"& .MuiTableCell-head": {
+				color: props.theme.palette.secondary.main,
+				backgroundColor: props.theme.palette.primary.main
+			},
+			'& .MuiFormLabel-root.Mui-disabled': {
+				color: 'red',
+			},
+			"& .MuiFormLabel-root": {
+				color: props.theme.palette.secondary.main,
+			},
+			"& .MuiFormLabel-root.Mui-focused": {
+				color: props.theme.palette.secondary.main,
+			},
+			"& .MuiInputBase-input.MuiInput-input": {
+				color: props.theme.palette.secondary.main,
+			}
 		},
 		sortLabelIcon: {
 			color: props.theme.palette.secondary.main,
@@ -150,7 +140,7 @@ const CustomTable: React.FC<any> = (props) => {
     };
 
 	const getTableHead = () => {
-		return <TableHead>
+		return <TableHead className={classes.root}>
 			<TableRow>
 				{props.selectableRows ? <TableCell style={{ minWidth: '50px' }} key={'select'}>
 					<Checkbox
@@ -198,10 +188,6 @@ const CustomTable: React.FC<any> = (props) => {
 						InputLabelProps={{
 							classes: {
 								root: classes.root,
-								// focused: classes.yellowText,
-								// active: classes.yellowText,
-								// focusVisible: classes.yellowText,
-								// selected: classes.yellowText,
 							},
 						}}
 						options={column.filter.options} value={1}
@@ -211,19 +197,10 @@ const CustomTable: React.FC<any> = (props) => {
 					/>
 				}
 				else {
-					return <TextField label={column.text} className={classes.root} 
-						InputProps={{ 
-							className: classes.input
-						}} 
-						InputLabelProps={{
-							classes: {
-								root: classes.root,
-								focused: classes.focused
-							},
-						}}
+					return <TextField label={column.text}
 						onChange={(e: any) => {
 							handleFilterChange(column.filter.type, column.dataField, e.target.value)
-						}} 
+						}}
 					/>
 				}
 			}

@@ -9,88 +9,55 @@ import { Grid } from '@material-ui/core';
 import { connect } from "react-redux";
 import { getGroupSchedules } from "../../../redux/actions/groups";
 
-class GroupScheduleSelect extends React.Component<any, any> {
+const GroupScheduleSelect: React.FC<any> = (props) => {
 
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            sportSchoolId: props.sportSchoolId,
-            groupId: props.groupId,
-            specialization: props.specialization,
-            scheduleIds: props.scheduleIds || [],
-            group_schedules: this.props.group_schedules
-        };
-    }
+    React.useEffect(() => {
+        if (props.groupId > 0){
+            props.getGroupSchedules(props.groupId)
+        }
+    }, [props.groupId])
 
-    componentDidUpdate = (prevProps: any) => {
-        if (this.props.groupId !== prevProps.groupId){
-            this.groupOnChange(this.props.groupId.toString(), this.props.specialization, false)
+    React.useEffect(() => {
+        let groupScheduleIds = props.group_schedules.map((d: {id: number}) => d.id)
+        let schIds = []
+        if (props.specialization){
+            schIds = groupScheduleIds
         }
-        if (JSON.stringify(this.props.scheduleIds) !== JSON.stringify(prevProps.scheduleIds)){
-            this.scheduleIdsOnChange(this.props.scheduleIds)
+        else {
+            const result = props.scheduleIds.every((val:number) => groupScheduleIds.includes(val));
+            if (result){
+                schIds = props.scheduleIds
+            }
         }
-        if (this.props.specialization !== prevProps.specialization){
-            this.setState({
-                specialization: this.props.specialization,
-            })
-        }
-        if (this.props.sportSchoolId !== prevProps.sportSchoolId){
-            this.setState({
-                sportSchoolId: this.props.sportSchoolId,
-            })
-        }
-    }
-    
-    groupOnChange = (groupId: number, specialization: boolean, resetSchedules=true) => {
-        this.setState({
-            groupId: groupId,
-            specialization: specialization,
-        })
-        if (groupId){
-            this.props.getGroupSchedules(groupId).then(() => {
-                let scheduleIds = specialization ? this.props.group_schedules.map((d: {id: number}) => d.id) : (resetSchedules ? [] : this.state.scheduleIds)
-                this.setState({
-                    scheduleIds: scheduleIds
-                })
-                this.props.onChange(groupId, specialization, scheduleIds)
-            })
-        }
-    }
+        props.onChange(props.groupId, props.specialization, schIds)
+    }, [props.group_schedules])
 
-    scheduleIdsOnChange = (scheduleIds: number[]) => {
-        this.setState({
-            scheduleIds: scheduleIds
-        })
-        this.props.onChange(this.state.groupId, this.state.specialization, scheduleIds)
-    }
-
-    render() {
-        return (
-            <Grid container item direction="row" spacing={2}>
-                <Grid item xs>
-                    <GroupSelect
-                        disabled={this.props.disabled || false}
-                        sportSchoolId={this.state.sportSchoolId}
-                        groupId={this.state.groupId}
-                        onChange={(groupId: number, specialization: boolean) => {
-                            this.groupOnChange(groupId, specialization)
-                        }}
-                    />
-                </Grid>
-                <Grid item xs={3}>
-                    <ScheduleSelect
-                        disabled={this.props.disabled || false}
-                        schedules={this.props.group_schedules}
-                        scheduleIds={this.state.scheduleIds}
-                        specialization={this.state.specialization}
-                        onChange={(scheduleIds: number[]) => {
-                            this.scheduleIdsOnChange(scheduleIds)
-                        }}
-                    />
-                </Grid>
+    return (
+        <Grid container item direction="row" spacing={2}>
+            <Grid item xs>
+                <GroupSelect
+                    disabled={props.disabled || false}
+                    sportSchoolId={props.sportSchoolId}
+                    groupId={props.groupId}
+                    onChange={(grId: number, spec: boolean) => {
+                        props.getGroupSchedules(grId)
+                        props.onChange(grId, spec, props.scheduleIds)
+                    }}
+                />
             </Grid>
-        )
-    }
+            <Grid item xs={3}>
+                <ScheduleSelect
+                    disabled={props.disabled || false}
+                    schedules={props.group_schedules}
+                    scheduleIds={props.scheduleIds}
+                    specialization={props.specialization}
+                    onChange={(scheduleIds: number[]) => {
+                        props.onChange(props.groupId, props.specialization, scheduleIds)
+                    }}
+                />
+            </Grid>
+        </Grid>
+    )
 }
 
 const mapDispatchToProps = {
