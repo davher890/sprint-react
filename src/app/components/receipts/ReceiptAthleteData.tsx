@@ -81,7 +81,7 @@ const ReceiptAthleteData: React.FC<any> = (props) => {
             </Grid>
             <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
                 <Toolbar>
-                    <SearchButton onClick={() => window.open("/athletes/" + receiptAthlete.athleteId, "_self")}>Ir al atleta</SearchButton>
+                    { receiptAthlete.athleteId > 0 && <SearchButton onClick={() => window.open("/athletes/" + receiptAthlete.athleteId, "_self")}>Ir al atleta</SearchButton> }
                     <SaveButton text='Guardar' onClick={saveReceiptAthlete} />
                 </Toolbar>
             </AppBar>

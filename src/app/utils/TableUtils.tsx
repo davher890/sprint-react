@@ -71,7 +71,8 @@ const Utils = {
         { dataField: 'enrollmentFee', text : 'Matricula', sort: false }, 
         { dataField: 'membershipFee', text : 'Cuota de socio', sort: false }, 
         { dataField: 'status', text : 'Estado' },
-        { dataField: 'paymentType', text : 'Forma de pago' }
+        { dataField: 'paymentType', text : 'Forma de pago' },
+        { dataField: 'feeType', text : 'Tipo de cuota' }
         ] 
     },
 

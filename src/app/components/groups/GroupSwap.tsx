@@ -4,6 +4,7 @@ import { Grid, AppBar, Toolbar, Snackbar } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 import SaveButton from '../custom/SaveButton'
+import SelectButton from '../custom/SelectButton'
 import CustomCard from '../custom/Card'
 import GroupSelect from '../custom/GroupSelect'
 import AthletesList from '../custom/Athletes/GroupSwapAthletesList'
@@ -42,7 +43,7 @@ const GroupSwap: React.FC<any> = (props) => {
     }, [groupBId])
     
     return (
-        <Grid>
+        <Grid container>
             <Snackbar open={success}
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
                 <Alert severity="success" onClose={() => { 
@@ -52,8 +53,8 @@ const GroupSwap: React.FC<any> = (props) => {
                     <AlertTitle>Cambios guardados!</AlertTitle>
                 </Alert>
             </Snackbar>
-            <Grid container direction="column" spacing={2}>
-                <Grid container item direction="row" spacing={2}>
+            <Grid container item direction="column" spacing={2} xs>
+                <Grid container item xs direction="row" spacing={2}>
                     <Grid item xs>
                         <CustomCard>
                             <Grid container direction="column">
@@ -73,10 +74,18 @@ const GroupSwap: React.FC<any> = (props) => {
                                         }}
                                     />
                                 </Grid>
+                                { groupAId > 0 && groupBId > 0 && <Grid item xs>
+                                    <SelectButton onClick={() => {
+                                        let athletes = JSON.parse(JSON.stringify(groupAAthletes))
+                                        setGroupBAthletes(athletes)
+                                        setGroupAAthletes([])
+                                    }}>Mover todos</SelectButton>
+                                </Grid>
+                                }
                             </Grid>
                         </CustomCard>
                     </Grid>
-                    { groupAId ? 
+                    { groupAId > 0 &&
                         <Grid item xs>
                             <CustomCard>
                                 <Grid container direction="column">
@@ -96,32 +105,47 @@ const GroupSwap: React.FC<any> = (props) => {
                                             }}
                                         />
                                     </Grid>
+                                    { groupAId > 0 && groupBId > 0 && <Grid item xs>
+                                        <SelectButton onClick={() => {
+                                            let athletes = JSON.parse(JSON.stringify(groupBAthletes))
+                                            setGroupAAthletes(athletes)
+                                            setGroupBAthletes([])
+                                        }}>Mover todos</SelectButton>
+                                    </Grid>
+                                    }
                                 </Grid>
                             </CustomCard>
                         </Grid>
-                    : null }
+                    }
                 </Grid>
-                <Grid container item direction="row" spacing={2}>
-                    <Grid item xs>
-                        <AthletesList athletes={groupAAthletes}
-                            onRowClick={(athlete: any) => {
-                                let grBAthletes = groupBAthletes
-                                grBAthletes.push(athlete)
-                                let grAAthletes = groupAAthletes.filter((a: any) => a.id !== athlete.id)
-                                setGroupAAthletes(grAAthletes)
-                                setGroupBAthletes(grBAthletes)
-                            }}/>
+                <Grid container item xs direction="row" spacing={2}>
+                    { groupAId > 0 && <Grid container item direction="column" xs>
+                        <Grid item xs>
+                            <AthletesList athletes={groupAAthletes}
+                                onRowClick={(athlete: any) => {
+                                    let grBAthletes = groupBAthletes
+                                    grBAthletes.push(athlete)
+                                    let grAAthletes = groupAAthletes.filter((a: any) => a.id !== athlete.id)
+                                    setGroupAAthletes(grAAthletes)
+                                    setGroupBAthletes(grBAthletes)
+                                }}/>
+                        </Grid>
                     </Grid>
-                    <Grid item xs>
-                        <AthletesList athletes={groupBAthletes}
-                            onRowClick={(athlete: any) => {
-                                let grAAthletes = groupAAthletes
-                                grAAthletes.push(athlete)
-                                let grBAthletes = groupBAthletes.filter((a: any) => a.id !== athlete.id)
-                                setGroupAAthletes(grAAthletes)
-                                setGroupBAthletes(grBAthletes)
-                            }}/>
+                    }
+                    { groupBId > 0 && <Grid container item direction="column" xs>
+                        <Grid item xs>
+                            <AthletesList athletes={groupBAthletes}
+                                onRowClick={(athlete: any) => {
+                                    let grAAthletes = groupAAthletes
+                                    grAAthletes.push(athlete)
+                                    let grBAthletes = groupBAthletes.filter((a: any) => a.id !== athlete.id)
+                                    setGroupAAthletes(grAAthletes)
+                                    setGroupBAthletes(grBAthletes)
+                                }}/>
+                        </Grid>
+                        
                     </Grid>
+                    }
                 </Grid>
             </Grid>
             <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>

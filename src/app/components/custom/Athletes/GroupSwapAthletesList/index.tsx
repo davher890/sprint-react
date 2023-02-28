@@ -5,6 +5,8 @@ import { Table, TableBody, TableHead, TableRow, TableCell, TableContainer, Table
 
 import { Order } from '../../../../types/order'
 
+import { withTheme, makeStyles } from '@material-ui/core/styles';
+
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
       return -1;
@@ -37,6 +39,34 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
 
 const GroupSwapAthletesList: React.FC<any> = (props) => {
 
+    const styles = makeStyles({
+		root: {
+			"& .MuiTableCell-head": {
+				color: props.theme.palette.secondary.main,
+				backgroundColor: props.theme.palette.primary.main
+			},
+			'& .MuiFormLabel-root.Mui-disabled': {
+				color: 'red',
+			},
+			"& .MuiFormLabel-root": {
+				color: props.theme.palette.secondary.main,
+			},
+			"& .MuiFormLabel-root.Mui-focused": {
+				color: props.theme.palette.secondary.main,
+			},
+			"& .MuiInputBase-input.MuiInput-input": {
+				color: props.theme.palette.secondary.main,
+			}
+		},
+		sortLabelIcon: {
+			color: props.theme.palette.secondary.main,
+			// fontSize: 30,
+			opacity: 1
+		}
+	});
+
+	const classes = styles();
+
     const [athletes, setAthletes] = React.useState<any[]>(props.athletes || [])
 
     const [orderBy, setOrderBy] = React.useState<string>('')
@@ -61,8 +91,8 @@ const GroupSwapAthletesList: React.FC<any> = (props) => {
     return ( 
         <Grid container style={{ width: "100%", overflowX: "auto" }}>
             <Grid item xs>
-                <TableContainer><Table stickyHeader>
-                    <TableHead>
+                <TableContainer><Table stickyHeader size="small">
+                    <TableHead className={classes.root}>
                         <TableRow>
                             <TableCell>
                                 <TableSortLabel
@@ -119,4 +149,4 @@ const GroupSwapAthletesList: React.FC<any> = (props) => {
         </Grid>
     )
 }
-export default GroupSwapAthletesList;
+export default withTheme(GroupSwapAthletesList);

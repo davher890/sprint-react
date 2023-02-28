@@ -1,9 +1,8 @@
 import * as React from "react"
 
 import { connect } from "react-redux";
-import { withTheme } from '@material-ui/core/styles';
+import { withTheme, makeStyles } from '@material-ui/core/styles';
 import { Box, Grid, Table, TableBody, TableHead, TableRow, TablePagination, TableCell, TableContainer, TableSortLabel, Checkbox } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 
 import ColumnsSelect from "../ColumnsSelect";
 import TextField from "../TextField";
