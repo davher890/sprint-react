@@ -167,6 +167,8 @@ class CreateAthlete extends React.Component<any, any> {
                         openDeleteDialog: false,
                         selectedCategory: false,
                         selectedDorsalCategory: false,
+
+                        lastRegisterDate: moment(new Date()).format("YYYY-MM-DD"),
                         
                         exit: this.props.athlete.exit || false,
 
@@ -408,6 +410,18 @@ class CreateAthlete extends React.Component<any, any> {
                                                     <Grid item xs={3}>
                                                         <TextField name="familyCode" label="Código de familia" type="number" disabled value={values.familyCode} />
                                                     </Grid>
+                                                    { values.id == 0 && <Grid item xs={2}>
+                                                        <TextField value={moment(values.lastRegisterDate).format('YYYY-MM-DD')} margin="dense"
+                                                                label="Fecha de alta" type="date"
+                                                                error={touched.lastRegisterDate && errors.lastRegisterDate}
+                                                                InputProps={{inputProps: { min: "1940-01-01", max: moment(new Date()).format("YYYY-MM-DD")} }}
+                                                                onChange={(e: any) => {
+                                                                    let d: Moment = moment(e.target.value, "YYYY-MM-DD")
+                                                                    setFieldValue('lastRegisterDate', d.toDate().getTime());
+                                                                }}
+                                                            />
+                                                    </Grid>
+                                                    }
                                                 </Grid>
                                             </CustomCard>
                                         </Grid>
