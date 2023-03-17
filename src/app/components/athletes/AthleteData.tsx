@@ -7,8 +7,9 @@ import { Formik } from 'formik';
 
 import { CardHeader, Grid, AppBar, Toolbar, Snackbar, Typography, Box, Checkbox, Button } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
+import InfoIcon from '@material-ui/icons/Info';
 
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from '@material-ui/core';
 
 import CustomCard from '../custom/Card'
 import GroupScheduleSelect from '../custom/GroupScheduleSelect'
@@ -157,8 +158,8 @@ class CreateAthlete extends React.Component<any, any> {
                         membershipFee: (this.props.athlete_fee ? this.props.athlete_fee.membershipFee : 0) || 0,
                         monthlyFee: (this.props.athlete_fee ? this.props.athlete_fee.monthlyFee : 0) || 0,
                         // Dialogs
+                        activationDate: moment(new Date()).format("YYYY-MM-DD"),
                         registerDate: moment(new Date()).format("YYYY-MM-DD"),
-                        registerDateStr: moment(new Date()).format("YYYY-MM-DD"),
                         registerObservations: '',
                         openRegisterDialog: false,
                         openSportdataDialog: false,
@@ -169,6 +170,7 @@ class CreateAthlete extends React.Component<any, any> {
                         selectedDorsalCategory: false,
 
                         lastRegisterDate: moment(new Date()).format("YYYY-MM-DD"),
+                        lastActivationDate: moment(new Date()).format("YYYY-MM-DD"),
                         
                         exit: this.props.athlete.exit || false,
 
@@ -321,14 +323,29 @@ class CreateAthlete extends React.Component<any, any> {
                             <DialogTitle id="form-dialog-title">Fecha de {utils.isRegistered(values.historic) ? 'baja' : 'alta'}</DialogTitle>
                             <DialogContent>
                                 <DialogContentText>
-                                    Introduce la fecha de {utils.isRegistered(values.historic) ? 'baja' : 'alta'}.
+                                    Introduce la fecha de {utils.isRegistered(values.historic) ? 'baja' : 'alta'} y la fecha en la que esta activo en el sistema.
                             </DialogContentText>
-                                <TextField name="registerDateStr" value={values.registerDateStr} margin="dense" onChange={(e: any) => {
+                                <div style={{ display:'flex', justifyContent:"space-between" }}>
+                                    <Tooltip title="Fecha a partir de la cual empieza los entrenamientos">
+                                        <InfoIcon></InfoIcon>
+                                    </Tooltip>
+
+                                    <TextField type="date" name="registerDate" value={moment(values.registerDate).format('YYYY-MM-DD')} label="Fecha de alta" margin="dense" onChange={(e: any) => {
                                             let d: Moment = moment(e.target.value, "YYYY-MM-DD")
-                                            setFieldValue('registerDateStr', e.target.value);
                                             setFieldValue('registerDate', d.toDate().getTime());
+                                        }} 
+                                    />
+
+                                    <Tooltip title="Fecha con la que se da de alta en el sistema.">
+                                        <InfoIcon></InfoIcon>
+                                    </Tooltip>
+                                    
+                                    <TextField type="date" name="activationDate" value={moment(values.activationDate).format('YYYY-MM-DD')} label="Fecha de visibilidad" margin="dense" onChange={(e: any) => {
+                                            let d: Moment = moment(e.target.value, "YYYY-MM-DD")
+                                            setFieldValue('activationDate', d.toDate().getTime());
                                         }}
-                                    type="date" />
+                                    />
+                                </div>
                                 <TextField fullWidth name="registerObservations" label="Observaciones" multiline
                                         value={values.registerObservations} onChange={handleChange}/>
                             </DialogContent>
@@ -339,7 +356,7 @@ class CreateAthlete extends React.Component<any, any> {
                                         .then(() => window.open("/athletes/list", "_self"))
                                     }
                                     else {
-                                        this.props.doRegisterAthlete(values.id, { date: values.registerDate, observations: values.registerObservations })
+                                        this.props.doRegisterAthlete(values.id, { date: values.registerDate, activationDate: values.activationDate, observations: values.registerObservations })
                                         .then(() => window.open("/athletes/" + values.id, "_self"))
                                     }
                                 }}>Guardar</Button>
@@ -410,17 +427,25 @@ class CreateAthlete extends React.Component<any, any> {
                                                     <Grid item xs={3}>
                                                         <TextField name="familyCode" label="Código de familia" type="number" disabled value={values.familyCode} />
                                                     </Grid>
-                                                    { values.id == 0 && <Grid item xs={2}>
+                                                    { values.id == 0 && <div style={{ display:'flex', justifyContent:'space-around'}}>
                                                         <TextField value={moment(values.lastRegisterDate).format('YYYY-MM-DD')} margin="dense"
                                                                 label="Fecha de alta" type="date"
                                                                 error={touched.lastRegisterDate && errors.lastRegisterDate}
-                                                                InputProps={{inputProps: { min: "1940-01-01", max: moment(new Date()).format("YYYY-MM-DD")} }}
                                                                 onChange={(e: any) => {
                                                                     let d: Moment = moment(e.target.value, "YYYY-MM-DD")
                                                                     setFieldValue('lastRegisterDate', d.toDate().getTime());
                                                                 }}
                                                             />
-                                                    </Grid>
+                                                        <TextField value={moment(values.lastActivationDate).format('YYYY-MM-DD')} margin="dense"
+                                                                label="Fecha de visibilidad" type="date"
+                                                                InputProps={{inputProps: { min: "1940-01-01", max: moment(values.lastRegisterDate).format('YYYY-MM-DD')} }}
+                                                                error={touched.lastActivationDate && errors.lastActivationDate}
+                                                                onChange={(e: any) => {
+                                                                    let d: Moment = moment(e.target.value, "YYYY-MM-DD")
+                                                                    setFieldValue('lastActivationDate', d.toDate().getTime());
+                                                                }}
+                                                            />
+                                                    </div>
                                                     }
                                                 </Grid>
                                             </CustomCard>
@@ -767,7 +792,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                 <Grid container spacing={1} direction="row">
                                                     <Grid item xs>
                                                         <GroupScheduleSelect 
-                                                            disabled={!utils.isRegistered(values.historic)}
+                                                            disabled={!utils.isActivated(values.historic)}
                                                             groupId={values.groupId}
                                                             sportSchoolId={values.sportSchoolId}
                                                             specialization={values.specialization}

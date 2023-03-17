@@ -15,7 +15,7 @@ const functions = {
             letter = letter.substring(number, number+1);
             if (letter !== letr.toUpperCase()) {
                 return false
-            }else{
+            } else{
                 return true
             }
         }
@@ -30,9 +30,28 @@ const functions = {
     isRegistered: function (historic: {type: string, date: number}[]) {
 
         if (historic && historic.length > 0){
-            let filtered = historic.filter((h: {type: string, date: number}) => { return h.date <= new Date().getTime() })
+            let filtered = historic
+                .filter((h: {type: string, date: number}) => { return h.date <= new Date().getTime() })
                 .sort((a: {type: string, date: number}, b: {type: string, date: number}) => { return a.date < b.date ? 1 : -1})
-            return filtered[0].type === 'REGISTER'
+            if (filtered.length > 0){
+                return filtered[0].type === 'REGISTER'
+            }
+        }
+        return true
+    },
+
+    isActivated: function (historic: {type: string, date: number, activationDate: number}[]) {
+
+        if (historic && historic.length > 0){
+            let filtered = historic
+                .filter((h: {type: string, date: number, activationDate: number}) => { return h.activationDate <= new Date().getTime() })
+                .sort((a: {type: string, date: number, activationDate: number}, b: {type: string, date: number, activationDate: number}) => { 
+                    if (a.activationDate === null || b.activationDate === null) return 1;
+                    return a.activationDate < b.activationDate ? 1 : -1
+                })
+            if (filtered.length > 0){
+                return filtered[0].type === 'REGISTER'
+            }
         }
         return true
     },
