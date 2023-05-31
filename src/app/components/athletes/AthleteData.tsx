@@ -797,16 +797,27 @@ class CreateAthlete extends React.Component<any, any> {
                                                             sportSchoolId={values.sportSchoolId}
                                                             specialization={values.specialization}
                                                             scheduleIds={values.scheduleIds}
-                                                            onChange={(grId: number, specialization: boolean, scheduleIds: number[]) => {
+                                                            onGroupChange={(grId: number, specialization: boolean) => {
                                                                 setFieldValue('groupId', grId)
                                                                 setFieldValue('specialization', specialization)
                                                                 if (grId == this.props.athlete.groupId){
                                                                     setFieldValue('scheduleIds', this.props.athlete.scheduleIds)
                                                                 }
-                                                                else {
-                                                                    setFieldValue('scheduleIds', scheduleIds)
-                                                                }
                                                             }}
+                                                            onScheduleChange={(scheduleIds: number[]) => {
+                                                                setFieldValue('scheduleIds', scheduleIds)
+
+                                                            }}
+                                                            // onChange={(grId: number, specialization: boolean, scheduleIds: number[]) => {
+                                                            //     setFieldValue('groupId', grId)
+                                                            //     setFieldValue('specialization', specialization)
+                                                            //     if (grId == this.props.athlete.groupId){
+                                                            //         setFieldValue('scheduleIds', this.props.athlete.scheduleIds)
+                                                            //     }
+                                                            //     else {
+                                                            //         setFieldValue('scheduleIds', scheduleIds)
+                                                            //     }
+                                                            // }}
                                                         />
                                                     </Grid>
                                                 </Grid>

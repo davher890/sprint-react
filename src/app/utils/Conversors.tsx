@@ -86,6 +86,12 @@ function athleteDataConversor(d: any) {
         dorsalNumber: d.dorsalNumber,
         dorsalCategory: functions?.getDorsalCategories().find(c => c.id === d.dorsalCategory)?.name,
         iban: d.iban,
+        paymentType: functions.getPaymentTypes().find(st => st.id === d.paymentType)?.name,
+        feeType: d.feeType,
+        holderName: d.holderName,
+        holderFirstSurname: d.holderFirstSurname,
+        holderSecondSurname: d.holderSecondSurname,
+        holderDni: d.holderDni,
         sportSchoolId: d.sportSchoolName, 
         groupName: d.groupName,
         days: d.days,
@@ -95,7 +101,15 @@ function athleteDataConversor(d: any) {
         lastUnregisterDate: d.lastUnregisterDate ? new Intl.DateTimeFormat('sq-AL').format(new Date(d.lastUnregisterDate)) : '',
         mail: d.mail,
         address: d.address,
+        familiarOneName: d.familiarOneName,
+        familiarOneFirstSurname: d.familiarOneFirstSurname,
+        familiarOneSecondSurname: d.familiarOneSecondSurname,
+        familiarOneDni: d.familiarOneDni,
         familiarOneMail: d.familiarOneMail,
+        familiarTwoName: d.familiarTwoName,
+        familiarTwoFirstSurname: d.familiarTwoFirstSurname,
+        familiarTwoSecondSurname: d.familiarTwoSecondSurname,
+        familiarTwoDni: d.familiarTwoDni,
         familiarTwoMail: d.familiarTwoMail
     }
 }
