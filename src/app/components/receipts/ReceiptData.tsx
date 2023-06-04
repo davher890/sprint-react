@@ -152,7 +152,7 @@ const NewReceiptForm: React.FC<any> = (props) => {
                                 <Grid container item direction="column" xs>
                                     <Grid container item xs spacing={4}>
                                         <Grid item xs={3}>
-                                            <span>Atletas cuya fecha de alta sea anterior a: </span>
+                                            <span>Se seleccionaran aquellos atletas cuya fecha de alta sea anterior a: </span>
                                         </Grid>
                                         <Grid item xs={1}>
                                             <TextField value={receipt.lastRegisterDate} margin="dense"
@@ -165,7 +165,7 @@ const NewReceiptForm: React.FC<any> = (props) => {
                                     </Grid>
                                     <Grid container item xs spacing={4}>
                                         <Grid item xs={3}>
-                                            <span>Atletas cuya fecha de baja sea posterior a: </span>
+                                            <span>Se seleccionaran aquellos atletas cuya fecha de baja sea posterior a: </span>
                                         </Grid>
                                         <Grid item xs={1}>
                                             <TextField value={receipt.lastUnregisterDate}
