@@ -62,6 +62,7 @@ const Utils = {
             { dataField: 'phone2', text : 'Tel.2', show: false, filter: { type: "text" } },
             { dataField: 'phone3', text : 'Tel.3', show: false, filter: { type: "text" } },
             { dataField: 'address', text: 'Dirección', filter: { type: "text" } },
+            { dataField: 'municipality', text: 'Municipio', filter: { type: "text" } },
             { dataField: 'code', text : 'Codigo atleta', show: false, filter: { type: "number" } },
             { dataField: 'familyCode', text : 'Codigo familia', show: false, filter: { type: "number" } }
         ]
@@ -69,24 +70,25 @@ const Utils = {
 
     getReceiptAthleteColumns: () => {
         return [
-        { dataField: 'athlete_id', text: 'athlete_id', show: false },
-        { dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
-        { dataField: 'firstSurname', text : 'Primer apellido', filter: { type: "text" } }, 
-        { dataField: 'secondSurname', text : 'Segundo apellido', filter: { type: "text" } }, 
-        { dataField: 'lastRegisterDate', text : 'Fecha incorporacion', sort: false, type: "date" },
-        { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
-            type: "options",
-            options : functions.getSportSchools()
-        }},
-        { dataField: 'groupName', text : 'Grupo', filter: { type: "text" } }, 
-        { dataField: 'days', text : 'Dias', sort: false }, 
-        { dataField: 'numDays', text : 'Num. Dias', sort: false }, 
-        { dataField: 'monthlyFee', text : 'Mensualidad', sort: false }, 
-        { dataField: 'enrollmentFee', text : 'Matricula', sort: false }, 
-        { dataField: 'membershipFee', text : 'Cuota de socio', sort: false }, 
-        { dataField: 'status', text : 'Estado' },
-        { dataField: 'paymentType', text : 'Forma de pago' },
-        { dataField: 'feeType', text : 'Tipo de cuota' }
+            { dataField: 'athlete_id', text: 'athlete_id', show: false },
+            { dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
+            { dataField: 'firstSurname', text : 'Primer apellido', filter: { type: "text" } }, 
+            { dataField: 'secondSurname', text : 'Segundo apellido', filter: { type: "text" } }, 
+            { dataField: 'lastRegisterDate', text : 'Fecha incorporacion', sort: false, type: "date" },
+            { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
+                type: "options",
+                options : functions.getSportSchools()
+            }},
+            { dataField: 'groupName', text : 'Grupo', filter: { type: "text" } }, 
+            { dataField: 'days', text : 'Dias', sort: false }, 
+            { dataField: 'numDays', text : 'Num. Dias', sort: false }, 
+            { dataField: 'monthlyFee', text : 'Mensualidad', sort: false }, 
+            { dataField: 'enrollmentFee', text : 'Matricula', sort: false }, 
+            { dataField: 'membershipFee', text : 'Cuota de socio', sort: false }, 
+            { dataField: 'status', text : 'Estado' },
+            { dataField: 'paymentType', text : 'Forma de pago' },
+            { dataField: 'feeType', text : 'Tipo de cuota' },
+            { dataField: 'licenseType', text : 'Tipo de licencia'}, 
         ] 
     },
 
