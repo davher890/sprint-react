@@ -81,8 +81,10 @@ class CreateAthlete extends React.Component<any, any> {
         return !(this.props.id)
     }
 
-    isMatchingAthletes() {
-        return (this.props.athletes_by_surnames && this.props.athletes_by_surnames.length > 0) || (this.props.athletes_by_phone && this.props.athletes_by_phone.length > 0)                                                                     
+    isMatchingAthletes(selectedFamily: boolean) {
+        return !selectedFamily && (!this.props.athlete.id || this.props.athlete.id == 0) && 
+            ((this.props.athletes_by_surnames && this.props.athletes_by_surnames.length > 0) || 
+            (this.props.athletes_by_phone && this.props.athletes_by_phone.length > 0))                                                                    
     }
 
     render() {
@@ -129,8 +131,8 @@ class CreateAthlete extends React.Component<any, any> {
                         familiarTwoMail: this.props.athlete.familiarTwoMail || '',
                         // Sport info
                         category: this.props.athlete.category || '',
-                        nextCategory: this.props.athlete.nextCategory || '',
-                        dorsalCategory: this.props.athlete.dorsalCategory ? this.props.athlete.dorsalCategory : utils.calculateDorsalCategory(new Date(this.props.athlete.birthDate).getFullYear(), this.props.athlete.gender),
+                        nextCategory: (this.props.athlete.birthDate ? utils.calculateCategory(new Date(this.props.athlete.birthDate).getFullYear() - 1) : '') || '',
+                        dorsalCategory: this.props.athlete.dorsalCategory || '',
                         dorsalNumber: this.props.athlete.dorsalNumber || '',
                         license: this.props.athlete.license || '',
                         licenseType: this.props.athlete.licenseType || '',
@@ -166,8 +168,7 @@ class CreateAthlete extends React.Component<any, any> {
                         openReceiptsDialog: false,
                         openMatchingAthletes: false,
                         openDeleteDialog: false,
-                        selectedCategory: false,
-                        selectedDorsalCategory: false,
+                        selectedFamily: false,
 
                         lastRegisterDate: moment(new Date()).format("YYYY-MM-DD"),
                         lastActivationDate: moment(new Date()).format("YYYY-MM-DD"),
@@ -264,6 +265,7 @@ class CreateAthlete extends React.Component<any, any> {
                         <Dialog fullWidth={true} maxWidth="xl" open={values.openMatchingAthletes} aria-labelledby="form-dialog-title"
                             onClose={() => {
                                 setFieldValue('openMatchingAthletes', false)
+                                setFieldValue("selectedFamily", false)
                             }}
                         >
                             <DialogTitle id="form-dialog-title">Atletas coincidentes</DialogTitle>
@@ -299,7 +301,8 @@ class CreateAthlete extends React.Component<any, any> {
                                         setFieldValue("holderFirstSurname", athlete.holderFirstSurname)
                                         setFieldValue("holderSecondSurname", athlete.holderSecondSurname)
                                         setFieldValue("holderDni", athlete.holderDni)
-                                        setFieldValue('openMatchingAthletes', false)
+                                        setFieldValue("openMatchingAthletes", false)
+                                        setFieldValue("selectedFamily", true)
                                     }}
                                     onSelectAthlete={(id: number) => { 
                                         window.open("/athletes/" + id, "_self");
@@ -309,7 +312,10 @@ class CreateAthlete extends React.Component<any, any> {
                             </DialogContent>
                             <DialogActions>
                                 <Button 
-                                    onClick={(a: any) => { setFieldValue('openMatchingAthletes', false) }}
+                                    onClick={(a: any) => { 
+                                        setFieldValue('selectedFamily', false) 
+                                        setFieldValue('openMatchingAthletes', false)
+                                    }}
                                 >Cerrar</Button>
                             </DialogActions>
                         </Dialog>
@@ -507,7 +513,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                                     }
                                                                     if (this.isNewAthlete() && values.firstSurname !== '' && values.secondSurname !== ''){
                                                                         return this.props.getAthletesBySurnames(values.firstSurname, values.secondSurname).then(() => {
-                                                                            setFieldValue('openMatchingAthletes', this.isMatchingAthletes())
+                                                                            setFieldValue('openMatchingAthletes', this.isMatchingAthletes(values.selectedFamily))
                                                                         })
                                                                     }
                                                                 }}
@@ -523,7 +529,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                                     }
                                                                     if (this.isNewAthlete() && values.firstSurname !== '' && values.secondSurname !== ''){
                                                                         return this.props.getAthletesBySurnames(values.firstSurname, values.secondSurname).then(() => {
-                                                                            setFieldValue('openMatchingAthletes', this.isMatchingAthletes())
+                                                                            setFieldValue('openMatchingAthletes', this.isMatchingAthletes(values.selectedFamily))
                                                                         })
                                                                     }
                                                                 }}
@@ -544,7 +550,12 @@ class CreateAthlete extends React.Component<any, any> {
                                                                     setFieldValue('age', age);
                                                                     setFieldValue('birthDateStr', e.target.value);
                                                                     setFieldValue('birthDate', d.toDate().getTime());
-                                                                    setFieldValue('category', utils.calculateCategory(new Date(d.milliseconds()).getFullYear()));
+                                                                    // if (!values.category){ 
+                                                                    let cat = utils.calculateCategory(d.toDate().getFullYear())
+                                                                    let nextCat = utils.calculateCategory(d.toDate().getFullYear() - 1)
+                                                                    setFieldValue('category', cat);
+                                                                    setFieldValue('nextCategory', nextCat);
+                                                                    // }
                                                                 }}
                                                             />
                                                         </Grid>
@@ -571,7 +582,12 @@ class CreateAthlete extends React.Component<any, any> {
                                                         <Grid item xs>
                                                             <Select fullWidth name="gender" label="Género" error={touched.gender && errors.gender}
                                                                 options={[{ id: "male", name: "Hombre" }, { id: "female", name: "Mujer" }]} value={values.gender}
-                                                                onChange={(e: any, value: any) => setFieldValue('gender', value ? value.id : "")}
+                                                                onChange={(e: any, value: any) => {
+                                                                    setFieldValue('gender', value ? value.id : "")
+                                                                    if (values.gender && values.birthDate){
+                                                                        setFieldValue('dorsalCategory', utils.calculateDorsalCategory(new Date(values.birthDate).getFullYear(), values.gender))
+                                                                    }
+                                                                }}
                                                             />
                                                         </Grid>
                                                         <Grid item xs>
@@ -604,7 +620,7 @@ class CreateAthlete extends React.Component<any, any> {
                                                             let phoneList = this.getPhoneList(values.phone1, values.phone2, values.phone3)
                                                             if (this.isNewAthlete() && phoneList.length > 0){
                                                                 return this.props.getAthletesByPhone(phoneList).then(() => {
-                                                                    setFieldValue('openMatchingAthletes', this.isMatchingAthletes())
+                                                                    setFieldValue('openMatchingAthletes', this.isMatchingAthletes(values.selectedFamily))
                                                                 })
                                                             }
                                                         }} />
@@ -752,22 +768,26 @@ class CreateAthlete extends React.Component<any, any> {
                                                 <Grid container item spacing={1}>
                                                     <Grid item xs={2}>
                                                         <Select fullWidth name="category" label="Categoría"
-                                                            options={utils.getCategories()} value={values.selectedCategory ? values.category : utils.calculateCategory(new Date(values.birthDate).getFullYear())}
+                                                            options={utils.getCategories()} 
+                                                            value={values.category}
                                                             onChange={(e: any, value: any) => {
-                                                                setFieldValue('selectedCategory', 'true');
                                                                 setFieldValue('category', value ? value.id : "")
                                                             }}
                                                         />
                                                     </Grid>
                                                     <Grid item xs={2}>
                                                         <Select fullWidth name="nextCategory" label="Siguiente categoría"
-                                                            options={utils.getCategories()} value={utils.calculateCategory(new Date(values.birthDate).getFullYear() - 1)}
-                                                            onChange={(e: any, value: any) => setFieldValue('nextCategory', value ? value.id : "")}
+                                                            options={utils.getCategories()} 
+                                                            value={values.nextCategory}
+                                                            onChange={(e: any, value: any) => {
+                                                                setFieldValue('nextCategory', value ? value.id : "")
+                                                            }}
                                                         />
                                                     </Grid>
                                                     <Grid item xs={2}>
                                                         <Select fullWidth name="dorsalCategory" label="Categoría dorsal"
-                                                            options={utils.getDorsalCategories()} value={values.selectedDorsalCategory ? values.dorsalCategory : utils.calculateDorsalCategory(new Date(values.birthDate).getFullYear(), values.gender)}
+                                                            options={utils.getDorsalCategories()} 
+                                                            value={values.dorsalCategory}
                                                             onChange={(e: any, value: any) => {
                                                                 setFieldValue('selectedDorsalCategory', 'true')
                                                                 setFieldValue('dorsalCategory', value ? value.id : "")
