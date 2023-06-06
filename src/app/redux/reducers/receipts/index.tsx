@@ -13,9 +13,6 @@ function rootReducer(state = initialState, action: { type: string, payload: any 
             receipt: action.payload
         }
     }
-    if (action.type === ACTION_TYPES.ADD_RECEIPT) {
-        window.open("/receipts/" + action.payload.id, "_self");
-    }
     else if (action.type === ACTION_TYPES.ADD_RECEIPT_ATHLETE) {
         return {
             ...state,

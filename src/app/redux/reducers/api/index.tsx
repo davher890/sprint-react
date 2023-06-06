@@ -1,7 +1,8 @@
 import * as ACTION_TYPES from "../../constants/action_types";
 
 const initialState = {
-    loading: false
+    loading: false,
+    go_to_page: null
 };
 
 function rootReducer(state = initialState, action: { type: string, payload: any }) {
@@ -26,18 +27,26 @@ function rootReducer(state = initialState, action: { type: string, payload: any 
         || action.type === ACTION_TYPES.LOAD_FAMILY_TABLE
         || action.type === ACTION_TYPES.LOAD_INCIDENCE_TABLE
         || action.type === ACTION_TYPES.LOAD_RECEIPT_TABLE
-        || action.type === ACTION_TYPES.LOAD_RECEIPT_ATHLETE_TABLE
-        || action.type === ACTION_TYPES.ADD_RECEIPT) {
+        || action.type === ACTION_TYPES.LOAD_RECEIPT_ATHLETE_TABLE) {
         return {
             ...state,
-            loading: false
+            loading: false,
+            go_to_page: null
         };
     }
-    if (action.type === ACTION_TYPES.API_CALL) {
+    else if (action.type === ACTION_TYPES.API_CALL) {
         return {
             ...state,
-            loading: true
+            loading: true,
+            go_to_page: null
         };
+    }
+    else if (action.type === ACTION_TYPES.ADD_RECEIPT) {
+        return {
+            ...state,
+            loading: true,
+            go_to_page: "/receipts/" + action.payload.id
+        }
     }
     else {
         return state;

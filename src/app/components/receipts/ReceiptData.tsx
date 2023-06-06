@@ -75,6 +75,13 @@ const NewReceiptForm: React.FC<any> = (props) => {
         }
     }, [props.receipt])
 
+    React.useEffect(() => {
+        if (props.go_to_page){
+            window.open(props.go_to_page, "_self");
+        }
+    }, [props.go_to_page])
+
+
     return (
         <>
             <Snackbar open={props.receipt.errorMessage !== undefined && props.receipt.errorMessage !== ''}
@@ -273,7 +280,8 @@ const mapStateToProps = (state: any) => {
 		page: state.table_reducer.page,
 		size: state.table_reducer.size,
 		total: state.table_reducer.total,
-        loading: state.api_reducer.loading
+        loading: state.api_reducer.loading,
+        go_to_page: state.api_reducer.go_to_page,
     };
 };
 
