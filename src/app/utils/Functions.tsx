@@ -27,6 +27,16 @@ const functions = {
         }
     },
 
+    isValidIban: function(iban: string) {
+        if (iban.toLowerCase().startsWith('es')){
+            const ibanRegex = /^ES\d{2}[ ]\d{4}[ ]\d{4}[ ]\d{4}[ ]\d{4}[ ]\d{4}|ES\d{22}$/i
+            return ibanRegex.test(iban.toUpperCase())
+        }
+        else {
+            return true;
+        }
+    },
+
     isRegistered: function (historic: {type: string, date: number}[]) {
 
         if (historic && historic.length > 0){

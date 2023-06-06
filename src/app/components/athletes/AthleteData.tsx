@@ -196,8 +196,13 @@ class CreateAthlete extends React.Component<any, any> {
                         if (values.paymentType  === '') errors.paymentType = true;
                         if (values.feeType  === '') errors.feeType = true;
                                         
-                        if (values.iban === '' && values.paymentType === "DOM") {
-                            errors.iban = true;
+                        if(values.paymentType === "DOM") {
+                            if (!values.iban || values.iban === '') {
+                                errors.iban = true;
+                            }
+                            else if(!utils.isValidIban(values.iban)) {
+                                errors.iban = true;
+                            }
                         }
                         if (values.holderName === '' && values.paymentType === "DOM") {
                             errors.holderName = true;
@@ -724,6 +729,12 @@ class CreateAthlete extends React.Component<any, any> {
                                                             <Grid item xs={6}>
                                                                 <TextField fullWidth name="iban" label="Iban" value={values.iban} onChange={handleChange}
                                                                     error={touched.iban && errors.iban}
+                                                                    onBlur={() => {
+                                                                        if (values.paymentType === "DOM" && !utils.isValidIban(values.iban)){
+                                                                            setFieldTouched("iban", true, false);
+                                                                            setFieldError("iban", "IBAN incorrecto");
+                                                                        }
+                                                                    }}
                                                                 />
                                                             </Grid>
                                                         </Grid>
