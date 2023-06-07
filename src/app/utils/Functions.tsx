@@ -1,5 +1,21 @@
 const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
+function modulo97(iban: string) {
+    var parts = Math.ceil(iban.length/7);
+    var remainer = "";
+
+    for (var i = 1; i <= parts; i++) {
+        remainer = String(parseFloat(remainer+iban.substr((i-1)*7, 7))%97);
+    }
+
+    return parseInt(remainer);
+}
+
+function getnumIBAN(letra: string) {
+    let ls_letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    return ls_letras.search(letra) + 10;
+}
+
 const functions = {
 
     isValidDni: function(dni: string) {
@@ -28,12 +44,39 @@ const functions = {
     },
 
     isValidIban: function(iban: string) {
-        if (iban.toLowerCase().startsWith('es')){
-            const ibanRegex = /^ES\d{2}[ ]\d{4}[ ]\d{4}[ ]\d{4}[ ]\d{4}[ ]\d{4}|ES\d{22}$/i
-            return ibanRegex.test(iban.toUpperCase())
+        // if (iban.toLowerCase().startsWith('es')){
+        //     const ibanRegex = /^ES\d{2}[ ]\d{4}[ ]\d{4}[ ]\d{4}[ ]\d{4}[ ]\d{4}|ES\d{22}$/i
+        //     return ibanRegex.test(iban.toUpperCase())
+        // }
+        // else {
+        //     return true;
+        // }
+        //Se pasa a Mayusculas
+        iban = iban.toUpperCase().trim().replace(/\s/g, ""); 
+        
+        var letra1,letra2,num1,num2;
+        var isbanaux;
+        //La longitud debe ser siempre de 24 caracteres
+        if (iban.length !== 24) {
+            return false;
         }
-        else {
+
+        // Se coge las primeras dos letras y se pasan a números
+        letra1 = iban.substring(0, 1);
+        letra2 = iban.substring(1, 2);
+        num1 = getnumIBAN(letra1);
+        num2 = getnumIBAN(letra2);
+        //Se sustituye las letras por números.
+        isbanaux = String(num1) + String(num2) + iban.substring(2);
+        // Se mueve los 6 primeros caracteres al final de la cadena.
+        isbanaux = isbanaux.substring(6) + isbanaux.substring(0,6);
+
+        //Se calcula el resto, llamando a la función modulo97, definida más abajo
+        let resto = modulo97(isbanaux);
+        if (resto === 1){
             return true;
+        }else{
+            return false;
         }
     },
 

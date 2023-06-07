@@ -136,6 +136,8 @@ class CreateAthlete extends React.Component<any, any> {
                         dorsalNumber: this.props.athlete.dorsalNumber || '',
                         license: this.props.athlete.license || '',
                         licenseType: this.props.athlete.licenseType || '',
+                        licenseNationalFee: this.props.athlete.licenseNationalFee || '',
+                        licenseTerritorialFee: this.props.athlete.licenseTerritorialFee || '',
                         specialization: this.props.athlete.specialization || false,
                         groupId: this.props.athlete.groupId || '',
                         scheduleIds: this.props.athlete.scheduleIds || [],
@@ -818,6 +820,12 @@ class CreateAthlete extends React.Component<any, any> {
                                                     </Grid>
                                                     <Grid item>
                                                         <TextField fullWidth name="license" label="Licencia" value={values.license} onChange={handleChange} />
+                                                    </Grid>
+                                                    <Grid item>
+                                                        <TextField fullWidth name="licenseNationalFee" label="Cuota licencia nacional" type="number" value={values.licenseNationalFee} onChange={handleChange} />
+                                                    </Grid>
+                                                    <Grid item>
+                                                        <TextField fullWidth name="licenseTerritorialFee" label="Cuota licencia territorial" type="number" value={values.licenseTerritorialFee} onChange={handleChange} />
                                                     </Grid>
                                                 </Grid>
                                                 <Grid container spacing={1} direction="row">
