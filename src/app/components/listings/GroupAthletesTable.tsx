@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useState } from "react";
 
 import { Grid } from '@material-ui/core';
 
@@ -14,89 +15,79 @@ import { getGroupAthleteTable, getGroupSchedules, downloadGroupSchedulesAthletes
 
 import { Order } from '../../types/order'
 
-class GroupAthletesTable extends React.Component<any, any> {
+const GroupAthletesTable: React.FC<any> = (props) => {
 
-	constructor(props: any) {
+    const [sportSchoolId, setSportSchoolId] = useState<number>(0)
+	const [groupId, setGroupId] = useState<number>(0)
+    const [scheduleIds, setScheduleIds] = useState<number[]>([])
+	
 
-		super(props);
-		this.state = {
-        	columns: Utils.getGroupAthleteColumns()
-		}
-        this.handleSubmitQuery = this.handleSubmitQuery.bind(this);
-        this.downloadData = this.downloadData.bind(this)
+    const downloadData = (columns: any, filters: any) => {
+		props.downloadGroupSchedulesAthletes(groupId, scheduleIds, columns, filters)
 	}
 
-    downloadData(columns: any, filters: any) {
-		this.props.downloadGroupSchedulesAthletes(this.state.groupId, this.state.scheduleIds, columns, filters)
-	}
-
-	handleSubmitQuery() {
-        this.props.getGroupAthleteTable(this.state.groupId, this.state.scheduleIds)
+	const handleSubmitQuery = () => {
+        props.getGroupAthleteTable(groupId, scheduleIds)
     }
 
-    fillSchedules(groupId: number){
-        this.props.getGroupSchedules(groupId)
+    const fillSchedules = (groupId: number) => {
+        props.getGroupSchedules(groupId)
     }
 
-	render() {
-		return (
-            <Grid container direction="column" spacing={3}>
-                <Grid item xs>
-                    <CustomCard>
-                        <Grid container direction="column" spacing={3}>
-                            <Grid container item spacing={1}>
-                                <Grid item xs={2}>
-                                    <SportSchoolSelect sportSchoolId={this.state.sportSchoolId}
-                                        onChange={(sportSchoolId: number) => {
-                                            this.setState({
-                                                sportSchoolId: sportSchoolId 
-                                            })
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item xs>
-                                    <GroupScheduleSelect
-                                        sportSchoolId={this.state.sportSchoolId}
-                                        groupId={this.state.groupId}
-                                        scheduleIds={this.state.scheduleIds}
-                                        onChange={(groupId: number, specialization: boolean, scheduleIds: number[]) => {
-                                            this.setState({
-                                                groupId: groupId,
-                                                scheduleIds: scheduleIds 
-                                            })
-                                        }}
-                                    />
-                                </Grid>
+    return (
+        <Grid container direction="column" spacing={3}>
+            <Grid item xs>
+                <CustomCard>
+                    <Grid container direction="column" spacing={3}>
+                        <Grid container item spacing={1}>
+                            <Grid item xs={2}>
+                                <SportSchoolSelect sportSchoolId={sportSchoolId}
+                                    onChange={(sportSchoolId: number) => {
+                                        setSportSchoolId(sportSchoolId)
+                                    }}
+                                />
                             </Grid>
                             <Grid item xs>
-                                <SearchButton type="submit"
-                                    disabled={!(this.state.groupId > 0 && this.state.scheduleIds.length > 0)}
-                                    onClick={this.handleSubmitQuery}>Buscar</SearchButton>
+                                <GroupScheduleSelect
+                                    sportSchoolId={sportSchoolId}
+                                    groupId={groupId}
+                                    scheduleIds={scheduleIds}
+                                    onChange={(groupId: number, specialization: boolean, scheduleIds: number[]) => {
+                                        setGroupId(groupId)
+                                        setScheduleIds(scheduleIds)
+                                    }}
+                                />
                             </Grid>
                         </Grid>
-                    </CustomCard>
-                </Grid>
-                <Grid item xs>
-                    <Table 
-                        data={this.props.table_data}
-                        page={this.props.page}
-                        size={this.props.size}
-                        total={this.props.total}
-                        columns={this.state.columns} 
-                        downloadData={this.downloadData}
-                        showColumns={true}
-                        onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
-                            this.props.getGroupAthleteTable(this.state.groupId, this.state.scheduleIds, page, size, filters, sort, sortDirection);
-                        }}
-                        onRowClick={(id: number) => {
-                            window.open("/athletes/" + id, "_self");
-                        }}
-                    />
-                </Grid>
+                        <Grid item xs>
+                            <SearchButton type="submit"
+                                disabled={!(groupId > 0 && scheduleIds.length > 0)}
+                                onClick={handleSubmitQuery}>Buscar</SearchButton>
+                        </Grid>
+                    </Grid>
+                </CustomCard>
             </Grid>
-		)
-	}
+            <Grid item xs>
+                <Table 
+                    data={props.table_data}
+                    page={props.page}
+                    size={props.size}
+                    total={props.total}
+                    columns={Utils.getGroupAthleteColumns()} 
+                    downloadData={downloadData}
+                    showColumns={true}
+                    onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
+                        props.getGroupAthleteTable(groupId, scheduleIds, page, size, filters, sort, sortDirection);
+                    }}
+                    onRowClick={(id: number) => {
+                        window.open("/athletes/" + id, "_self");
+                    }}
+                />
+            </Grid>
+        </Grid>
+    )
 }
+
 function mapStateToProps(state: any) {
 	return {
 		table_data: state.table_reducer.table_data,
