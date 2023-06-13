@@ -54,7 +54,7 @@ function receiptAthleteDataConversor(d: any) {
         numDays: d.numDays,
         code: d.code,
 
-        specialization: d.specialization,
+        specialization: d.specialization === true ? 'Si' : 'No',
 
         paymentType: functions.getPaymentTypes().find(st => st.id === d.paymentType)?.name,
         feeType: d.feeType,
