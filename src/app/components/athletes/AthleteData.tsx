@@ -19,6 +19,7 @@ import Select from '../custom/Select'
 import TextField from '../custom/TextField'
 import FeeInfo from '../custom/FeeInfo'
 import PhoneCard from '../custom/PhoneCard'
+import Spinner from '../custom/Spinner'
 
 import AthletesList from '../custom/Athletes/AthletesList'
 import AthleteFamilyData from './AthleteFamilyData'
@@ -37,43 +38,31 @@ import { isManager, isAdmin } from "../../services/LoginService";
 
 const CreateAthlete: React.FC<any> = (props) => {
 
-    const [enabledSave, setEnabledSave] = React.useState<boolean>(false)
     const [athlete, setAthlete] = React.useState<any>({})
     const [sportSchools, setSportSchools] = React.useState<any[]>([])
     const [feeTypes, setFeeTypes] = React.useState<any[]>([])
-    // constructor(props: {}) {
-    //     super(props);
-    //     this.state = {
-    //         enableSave: true
-    //     };
-    //     this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    // }
 
     React.useEffect(() => {
         if (!isNewAthlete()) {
             let id = props.id
-            getAthlete(id)
+            props.getAthlete(id)
         }
     }, [props.id])
 
     React.useEffect(() => {
-        setAthlete(props.athlete)
-        setEnabledSave(true)
+        if (props.athlete){
+            setAthlete(props.athlete)
+            if (props.athlete.sportSchoolId){
+                props.getSportSchoolFeeTypes(props.athlete.sportSchoolId)
+            }
+        }
     }, [props.athlete])
 
     React.useEffect(() => {
         setFeeTypes(props.fee_types)
     }, [props.fee_types])
 
-
-    const getAthlete = (id: Number) => {
-        props.getAthlete(id).then((data: Object) => {
-            props.getSportSchoolFeeTypes(props.athlete.sportSchoolId)
-        });
-    }
-
     const handleFormSubmit = (values: any) => {
-        setEnabledSave(false)
         props.addAthlete(values)
     }
 
@@ -125,8 +114,8 @@ const CreateAthlete: React.FC<any> = (props) => {
                     name: athlete.name || '',
                     firstSurname: athlete.firstSurname || '',
                     secondSurname: athlete.secondSurname || '',
-                    birthDate: athlete.birthDate || '',
-                    birthDateStr: athlete.birthDateStr || '',
+                    birthDate: athlete.birthDate || [],
+                    birthDateStr: utils.localDatetoStr(athlete.birthDate),
                     birthPlace: athlete.birthPlace || '',
                     dni: athlete.dni || '',
                     nationality: athlete.nationality || '',
@@ -144,7 +133,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                     familiarTwoMail: athlete.familiarTwoMail || '',
                     // Sport info
                     category: athlete.category || '',
-                    nextCategory: (athlete.birthDate ? utils.calculateCategory(new Date(athlete.birthDate).getFullYear() - 1) : '') || '',
+                    nextCategory: (athlete.birthDate && athlete.birthDate.length > 0 ? utils.calculateCategory(athlete.birthDate[0] - 1) : '') || '',
                     dorsalCategory: athlete.dorsalCategory || '',
                     dorsalNumber: athlete.dorsalNumber || '',
                     license: athlete.license || '',
@@ -198,7 +187,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                     if (values.imageAuth  === '') errors.imageAuth = true;
                     if (values.name  === '') errors.name = true;
                     if (values.firstSurname  === '') errors.firstSurname = true;
-                    if (values.birthDate  === '') errors.birthDate = true;
+                    if (!values.birthDate || values.birthDate.length == 0) errors.birthDate = true;
                     if (values.gender  === '') errors.gender = true;
                     if (values.phone1  === '' && values.phone2  === '' && values.phone3  === '') errors.phone1 = true;
                     if (values.age >= 18 && values.mail  === '') errors.mail = true;
@@ -349,7 +338,10 @@ const CreateAthlete: React.FC<any> = (props) => {
                                 Introduce la fecha de {utils.isRegistered(values.historic) ? 'baja' : 'alta'}.
                         </DialogContentText>
                             <div style={{ display:'flex', justifyContent:"space-between" }}>
-                                <TextField type="date" name="registerDate" value={moment(values.registerDate).format('YYYY-MM-DD')} label={utils.isRegistered(values.historic) ? 'Fecha de baja' : 'Fecha de alta'} margin="dense" onChange={(e: any) => {
+                                <TextField type="date" name="registerDate" value={moment(values.registerDate).format('YYYY-MM-DD')} 
+                                inputProps={{ min:utils.getLastHistoricDate(values.historic) }}
+                                label={utils.isRegistered(values.historic) ? 'Fecha de baja' : 'Fecha de alta'} margin="dense" 
+                                onChange={(e: any) => {
                                         let d: Moment = moment(e.target.value, "YYYY-MM-DD")
                                         setFieldValue('registerDate', d.toDate().getTime());
                                     }} 
@@ -536,14 +528,14 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                     <Grid item xs>
                                                         <TextField value={values.birthDateStr} margin="dense"
                                                             label="Fecha de nacimiento" type="date"
-                                                            error={touched.birthDateStr && errors.birthDateStr}
+                                                            error={touched.birthDate && errors.birthDate}
                                                             InputProps={{inputProps: { min: "1940-01-01", max: moment(new Date()).format("YYYY-MM-DD")} }}
                                                             onChange={(e: any) => {
                                                                 let d: Moment = moment(e.target.value, "YYYY-MM-DD")
-                                                                let age: number = utils.ageCalculator(parseInt(d.format('x')))
+                                                                let age: number = utils.ageCalculator([d.toDate().getFullYear(), d.toDate().getMonth(), d.toDate().getDay()])
                                                                 setFieldValue('age', age);
+                                                                setFieldValue('birthDate', utils.dateToLocalDate(d.toDate()));
                                                                 setFieldValue('birthDateStr', e.target.value);
-                                                                setFieldValue('birthDate', d.toDate().getTime());
                                                                 // if (!values.category){ 
                                                                 let cat = utils.calculateCategory(d.toDate().getFullYear())
                                                                 let nextCat = utils.calculateCategory(d.toDate().getFullYear() - 1)
@@ -578,8 +570,8 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                             options={[{ id: "male", name: "Hombre" }, { id: "female", name: "Mujer" }]} value={values.gender}
                                                             onChange={(e: any, value: any) => {
                                                                 setFieldValue('gender', value ? value.id : "")
-                                                                if (values.gender && values.birthDate){
-                                                                    setFieldValue('dorsalCategory', utils.calculateDorsalCategory(new Date(values.birthDate).getFullYear(), values.gender))
+                                                                if (values.gender && values.birthDate && values.birthDate.length > 0){
+                                                                    setFieldValue('dorsalCategory', utils.calculateDorsalCategory(values.birthDate[0], values.gender))
                                                                 }
                                                             }}
                                                         />
@@ -867,18 +859,19 @@ const CreateAthlete: React.FC<any> = (props) => {
                     { (isAdmin() || isManager()) && 
                         <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
                             <Toolbar>
-                                { enabledSave && <>
-                                        <SaveButton type="submit" disabled={isSubmitting}
+                                { props.loading ? <Spinner/> : <>
+                                    <SaveButton type="submit" disabled={isSubmitting}
                                             onClick={() => {
                                                 setFieldValue('exit', true)
                                                 return false;
                                             }}
                                         >Guardar y salir</SaveButton>
-                                        <SaveButton type="submit" disabled={isSubmitting}>Guardar y continuar</SaveButton>
-                                    </>
+                                    
+                                    <SaveButton type="submit" disabled={isSubmitting}>Guardar y continuar</SaveButton>
+                                    {props.id ? <DeleteButton onClick={() => setFieldValue("openDeleteDialog", true)}/> : null }
+                                    <ReturnButton onClick={() => window.open("/athletes/list", "_self")}/>
+                                </>
                                 }
-                                {(props.id) ? <DeleteButton onClick={() => setFieldValue("openDeleteDialog", true)}/> : null }
-                                <ReturnButton onClick={() => window.open("/athletes/list", "_self")}/>
                             </Toolbar>
                         </AppBar>
                     }
@@ -907,6 +900,7 @@ const mapStateToProps = (state: any) => {
         athletes_by_phone: state.athlete_reducer.athletes_by_phone,
         athletes_by_surnames: state.athlete_reducer.athletes_by_surnames,
         fee_types: state.sport_school_reducer.fee_types,
+        loading: state.api_reducer.loading,
     };
 };
 

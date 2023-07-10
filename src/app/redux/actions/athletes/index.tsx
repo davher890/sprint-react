@@ -4,7 +4,6 @@ import { addData, findById, findAthleteFee, downloadExcel, findByPhone, findBySu
 import { findHistoricDataPagination, findPaymentAthleteDataPagination, findAthleteDataPagination, findAthleteSportdataPagination, findDuplicatedAthletesDataPagination } from "../../../services/TableService"
 
 import utils from "../../../utils/Functions"
-import moment from 'moment'
 
 import { Order } from '../../../types/order'
 
@@ -56,7 +55,6 @@ export function getAthlete(id: number) {
     return function (dispatch: any) {
         return findById(id).then(json => {
             json.age = utils.ageCalculator(json.birthDate);
-            json.birthDateStr = moment.unix(json.birthDate/1000).format("YYYY-MM-DD")
             dispatch({ type: ACTION_TYPES.GET_ATHLETE, payload: json });
         });
     }
@@ -144,7 +142,6 @@ export function doRegisterAthlete(id: number, body: any) {
                 json.successMessage = "Datos guardados!"
             }
             json.age = utils.ageCalculator(json.birthDate);
-            json.birthDateStr = moment.unix(json.birthDate/1000).format("YYYY-MM-DD")
             dispatch({ type: ACTION_TYPES.ADD_ATHLETE, payload: json });
         });
     }
@@ -157,7 +154,6 @@ export function doUnregisterAthlete(id: number, body: any) {
                 json.successMessage = "Datos guardados!"
             }
             json.age = utils.ageCalculator(json.birthDate);
-            json.birthDateStr = moment.unix(json.birthDate/1000).format("YYYY-MM-DD")
             dispatch({ type: ACTION_TYPES.ADD_ATHLETE, payload: json });
         });
     }
@@ -165,13 +161,13 @@ export function doUnregisterAthlete(id: number, body: any) {
 
 export function addAthlete(data: any) {
     return function (dispatch: any) {
+        dispatch({ type: ACTION_TYPES.API_CALL})
         return addData(data).then(json => {
             if (!json.errorMessage) {
                 json.successMessage = "Datos guardados!"
             }
             json.exit = data.exit
             json.age = utils.ageCalculator(json.birthDate);
-            json.birthDateStr = moment.unix(json.birthDate/1000).format("YYYY-MM-DD")
             dispatch({ type: ACTION_TYPES.ADD_ATHLETE, payload: json });
         });
     }

@@ -78,6 +78,7 @@ export function removeGroup(id: number) {
 
 export function addGroup(data: any) {
     return function (dispatch: any)  {
+        dispatch({ type: ACTION_TYPES.API_CALL})
         return addData(data).then(json => {
             if (!json.errorMessage) {
                 json.successMessage = "Datos guardados!"
@@ -89,6 +90,7 @@ export function addGroup(data: any) {
 
 export function swapGroups(idA: number, idB: number, groupAAthletes: number[], groupBAthletes: number[]) {
     return function (dispatch: any)  {
+        dispatch({ type: ACTION_TYPES.API_CALL})
         return swapGroupsAthletes(idA, idB, groupAAthletes, groupBAthletes).then((json: any) => {
             dispatch({ type: ACTION_TYPES.SWAP_GROUPS_ATHLETES, payload: json });
         });

@@ -1,3 +1,5 @@
+import moment, { Moment } from 'moment'
+
 const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
 function modulo97(iban: string) {
@@ -17,6 +19,27 @@ function getnumIBAN(letra: string) {
 }
 
 const functions = {
+
+    localDatetoStr: function(localDate: number[]) {
+        if (localDate && localDate.length > 0){
+            return localDate[0] + '-' + this.leftPadding(localDate[1], 2, '0') + '-' + this.leftPadding(localDate[2], 2, '0')
+        }
+        return ''
+    },
+
+    dateToLocalDate: function(date: Date) {
+        if (date && isFinite(+date)){
+            return [date.getFullYear(), date.getMonth()+1, date.getDate()]
+        }
+        return []
+    },
+
+    localDateToDate: function(localDate: number[]) {
+        if (localDate && localDate.length > 0){
+            return new Date(Date.UTC(localDate[0], localDate[1], localDate[2]));
+        }
+        return null
+    },
 
     isValidDni: function(dni: string) {
         
@@ -80,6 +103,16 @@ const functions = {
         }
     },
 
+    monthDiff: function(d1: Date, d2: Date) {
+        if (!d1 || !d2){
+            return 0;
+        }
+        const monthDiff = d1.getMonth() - d2.getMonth();
+        const yearDiff = d1.getFullYear() - d2.getFullYear();
+
+        return Math.abs(monthDiff + yearDiff * 12);
+    },
+
     isRegistered: function (historic: {type: string, date: number}[]) {
 
         if (historic && historic.length > 0){
@@ -93,29 +126,23 @@ const functions = {
         return true
     },
 
-    isActivated: function (historic: {type: string, date: number, activationDate: number}[]) {
-
-        if (historic && historic.length > 0){
-            let filtered = historic
-                .filter((h: {type: string, date: number, activationDate: number}) => { return h.activationDate <= new Date().getTime() })
-                .sort((a: {type: string, date: number, activationDate: number}, b: {type: string, date: number, activationDate: number}) => { 
-                    if (a.activationDate === null || b.activationDate === null) return 1;
-                    return a.activationDate < b.activationDate ? 1 : -1
-                })
-            if (filtered.length > 0){
-                return filtered[0].type === 'REGISTER'
-            }
+    getLastHistoricDate: function (historic: {type: string, date: number}[]) {
+        let filtered = historic
+        .filter((h: {type: string, date: number}) => { return h.date <= new Date().getTime() })
+        .sort((a: {type: string, date: number}, b: {type: string, date: number}) => { return a.date < b.date ? 1 : -1})
+        if (filtered.length > 0){
+            return moment(new Date(filtered[0].date)).add(1, 'days').format('YYYY-MM-DD')
         }
-        return true
+        return null
     },
         
     getMonth: function (month: number) {
         return monthNames[month]
     },
 
-    ageCalculator: function (birthDate: number) {
+    ageCalculator: function (birthDate: number[]) {
         var curr = new Date();
-        var diff = curr.getTime() - birthDate;
+        var diff = curr.getTime() - Date.UTC(birthDate[0], birthDate[1], birthDate[2]);
         return Math.max(Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25)), 0)
     },
 
@@ -308,7 +335,10 @@ const functions = {
         ]
     },
 
-    leftPadding: (str: string, max: number, c: string): string => {
+    leftPadding: (str: any, max: number, c: string): string => {
+        if (!str){
+            return ''
+        }
         str = str.toString();
         return str.length < max ? functions.leftPadding(c + str, max, c) : str;
     },

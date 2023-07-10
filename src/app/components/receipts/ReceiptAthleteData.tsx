@@ -75,6 +75,20 @@ const ReceiptAthleteData: React.FC<any> = (props) => {
                                     }}
                                 />
                             </Grid>
+                            <Grid item xs>
+                                <TextField name="licenseNationalFee" label="Licencia nacional" value={receiptAthlete.licenseNationalFee} type='number'
+                                    onChange={(e:any) => {
+                                        setReceiptAthlete({ ...receiptAthlete, licenseNationalFee: e.target.value })
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs>
+                                <TextField name="licenseTerritorialFee" label="Licencia territorial" value={receiptAthlete.licenseTerritorialFee} type='number'
+                                    onChange={(e:any) => {
+                                        setReceiptAthlete({ ...receiptAthlete, licenseTerritorialFee: e.target.value })
+                                    }}
+                                />
+                            </Grid>
                         </Grid>
                     </Card>
                 </Grid>

@@ -9,6 +9,7 @@ import CustomCard from '../custom/Card'
 import GroupSelect from '../custom/GroupSelect'
 import AthletesList from '../custom/Athletes/GroupSwapAthletesList'
 import SportSchoolSelect from "../custom/SportSchoolSelect";
+import Spinner from '../custom/Spinner'
 
 import { connect } from "react-redux";
 import { getGroupAAthletes, getGroupBAthletes, swapGroups } from "../../redux/actions/groups";
@@ -48,7 +49,7 @@ const GroupSwap: React.FC<any> = (props) => {
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
                 <Alert severity="success" onClose={() => { 
                         setSuccess(false)
-                        window.open("/athletes/list", "_self");
+                        window.open("/groups/swap", "_self");
                     }}>
                     <AlertTitle>Cambios guardados!</AlertTitle>
                 </Alert>
@@ -62,6 +63,7 @@ const GroupSwap: React.FC<any> = (props) => {
                                     <SportSchoolSelect sportSchoolId={sportSchoolAId}
                                         onChange={(sportSchoolId: number) => {
                                             setsportSchoolAId(sportSchoolId)
+                                            setGroupAId(0)
                                         }}
                                     />
                                 </Grid>
@@ -93,6 +95,7 @@ const GroupSwap: React.FC<any> = (props) => {
                                         <SportSchoolSelect sportSchoolId={sportSchoolBId}
                                             onChange={(sportSchoolId: number) => {
                                                 setsportSchoolBId(sportSchoolId)
+                                                setGroupBId(0)
                                             }}
                                         />
                                     </Grid>
@@ -150,7 +153,8 @@ const GroupSwap: React.FC<any> = (props) => {
             </Grid>
             <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
                 <Toolbar>
-                    <SaveButton 
+                    {props.loading ? <Spinner/> : <SaveButton
+                        disabled={!(groupAId && groupAId > 0 && groupBId && groupBId > 0)} 
                         onClick={() => { 
                             props.swapGroups(
                                 groupAId, groupBId, 
@@ -160,6 +164,7 @@ const GroupSwap: React.FC<any> = (props) => {
                                 setSuccess(true)
                             })
                         }}>Guardar</SaveButton>
+                    }
                 </Toolbar>
             </AppBar>
         </Grid>
@@ -171,7 +176,8 @@ function mapStateToProps(state: any) {
 		group_a_athletes: state.group_reducer.group_a_athletes,
         group_b_athletes: state.group_reducer.group_b_athletes,
         group_a: state.group_reducer.group_a,
-        group_b: state.group_reducer.group_b
+        group_b: state.group_reducer.group_b,
+        loading: state.api_reducer.loading,
 	};
 }
 

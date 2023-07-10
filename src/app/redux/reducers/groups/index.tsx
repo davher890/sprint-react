@@ -28,7 +28,6 @@ function rootReducer(state = initialState, action: { type: string, payload: any,
         };
     }
     else if (action.type === ACTION_TYPES.GROUP_B_ATHLETES) {
-        console.log(action.type)
         return {
             ...state,
             group_b_athletes: action.payload
