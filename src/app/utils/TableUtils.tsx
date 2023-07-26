@@ -68,9 +68,11 @@ const Utils = {
         ]
     },
 
-    getReceiptAthleteColumns: () => {
-        return [
+    getReceiptAthleteColumns: (receiptType: string) => {
+        let commonColumns = [
             { dataField: 'athlete_id', text: 'athlete_id', show: false },
+            { dataField: 'code', text : 'Codigo', filter: { type: "number" } }, 
+            { dataField: 'familyCode', text : 'Codigo familia', filter: { type: "number" } }, 
             { dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
             { dataField: 'firstSurname', text : 'Primer apellido', filter: { type: "text" } }, 
             { dataField: 'secondSurname', text : 'Segundo apellido', filter: { type: "text" } }, 
@@ -83,16 +85,22 @@ const Utils = {
             { dataField: 'days', text : 'Dias', sort: false }, 
             { dataField: 'numDays', text : 'Num. Dias', sort: false }, 
             { dataField: 'specialization', text : 'Especializacion', sort: false }, 
+            { dataField: 'status', text : 'Estado' },
+            { dataField: 'paymentType', text : 'Forma de pago' }
+        ] 
+        let trimestralColumns = [
+            { dataField: 'feeType', text : 'Tipo de cuota' },
             { dataField: 'monthlyFee', text : 'Mensualidad', sort: true }, 
             { dataField: 'enrollmentFee', text : 'Matricula', sort: true }, 
-            { dataField: 'membershipFee', text : 'Cuota de socio', sort: true }, 
+            { dataField: 'membershipFee', text : 'Cuota de socio', sort: true }
+        ]
+
+        let licenseColumns = [
+            { dataField: 'licenseType', text : 'Tipo de licencia'},
             { dataField: 'licenseTerritorialFee', text : 'Licencia territorial', sort: true }, 
-            { dataField: 'licenseNationalFee', text : 'Licencia nacional', sort: true }, 
-            { dataField: 'status', text : 'Estado' },
-            { dataField: 'paymentType', text : 'Forma de pago' },
-            { dataField: 'feeType', text : 'Tipo de cuota' },
-            { dataField: 'licenseType', text : 'Tipo de licencia'}, 
-        ] 
+            { dataField: 'licenseNationalFee', text : 'Licencia nacional', sort: true }
+        ]
+        return receiptType !== undefined && receiptType === 'LICENSE' ? [ ...commonColumns, ...licenseColumns] : [ ...commonColumns, ...trimestralColumns]
     },
 
     getGroupAthleteColumns: () => {
@@ -164,7 +172,8 @@ const Utils = {
 
     getUserColumns: () => {
         return [
-            { dataField: 'username', text: 'Nombre', filter: { type: "text" } }
+            { dataField: 'username', text: 'Nombre', filter: { type: "text" } },
+            { dataField: 'email', text: 'Email', filter: { type: "text" } }
         ]
     },
 
@@ -193,7 +202,8 @@ const Utils = {
         return [
             { dataField: 'id', text: 'Id', show: false },
             { dataField: 'name', text: 'Nombre', filter: { type: "text" } },
-            { dataField: 'collection', text: 'Remesa', filter: { type: "text" } },
+            { dataField: 'season', text: 'Temporada', filter: { type: "text" } },
+            { dataField: 'receiptType', text: 'Tipo de remesa', filter: { type: "text" } },
             { dataField: 'createdAt', text: 'Fecha creación', filter: { type: "text" }, type: "date" },
             { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
                 type: "options",

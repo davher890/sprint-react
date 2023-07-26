@@ -5,7 +5,7 @@ import { Order } from '../../../types/order'
 import { findGroupSchedules, downloadGroupSchedulesExcel, addData, findById, findGroupAttendance, deleteGroup, findGroupAthletes, swapGroupsAthletes, swapGroupAthletes } from "../../../services/GroupService"
 import { findGroupDataPagination, findGroupAthletesDataPagination } from "../../../services/TableService"
 
-export function getGroupTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
+export function getGroupTable(page: number, size: number, filters: any, sort: string='name', sortDirection: Order='asc') {
     return function (dispatch: any) {
         dispatch({ type: ACTION_TYPES.API_CALL})
         return findGroupDataPagination(page, size, filters, sort, sortDirection).then(json => {

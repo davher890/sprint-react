@@ -21,11 +21,12 @@ function groupDataConversor(d: { id: number, name: string, sportSchoolName: stri
     }
 }
 
-function receiptDataConversor(d: { id: number, name: string, collection: string, sportSchoolName: string, createdAt: number, status: string, collectionName: string }) {
+function receiptDataConversor(d: { id: number, name: string, season: string, receiptType: string, sportSchoolName: string, createdAt: number, status: string, collectionName: string }) {
     return {
         id : d.id,
         name: d.name,
-        collection: d.collectionName,
+        season: d.season.replace('_', '-'),
+        receiptType: d.receiptType && d.receiptType === 'LICENSE' ? 'Licencia' : 'Trimestral',
         sportSchoolId: d.sportSchoolName, 
         createdAt: moment(d.createdAt).format("YYYY-MM-DD hh:mm:ss"),
         status: functions?.getReceiptStatus().find(c => c.id === d.status)?.name
@@ -43,7 +44,7 @@ function receiptAthleteDataConversor(d: any) {
         
         category: functions?.getCategories().find(c => c.id === d.category)?.name,
         license: d.license,
-        licenseType: d.licenseType,
+        licenseType: d.licenseType && d.licenseType === 'NATIONAL' ? 'Nacional' : 'Territorial',
         dorsalNumber: d.dorsalNumber,
         dorsalCategory: functions?.getDorsalCategories().find(c => c.id === d.dorsalCategory)?.name,
         
@@ -53,6 +54,7 @@ function receiptAthleteDataConversor(d: any) {
         days: d.days,
         numDays: d.numDays,
         code: d.code,
+        familyCode: d.familyCode,
 
         specialization: d.specialization === true ? 'Si' : 'No',
 
@@ -143,10 +145,11 @@ function trainerDataConversor(d: { id: number, name: string, sportSchoolName: st
     }
 }
 
-function userDataConversor(d: { id: number, username: string }){
+function userDataConversor(d: { id: number, username: string, email: string }){
     return {
         id : d.id, 
-        username: d.username
+        username: d.username,
+        email: d.email
     }
 }
 

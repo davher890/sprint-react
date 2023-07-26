@@ -40,7 +40,8 @@ class GroupTable extends React.Component<any, any> {
 							page={this.props.page}
 							size={this.props.size}
 							total={this.props.total}
-							columns={this.state.columns} 
+							orderBy="name"
+							columns={this.state.columns}
 							onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
 								this.props.getGroupTable(page, size, filters, sort, sortDirection);
 							}}

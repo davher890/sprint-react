@@ -5,7 +5,7 @@ import { findSportSchoolDataPagination } from "../../../services/TableService"
 
 import { Order } from '../../../types/order'
 
-export function getSportSchoolTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
+export function getSportSchoolTable(page: number, size: number, filters: any, sort: string='name', sortDirection: Order='asc') {
     return function (dispatch: any)  {
         dispatch({ type: ACTION_TYPES.API_CALL})
         return findSportSchoolDataPagination(page, size, filters, sort, sortDirection).then(json => {

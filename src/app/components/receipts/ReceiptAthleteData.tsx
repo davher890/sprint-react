@@ -3,7 +3,8 @@ import React from "react"
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
 
-import { Grid, AppBar, Toolbar } from '@material-ui/core';
+import { Grid, AppBar, Toolbar, Snackbar } from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 import Card from '../custom/Card';
 import SaveButton from '../custom/SaveButton'
@@ -35,6 +36,22 @@ const ReceiptAthleteData: React.FC<any> = (props) => {
 
     return (
         <>
+            <Snackbar open={props.receipt_athlete.errorMessage !== undefined && props.receipt_athlete.errorMessage !== ''}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                <Alert severity="error">
+                    <AlertTitle>Error</AlertTitle>
+                    <strong>{props.receipt_athlete.errorMessage}</strong>
+                </Alert>
+            </Snackbar>
+            <Snackbar open={props.receipt_athlete.successMessage !== undefined && props.receipt_athlete.successMessage !== ''}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                <Alert severity="success" onClose={() => {
+                        window.open("/receipts/" + props.receipt_athlete.receiptId, "_self");
+                    }}>
+                    <AlertTitle>Ok!</AlertTitle>
+                    <strong>{props.receipt_athlete.successMessage}</strong>
+                </Alert>
+            </Snackbar>
             <Grid container spacing={1}>
                 <Grid item xs>
                     <Card title="Datos del Atleta">

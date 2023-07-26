@@ -1,6 +1,6 @@
 import * as React from "react"
-import moment, { Moment } from 'moment'
-import { useParams } from 'react-router-dom';
+import moment from 'moment'
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import utils from "../../utils/Functions"
 import { Formik } from 'formik';
@@ -8,16 +8,18 @@ import { Formik } from 'formik';
 import { CardHeader, Grid, AppBar, Toolbar, Snackbar, Typography, Box, Checkbox, Button } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from '@material-ui/core';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 
 import CustomCard from '../custom/Card'
+import DateField from '../custom/DateField'
 import GroupScheduleSelect from '../custom/GroupScheduleSelect'
+import FeeTypeSelect from '../custom/FeeTypeSelect'
 import SportSchoolSelect from '../custom/SportSchoolSelect'
 import SaveButton from '../custom/SaveButton'
 import ReturnButton from '../custom/ReturnButton'
 import Select from '../custom/Select'
 import TextField from '../custom/TextField'
-import FeeInfo from '../custom/FeeInfo'
+// import FeeInfo from '../custom/FeeInfo'
 import PhoneCard from '../custom/PhoneCard'
 import Spinner from '../custom/Spinner'
 
@@ -29,8 +31,7 @@ import AthleteSportdata from './AthleteSportdata'
 
 // Redux
 import { connect } from "react-redux";
-import { addAthlete, getAthlete, getAthletesByPhone, getAthletesBySurnames, doRegisterAthlete, doUnregisterAthlete, removeAthlete } from "../../redux/actions/athletes";
-import { getSportSchoolFeeTypes } from "../../redux/actions/sportSchools";
+import { addAthlete, getAthlete, getAthletesByPhone, getAthleteByCode, getAthletesBySurnames, doRegisterAthlete, doUnregisterAthlete, removeAthlete } from "../../redux/actions/athletes";
 import DeleteButton from "../custom/DeleteButton";
 import ConfirmDialog from "../custom/ConfirmDialog";
 
@@ -39,28 +40,25 @@ import { isManager, isAdmin } from "../../services/LoginService";
 const CreateAthlete: React.FC<any> = (props) => {
 
     const [athlete, setAthlete] = React.useState<any>({})
-    const [sportSchools, setSportSchools] = React.useState<any[]>([])
-    const [feeTypes, setFeeTypes] = React.useState<any[]>([])
 
     React.useEffect(() => {
         if (!isNewAthlete()) {
-            let id = props.id
-            props.getAthlete(id)
+            if (props.searchParams, props.searchParams.get('code')){
+                let code = props.searchParams.get('code')
+                props.getAthleteByCode(code)
+            }
+            else if (props.id && props.id ){
+                let id = props.id
+                props.getAthlete(id)
+            }
         }
     }, [props.id])
 
     React.useEffect(() => {
         if (props.athlete){
             setAthlete(props.athlete)
-            if (props.athlete.sportSchoolId){
-                props.getSportSchoolFeeTypes(props.athlete.sportSchoolId)
-            }
         }
     }, [props.athlete])
-
-    React.useEffect(() => {
-        setFeeTypes(props.fee_types)
-    }, [props.fee_types])
 
     const handleFormSubmit = (values: any) => {
         props.addAthlete(values)
@@ -83,11 +81,11 @@ const CreateAthlete: React.FC<any> = (props) => {
     }
 
     const isNewAthlete = () => {
-        return !(props.id)
+        return !(props.id) && !(props.code)
     }
 
     const isMatchingAthletes = (selectedFamily: boolean) => {
-        return !selectedFamily && (!props.athlete.id || props.athlete.id == 0) && 
+        return !selectedFamily && (!props.athlete.id || props.athlete.id === 0) && 
             ((props.athletes_by_surnames && props.athletes_by_surnames.length > 0) || 
             (props.athletes_by_phone && props.athletes_by_phone.length > 0))                                                                    
     }
@@ -102,8 +100,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                     familyCode: athlete.familyCode || 0,
                     historic: athlete.historic || [],
                     // Extra fields
-                    sportSchools: sportSchools || [],
-                    feeTypes: feeTypes || [],
+                    sportSchools: props.sportSchools || [],
                     age: athlete.age || 0,
                     // Personal info
                     sportSchoolId: athlete.sportSchoolId || '',
@@ -115,7 +112,6 @@ const CreateAthlete: React.FC<any> = (props) => {
                     firstSurname: athlete.firstSurname || '',
                     secondSurname: athlete.secondSurname || '',
                     birthDate: athlete.birthDate || [],
-                    birthDateStr: utils.localDatetoStr(athlete.birthDate),
                     birthPlace: athlete.birthPlace || '',
                     dni: athlete.dni || '',
                     nationality: athlete.nationality || '',
@@ -158,12 +154,12 @@ const CreateAthlete: React.FC<any> = (props) => {
                     holderFirstSurname: athlete.holderFirstSurname || '',
                     holderSecondSurname: athlete.holderSecondSurname || '',
                     holderDni: athlete.holderDni || '',
-                    //Calculated Fee
+                    // Calculated Fee
                     enrollmentFee: (props.athlete_fee ? props.athlete_fee.enrollmentFee : 0) || 0,
                     membershipFee: (props.athlete_fee ? props.athlete_fee.membershipFee : 0) || 0,
                     monthlyFee: (props.athlete_fee ? props.athlete_fee.monthlyFee : 0) || 0,
                     // Dialogs
-                    registerDate: moment(new Date()).format("YYYY-MM-DD"),
+                    registerDate: utils.dateToLocalDate(new Date()),
                     registerObservations: '',
                     openRegisterDialog: false,
                     openSportdataDialog: false,
@@ -172,7 +168,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                     openDeleteDialog: false,
                     selectedFamily: false,
 
-                    lastRegisterDate: moment(new Date()).format("YYYY-MM-DD"),
+                    lastRegisterDate: utils.dateToLocalDate(new Date()),
                     
                     exit: athlete.exit || false,
 
@@ -187,7 +183,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                     if (values.imageAuth  === '') errors.imageAuth = true;
                     if (values.name  === '') errors.name = true;
                     if (values.firstSurname  === '') errors.firstSurname = true;
-                    if (!values.birthDate || values.birthDate.length == 0) errors.birthDate = true;
+                    if (!values.birthDate || values.birthDate.length === 0) errors.birthDate = true;
                     if (values.gender  === '') errors.gender = true;
                     if (values.phone1  === '' && values.phone2  === '' && values.phone3  === '') errors.phone1 = true;
                     if (values.age >= 18 && values.mail  === '') errors.mail = true;
@@ -276,7 +272,16 @@ const CreateAthlete: React.FC<any> = (props) => {
                     >
                         <DialogTitle id="form-dialog-title">Atletas coincidentes</DialogTitle>
                         <DialogContent>
-                            <AthletesList athletes={props.athletes_by_phone.concat(props.athletes_by_surnames)}
+                            <AthletesList athletes={props.athletes_by_phone.concat(props.athletes_by_surnames)
+                                    .reduce((accumulator:any[], currentValue:any) => {
+                                        if (accumulator.some((d:any) => d.id == currentValue.id)){
+                                            return accumulator;
+                                        }
+                                        else {
+                                            return [...accumulator, currentValue]
+                                        }
+                                    }, [])
+                                }
                                 onSelectFamily={(athlete: any) => { 
 
                                     setFieldValue("familyCode", athlete.familyCode)
@@ -338,12 +343,11 @@ const CreateAthlete: React.FC<any> = (props) => {
                                 Introduce la fecha de {utils.isRegistered(values.historic) ? 'baja' : 'alta'}.
                         </DialogContentText>
                             <div style={{ display:'flex', justifyContent:"space-between" }}>
-                                <TextField type="date" name="registerDate" value={moment(values.registerDate).format('YYYY-MM-DD')} 
-                                inputProps={{ min:utils.getLastHistoricDate(values.historic) }}
-                                label={utils.isRegistered(values.historic) ? 'Fecha de baja' : 'Fecha de alta'} margin="dense" 
-                                onChange={(e: any) => {
-                                        let d: Moment = moment(e.target.value, "YYYY-MM-DD")
-                                        setFieldValue('registerDate', d.toDate().getTime());
+                                <DateField name="registerDate" value={values.registerDate} 
+                                    min={utils.getLastHistoricDate(values.historic) }
+                                    label={utils.isRegistered(values.historic) ? 'Fecha de baja' : 'Fecha de alta'} margin="dense" 
+                                    onChange={(e: any) => {
+                                        setFieldValue('registerDate', e);
                                     }} 
                                 />
                             </div>
@@ -408,13 +412,6 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                     <SportSchoolSelect sportSchoolId={values.sportSchoolId} error={touched.sportSchoolId && errors.sportSchoolId}
                                                         onChange={(sportSchoolId: number) => {
                                                             setFieldValue('sportSchoolId', sportSchoolId);
-                                                            if (sportSchoolId) {
-                                                                props.getSportSchoolFeeTypes(sportSchoolId).then(() => {
-                                                                    if (values.feeType) {
-                                                                        setFieldValue('feeType', values.feeType);
-                                                                    }
-                                                                })
-                                                            }
                                                             if (sportSchoolId !== values.sportSchoolId){
                                                                 setFieldValue('groupId', 0);
                                                                 setFieldValue('schedueIds', []);
@@ -428,13 +425,11 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                 <Grid item xs={3}>
                                                     <TextField name="familyCode" label="Código de familia" type="number" disabled value={values.familyCode} />
                                                 </Grid>
-                                                { values.id == 0 && <div style={{ display:'flex', justifyContent:'space-around'}}>
-                                                    <TextField value={moment(values.lastRegisterDate).format('YYYY-MM-DD')} margin="dense"
-                                                        label="Fecha de alta" type="date"
+                                                { values.id === 0 && <div style={{ display:'flex', justifyContent:'space-around'}}>
+                                                    <DateField value={values.lastRegisterDate} label="Fecha de alta"
                                                         error={touched.lastRegisterDate && errors.lastRegisterDate}
                                                         onChange={(e: any) => {
-                                                            let d: Moment = moment(e.target.value, "YYYY-MM-DD")
-                                                            setFieldValue('lastRegisterDate', d.toDate().getTime());
+                                                            setFieldValue('lastRegisterDate', e);
                                                         }}
                                                     />
                                                 </div>
@@ -443,7 +438,11 @@ const CreateAthlete: React.FC<any> = (props) => {
                                         </CustomCard>
                                     </Grid>
                                     <Grid item xs={2} style={{ display: values.id > 0 ? "block" : "none" }}>
-                                        {values.historic.sort((a: {type: string, date: number}, b: {type: string, date: number}) => { return b.date - a.date})
+                                        {values.historic.sort((a: {type: string, date: number[]}, b: {type: string, date: number[]}) => { 
+                                            let aDate = utils.localDateToDate(a.date)
+                                            let bDate = utils.localDateToDate(b.date)
+                                            return aDate !== null && bDate !== null && aDate?.getTime() < bDate?.getTime() ? 1 : -1
+                                        })
                                         .map((historic:any) => {
                                             return <Typography variant="subtitle1" gutterBottom component="div">{historic.type === 'REGISTER' ? 'Alta' : 'Baja'}: {moment(new Date(historic.date)).format('DD/MM/YYYY')}</Typography>
                                         })}
@@ -526,19 +525,16 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                 </Grid>
                                                 <Grid container item spacing={1}>
                                                     <Grid item xs>
-                                                        <TextField value={values.birthDateStr} margin="dense"
-                                                            label="Fecha de nacimiento" type="date"
+                                                        <DateField value={values.birthDate} label="Fecha de nacimiento"
                                                             error={touched.birthDate && errors.birthDate}
-                                                            InputProps={{inputProps: { min: "1940-01-01", max: moment(new Date()).format("YYYY-MM-DD")} }}
+                                                            max={moment(new Date()).format("YYYY-MM-DD")}
                                                             onChange={(e: any) => {
-                                                                let d: Moment = moment(e.target.value, "YYYY-MM-DD")
-                                                                let age: number = utils.ageCalculator([d.toDate().getFullYear(), d.toDate().getMonth(), d.toDate().getDay()])
+                                                                let age: number = utils.ageCalculator(e)
                                                                 setFieldValue('age', age);
-                                                                setFieldValue('birthDate', utils.dateToLocalDate(d.toDate()));
-                                                                setFieldValue('birthDateStr', e.target.value);
+                                                                setFieldValue('birthDate', e);
                                                                 // if (!values.category){ 
-                                                                let cat = utils.calculateCategory(d.toDate().getFullYear())
-                                                                let nextCat = utils.calculateCategory(d.toDate().getFullYear() - 1)
+                                                                let cat = utils.calculateCategory(e[0])
+                                                                let nextCat = utils.calculateCategory(e[0] - 1)
                                                                 setFieldValue('category', cat);
                                                                 setFieldValue('nextCategory', nextCat);
                                                                 // }
@@ -700,10 +696,10 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                             />
                                                         </Grid>
                                                         <Grid item xs={4}>
-                                                            <Select fullWidth name="feeType" label="Tipo de cuota"
-                                                                options={feeTypes} value={values.feeType} error={touched.feeType && errors.feeType}
-                                                                onChange={(e: any, value: any) => {
-                                                                    setFieldValue('feeType', value ? value.id : "")
+                                                            <FeeTypeSelect feeType={values.feeType} sportSchoolId={values.sportSchoolId}
+                                                                error={touched.feeType && errors.feeType}
+                                                                onChange={(feeType: string) => {
+                                                                    setFieldValue('feeType', feeType);
                                                                 }}
                                                             />
                                                         </Grid>
@@ -815,7 +811,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                         scheduleIds={values.scheduleIds}
                                                         onGroupChange={(grId: number) => {
                                                             setFieldValue('groupId', grId)
-                                                            if (grId == athlete.groupId){
+                                                            if (grId === athlete.groupId){
                                                                 setFieldValue('scheduleIds', athlete.scheduleIds)
                                                             }
                                                         }}
@@ -848,11 +844,11 @@ const CreateAthlete: React.FC<any> = (props) => {
                                         </CustomCard>
                                     </Grid>
                                 </Grid>
-                                <Grid container item style={{ display: values.feeType !== "SOCIO" ? "block" : "none" }}>
+                                {/* <Grid container item style={{ display: values.feeType !== "SOCIO" ? "block" : "none" }}>
                                     <Grid item>
                                         <FeeInfo {...values} />
                                     </Grid>
-                                </Grid>
+                                </Grid> */}
                             </Grid>
                         </Grid>
                     </Box>
@@ -886,9 +882,9 @@ const CreateAthlete: React.FC<any> = (props) => {
 const mapDispatchToProps = {
     addAthlete, 
     getAthlete,
+    getAthleteByCode,
     getAthletesByPhone,
     getAthletesBySurnames,
-    getSportSchoolFeeTypes,
     doRegisterAthlete, 
     doUnregisterAthlete,
     removeAthlete
@@ -899,7 +895,6 @@ const mapStateToProps = (state: any) => {
         athlete: state.athlete_reducer.athlete,
         athletes_by_phone: state.athlete_reducer.athletes_by_phone,
         athletes_by_surnames: state.athlete_reducer.athletes_by_surnames,
-        fee_types: state.sport_school_reducer.fee_types,
         loading: state.api_reducer.loading,
     };
 };
@@ -908,9 +903,10 @@ const ConnectedComponent = connect(mapStateToProps,mapDispatchToProps)(CreateAth
 
 const WithRouterWrapper = () => {
     let { id } = useParams()
+    const [searchParams] = useSearchParams();
 
     return (
-        <ConnectedComponent id={id}></ConnectedComponent>
+        <ConnectedComponent id={id} searchParams={searchParams}></ConnectedComponent>
     )
 }
 export default WithRouterWrapper

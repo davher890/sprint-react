@@ -35,7 +35,27 @@ const ScheduleSelect: React.FC<any> = (props) => {
                                 return props.scheduleIds.includes(sch.id)
                             })
                             .map((sch: {id: number, startHour: number, startMinute: number, endHour: number, endMinute: number, dayTranslate: string}) => {
-                                return <Typography variant="h6">{sch.dayTranslate} - {utils.leftPadding(sch.startHour.toString(), 2, "0")}:{utils.leftPadding(sch.startMinute.toString(), 2, "0")} - {utils.leftPadding(sch.endHour.toString(), 2, "0")}:{utils.leftPadding(sch.endMinute.toString(), 2, "0")}</Typography>
+                                // return <Typography variant="h6">{sch.dayTranslate} - {utils.leftPadding(sch.startHour.toString(), 2, "0")}:{utils.leftPadding(sch.startMinute.toString(), 2, "0")} - {utils.leftPadding(sch.endHour.toString(), 2, "0")}:{utils.leftPadding(sch.endMinute.toString(), 2, "0")}</Typography>
+                                return <Grid item key={`row_sch${sch.id}`} xs>
+                                    <Checkbox
+                                        disabled={props.disabled || props.specialization}
+                                        name="scheduleIds"
+                                        key={`sch${sch.id}`}
+                                        checked={props.scheduleIds.includes(sch.id)}
+                                        onChange={e => {
+                                            if (e.target.checked) {
+                                                let s = props.scheduleIds.concat([sch.id])
+                                                onChange(s)
+                                            } else {
+                                                let schIds = props.scheduleIds
+                                                const idx = props.scheduleIds.indexOf(sch.id);
+                                                schIds.splice(idx, 1);
+                                                onChange(schIds)
+                                            }
+                                        }}
+                                    />
+                                    {sch.dayTranslate} - {utils.leftPadding(sch.startHour.toString(), 2, "0")}:{utils.leftPadding(sch.startMinute.toString(), 2, "0")} - {utils.leftPadding(sch.endHour.toString(), 2, "0")}:{utils.leftPadding(sch.endMinute.toString(), 2, "0")}
+                                </Grid>
                             })
                         }
                         </CustomCard>
@@ -43,7 +63,7 @@ const ScheduleSelect: React.FC<any> = (props) => {
                     <Grid container>
                         <Grid container item direction="column" xs>
                             <Box >
-                            { ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"].map(d => {
+                            { [...new Set(props.schedules.map((sch: {day: string}) => { return sch.day.toLowerCase() }))].map((d:any) => {
                                 return <Grid item xs>
                                     <Checkbox
                                         name={d}

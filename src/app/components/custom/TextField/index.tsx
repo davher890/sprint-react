@@ -8,6 +8,7 @@ const CustomTextField: React.FC<any> = (props) => (
         {...props}
         
         InputLabelProps={{
+            ...props.InputLabelProps,
             shrink: true,
         }}
     

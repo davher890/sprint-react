@@ -9,6 +9,10 @@ export const findById = (id: number) => {
     return getRequest("/athletes/" + id)
 }
 
+export const findByCode = (code: number) => {
+    return getRequest("/athletes/code?code=" + code)
+}
+
 export const findByPhone = (phoneList: string[]) => {
     return getRequest("/athletes/phone?phone_list=" + phoneList.join(','))
 }
