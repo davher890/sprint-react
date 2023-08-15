@@ -80,18 +80,15 @@ const CustomAppBar: React.FC<any> = (props) => {
                     <MenuItem onClick={handleListingsMenuClose} component={Link1} to="/groups/athletes">Atletas-Grupos</MenuItem>
                 </Menu>
                 { (LoginService.isAdmin() || LoginService.isManager()) &&
-                    <Typography variant="button" component={Link1} to="/admin/users/list" color="inherit">Usuarios</Typography>
+                    <>
+                        <Typography variant="button" component={Link1} to="/admin/users/list" color="inherit">Usuarios</Typography>
+                        <Typography variant="button" component={Link1} to="/admin/athletes_by_date" color="inherit">Athletas por fecha</Typography>
+                    </>
                 }
-                {/* { (LoginService.isAdmin() || LoginService.isManager()) &&
-                    <Typography variant="button" component={Link1} to="/admin/payments" color="inherit">Pagos</Typography>
-                } */}
                 { LoginService.isManager() &&
                     <Typography variant="button" component={Link1} to="/receipts/list" color="inherit">Remesas de recibos</Typography>
                 }
                 <Typography variant="button" component={Link1} to="/incidences/list" color="inherit">Incidencias</Typography>
-                {/* <Typography variant="button">
-                    <Link href="/social" color="inherit">Red Social</Link>
-                </Typography> */}
                 <IconButton
                     // size="large"
                     aria-label="account of current user"

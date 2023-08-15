@@ -212,7 +212,12 @@ const Utils = {
             { dataField: 'status', text: 'Estado', filter: { 
                 type: "options",
                 options : functions.getReceiptStatus()
-            }}
+            }},
+            { dataField: 'enrollmentFee', text: 'Socio' },
+            { dataField: 'membershipFee', text: 'Matricula' },
+            { dataField: 'monthlyFee', text: 'Cuota' },
+            { dataField: 'licenseFee', text: 'Licencia' },
+            { dataField: 'totalFee', text: 'Total' },
         ]
     },
 

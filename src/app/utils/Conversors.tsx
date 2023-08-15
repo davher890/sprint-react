@@ -21,7 +21,7 @@ function groupDataConversor(d: { id: number, name: string, sportSchoolName: stri
     }
 }
 
-function receiptDataConversor(d: { id: number, name: string, season: string, receiptType: string, sportSchoolName: string, createdAt: number, status: string, collectionName: string }) {
+function receiptDataConversor(d: { id: number, name: string, season: string, receiptType: string, sportSchoolName: string, createdAt: number, status: string, collectionName: string, enrollmentFee: number, membershipFee: number, monthlyFee: number, licenseFee: number }) {
     return {
         id : d.id,
         name: d.name,
@@ -29,7 +29,12 @@ function receiptDataConversor(d: { id: number, name: string, season: string, rec
         receiptType: d.receiptType && d.receiptType === 'LICENSE' ? 'Licencia' : 'Trimestral',
         sportSchoolId: d.sportSchoolName, 
         createdAt: moment(d.createdAt).format("YYYY-MM-DD hh:mm:ss"),
-        status: functions?.getReceiptStatus().find(c => c.id === d.status)?.name
+        status: functions?.getReceiptStatus().find(c => c.id === d.status)?.name,
+        enrollmentFee: d.enrollmentFee, 
+        membershipFee: d.membershipFee, 
+        monthlyFee: d.monthlyFee, 
+        licenseFee: d.licenseFee, 
+        totalFee: d.enrollmentFee + d.membershipFee + d.monthlyFee + d.licenseFee
     }
 }
 
