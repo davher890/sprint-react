@@ -5,7 +5,7 @@ import { Order } from '../../../types/order'
 import { findGroupSchedules, downloadGroupSchedulesExcel, addData, findById, findGroupAttendance, deleteGroup, findGroupAthletes, swapGroupsAthletes, swapGroupAthletes } from "../../../services/GroupService"
 import { findGroupDataPagination, findGroupAthletesDataPagination } from "../../../services/TableService"
 
-export function getGroupTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
+export function getGroupTable(page: number, size: number, filters: any, sort: string='name', sortDirection: Order='asc') {
     return function (dispatch: any) {
         dispatch({ type: ACTION_TYPES.API_CALL})
         return findGroupDataPagination(page, size, filters, sort, sortDirection).then(json => {
@@ -78,6 +78,7 @@ export function removeGroup(id: number) {
 
 export function addGroup(data: any) {
     return function (dispatch: any)  {
+        dispatch({ type: ACTION_TYPES.API_CALL})
         return addData(data).then(json => {
             if (!json.errorMessage) {
                 json.successMessage = "Datos guardados!"
@@ -89,6 +90,7 @@ export function addGroup(data: any) {
 
 export function swapGroups(idA: number, idB: number, groupAAthletes: number[], groupBAthletes: number[]) {
     return function (dispatch: any)  {
+        dispatch({ type: ACTION_TYPES.API_CALL})
         return swapGroupsAthletes(idA, idB, groupAAthletes, groupBAthletes).then((json: any) => {
             dispatch({ type: ACTION_TYPES.SWAP_GROUPS_ATHLETES, payload: json });
         });

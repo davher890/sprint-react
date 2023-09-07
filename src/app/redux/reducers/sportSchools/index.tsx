@@ -4,7 +4,8 @@ const initialState = {
     sport_schools: [],
     sport_school: {},
     fee_types: [],
-    collections: []
+    collections: [],
+    athletes_by_date: {}
 };
 
 function rootReducer(state = initialState, action: { type: string, payload: any }) {
@@ -30,6 +31,12 @@ function rootReducer(state = initialState, action: { type: string, payload: any 
         return {
             ...state,
             collections: action.payload
+        };
+    }
+    else if (action.type === ACTION_TYPES.GET_SPORT_SCHOOL_ATHLETES_BY_DATE) {
+        return {
+            ...state,
+            athletes_by_date: action.payload
         };
     }
     else return state;

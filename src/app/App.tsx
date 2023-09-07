@@ -18,6 +18,7 @@ import ReceiptData from './components/receipts/ReceiptData';
 import ReceiptTable from './components/receipts/ReceiptTable';
 import ReceiptAthleteData from './components/receipts/ReceiptAthleteData';
 
+import SportSchoolAthletesByDate from './components/sport_schools/SportSchoolAthletesByDate';
 import SportSchoolData from './components/sport_schools/SportSchoolData';
 import SportSchoolTable from './components/sport_schools/SportSchoolTable';
 
@@ -53,6 +54,7 @@ const AppBar: React.FC<any> = (props) => {
           <Route path="/" element={<Login/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/admin/users"              element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" ><UserData/></Box></AuthenticatedProtected></AdminProtected>}/>
+          <Route path="/admin/athletes_by_date"   element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" ><SportSchoolAthletesByDate/></Box></AuthenticatedProtected></AdminProtected>}/>
           
           <Route path="/admin/payments"           element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" ><Payment/></Box></AuthenticatedProtected>}/>
           
@@ -73,6 +75,7 @@ const AppBar: React.FC<any> = (props) => {
           <Route path="/athletes/:id/sport_data"  element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><AthleteSportdata/></Box></AuthenticatedProtected>} />
           <Route path="/athletes/historic"        element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><HistoricTable/></Box></AuthenticatedProtected>} />
           <Route path="/athletes/:id"             element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><AthleteData/></Box></AuthenticatedProtected>} />
+          <Route path="/athletes/code?code=:code" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><AthleteData/></Box></AuthenticatedProtected>} />
           <Route path="/athletes"                 element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><AthleteData/></Box></AuthenticatedProtected>} />
           
           <Route path="/groups/attendance"        element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><GroupAttendance/></Box></AuthenticatedProtected>}/>

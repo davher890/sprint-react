@@ -7,7 +7,7 @@ const initialState = {
 };
 
 function rootReducer(state = initialState, action: { type: string, payload: any }) {
-    if (action.type === ACTION_TYPES.GET_RECEIPT || action.type === ACTION_TYPES.VALIDATE_RECEIPT) {
+    if (action.type === ACTION_TYPES.GET_RECEIPT || action.type === ACTION_TYPES.VALIDATE_RECEIPT || action.type === ACTION_TYPES.ADD_RECEIPT) {
         return {
             ...state,
             receipt: action.payload

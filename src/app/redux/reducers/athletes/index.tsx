@@ -12,7 +12,7 @@ const initialState = {
 };
 
 function rootReducer(state = initialState, action: { type: string, payload: any }) {
-    if (action.type === ACTION_TYPES.ADD_ATHLETE || action.type === ACTION_TYPES.GET_ATHLETE || action.type === ACTION_TYPES.REGISTER_ATHLETE || action.type === ACTION_TYPES.UNREGISTER_ATHLETE) {
+    if (action.type === ACTION_TYPES.ADD_ATHLETE || action.type === ACTION_TYPES.GET_ATHLETE || action.type === ACTION_TYPES.GET_ATHLETE_BY_CODE || action.type === ACTION_TYPES.REGISTER_ATHLETE || action.type === ACTION_TYPES.UNREGISTER_ATHLETE) {
         return {
             ...state,
             athlete: action.payload

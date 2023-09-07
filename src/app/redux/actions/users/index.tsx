@@ -6,7 +6,7 @@ import { addData, changePassword, findById } from "../../../services/UserService
 import { getUserId } from "../../../services/LoginService";
 import { Order } from '../../../types/order'
 
-export function getUserTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
+export function getUserTable(page: number, size: number, filters: any, sort: string='username', sortDirection: Order='asc') {
     return function (dispatch: any)  {
         dispatch({ type: API_CALL})
         return findUserDataPagination(page, size, filters, sort, sortDirection).then(json => {

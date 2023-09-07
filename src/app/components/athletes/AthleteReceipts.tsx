@@ -27,12 +27,12 @@ const AthleteReceipts: React.FC<any> = (props) => {
     return (
         <>
             <Grid container direction="column" spacing={3}>
-                <Grid container direction="row">
+                <Grid container direction="row" xs>
                     <Grid item xs>
                         <Box sx={{ fontWeight: 'bold'}}><h3>Nombre</h3></Box>
                     </Grid>
                     <Grid item xs>
-                        <Box sx={{ fontWeight: 'bold' }}><h3>Remesa</h3></Box>
+                        <Box sx={{ fontWeight: 'bold'}}><h3>Temporada</h3></Box>
                     </Grid>
                     <Grid item xs>
                         <Box sx={{ fontWeight: 'bold' }}><h3>Fecha de creación</h3></Box>
@@ -47,6 +47,12 @@ const AthleteReceipts: React.FC<any> = (props) => {
                         <Box sx={{ fontWeight: 'bold' }}><h3>Matricula</h3></Box>
                     </Grid>
                     <Grid item xs>
+                        <Box sx={{ fontWeight: 'bold' }}><h3>Licencia territorial</h3></Box>
+                    </Grid>
+                    <Grid item xs>
+                        <Box sx={{ fontWeight: 'bold' }}><h3>Licencia nacional</h3></Box>
+                    </Grid>
+                    <Grid item xs>
                         <Box sx={{ fontWeight: 'bold' }}><h3>Estado</h3></Box>
                     </Grid>
                     <Grid item xs></Grid>
@@ -54,12 +60,12 @@ const AthleteReceipts: React.FC<any> = (props) => {
                 </Grid>
                 { 
                 props.receipts.map((receipt : any) => {
-                    return <Grid container direction="row">
+                    return <Grid container direction="row" xs>
                         <Grid item xs>
                             { receipt.receiptName }
                         </Grid>
                         <Grid item xs>
-                            { props.fees && props.fees.find((c:any) => c.id === receipt.receiptCollection)?.name }
+                            { receipt.season.replace('_', '-') }
                         </Grid>
                         <Grid item xs>
                             { moment(receipt.receiptCreatedAt).format("YYYY-MM-DD hh:mm:ss") }
@@ -72,6 +78,12 @@ const AthleteReceipts: React.FC<any> = (props) => {
                         </Grid>
                         <Grid item xs>
                             { receipt.enrollmentFee }
+                        </Grid>
+                        <Grid item xs>
+                            { receipt.licenseTerritorialFee }
+                        </Grid>
+                        <Grid item xs>
+                            { receipt.licenseNationalFee }
                         </Grid>
                         <Grid item xs>
                             { Functions?.getReceiptStatus().find(c => c.id === receipt.status)?.name }

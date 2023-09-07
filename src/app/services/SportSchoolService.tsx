@@ -13,6 +13,10 @@ export const findById = (id: number) => {
     return getRequest("/sport_schools/" + id)
 }
 
+export const findSportSchoolAthletesByDate = (id: number, startDate: string, endDate: string) => {
+    return getRequest("/sport_schools/" + id + "/athletes_by_date?start_date=" + startDate + "&end_date=" + endDate)
+}
+
 export const findSportSchoolGroups = (id: number) => {
     return getRequest("/sport_schools/" + id + "/groups")
 }

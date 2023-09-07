@@ -10,6 +10,7 @@ import SaveButton from '../custom/SaveButton'
 import DeleteButton from '../custom/DeleteButton'
 import Card from '../custom/Card'
 import ScheduleSelect from '../custom/ScheduleSelect'
+import Spinner from '../custom/Spinner'
 
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
@@ -22,49 +23,31 @@ import ConfirmDialog from "../custom/ConfirmDialog";
 
 import { isManager, isAdmin } from "../../services/LoginService";
 
-class ConnectedForm extends React.Component<any, any> {
+const CreateGroup: React.FC<any> = (props) => {
 
-    constructor(props: any) {
-        super(props);
-        this.state = {}
-        
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
+    const [group, setGroup] = React.useState<any>({})
 
-    componentDidMount(){
-                
-        if (this.props.id) {
-            let id = this.props.id
+    React.useEffect(() => {
+        if (props.id) {
+            let id = props.id
             if (id) {
-                this.props.getGroup(id)
+                props.getGroup(id)
             }
         }
-        this.props.getSchedules()
-    }
+        props.getSchedules()
+    }, [])
 
-    handleSubmit() {
-        this.props.addGroup(this.state)
-    }
+    const handleSubmit = ((values: any) => {
+        props.addGroup(values)
+    })
 
-    deleteGroup(groupId: number) {
-        this.props.removeGroup(groupId)
-    }
+    const deleteGroup = ((groupId: number) => {
+        props.removeGroup(groupId)
+    })
 
-    render() {
-        return (
-            <React.Suspense fallback={<div>Cargando...</div>}>
+    return (
+        <React.Suspense fallback={<div>Cargando...</div>}>
 
-<<<<<<< Updated upstream
-                <Formik enableReinitialize 
-                    initialValues={{
-                        // Group data
-                        id: this.props.group.id || 0,
-                        name: this.props.group.name || '',
-                        scheduleIds: this.props.group.scheduleIds || [],
-                        specialization: this.props.group.specialization || false,
-                        trainerId: this.props.group.trainerId || '',
-                        sportSchoolId: this.props.group.sportSchoolId || '',
-=======
             <Formik enableReinitialize 
                 initialValues={{
                     // Group data
@@ -75,133 +58,130 @@ class ConnectedForm extends React.Component<any, any> {
                     specialization: props.group.specialization || false,
                     trainerId: props.group.trainerId || '',
                     sportSchoolId: props.group.sportSchoolId || '',
->>>>>>> Stashed changes
 
-                        openDeleteDialog: false,
+                    openDeleteDialog: false,
 
-                        errorMessage: this.props.group.errorMessage || '',
-                        successMessage: this.props.group.successMessage || ''
-                    }}
-                    validate={(values) => {
-                        let errors: any = {};
+                    errorMessage: props.group.errorMessage || '',
+                    successMessage: props.group.successMessage || ''
+                }}
+                validate={(values) => {
+                    let errors: any = {};
 
-                        if (values.name === '') errors.name = true
-                        if (values.scheduleIds === '') errors.scheduleIds = true
-                        if (!values.trainerId) errors.trainerId = true
-                        if (!values.sportSchoolId) errors.sportSchoolId = true
-                        //check if my values have errors
-                        return errors;
-                    }}
-                    onSubmit={(values, { setSubmitting }) => {
-                        this.setState(values)
-                        setSubmitting(false);
-                        this.handleSubmit()
-                    }}
-                    >
-                    {({ handleSubmit, handleChange, values, touched, setFieldValue, errors, isSubmitting }) => (
-        
-                        <form onSubmit={handleSubmit}>
-                            <ConfirmDialog open={values.openDeleteDialog} 
-                                confirm={() => {
-                                    this.deleteGroup(this.props.id); 
-                                    setFieldValue("openDeleteDialog", false);
+                    if (values.name === '') errors.name = true
+                    if (values.scheduleIds === '') errors.scheduleIds = true
+                    if (!values.trainerId) errors.trainerId = true
+                    if (!values.sportSchoolId) errors.sportSchoolId = true
+                    //check if my values have errors
+                    return errors;
+                }}
+                onSubmit={(values, { setSubmitting }) => {
+                    setGroup(values)
+                    setSubmitting(false);
+                    handleSubmit(values)
+                }}
+                >
+                {({ handleSubmit, handleChange, values, touched, setFieldValue, errors, isSubmitting }) => (
+    
+                    <form onSubmit={handleSubmit}>
+                        <ConfirmDialog open={values.openDeleteDialog} 
+                            confirm={() => {
+                                deleteGroup(props.id); 
+                                setFieldValue("openDeleteDialog", false);
+                                window.open("/groups/list", "_self");
+                            }}
+                            cancel={() => setFieldValue("openDeleteDialog", false)}
+                        />
+                        <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                            <Alert severity="error" onClose={() => { 
+                                    setFieldValue("errorMessage", "");
+                                }}>
+                                <AlertTitle>Error</AlertTitle>
+                                <strong>{values.errorMessage}</strong>
+                            </Alert>
+                        </Snackbar>
+                        <Snackbar open={values.successMessage !== undefined && values.successMessage !== ''}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                            <Alert severity="success" onClose={() => { 
+                                    setFieldValue("successMessage", "") 
                                     window.open("/groups/list", "_self");
-                                }}
-                                cancel={() => setFieldValue("openDeleteDialog", false)}
-                            />
-                            <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
-                                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
-                                <Alert severity="error" onClose={() => { 
-                                        setFieldValue("errorMessage", "");
-                                    }}>
-                                    <AlertTitle>Error</AlertTitle>
-                                    <strong>{values.errorMessage}</strong>
-                                </Alert>
-                            </Snackbar>
-                            <Snackbar open={values.successMessage !== undefined && values.successMessage !== ''}
-                                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
-                                <Alert severity="success" onClose={() => { 
-                                        setFieldValue("successMessage", "") 
-                                        window.open("/groups/list", "_self");
-                                    }}>
-                                    <AlertTitle>Ok!</AlertTitle>
-                                    <strong>{values.successMessage}</strong>
-                                </Alert>
-                            </Snackbar>
-                            <Box paddingBottom={7}>
-                                <Grid container direction='row' spacing={3}>
-                                    <Grid item xs={6}>
-                                        <Card title="Datos del grupo">
-                                            <Grid container spacing={2}>
-                                                <Grid container item spacing={2}>
-                                                    <Grid item xs={6}>
-                                                        <SportSchoolSelect sportSchoolId={values.sportSchoolId} error={touched.sportSchoolId && errors.sportSchoolId}
-                                                            onChange={(sportSchoolId: number) => {
-                                                                setFieldValue('sportSchoolId', sportSchoolId);
-                                                            }}
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xs={6}>
-                                                        <Checkbox name="specialization" checked={values.specialization === true} 
-                                                                onChange={e => {
-                                                                    setFieldValue('specialization', e.target.checked)
-                                                                }}
-                                                            />
-                                                            Especialización
-                                                    </Grid>
+                                }}>
+                                <AlertTitle>Ok!</AlertTitle>
+                                <strong>{values.successMessage}</strong>
+                            </Alert>
+                        </Snackbar>
+                        <Box paddingBottom={7}>
+                            <Grid container direction='row' spacing={3}>
+                                <Grid item xs>
+                                    <Card title="Datos del grupo">
+                                        <Grid container spacing={2}>
+                                            <Grid container item spacing={2}>
+                                                <Grid item xs>
+                                                    <SportSchoolSelect sportSchoolId={values.sportSchoolId} error={touched.sportSchoolId && errors.sportSchoolId}
+                                                        onChange={(sportSchoolId: number) => {
+                                                            setFieldValue('sportSchoolId', sportSchoolId);
+                                                        }}
+                                                    />
                                                 </Grid>
-                                                <Grid container item spacing={2}>
-                                                    <Grid item xs>
-                                                        <TextField fullWidth name="name" label="Nombre" value={values.name} onChange={handleChange}
-                                                            error={touched.name && errors.name} />
-                                                    </Grid>
-                                                    <Grid item xs>
-                                                        <TrainerSelect 
-                                                            trainerId={values.trainerId} 
-                                                            sportSchoolId={values.sportSchoolId}  
-                                                            error={touched.trainerId && errors.trainerId}
-                                                            onChange={(trainerId: number) => {
-                                                                setFieldValue('trainerId', trainerId);
+                                                <Grid item xs>
+                                                    <Checkbox name="specialization" checked={values.specialization === true} 
+                                                            onChange={e => {
+                                                                setFieldValue('specialization', e.target.checked)
                                                             }}
                                                         />
-                                                    </Grid>
+                                                        Especialización
                                                 </Grid>
                                             </Grid>
-                                        </Card>
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <Grid container spacing={2}>
-                                            <Grid item xs>
-                                                <ScheduleSelect 
-                                                    schedules={this.props.schedules}
-                                                    scheduleIds={values.scheduleIds}
-                                                    specialization={false}
-                                                    onChange={(scheduleIds: number[]) => {
-                                                        setFieldValue('scheduleIds', scheduleIds)
-                                                    }}
-                                                />
+                                            <Grid container item spacing={2}>
+                                                <Grid item xs>
+                                                    <TextField fullWidth name="name" label="Nombre" value={values.name} onChange={handleChange}
+                                                        error={touched.name && errors.name} />
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <TrainerSelect 
+                                                        trainerId={values.trainerId} 
+                                                        sportSchoolId={values.sportSchoolId}  
+                                                        error={touched.trainerId && errors.trainerId}
+                                                        onChange={(trainerId: number) => {
+                                                            setFieldValue('trainerId', trainerId);
+                                                        }}
+                                                    />
+                                                </Grid>
                                             </Grid>
                                         </Grid>
-                                    </Grid>
+                                    </Card>
                                 </Grid>
-                            </Box>
-                            { (isAdmin() || isManager()) &&
-                                <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
-                                    <Toolbar>
+                                <Grid container item xs spacing={2}>
+                                    <ScheduleSelect 
+                                        schedules={props.schedules}
+                                        scheduleIds={values.scheduleIds}
+                                        specialization={false}
+                                        onChange={(scheduleIds: number[]) => {
+                                            setFieldValue('scheduleIds', scheduleIds)
+                                        }}
+                                    />
+                                </Grid>
+                            </Grid>
+                        </Box>
+                        { (isAdmin() || isManager()) &&
+                            <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
+                                <Toolbar>
+                                    { props.loading ? <Spinner/> : <>
                                         <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
-                                        {(this.props.id) ? 
+                                        {props.id ? 
                                             <DeleteButton text='Borrar' onClick={() => setFieldValue("openDeleteDialog", true)}/>
                                             : null
                                         }
-                                    </Toolbar>
-                                </AppBar>
-                            }
-                        </form>
-                    )}
-                </Formik>                
-            </React.Suspense>
-        );
-    }
+                                    </>
+                                    }
+                                </Toolbar>
+                            </AppBar>
+                        }
+                    </form>
+                )}
+            </Formik>                
+        </React.Suspense>
+    );
 }
 
 const mapDispatchToProps =  {
@@ -214,11 +194,12 @@ const mapDispatchToProps =  {
 const mapStateToProps = (state: any) => {
     return { 
         group: state.group_reducer.group,
-        schedules: state.schedule_reducer.schedules
+        schedules: state.schedule_reducer.schedules,
+        loading: state.api_reducer.loading
     };
 };
 
-const ConnectedComponent = connect(mapStateToProps, mapDispatchToProps)(ConnectedForm);
+const ConnectedComponent = connect(mapStateToProps, mapDispatchToProps)(CreateGroup);
 
 const WithRouterWrapper = () => {
     let { id } = useParams()

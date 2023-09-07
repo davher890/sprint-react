@@ -1,10 +1,9 @@
 import * as ACTION_TYPES from "../../constants/action_types";
 
-import { addData, findById, findAthleteFee, downloadExcel, findByPhone, findBySurnames, registerAthlete, unregisterAthlete, findAthleteObservations, findAthleteReceipts, findAthleteHistoric, deleteAthlete, updateAthleteReceiptStatus } from "../../../services/AthleteService"
+import { addData, findById, findByCode, findAthleteFee, downloadExcel, findByPhone, findBySurnames, registerAthlete, unregisterAthlete, findAthleteObservations, findAthleteReceipts, findAthleteHistoric, deleteAthlete, updateAthleteReceiptStatus } from "../../../services/AthleteService"
 import { findHistoricDataPagination, findPaymentAthleteDataPagination, findAthleteDataPagination, findAthleteSportdataPagination, findDuplicatedAthletesDataPagination } from "../../../services/TableService"
 
 import utils from "../../../utils/Functions"
-import moment from 'moment'
 
 import { Order } from '../../../types/order'
 
@@ -56,8 +55,16 @@ export function getAthlete(id: number) {
     return function (dispatch: any) {
         return findById(id).then(json => {
             json.age = utils.ageCalculator(json.birthDate);
-            json.birthDateStr = moment.unix(json.birthDate/1000).format("YYYY-MM-DD")
             dispatch({ type: ACTION_TYPES.GET_ATHLETE, payload: json });
+        });
+    }
+}
+
+export function getAthleteByCode(code: number) {
+    return function (dispatch: any) {
+        console.log('de', code)
+        return findByCode(code).then(json => {
+            dispatch({ type: ACTION_TYPES.GET_ATHLETE_BY_CODE, payload: json });
         });
     }
 }
@@ -143,8 +150,6 @@ export function doRegisterAthlete(id: number, body: any) {
             if (!json.errorMessage) {
                 json.successMessage = "Datos guardados!"
             }
-            json.age = utils.ageCalculator(json.birthDate);
-            json.birthDateStr = moment.unix(json.birthDate/1000).format("YYYY-MM-DD")
             dispatch({ type: ACTION_TYPES.ADD_ATHLETE, payload: json });
         });
     }
@@ -156,8 +161,6 @@ export function doUnregisterAthlete(id: number, body: any) {
             if (!json.errorMessage) {
                 json.successMessage = "Datos guardados!"
             }
-            json.age = utils.ageCalculator(json.birthDate);
-            json.birthDateStr = moment.unix(json.birthDate/1000).format("YYYY-MM-DD")
             dispatch({ type: ACTION_TYPES.ADD_ATHLETE, payload: json });
         });
     }
@@ -165,13 +168,13 @@ export function doUnregisterAthlete(id: number, body: any) {
 
 export function addAthlete(data: any) {
     return function (dispatch: any) {
+        dispatch({ type: ACTION_TYPES.API_CALL})
         return addData(data).then(json => {
             if (!json.errorMessage) {
                 json.successMessage = "Datos guardados!"
             }
             json.exit = data.exit
             json.age = utils.ageCalculator(json.birthDate);
-            json.birthDateStr = moment.unix(json.birthDate/1000).format("YYYY-MM-DD")
             dispatch({ type: ACTION_TYPES.ADD_ATHLETE, payload: json });
         });
     }

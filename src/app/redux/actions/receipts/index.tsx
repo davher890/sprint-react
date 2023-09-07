@@ -59,6 +59,9 @@ export function addReceiptAthlete(data: any) {
     return function (dispatch: any) {
         dispatch({ type: ACTION_TYPES.API_CALL})
         return saveReceiptAthlete(data).then(json => {
+            if (!json.errorMessage) {
+                json.successMessage = "Recibo actualizado!"
+            }
             dispatch({ type: ACTION_TYPES.ADD_RECEIPT_ATHLETE, payload: json });
         });
     }

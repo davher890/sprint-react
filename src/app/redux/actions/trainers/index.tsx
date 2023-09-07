@@ -13,7 +13,7 @@ export function getAllTrainers() {
     }
 }
 
-export function getTrainerTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
+export function getTrainerTable(page: number, size: number, filters: any, sort: string='name', sortDirection: Order='asc') {
     return function (dispatch: any)  {
         dispatch({ type: ACTION_TYPES.API_CALL})
         return findTrainerDataPagination(page, size, filters, sort, sortDirection).then(json => {
