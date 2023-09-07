@@ -54,6 +54,7 @@ class ConnectedForm extends React.Component<any, any> {
         return (
             <React.Suspense fallback={<div>Cargando...</div>}>
 
+<<<<<<< Updated upstream
                 <Formik enableReinitialize 
                     initialValues={{
                         // Group data
@@ -63,6 +64,18 @@ class ConnectedForm extends React.Component<any, any> {
                         specialization: this.props.group.specialization || false,
                         trainerId: this.props.group.trainerId || '',
                         sportSchoolId: this.props.group.sportSchoolId || '',
+=======
+            <Formik enableReinitialize 
+                initialValues={{
+                    // Group data
+                    id: props.group.id || 0,
+                    createdAt: props.group.createdAt || 0,
+                    name: props.group.name || '',
+                    scheduleIds: props.group.scheduleIds || [],
+                    specialization: props.group.specialization || false,
+                    trainerId: props.group.trainerId || '',
+                    sportSchoolId: props.group.sportSchoolId || '',
+>>>>>>> Stashed changes
 
                         openDeleteDialog: false,
 

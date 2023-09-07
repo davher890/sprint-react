@@ -32,9 +32,9 @@ const ConnectedForm: React.FC<any> = (props) => {
         }
     }, [])
 
-    const handleFormSubmit = (values: any) => {
-        props.addSportSchool(values);
-        props.addFee({ id: values.feeId, sportSchoolId: props.id, ...values });
+    const handleFormSubmit = async (values: any) => {
+        await props.addSportSchool(values);
+        await props.addFee({ id: values.feeId, sportSchoolId: props.id, ...values });
     }
 
     const deleteSportSchool = (groupId: number) => {
@@ -48,6 +48,7 @@ const ConnectedForm: React.FC<any> = (props) => {
             <Formik enableReinitialize
                 initialValues={{
                     id: props.sport_school.id || 0,
+                    createdAt: props.sport_school.createdAt || 0,
                     name: props.sport_school.name || '',
                     municipality: props.sport_school.municipality || '',
                     address: props.sport_school.address || '',
