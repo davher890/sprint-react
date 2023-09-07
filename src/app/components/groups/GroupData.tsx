@@ -52,6 +52,7 @@ const CreateGroup: React.FC<any> = (props) => {
                 initialValues={{
                     // Group data
                     id: props.group.id || 0,
+                    createdAt: props.group.createdAt || 0,
                     name: props.group.name || '',
                     scheduleIds: props.group.scheduleIds || [],
                     specialization: props.group.specialization || false,

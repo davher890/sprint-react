@@ -96,6 +96,7 @@ const CreateAthlete: React.FC<any> = (props) => {
             <Formik enableReinitialize
                 initialValues={{
                     id: athlete.id || 0,
+                    createdAt: athlete.createdAt || 0,
                     code: athlete.code || 0,
                     familyCode: athlete.familyCode || 0,
                     historic: athlete.historic || [],

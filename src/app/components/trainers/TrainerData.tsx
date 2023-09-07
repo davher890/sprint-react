@@ -48,6 +48,7 @@ class ConnectedForm extends React.Component<any, any> {
                 <Formik enableReinitialize
                     initialValues={{
                         id: this.props.trainer.id || 0,
+                        createdAt: this.props.createdAt || 0,
                         name: this.props.trainer.name || '',
                         mail: this.props.trainer.mail || '',
                         sportSchoolId: this.props.trainer.sportSchoolId || '',
