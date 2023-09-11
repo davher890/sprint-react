@@ -26,7 +26,7 @@ const ScheduleSelect: React.FC<any> = (props) => {
 
     return (
         <Grid container item xs>
-            <CustomCard title="Horarios">
+            { props.schedules && props.schedules.length > 0 && <CustomCard title="Horarios">
                 <Grid container direction="column">
                     <Grid item xs>
                         <CustomCard title="Seleccionados">
@@ -118,6 +118,7 @@ const ScheduleSelect: React.FC<any> = (props) => {
                     </Grid>
                 </Grid>
             </CustomCard>
+            }
         </Grid>
     )
 }

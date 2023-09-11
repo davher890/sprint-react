@@ -60,6 +60,7 @@ const ConnectedForm: React.FC<any> = (props) => {
                     quarterTwoDays: props.fee.quarterTwoDays,
                     quarterThreeDays: props.fee.quarterThreeDays,
                     quarterSpecialization: props.fee.quarterSpecialization,
+                    trackFee: props.fee.trackFee,
                     
                     openDeleteDialog: false,
                     
@@ -139,10 +140,14 @@ const ConnectedForm: React.FC<any> = (props) => {
                                                     error={touched.enrollmentFee && errors.enrollmentFee} type='number' />
                                             </Grid>
                                             <Grid item xs>
-                                                <TextField name="membershipFee" label="Cuota de socio" value={values.membershipFee} onChange={handleChange}
+                                                <TextField name="membershipFee" label="Socio" value={values.membershipFee} onChange={handleChange}
                                                     error={touched.membershipFee && errors.membershipFee} type='number' />
                                             </Grid>
                                         </Grid>
+                                    </Grid>
+                                </Card>
+                                <Card title="Entrenamiento">
+                                    <Grid container direction='column' spacing={2}> 
                                         <Grid container item spacing={2}>
                                             <Grid item xs>
                                                 <TextField name="quarterOneDay" label="Cuota trimestral 1 dia" value={values.quarterOneDay} onChange={handleChange}
@@ -159,6 +164,16 @@ const ConnectedForm: React.FC<any> = (props) => {
                                             <Grid item xs>
                                                 <TextField name="quarterSpecialization" label="Cuota trimestral especializacion" value={values.quarterSpecialization} onChange={handleChange}
                                                     error={touched.quarterSpecialization && errors.quarterSpecialization} type='number' />
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </Card>
+                                <Card title="Pista">
+                                    <Grid container direction='column' spacing={2}>
+                                        <Grid container item spacing={2}>
+                                            <Grid item xs>
+                                                <TextField name="trackFee" label="Precio/hora" value={values.trackFee} onChange={handleChange}
+                                                    error={touched.trackFee && errors.trackFee} type='number' />
                                             </Grid>
                                         </Grid>
                                     </Grid>

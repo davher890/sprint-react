@@ -139,6 +139,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                     licenseTerritorialFee: athlete.licenseTerritorialFee || '',
                     groupId: athlete.groupId || '',
                     scheduleIds: athlete.scheduleIds || [],
+                    trackHours: athlete.trackHours,
                     // Contact info
                     mail: athlete.mail || '',
                     phone1: athlete.phone1 || '',
@@ -803,24 +804,37 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                 <Grid item>
                                                     <TextField fullWidth name="licenseTerritorialFee" label="Cuota licencia territorial" type="number" value={values.licenseTerritorialFee} onChange={handleChange} />
                                                 </Grid>
-                                            </Grid>
-                                            <Grid container spacing={1} direction="row">
-                                                <Grid item xs>
-                                                    <GroupScheduleSelect 
-                                                        groupId={values.groupId}
-                                                        sportSchoolId={values.sportSchoolId}
-                                                        scheduleIds={values.scheduleIds}
-                                                        onGroupChange={(grId: number) => {
-                                                            setFieldValue('groupId', grId)
-                                                            if (grId === athlete.groupId){
-                                                                setFieldValue('scheduleIds', athlete.scheduleIds)
-                                                            }
-                                                        }}
-                                                        onScheduleChange={(scheduleIds: number[]) => {
-                                                            setFieldValue('scheduleIds', scheduleIds)
+                                            
+                                            
+                                                <Grid container spacing={1} direction="row">
+                                                    { values.feeType == 'PISTAS' || values.feeType == 'PISTAS_FED' ?
+                                                    <Grid item xs={2}>
+                                                        <Select name="trackHours" label="Num horas de pista" error={touched.trackHours && errors.trackHours}
+                                                                options={[{ id: "h_1_5", name: "1.5 h" }, { id: "h_3", name: "3 h" } ]} value={values.trackHours}
+                                                                onChange={(e: any, value: any) => {
+                                                                    setFieldValue('trackHours', value ? value.id : "")
+                                                                }}
+                                                        />
+                                                    </Grid>
+                                                    :
+                                                        <Grid item xs>
+                                                            <GroupScheduleSelect 
+                                                                groupId={values.groupId}
+                                                                sportSchoolId={values.sportSchoolId}
+                                                                scheduleIds={values.scheduleIds}
+                                                                onGroupChange={(grId: number) => {
+                                                                    setFieldValue('groupId', grId)
+                                                                    if (grId === athlete.groupId){
+                                                                        setFieldValue('scheduleIds', athlete.scheduleIds)
+                                                                    }
+                                                                }}
+                                                                onScheduleChange={(scheduleIds: number[]) => {
+                                                                    setFieldValue('scheduleIds', scheduleIds)
 
-                                                        }}
-                                                    />
+                                                                }}
+                                                            />
+                                                        </Grid>
+                                                    }
                                                 </Grid>
                                             </Grid>
                                         </CustomCard>
