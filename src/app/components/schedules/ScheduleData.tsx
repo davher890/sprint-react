@@ -15,14 +15,22 @@ import { useParams } from 'react-router-dom';
 
 import { addSchedule, getSchedule } from "../../redux/actions/schedules";
 
+const LUNES = "Lunes"
+const MARTES = "Martes"
+const MIERCOLES = "Miércoles"
+const JUEVES = "Jueves"
+const VIERNES = "Viernes"
+const SABADO = "Sábado"
+const DOMINGO = "Domingo"
+
 const weekDays: any = {
-    "Lunes": "MONDAY",
-    "Martes": "TUESDAY",
-    "Miercoles": "WEDNESDAY",
-    "Jueves": "THURSDAY",
-    "Viernes": "FRIDAY",
-    "Sabado": "SATURDAY",
-    "Domingo": "SUNDAY"
+    [LUNES]: "MONDAY",
+    [MARTES]: "TUESDAY",
+    [MIERCOLES]: "WEDNESDAY",
+    [JUEVES]: "THURSDAY",
+    [VIERNES]: "FRIDAY",
+    [SABADO]: "SATURDAY",
+    [DOMINGO]: "SUNDAY"
 }
 const CreateSchedule: React.FC<any> = (props) => {
 
@@ -45,6 +53,7 @@ const CreateSchedule: React.FC<any> = (props) => {
             <Formik enableReinitialize
                 initialValues={{
                     id: props.schedule.id || 0,
+                    createdAt: props.schedule.createdAt || 0,
                     day: props.schedule.day || '',
                     dayNumber: props.schedule.dayNumber || 0,
                     startHour: props.schedule.startHour || 0,
@@ -97,13 +106,13 @@ const CreateSchedule: React.FC<any> = (props) => {
                             <Grid item xs>
                                 <Select fullWidth name="dayNumber" label="Día de la semana" error={touched.dayNumber && errors.dayNumber}
                                     options={[
-                                        { id: 1, name: "Lunes" }, 
-                                        { id: 2, name: "Martes" }, 
-                                        { id: 3, name: "Miércoles" }, 
-                                        { id: 4, name: "Jueves" }, 
-                                        { id: 5, name: "Viernes" }, 
-                                        { id: 6, name: "Sábado" }, 
-                                        { id: 7, name: "Domingo" }
+                                        { id: 1, name: LUNES }, 
+                                        { id: 2, name: MARTES }, 
+                                        { id: 3, name: MIERCOLES }, 
+                                        { id: 4, name: JUEVES }, 
+                                        { id: 5, name: VIERNES }, 
+                                        { id: 6, name: SABADO }, 
+                                        { id: 7, name: DOMINGO }
                                     ]}
                                     value={values.dayNumber}
                                     onChange={(e: any, value: any) => {
