@@ -14,6 +14,8 @@ import Spinner from '../Spinner'
 import { Order } from '../../../types/order'
 import functions from '../../../utils/Functions'
 
+import { debounce } from "lodash"
+
 const CustomTable: React.FC<any> = (props) => {
 
 	const styles = makeStyles({
@@ -55,6 +57,11 @@ const CustomTable: React.FC<any> = (props) => {
 
 	const handleFilterChange = (filterType: string, filterField: string, filterValue: string, filterOptions?: any[]) => {
 
+		debounceFilterChange(filterType, filterField, filterValue, filterOptions);
+	}
+
+	const debounceFilterChange = React.useRef(
+		debounce((filterType: string, filterField: string, filterValue: string, filterOptions?: any[]) => {
 		if (!filterValue || filterValue === ''){
 			delete filterObj[filterField]
 			setFilterObj(filterObj)
@@ -77,8 +84,15 @@ const CustomTable: React.FC<any> = (props) => {
 				props.onPaginationFilterChange(0, pageSize, filterObj, orderBy, order)
 			}
 		}
-		
-	}
+	}, 500)
+	).current;
+
+	React.useEffect(() => {
+		return () => {
+			debounceFilterChange.cancel();
+		};
+	  }, [debounceFilterChange]);
+
 	const handlePageChange = (event: any, newPage: number) => {
 		setPage(newPage)
 		if (props.onPaginationFilterChange){
