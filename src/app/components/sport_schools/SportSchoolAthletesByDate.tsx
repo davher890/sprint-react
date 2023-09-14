@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import * as moment from "moment"
+import moment from "moment"
 
 import { Grid } from '@material-ui/core';
 
@@ -19,7 +19,7 @@ const SportSchoolAthletesByDate: React.FC<any> = (props) => {
 	
 	React.useEffect(() => {
 		if (sportSchoolId > 0){
-			props.getSportSchoolAthletesByDate(sportSchoolId, '2022-09-01', '2023-09-01')
+			props.getSportSchoolAthletesByDate(sportSchoolId, moment().subtract(90, "days").format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'))
 		}
     }, [sportSchoolId])
 
