@@ -259,7 +259,7 @@ const NewReceiptForm: React.FC<any> = (props) => {
                             </Grid>
                             <Grid container item xs spacing={4}>
                                 { isValidReceipt(receipt) && <Grid item xs={3}>
-                                    {(props.loading ? <Spinner/> : (isAdmin() || !props.receipt.id) && <SearchButton onClick={() => {
+                                    {(props.loading ? <Spinner/> : (!receipt.id || receipt.status === 'pending') && <SearchButton onClick={() => {
                                         saveReceipt(receipt)
                                     }}>Guardar</SearchButton>)
                                     }
