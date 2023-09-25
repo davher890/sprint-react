@@ -54,6 +54,8 @@ const ConnectedForm: React.FC<any> = (props) => {
                     address: props.sport_school.address || '',
 
                     feeId: props.fee.id || 0,
+                    sportSchoolAnnualFee: props.fee.sportSchoolAnnualFee,
+                    equipmentAnnualFee: props.fee.equipmentAnnualFee,
                     enrollmentFee: props.fee.enrollmentFee,
                     membershipFee: props.fee.membershipFee,
                     quarterOneDay: props.fee.quarterOneDay,
@@ -142,6 +144,14 @@ const ConnectedForm: React.FC<any> = (props) => {
                                             <Grid item xs>
                                                 <TextField name="membershipFee" label="Socio" value={values.membershipFee} onChange={handleChange}
                                                     error={touched.membershipFee && errors.membershipFee} type='number' />
+                                            </Grid>
+                                            <Grid item xs>
+                                                <TextField name="equipmentAnnualFee" label="Pack de equipación competición" value={values.equipmentAnnualFee} onChange={handleChange}
+                                                    error={touched.equipmentAnnualFee && errors.equipmentAnnualFee} type='number' />
+                                            </Grid>
+                                            <Grid item xs>
+                                                <TextField name="sportSchoolAnnualFee" label={`Cuota Anual ${values.name}`} value={values.sportSchoolAnnualFee} onChange={handleChange}
+                                                    error={touched.sportSchoolAnnualFee && errors.sportSchoolAnnualFee} type='number' />
                                             </Grid>
                                         </Grid>
                                     </Grid>
