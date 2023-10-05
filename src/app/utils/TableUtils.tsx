@@ -68,7 +68,7 @@ const Utils = {
         ]
     },
 
-    getReceiptAthleteColumns: (receiptType: string) => {
+    getReceiptAthleteColumns: (receiptType: string, sportSchoolFee: any) => {
         let commonColumns = [
             { dataField: 'athlete_id', text: 'athlete_id', show: false },
             { dataField: 'code', text : 'Codigo', filter: { type: "number" } }, 
@@ -94,6 +94,10 @@ const Utils = {
             { dataField: 'enrollmentFee', text : 'Matricula', sort: true }, 
             { dataField: 'membershipFee', text : 'Cuota de socio', sort: true }
         ]
+        console.log(sportSchoolFee.sportSchoolAnnualFee)
+        if (sportSchoolFee.sportSchoolAnnualFee && sportSchoolFee.sportSchoolAnnualFee > 0){
+            trimestralColumns.push({ dataField: 'sportSchoolAnnualFee', text : 'Cuota anual/escuela', sort: true })
+        }
 
         let licenseColumns = [
             { dataField: 'licenseType', text : 'Tipo de licencia'},
