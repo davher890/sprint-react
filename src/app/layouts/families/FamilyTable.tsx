@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { Container, Grid } from '@material-ui/core';
 
-import Table from "../custom/Table";
+import Table from "../../components/custom/Table";
 
 import { connect } from "react-redux";
 import { getFamilyTable } from "../../redux/actions/families/index";

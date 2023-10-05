@@ -2,34 +2,38 @@ import * as React from "react"
 
 import { Grid } from '@material-ui/core';
 
-import Table from "../custom/Table";
-import Button from '../custom/AddButton'
+import Table from "../../components/custom/Table";
+import Button from '../../components/custom/AddButton'
 
 import { connect } from "react-redux";
-import { getTrainerTable, downloadTrainers } from "../../redux/actions/trainers";
+import { getUserTable } from "../../redux/actions/users";
 import Utils from "../../utils/TableUtils";
 
 import { Order } from '../../types/order'
 
-class TrainerTable extends React.Component<any, any> {
+import { isAdmin, isManager } from "../../services/LoginService";
+
+class UserTable extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
-        	columns : Utils.getTrainerColumns()
+        	columns : Utils.getUserColumns()
         }
     }
 
 	componentDidMount() {
-		this.props.getTrainerTable();
+		this.props.getUserTable();
 	}
 
 	render() {
 		return (
 			<React.Suspense fallback={<div>Cargando...</div>}>
 				<Grid container direction="column" spacing={3}>
-					<Grid item xs>
-						<Button text='Nuevo Entrenador' href={'/trainers'}/>
-					</Grid>
+					{ isAdmin() || isManager() ?
+						<Grid item xs>
+							<Button text="Nuevo Usuario" href={'/admin/users'}/>
+						</Grid>
+					: null }
 					<Grid item xs>
 						<Table 
 							data={this.props.table_data}
@@ -37,11 +41,12 @@ class TrainerTable extends React.Component<any, any> {
 							size={this.props.size}
 							total={this.props.total}
 							columns={this.state.columns} 
+							showColumns={true}
 							onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
-								this.props.getTrainerTable(page, size, filters, sort, sortDirection);
+								this.props.getUserTable(page, size, filters, sort, sortDirection);
 							}}
 							onRowClick={(id: number) => {
-								window.open("/trainers/" + id, "_self");
+								window.open("/admin/users/" + id, "_self");
 							}}
 						/>
 					</Grid>
@@ -61,10 +66,10 @@ function mapStateToProps(state: any) {
 }
 
 const mapDispatchToProps = {
-	getTrainerTable, downloadTrainers
+	getUserTable
 }
 
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(TrainerTable);
+)(UserTable);

@@ -5,10 +5,10 @@ import { Formik } from 'formik';
 import { Grid, AppBar, Toolbar, Snackbar } from "@material-ui/core";
 import { Alert, AlertTitle } from '@material-ui/lab';
 
-import TextField from '../custom/TextField';
-import Select from '../custom/Select';
-import SaveButton from '../custom/SaveButton'
-import Card from '../custom/Card';
+import TextField from '../../components/custom/TextField';
+import Select from '../../components/custom/Select';
+import SaveButton from '../../components/custom/SaveButton'
+import Card from '../../components/custom/Card';
 
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';

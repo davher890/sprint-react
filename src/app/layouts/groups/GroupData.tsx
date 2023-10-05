@@ -5,21 +5,21 @@ import { Formik } from 'formik';
 import { Grid, Snackbar, Checkbox, AppBar, Toolbar, Box } from "@material-ui/core";
 import { Alert, AlertTitle } from '@material-ui/lab';
 
-import TextField from '../custom/TextField';
-import SaveButton from '../custom/SaveButton'
-import DeleteButton from '../custom/DeleteButton'
-import Card from '../custom/Card'
-import ScheduleSelect from '../custom/ScheduleSelect'
-import Spinner from '../custom/Spinner'
+import TextField from '../../components/custom/TextField';
+import SaveButton from '../../components/custom/SaveButton'
+import DeleteButton from '../../components/custom/DeleteButton'
+import Card from '../../components/custom/Card'
+import ScheduleSelect from '../../components/custom/ScheduleSelect'
+import Spinner from '../../components/custom/Spinner'
 
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
 
 import { addGroup, getGroup, removeGroup } from "../../redux/actions/groups";
 import { getSchedules } from "../../redux/actions/schedules";
-import TrainerSelect from "../custom/TrainerSelect";
-import SportSchoolSelect from "../custom/SportSchoolSelect";
-import ConfirmDialog from "../custom/ConfirmDialog";
+import TrainerSelect from "../../components/custom/TrainerSelect";
+import SportSchoolSelect from "../../components/custom/SportSchoolSelect";
+import ConfirmDialog from "../../components/custom/ConfirmDialog";
 
 import { isManager, isAdmin } from "../../services/LoginService";
 

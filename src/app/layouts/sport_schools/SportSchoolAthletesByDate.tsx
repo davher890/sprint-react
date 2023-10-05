@@ -9,7 +9,7 @@ import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, X
 import { connect } from "react-redux";
 import { getSportSchoolAthletesByDate } from "../../redux/actions/sportSchools";
 
-import SportSchoolSelect from "../custom/SportSchoolSelect";
+import SportSchoolSelect from "../../components/custom/SportSchoolSelect";
 
 import { useState } from "react";
 

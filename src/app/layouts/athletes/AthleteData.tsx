@@ -10,30 +10,30 @@ import { Alert, AlertTitle } from '@material-ui/lab';
 
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 
-import CustomCard from '../custom/Card'
-import DateField from '../custom/DateField'
-import GroupScheduleSelect from '../custom/GroupScheduleSelect'
-import FeeTypeSelect from '../custom/FeeTypeSelect'
-import SportSchoolSelect from '../custom/SportSchoolSelect'
-import SaveButton from '../custom/SaveButton'
-import ReturnButton from '../custom/ReturnButton'
-import Select from '../custom/Select'
-import TextField from '../custom/TextField'
+import CustomCard from '../../components/custom/Card'
+import DateField from '../../components/custom/DateField'
+import GroupScheduleSelect from '../../components/custom/GroupScheduleSelect'
+import FeeTypeSelect from '../../components/custom/FeeTypeSelect'
+import SportSchoolSelect from '../../components/custom/SportSchoolSelect'
+import SaveButton from '../../components/custom/SaveButton'
+import ReturnButton from '../../components/custom/ReturnButton'
+import Select from '../../components/custom/Select'
+import TextField from '../../components/custom/TextField'
 // import FeeInfo from '../custom/FeeInfo'
-import PhoneCard from '../custom/PhoneCard'
-import Spinner from '../custom/Spinner'
+import PhoneCard from '../../components/custom/PhoneCard'
+import Spinner from '../../components/custom/Spinner'
 
-import AthletesList from '../custom/Athletes/AthletesList'
-import AthleteFamilyData from './AthleteFamilyData'
-import AthletesObservations from './AthleteObservations'
-import AthleteReceipts from './AthleteReceipts'
+import AthletesList from '../../components/custom/Athletes/AthletesList'
+import AthleteFamilyData from '../../components/athletes/AthleteFamilyData'
+import AthletesObservations from '../../components/athletes/AthleteObservations'
+import AthleteReceipts from '../../components/athletes/AthleteReceipts'
 import AthleteSportdata from './AthleteSportdata'
 
 // Redux
 import { connect } from "react-redux";
 import { addAthlete, getAthlete, getAthletesByPhone, getAthleteByCode, getAthletesBySurnames, doRegisterAthlete, doUnregisterAthlete, removeAthlete } from "../../redux/actions/athletes";
-import DeleteButton from "../custom/DeleteButton";
-import ConfirmDialog from "../custom/ConfirmDialog";
+import DeleteButton from "../../components/custom/DeleteButton";
+import ConfirmDialog from "../../components/custom/ConfirmDialog";
 
 import { isManager, isAdmin } from "../../services/LoginService";
 

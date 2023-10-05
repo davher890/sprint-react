@@ -2,51 +2,46 @@ import * as React from "react"
 
 import { Grid } from '@material-ui/core';
 
-import Table from "../custom/Table";
-import Button from '../custom/AddButton'
+import Table from "../../components/custom/Table";
+import Button from '../../components/custom/AddButton'
 
 import { connect } from "react-redux";
-import { getGroupTable } from "../../redux/actions/groups/index";
+import { getTrainerTable, downloadTrainers } from "../../redux/actions/trainers";
 import Utils from "../../utils/TableUtils";
 
 import { Order } from '../../types/order'
 
-import { isManager, isAdmin } from "../../services/LoginService";
-
-class GroupTable extends React.Component<any, any> {
+class TrainerTable extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
-        this.state = { 
-    		columns : Utils.getGroupColumns()
-        };
+        this.state = {
+        	columns : Utils.getTrainerColumns()
+        }
     }
 
 	componentDidMount() {
-		this.props.getGroupTable();
+		this.props.getTrainerTable();
 	}
 
-    render() {
+	render() {
 		return (
 			<React.Suspense fallback={<div>Cargando...</div>}>
 				<Grid container direction="column" spacing={3}>
-					{ (isAdmin() || isManager()) &&	
-						<Grid item xs>
-							<Button text="Nuevo Grupo" href={'/groups'}/>
-						</Grid>
-					}
+					<Grid item xs>
+						<Button text='Nuevo Entrenador' href={'/trainers'}/>
+					</Grid>
 					<Grid item xs>
 						<Table 
 							data={this.props.table_data}
 							page={this.props.page}
 							size={this.props.size}
 							total={this.props.total}
-							orderBy="name"
-							columns={this.state.columns}
+							columns={this.state.columns} 
 							onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
-								this.props.getGroupTable(page, size, filters, sort, sortDirection);
+								this.props.getTrainerTable(page, size, filters, sort, sortDirection);
 							}}
 							onRowClick={(id: number) => {
-								window.open("/groups/" + id, "_self");
+								window.open("/trainers/" + id, "_self");
 							}}
 						/>
 					</Grid>
@@ -65,13 +60,11 @@ function mapStateToProps(state: any) {
 	};
 }
 
-// Object of action creators
 const mapDispatchToProps = {
-	getGroupTable
+	getTrainerTable, downloadTrainers
 }
 
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(GroupTable);
-
+)(TrainerTable);

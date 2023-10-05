@@ -2,10 +2,10 @@ import * as React from "react"
 
 import { Grid } from '@material-ui/core';
 
-import SaveButton from '../custom/SaveButton'
-import DeleteButton from '../custom/DeleteButton'
-import Table from "../custom/Table";
-import TextField from "../custom/TextField"
+import SaveButton from '../../components/custom/SaveButton'
+import DeleteButton from '../../components/custom/DeleteButton'
+import Table from "../../components/custom/Table";
+import TextField from "../../components/custom/TextField"
 import Utils from "../../utils/TableUtils";
 
 import { Formik } from 'formik';

@@ -5,11 +5,11 @@ import { Formik } from 'formik';
 import { AppBar, Box, Grid, Snackbar, Toolbar } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
-import DeleteButton from "../custom/DeleteButton";
-import Card from '../custom/Card';
-import ConfirmDialog from "../custom/ConfirmDialog";
-import SaveButton from '../custom/SaveButton'
-import TextField from '../custom/TextField';
+import DeleteButton from "../../components/custom/DeleteButton";
+import Card from '../../components/custom/Card';
+import ConfirmDialog from "../../components/custom/ConfirmDialog";
+import SaveButton from '../../components/custom/SaveButton'
+import TextField from '../../components/custom/TextField';
 
 
 import { connect } from "react-redux";

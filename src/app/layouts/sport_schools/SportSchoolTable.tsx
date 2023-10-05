@@ -2,51 +2,57 @@ import * as React from "react"
 
 import { Grid } from '@material-ui/core';
 
-import Table from "../custom/Table";
-import Button from '../custom/AddButton'
+import Table from "../../components/custom/Table";
+import Button from '../../components/custom/AddButton'
 
 import { connect } from "react-redux";
-import { getUserTable } from "../../redux/actions/users";
+import { getSportSchoolTable, downloadSportSchools } from "../../redux/actions/sportSchools/index";
 import Utils from "../../utils/TableUtils";
 
 import { Order } from '../../types/order'
 
-import { isAdmin, isManager } from "../../services/LoginService";
+import { isManager, isAdmin } from "../../services/LoginService";
 
-class UserTable extends React.Component<any, any> {
-    constructor(props: any) {
-        super(props);
-        this.state = {
-        	columns : Utils.getUserColumns()
-        }
-    }
+class SportSchoolTable extends React.Component<any, any> {
+	constructor(props: any) {
+		super(props);
+		this.state = {
+			columns: Utils.getSportSchoolColumns()
+		};
+		this.downloadData = this.downloadData.bind(this)
+	}
 
 	componentDidMount() {
-		this.props.getUserTable();
+		this.props.getSportSchoolTable();
+	}
+
+	downloadData() {
+		this.props.downloadSportSchools(this.state.columns)
 	}
 
 	render() {
 		return (
 			<React.Suspense fallback={<div>Cargando...</div>}>
 				<Grid container direction="column" spacing={3}>
-					{ isAdmin() || isManager() ?
+					{ (isAdmin() || isManager()) &&
 						<Grid item xs>
-							<Button text="Nuevo Usuario" href={'/admin/users'}/>
+							<Button text="Nueva Escuela Deportiva" href={'/sport_schools'} />
 						</Grid>
-					: null }
+					}
 					<Grid item xs>
-						<Table 
+						<Table
 							data={this.props.table_data}
 							page={this.props.page}
 							size={this.props.size}
 							total={this.props.total}
-							columns={this.state.columns} 
+							columns={this.state.columns}
+							downloadData={this.downloadData}
 							showColumns={true}
 							onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
-								this.props.getUserTable(page, size, filters, sort, sortDirection);
+								this.props.getSportSchoolTable(page, size, filters, sort, sortDirection);
 							}}
 							onRowClick={(id: number) => {
-								window.open("/admin/users/" + id, "_self");
+								window.open("/sport_schools/" + id, "_self");
 							}}
 						/>
 					</Grid>
@@ -65,11 +71,14 @@ function mapStateToProps(state: any) {
 	};
 }
 
+// Object of action creators
 const mapDispatchToProps = {
-	getUserTable
+	getSportSchoolTable, downloadSportSchools
 }
 
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(UserTable);
+)(SportSchoolTable);
+
+

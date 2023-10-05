@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import { Grid, AppBar, Toolbar, Snackbar } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
-import SaveButton from '../custom/SaveButton'
-import SelectButton from '../custom/SelectButton'
-import CustomCard from '../custom/Card'
-import GroupSelect from '../custom/GroupSelect'
-import AthletesList from '../custom/Athletes/GroupSwapAthletesList'
-import SportSchoolSelect from "../custom/SportSchoolSelect";
-import Spinner from '../custom/Spinner'
+import SaveButton from '../../components/custom/SaveButton'
+import SelectButton from '../../components/custom/SelectButton'
+import CustomCard from '../../components/custom/Card'
+import GroupSelect from '../../components/custom/GroupSelect'
+import AthletesList from '../../components/custom/Athletes/GroupSwapAthletesList'
+import SportSchoolSelect from "../../components/custom/SportSchoolSelect";
+import Spinner from '../../components/custom/Spinner'
 
 import { connect } from "react-redux";
 import { getGroupAAthletes, getGroupBAthletes, swapGroups } from "../../redux/actions/groups";

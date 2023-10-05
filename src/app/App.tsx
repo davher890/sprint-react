@@ -2,39 +2,39 @@ import {
   BrowserRouter as Router, Routes, Route
 } from "react-router-dom";
 
-import UserData from './components/users/UserData';
-import UserTable from './components/users/UserTable';
+import UserData from './layouts/users/UserData';
+import UserTable from './layouts/users/UserTable';
 
-import TrainerData from './components/trainers/TrainerData';
-import TrainerTable from './components/trainers/TrainerTable';
+import TrainerData from './layouts/trainers/TrainerData';
+import TrainerTable from './layouts/trainers/TrainerTable';
 
-import ScheduleData from './components/schedules/ScheduleData';
-import ScheduleTable from './components/schedules/ScheduleTable';
+import ScheduleData from './layouts/schedules/ScheduleData';
+import ScheduleTable from './layouts/schedules/ScheduleTable';
 
 import IncidenceData from './components/incidences/IncidenceData';
 import IncidenceTable from './components/incidences/IncidenceTable';
 
-import ReceiptData from './components/receipts/ReceiptData';
-import ReceiptTable from './components/receipts/ReceiptTable';
-import ReceiptAthleteData from './components/receipts/ReceiptAthleteData';
+import ReceiptData from './layouts/receipts/ReceiptData';
+import ReceiptTable from './layouts/receipts/ReceiptTable';
+import ReceiptAthleteData from './layouts/receipts/ReceiptAthleteData';
 
-import SportSchoolAthletesByDate from './components/sport_schools/SportSchoolAthletesByDate';
-import SportSchoolData from './components/sport_schools/SportSchoolData';
-import SportSchoolTable from './components/sport_schools/SportSchoolTable';
+import SportSchoolAthletesByDate from './layouts/sport_schools/SportSchoolAthletesByDate';
+import SportSchoolData from './layouts/sport_schools/SportSchoolData';
+import SportSchoolTable from './layouts/sport_schools/SportSchoolTable';
 
-import AthleteData from './components/athletes/AthleteData';
-import AthleteSportdata from './components/athletes/AthleteSportdata';
-import AthleteTable from './components/athletes/AthleteTable';
-import HistoricTable from './components/athletes/HistoricTable';
+import AthleteData from './layouts/athletes/AthleteData';
+import AthleteSportdata from './layouts/athletes/AthleteSportdata';
+import AthleteTable from './layouts/athletes/AthleteTable';
+import HistoricTable from './layouts/athletes/HistoricTable';
 
-import GroupData from './components/groups/GroupData';
-import GroupTable from './components/groups/GroupTable';
-import GroupSwap from './components/groups/GroupSwap';
+import GroupData from './layouts/groups/GroupData';
+import GroupTable from './layouts/groups/GroupTable';
+import GroupSwap from './layouts/groups/GroupSwap';
 
-import FamilyTable from './components/families/FamilyTable';
-import FamilyData from './components/families/FamilyData';
+import FamilyTable from './layouts/families/FamilyTable';
+import FamilyData from './layouts/families/FamilyData';
 
-import Login from './components/login';
+import Login from './layouts/login';
 import Payment from './components/payments';
 
 import CustomAppBar from './components/custom/AppBar'

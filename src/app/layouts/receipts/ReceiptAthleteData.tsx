@@ -6,12 +6,12 @@ import { useParams } from 'react-router-dom';
 import { Grid, AppBar, Toolbar, Snackbar } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
-import Card from '../custom/Card';
-import SaveButton from '../custom/SaveButton'
-import TextField from '../custom/TextField';
+import Card from '../../components/custom/Card';
+import SaveButton from '../../components/custom/SaveButton'
+import TextField from '../../components/custom/TextField';
 
 import { getReceiptAthlete, addReceiptAthlete } from "../../redux/actions/receipts";
-import SearchButton from "../custom/SearchButton";
+import SearchButton from "../../components/custom/SearchButton";
 
 const ReceiptAthleteData: React.FC<any> = (props) => {
 

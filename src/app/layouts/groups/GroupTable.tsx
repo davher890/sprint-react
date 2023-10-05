@@ -2,57 +2,51 @@ import * as React from "react"
 
 import { Grid } from '@material-ui/core';
 
-import Table from "../custom/Table";
-import Button from '../custom/AddButton'
+import Table from "../../components/custom/Table";
+import Button from '../../components/custom/AddButton'
 
 import { connect } from "react-redux";
-import { getSportSchoolTable, downloadSportSchools } from "../../redux/actions/sportSchools/index";
+import { getGroupTable } from "../../redux/actions/groups/index";
 import Utils from "../../utils/TableUtils";
 
 import { Order } from '../../types/order'
 
 import { isManager, isAdmin } from "../../services/LoginService";
 
-class SportSchoolTable extends React.Component<any, any> {
-	constructor(props: any) {
-		super(props);
-		this.state = {
-			columns: Utils.getSportSchoolColumns()
-		};
-		this.downloadData = this.downloadData.bind(this)
-	}
+class GroupTable extends React.Component<any, any> {
+    constructor(props: any) {
+        super(props);
+        this.state = { 
+    		columns : Utils.getGroupColumns()
+        };
+    }
 
 	componentDidMount() {
-		this.props.getSportSchoolTable();
+		this.props.getGroupTable();
 	}
 
-	downloadData() {
-		this.props.downloadSportSchools(this.state.columns)
-	}
-
-	render() {
+    render() {
 		return (
 			<React.Suspense fallback={<div>Cargando...</div>}>
 				<Grid container direction="column" spacing={3}>
-					{ (isAdmin() || isManager()) &&
+					{ (isAdmin() || isManager()) &&	
 						<Grid item xs>
-							<Button text="Nueva Escuela Deportiva" href={'/sport_schools'} />
+							<Button text="Nuevo Grupo" href={'/groups'}/>
 						</Grid>
 					}
 					<Grid item xs>
-						<Table
+						<Table 
 							data={this.props.table_data}
 							page={this.props.page}
 							size={this.props.size}
 							total={this.props.total}
+							orderBy="name"
 							columns={this.state.columns}
-							downloadData={this.downloadData}
-							showColumns={true}
 							onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
-								this.props.getSportSchoolTable(page, size, filters, sort, sortDirection);
+								this.props.getGroupTable(page, size, filters, sort, sortDirection);
 							}}
 							onRowClick={(id: number) => {
-								window.open("/sport_schools/" + id, "_self");
+								window.open("/groups/" + id, "_self");
 							}}
 						/>
 					</Grid>
@@ -73,12 +67,11 @@ function mapStateToProps(state: any) {
 
 // Object of action creators
 const mapDispatchToProps = {
-	getSportSchoolTable, downloadSportSchools
+	getGroupTable
 }
 
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(SportSchoolTable);
-
+)(GroupTable);
 

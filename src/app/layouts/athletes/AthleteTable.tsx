@@ -2,9 +2,9 @@ import * as React from "react"
 
 import { Grid, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
 
-import Table from "../custom/Table";
-import Button from '../custom/AddButton'
-import DeleteButton from '../custom/DeleteButton'
+import Table from "../../components/custom/Table";
+import Button from '../../components/custom/AddButton'
+import DeleteButton from '../../components/custom/DeleteButton'
 
 import Utils from "../../utils/TableUtils";
 
@@ -14,10 +14,10 @@ import { saveReceiptAthletes } from "../../redux/actions/receipts";
 import { swapGroup } from "../../redux/actions/groups";
 
 import { Order } from '../../types/order'
-import GroupSelect from "../custom/GroupSelect";
-import ReceiptSelect from "../custom/ReceiptSelect";
-import ConfirmDialog from "../custom/ConfirmDialog";
-import SportSchoolSelect from "../custom/SportSchoolSelect";
+import GroupSelect from "../../components/custom/GroupSelect";
+import ReceiptSelect from "../../components/custom/ReceiptSelect";
+import ConfirmDialog from "../../components/custom/ConfirmDialog";
+import SportSchoolSelect from "../../components/custom/SportSchoolSelect";
 
 import { isManager, isAdmin } from "../../services/LoginService";
 import { useState } from "react";

@@ -4,9 +4,9 @@ import { connect } from "react-redux";
 import { Grid, Snackbar } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
-import TextField from "../custom/TextField"
-import SearchButton from "../custom/SearchButton"
-import Card from "../custom/Card"
+import TextField from "../../components/custom/TextField"
+import SearchButton from "../../components/custom/SearchButton"
+import Card from "../../components/custom/Card"
 
 import { signUp } from "../../redux/actions/login"
 

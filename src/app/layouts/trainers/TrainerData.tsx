@@ -4,18 +4,18 @@ import { Alert, AlertTitle } from '@material-ui/lab';
 
 import { Formik } from 'formik';
 
-import TextField from "../custom/TextField";
-import Card from "../custom/Card";
-import SaveButton from "../custom/SaveButton";
-import DeleteButton from '../custom/DeleteButton'
-import ConfirmDialog from "../custom/ConfirmDialog";
+import TextField from "../../components/custom/TextField";
+import Card from "../../components/custom/Card";
+import SaveButton from "../../components/custom/SaveButton";
+import DeleteButton from '../../components/custom/DeleteButton'
+import ConfirmDialog from "../../components/custom/ConfirmDialog";
 
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
 
 import { addTrainer, getTrainer , removeTrainer} from "../../redux/actions/trainers";
 
-import SportSchoolSelect from "../custom/SportSchoolSelect";
+import SportSchoolSelect from "../../components/custom/SportSchoolSelect";
 
 class ConnectedForm extends React.Component<any, any> {
     constructor(props: any) {

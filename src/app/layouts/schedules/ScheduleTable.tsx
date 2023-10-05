@@ -2,8 +2,8 @@ import * as React from "react"
 
 import { Grid } from '@material-ui/core';
 
-import Table from "../custom/Table";
-import Button from '../custom/AddButton'
+import Table from "../../components/custom/Table";
+import Button from '../../components/custom/AddButton'
 
 import { connect } from "react-redux";
 import { getScheduleTable } from "../../redux/actions/schedules";

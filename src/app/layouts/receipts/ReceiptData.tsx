@@ -5,22 +5,22 @@ import moment from 'moment'
 import { Grid, AppBar, Checkbox, Chip, Snackbar, Toolbar } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
-import Table from '../custom/Table';
-import TextField from '../custom/TextField';
-import Card from '../custom/Card';
-import ConfirmDialog from "../custom/ConfirmDialog";
+import Table from '../../components/custom/Table';
+import TextField from '../../components/custom/TextField';
+import Card from '../../components/custom/Card';
+import ConfirmDialog from "../../components/custom/ConfirmDialog";
 
-import Select from '../custom/Select'
+import Select from '../../components/custom/Select'
 
-import SelectButton from '../custom/SelectButton'
-import RefreshButton from '../custom/RefreshButton'
-import SearchButton from '../custom/SearchButton'
-import DeleteButton from '../custom/DeleteButton'
-import DownloadButton from '../custom/DownloadButton'
+import SelectButton from '../../components/custom/SelectButton'
+import RefreshButton from '../../components/custom/RefreshButton'
+import SearchButton from '../../components/custom/SearchButton'
+import DeleteButton from '../../components/custom/DeleteButton'
+import DownloadButton from '../../components/custom/DownloadButton'
 
-import DateField from "../custom/DateField";
-import SportSchoolSelect from "../custom/SportSchoolSelect";
-import Spinner from '../custom/Spinner'
+import DateField from "../../components/custom/DateField";
+import SportSchoolSelect from "../../components/custom/SportSchoolSelect";
+import Spinner from '../../components/custom/Spinner'
 
 import Functions from "../../utils/Functions";
 

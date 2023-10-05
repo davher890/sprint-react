@@ -6,9 +6,9 @@ import { Grid, Snackbar, AppBar, Toolbar, Box, Button, Checkbox } from "@materia
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
 
-import TextField from "../custom/TextField";
-import Card from "../custom/Card";
-import SaveButton from "../custom/SaveButton";
+import TextField from "../../components/custom/TextField";
+import Card from "../../components/custom/Card";
+import SaveButton from "../../components/custom/SaveButton";
 
 import { addUser, getUser, changeUserPassword } from "../../redux/actions/users";
 import { getAllSportSchools, getSportSchoolsGroups } from "../../redux/actions/sportSchools";
@@ -17,8 +17,8 @@ import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
 
 import { getUserId, isAdmin, isManager } from "../../services/LoginService";
-import SportSchoolMultiSelect from "../custom/SportSchoolMultiSelect";
-import GroupMultiSelect from "../custom/GroupMultiSelect";
+import SportSchoolMultiSelect from "../../components/custom/SportSchoolMultiSelect";
+import GroupMultiSelect from "../../components/custom/GroupMultiSelect";
 
 class ConnectedForm extends React.Component<any, any> {
     constructor(props: any) {

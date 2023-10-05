@@ -3,7 +3,7 @@ import * as React from "react"
 import { Container, Grid } from '@material-ui/core';
 
 import AthleteTable from "../athletes/AthleteTable";
-import TextField from "../custom/TextField";
+import TextField from "../../components/custom/TextField";
 
 class FamilyData extends React.Component<any, any> {
     constructor(props: any) {
