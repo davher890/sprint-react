@@ -28,7 +28,7 @@ import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
 
 import { addReceipt, getReceipt, getReceiptIdAthleteTable, removeReceipt, downloadReceiptAthletes, removeReceiptAthletes, validateReceipt } from "../../redux/actions/receipts";
-import { getSportSchoolCollections } from "../../redux/actions/sportSchools";
+import { getSportSchoolCollections, getSportSchoolFee } from "../../redux/actions/sportSchools";
 
 import { Order } from '../../types/order'
 
@@ -80,6 +80,9 @@ const NewReceiptForm: React.FC<any> = (props) => {
             })
             getReceiptIdAthletes()
         }
+        if (props.receipt.sportSchoolId > 0){
+            props.getSportSchoolFee(props.receipt.sportSchoolId);
+        }
     }, [props.receipt])
 
     React.useEffect(() => {
@@ -93,7 +96,6 @@ const NewReceiptForm: React.FC<any> = (props) => {
             setNumMonths(Functions.monthDiff(new Date(Date.parse(receipt.startDate)), new Date(Date.parse(receipt.endDate))))
         }
     },[receipt.startDate, receipt.endDate])
-
 
     return (
         <>
@@ -158,6 +160,7 @@ const NewReceiptForm: React.FC<any> = (props) => {
                                         onChange={(id: number) => {
                                             setReceipt({ ...receipt, sportSchoolId: id });
                                             props.getSportSchoolCollections(id)
+                                            props.getSportSchoolFee(id);
                                         }}
                                     />
                                 </Grid>
@@ -277,7 +280,7 @@ const NewReceiptForm: React.FC<any> = (props) => {
                         </Grid>
                     </Card>
                 </Grid>
-                { props.receipt.id && <>
+                { props.receipt.id && props.sportSchoolFee.sportSchoolAnnualFee !== undefined && <>
                     <Grid item xs>
                         <Card title="Atletas">
                             <>
@@ -288,14 +291,21 @@ const NewReceiptForm: React.FC<any> = (props) => {
                                     }}>Refrescar datos</RefreshButton>
                                     { selectedIds && selectedIds.length > 0 && <DeleteButton onClick={() => setOpenDeleteAthletesDialog(true)}>Eliminar de la remesa</DeleteButton> }
                                     { <DownloadButton onClick={(downloadData)}>Descargar Excel</DownloadButton> }
-                                    { isAdmin() && <Grid item xs spacing={2}><Chip label={"Socio: " + props.receipt.membershipFee} color="primary" /><Chip label={"Matricula: " + props.receipt.enrollmentFee} color="primary" /><Chip label={"Trimestral: " + props.receipt.monthlyFee} color="primary" /><Chip label={"Licencias: " + props.receipt.licenseFee} color="primary" /><Chip label={"Total: " + (props.receipt.monthlyFee + props.receipt.enrollmentFee+ props.receipt.membershipFee + props.receipt.licenseFee)} color="secondary" /></Grid> }
+                                    { isAdmin() && <Grid item xs spacing={2}>
+                                        <Chip label={"Socio: " + props.receipt.membershipFee} color="primary" />
+                                        <Chip label={"Matricula: " + props.receipt.enrollmentFee} color="primary" />
+                                        <Chip label={"Anual: " + props.receipt.sportSchoolAnnualFee} color="primary" />
+                                        <Chip label={"Trimestral: " + props.receipt.monthlyFee} color="primary" />
+                                        <Chip label={"Licencias: " + props.receipt.licenseFee} color="primary" />
+                                        <Chip label={"Total: " + (props.receipt.monthlyFee + props.receipt.enrollmentFee+ props.receipt.membershipFee + props.receipt.licenseFee + props.receipt.sportSchoolAnnualFee)} color="secondary" />
+                                    </Grid> }
                                 </Grid>
                                 <Table 
                                     data={props.table_data}
                                     page={props.page}
                                     size={props.size}
                                     total={props.total}
-                                    columns={ Utils.getReceiptAthleteColumns(props.receipt.receiptType) }
+                                    columns={ Utils.getReceiptAthleteColumns(props.receipt.receiptType, props.sportSchoolFee) }
                                     onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
                                         if (props.receipt.id){
                                             props.getReceiptIdAthleteTable(props.receipt.id, page, size, filters, sort, sortDirection);
@@ -350,13 +360,15 @@ const mapDispatchToProps = {
     getReceiptIdAthleteTable,
     removeReceipt,
     removeReceiptAthletes,
-    getSportSchoolCollections
+    getSportSchoolCollections,
+    getSportSchoolFee
 }
 
 const mapStateToProps = (state: any) => {
     return { 
         receipt: state.receipt_reducer.receipt,
         collections: state.sport_school_reducer.collections,
+        sportSchoolFee: state.sport_school_reducer.sport_school_fee,
         table_data: state.table_reducer.table_data,
 		page: state.table_reducer.page,
 		size: state.table_reducer.size,

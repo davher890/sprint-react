@@ -107,6 +107,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                     sportSchoolId: athlete.sportSchoolId || '',
                     imageAuth: athlete.imageAuth,
                     enrollmentFeePaid: athlete.enrollmentFeePaid,
+                    sportSchoolAnnualFeePaid: athlete.sportSchoolAnnualFeePaid,
                     membershipFeePaid: athlete.membershipFeePaid,
                     observations: athlete.observations || [],
                     name: athlete.name || '',
@@ -478,6 +479,14 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                 }}
                                             />
                                             Cuota de socio pagada
+                                        </Grid>
+                                        <Grid item xs>
+                                            <Checkbox name="sportSchoolAnnualFeePaid" checked={values.sportSchoolAnnualFeePaid === true} 
+                                                onChange={e => {
+                                                    setFieldValue('sportSchoolAnnualFeePaid', e.target.checked)
+                                                }}
+                                            />
+                                            Cuota anual de escuela
                                         </Grid>
                                     </Grid>
                                 </Grid>

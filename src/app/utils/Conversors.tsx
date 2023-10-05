@@ -68,6 +68,7 @@ function receiptAthleteDataConversor(d: any) {
         monthlyFee: d.monthlyFee,
         enrollmentFee: d.enrollmentFee,
         membershipFee: d.membershipFee,
+        sportSchoolAnnualFee: d.sportSchoolAnnualFee,
         licenseTerritorialFee: d.licenseTerritorialFee,
         licenseNationalFee: d.licenseNationalFee,
         status: functions.getReceiptStatus().find(st => st.id === d.status)?.name,
