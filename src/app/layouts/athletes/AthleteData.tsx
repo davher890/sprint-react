@@ -17,6 +17,9 @@ import FeeTypeSelect from '../../components/custom/FeeTypeSelect'
 import SportSchoolSelect from '../../components/custom/SportSchoolSelect'
 import SaveButton from '../../components/custom/SaveButton'
 import ReturnButton from '../../components/custom/ReturnButton'
+import DeleteButton from "../../components/custom/DeleteButton";
+import ConfirmDialog from "../../components/custom/ConfirmDialog";
+
 import Select from '../../components/custom/Select'
 import TextField from '../../components/custom/TextField'
 // import FeeInfo from '../custom/FeeInfo'
@@ -27,13 +30,15 @@ import AthletesList from '../../components/custom/Athletes/AthletesList'
 import AthleteFamilyData from '../../components/athletes/AthleteFamilyData'
 import AthletesObservations from '../../components/athletes/AthleteObservations'
 import AthleteReceipts from '../../components/athletes/AthleteReceipts'
+
 import AthleteSportdata from './AthleteSportdata'
 
 // Redux
 import { connect } from "react-redux";
 import { addAthlete, getAthlete, getAthletesByPhone, getAthleteByCode, getAthletesBySurnames, doRegisterAthlete, doUnregisterAthlete, removeAthlete } from "../../redux/actions/athletes";
-import DeleteButton from "../../components/custom/DeleteButton";
-import ConfirmDialog from "../../components/custom/ConfirmDialog";
+import { getSportSchoolFee } from "../../redux/actions/sportSchools";
+
+
 
 import { isManager, isAdmin } from "../../services/LoginService";
 
@@ -57,6 +62,7 @@ const CreateAthlete: React.FC<any> = (props) => {
     React.useEffect(() => {
         if (props.athlete){
             setAthlete(props.athlete)
+            props.getSportSchoolFee(props.athlete.sportSchoolId);
         }
     }, [props.athlete])
 
@@ -418,6 +424,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                             if (sportSchoolId !== values.sportSchoolId){
                                                                 setFieldValue('groupId', 0);
                                                                 setFieldValue('schedueIds', []);
+                                                                props.getSportSchoolFee(sportSchoolId);
                                                             }
                                                         }}
                                                     />
@@ -480,7 +487,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                             />
                                             Cuota de socio pagada
                                         </Grid>
-                                        <Grid item xs>
+                                        { props.sportSchoolFee && props.sportSchoolFee.sportSchoolAnnualFee > 0 && <Grid item xs>
                                             <Checkbox name="sportSchoolAnnualFeePaid" checked={values.sportSchoolAnnualFeePaid === true} 
                                                 onChange={e => {
                                                     setFieldValue('sportSchoolAnnualFeePaid', e.target.checked)
@@ -488,6 +495,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                             />
                                             Cuota anual de escuela
                                         </Grid>
+                                        }
                                     </Grid>
                                 </Grid>
                                 <Grid container item spacing={2}>
@@ -911,7 +919,8 @@ const mapDispatchToProps = {
     getAthletesBySurnames,
     doRegisterAthlete, 
     doUnregisterAthlete,
-    removeAthlete
+    removeAthlete,
+    getSportSchoolFee
 }
 
 const mapStateToProps = (state: any) => {
@@ -919,7 +928,8 @@ const mapStateToProps = (state: any) => {
         athlete: state.athlete_reducer.athlete,
         athletes_by_phone: state.athlete_reducer.athletes_by_phone,
         athletes_by_surnames: state.athlete_reducer.athletes_by_surnames,
-        loading: state.api_reducer.loading,
+        sportSchoolFee: state.sport_school_reducer.sport_school_fee,
+        loading: state.api_reducer.loading
     };
 };
 

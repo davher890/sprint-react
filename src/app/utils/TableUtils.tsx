@@ -94,7 +94,6 @@ const Utils = {
             { dataField: 'enrollmentFee', text : 'Matricula', sort: true }, 
             { dataField: 'membershipFee', text : 'Cuota de socio', sort: true }
         ]
-        console.log(sportSchoolFee.sportSchoolAnnualFee)
         if (sportSchoolFee.sportSchoolAnnualFee && sportSchoolFee.sportSchoolAnnualFee > 0){
             trimestralColumns.push({ dataField: 'sportSchoolAnnualFee', text : 'Cuota anual/escuela', sort: true })
         }
