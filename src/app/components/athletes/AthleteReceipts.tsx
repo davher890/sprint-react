@@ -1,17 +1,24 @@
 import * as React from "react"
 import moment from 'moment'
-import { Grid, Box } from '@material-ui/core'
+import { Dialog, DialogActions, DialogContent, DialogTitle, Grid, Box, Button, Tooltip } from '@material-ui/core';
 
 import { connect } from "react-redux";
 import { getAthleteReceipts, setAthleteReceiptStatus } from "../../redux/actions/athletes";
 import { getSportSchoolCollections } from "../../redux/actions/sportSchools";
 
 import SaveButton from "../custom/SaveButton";
+import TextField from '../custom/TextField'
+
 import Functions from "../../utils/Functions";
 
+import InfoIcon from '@material-ui/icons/Info';
 
 const AthleteReceipts: React.FC<any> = (props) => {
     
+    const [ openObservationsDialog, setOpenObservationsDialog ] = React.useState<boolean>(false)
+    const [ status, setStatus ] = React.useState<String>()
+    const [ observations, setObservations ] = React.useState<String>()
+
     React.useEffect(() => {
         if (props.id){
             props.getSportSchoolCollections(props.id)
@@ -26,7 +33,7 @@ const AthleteReceipts: React.FC<any> = (props) => {
 
     return (
         <>
-            <Grid container direction="column" spacing={3}>
+            <Grid container direction="column" spacing={1}>
                 <Grid container direction="row" xs>
                     <Grid item xs>
                         <Box sx={{ fontWeight: 'bold'}}><h3>Nombre</h3></Box>
@@ -55,6 +62,7 @@ const AthleteReceipts: React.FC<any> = (props) => {
                     <Grid item xs>
                         <Box sx={{ fontWeight: 'bold' }}><h3>Estado</h3></Box>
                     </Grid>
+                    <Grid item xs={1}></Grid>
                     <Grid item xs></Grid>
                     
                 </Grid>
@@ -88,20 +96,51 @@ const AthleteReceipts: React.FC<any> = (props) => {
                         <Grid item xs>
                             { Functions?.getReceiptStatus().find(c => c.id === receipt.status)?.name }
                         </Grid>
+                        <Grid item xs={1}>
+                            <Tooltip title={<h2>{receipt.observations?.replace(/↵/g, "\n")}</h2>}>
+                                <InfoIcon/>
+                            </Tooltip>
+                        </Grid>
                         <Grid item xs>
                         { (receipt.status === 'return') && 
                                 <SaveButton onClick={async () => {
-                                    await props.setAthleteReceiptStatus(props.id, receipt.receiptId, 'paid')
-                                    props.getAthleteReceipts(props.id)
+                                    setObservations(receipt.observations)
+                                    setOpenObservationsDialog(true)
+                                    setStatus('paid')
                                 }}>Pagar</SaveButton>
                         }
                         { (receipt.status === 'paid') && 
                                 <SaveButton onClick={async () => {
-                                    await props.setAthleteReceiptStatus(props.id, receipt.receiptId, 'return')
-                                    props.getAthleteReceipts(props.id)
+                                    setObservations(receipt.observations)
+                                    setOpenObservationsDialog(true)
+                                    setStatus('return')
                                 }}>Devuelto</SaveButton>
                         }
                         </Grid>
+                        <Dialog fullWidth={true} open={openObservationsDialog} aria-labelledby="form-dialog-title"
+                            onClose={() => {
+                                setOpenObservationsDialog(false)
+                            }}
+                        >
+                            <DialogTitle id="form-dialog-title">Observaciones para el recibo {status == 'return' ? 'devuelto' : 'pagado'}</DialogTitle>
+                            <DialogContent>
+                                <Grid container>
+                                    <TextField fullWidth name="observations" label="Observaciones"
+                                        multiline value={observations?.replace(/↵/g, "\n")}
+                                        onChange={(e:any) => {
+                                            setObservations(e.target.value)
+                                        }}
+                                    />
+                                </Grid>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={async () => { 
+                                    await props.setAthleteReceiptStatus(props.id, receipt.receiptId, status, observations)
+                                    props.getAthleteReceipts(props.id)
+                                    setOpenObservationsDialog(false) 
+                                }}>Guardar</Button>
+                            </DialogActions>
+                        </Dialog>
                         
                         
                     </Grid>
