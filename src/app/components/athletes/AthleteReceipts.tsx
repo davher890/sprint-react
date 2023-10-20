@@ -60,6 +60,12 @@ const AthleteReceipts: React.FC<any> = (props) => {
                         <Box sx={{ fontWeight: 'bold' }}><h3>Licencia nacional</h3></Box>
                     </Grid>
                     <Grid item xs>
+                        <Box sx={{ fontWeight: 'bold' }}><h3>Cuota anual de escuela</h3></Box>
+                    </Grid>
+                    <Grid item xs>
+                        <Box sx={{ fontWeight: 'bold' }}><h3>Total</h3></Box>
+                    </Grid>
+                    <Grid item xs>
                         <Box sx={{ fontWeight: 'bold' }}><h3>Estado</h3></Box>
                     </Grid>
                     <Grid item xs={1}></Grid>
@@ -92,6 +98,12 @@ const AthleteReceipts: React.FC<any> = (props) => {
                         </Grid>
                         <Grid item xs>
                             { receipt.licenseNationalFee }
+                        </Grid>
+                        <Grid item xs>
+                            { receipt.sportSchoolAnnualFee }
+                        </Grid>
+                        <Grid item xs>
+                            { receipt.totalFee }
                         </Grid>
                         <Grid item xs>
                             { Functions?.getReceiptStatus().find(c => c.id === receipt.status)?.name }

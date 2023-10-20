@@ -10,6 +10,7 @@ const CustomAppBar: React.FC<any> = (props) => {
     const [groupsAnchorEl, setGroupsAnchorEl] = React.useState<any | null>();
     const [listingsAnchorEl, setListingsAnchorEl] = React.useState<any | null>();
     const [athletesAnchorEl, setAthletesAnchorEl] = React.useState<any | null>();
+    const [receiptsAnchorEl, setReceiptsAnchorEl] = React.useState<any | null>();
     
     const handleAthletesMenuClick = (event: any) => {
         setAthletesAnchorEl(event.currentTarget);
@@ -33,6 +34,14 @@ const CustomAppBar: React.FC<any> = (props) => {
   
     const handleGroupsMenuClose = () => {
         setGroupsAnchorEl(null);
+    };
+
+    const handleReceiptsMenuClick = (event: any) => {
+        setReceiptsAnchorEl(event.currentTarget);
+    };
+
+    const handleReceiptsMenuClose = () => {
+        setReceiptsAnchorEl(null);
     };
 
     return (
@@ -86,8 +95,19 @@ const CustomAppBar: React.FC<any> = (props) => {
                     <Typography variant="button" component={Link1} to="/admin/athletes_by_date" color="inherit">Atletas por fecha</Typography>
                 }
                 { LoginService.isManager() &&
-                    <Typography variant="button" component={Link1} to="/receipts/list" color="inherit">Remesas de recibos</Typography>
+                    <Typography variant="button" aria-controls="receipts-menu" aria-haspopup="true" onClick={handleReceiptsMenuClick}>
+                        Recibos
+                    </Typography>
                 }
+                <Menu id="receipts-menu"
+                        anchorEl={receiptsAnchorEl}
+                        keepMounted
+                        open={Boolean(receiptsAnchorEl)}
+                        onClose={handleReceiptsMenuClose}>
+                    <MenuItem onClick={handleReceiptsMenuClose} component={Link1} to="/receipts/list">Remesas</MenuItem>
+                    <MenuItem onClick={handleReceiptsMenuClose} component={Link1} to="/receipts/returned/list">Recibos devueltos</MenuItem>
+                </Menu>
+                
                 <Typography variant="button" component={Link1} to="/incidences/list" color="inherit">Incidencias</Typography>
                 <IconButton
                     // size="large"

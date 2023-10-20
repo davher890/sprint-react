@@ -71,6 +71,7 @@ function receiptAthleteDataConversor(d: any) {
         sportSchoolAnnualFee: d.sportSchoolAnnualFee,
         licenseTerritorialFee: d.licenseTerritorialFee,
         licenseNationalFee: d.licenseNationalFee,
+        totalFee: d.totalFee,
         status: functions.getReceiptStatus().find(st => st.id === d.status)?.name,
     }
 }
@@ -204,7 +205,7 @@ const Utils = (action: { type: string, payload: any }) => {
             return athleteDataConversor(d)
         })
     }
-    else if (action.type === ACTION_TYPES.LOAD_RECEIPT_ATHLETE_TABLE){
+    else if (action.type === ACTION_TYPES.LOAD_RECEIPT_ATHLETE_TABLE|| action.type === ACTION_TYPES.LOAD_RETURNED_RECEIPT_TABLE){
         items = action.payload.content.map((d: any) => {
             return receiptAthleteDataConversor(d)
         })

@@ -94,7 +94,7 @@ const Utils = {
             { dataField: 'enrollmentFee', text : 'Matricula', sort: true }, 
             { dataField: 'membershipFee', text : 'Cuota de socio', sort: true }
         ]
-        if (sportSchoolFee.sportSchoolAnnualFee && sportSchoolFee.sportSchoolAnnualFee > 0){
+        if (sportSchoolFee && sportSchoolFee.sportSchoolAnnualFee && sportSchoolFee.sportSchoolAnnualFee > 0){
             trimestralColumns.push({ dataField: 'sportSchoolAnnualFee', text : 'Cuota anual/escuela', sort: true })
         }
 
@@ -103,7 +103,10 @@ const Utils = {
             { dataField: 'licenseTerritorialFee', text : 'Licencia territorial', sort: true }, 
             { dataField: 'licenseNationalFee', text : 'Licencia nacional', sort: true }
         ]
-        return receiptType !== undefined && receiptType === 'LICENSE' ? [ ...commonColumns, ...licenseColumns] : [ ...commonColumns, ...trimestralColumns]
+
+        let finalColumns = receiptType !== undefined && receiptType === 'LICENSE' ? [ ...commonColumns, ...licenseColumns] : [ ...commonColumns, ...trimestralColumns]
+        finalColumns.push({ dataField: 'totalFee', text : 'Importe total', sort: false })
+        return finalColumns;
     },
 
     getGroupAthleteColumns: () => {
