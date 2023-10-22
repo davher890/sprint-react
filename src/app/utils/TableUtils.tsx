@@ -68,6 +68,44 @@ const Utils = {
         ]
     },
 
+    getReturnedReceiptColumns: (receiptType: string, sportSchoolFee: any) => {
+        let commonColumns =  [
+            { dataField: 'athlete_id', text: 'athlete_id', show: false },
+            { dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
+            { dataField: 'firstSurname', text : 'Primer apellido', filter: { type: "text" } }, 
+            { dataField: 'secondSurname', text : 'Segundo apellido', filter: { type: "text" } }, 
+            { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
+                type: "options",
+                options : functions.getSportSchools()
+            }},
+            { dataField: 'groupName', text : 'Grupo', filter: { type: "text" } }, 
+            { dataField: 'days', text : 'Dias', sort: false }, 
+            { dataField: 'numDays', text : 'Num. Dias', sort: false }, 
+            { dataField: 'specialization', text : 'Especializacion', sort: false }, 
+            { dataField: 'status', text : 'Estado' },
+            { dataField: 'paymentType', text : 'Forma de pago' }
+        ]
+        let trimestralColumns = [
+            { dataField: 'feeType', text : 'Tipo de cuota' },
+            { dataField: 'monthlyFee', text : 'Mensualidad', sort: true }, 
+            { dataField: 'enrollmentFee', text : 'Matricula', sort: true }, 
+            { dataField: 'membershipFee', text : 'Cuota de socio', sort: true }
+        ]
+        if (sportSchoolFee && sportSchoolFee.sportSchoolAnnualFee && sportSchoolFee.sportSchoolAnnualFee > 0){
+            trimestralColumns.push({ dataField: 'sportSchoolAnnualFee', text : 'Cuota anual/escuela', sort: true })
+        }
+
+        let licenseColumns = [
+            { dataField: 'licenseType', text : 'Tipo de licencia'},
+            { dataField: 'licenseTerritorialFee', text : 'Licencia territorial', sort: true }, 
+            { dataField: 'licenseNationalFee', text : 'Licencia nacional', sort: true }
+        ]
+
+        let finalColumns = receiptType !== undefined && receiptType === 'LICENSE' ? [ ...commonColumns, ...licenseColumns] : [ ...commonColumns, ...trimestralColumns]
+        finalColumns.push({ dataField: 'totalFee', text : 'Importe total', sort: false })
+        return finalColumns;
+    },
+
     getReceiptAthleteColumns: (receiptType: string, sportSchoolFee: any) => {
         let commonColumns = [
             { dataField: 'athlete_id', text: 'athlete_id', show: false },

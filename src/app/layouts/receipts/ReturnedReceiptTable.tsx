@@ -48,7 +48,7 @@ const ReturnedReceiptTable: React.FC<any> = (props) => {
                         page={props.page}
                         size={props.size}
                         total={props.total}
-                        columns={ Utils.getReceiptAthleteColumns('', {}) }
+                        columns={ Utils.getReturnedReceiptColumns('', {}) }
                         onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
                             props.getReturnedReceiptTable(page, size, filters, sort, sortDirection);
                         }}
