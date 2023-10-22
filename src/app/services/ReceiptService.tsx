@@ -19,6 +19,15 @@ export const findReceiptAthleteById = (id: number) => {
     return getRequest("/receipts/athletes/" + id)
 }
 
+export const findReturnReceiptRegistered = (season: string) => {
+    return getRequest("/receipts/athletes/return/registered?season=" + season)
+}
+
+export const findReturnReceiptUnregistered = (season: string) => {
+    return getRequest("/receipts/athletes/return/unregistered?season=" + season)
+}
+
+
 export const validateData = (id: number) => {
     return getRequest("/receipts/" + id + "/validate")
 }

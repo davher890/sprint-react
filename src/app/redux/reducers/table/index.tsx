@@ -23,7 +23,6 @@ function rootReducer(state = initialState, action: { type: string, payload: any 
         action.type === ACTION_TYPES.LOAD_DUPLICATED_ATHLETES_TABLE ||
         action.type === ACTION_TYPES.LOAD_INCIDENCE_TABLE ||
         action.type === ACTION_TYPES.LOAD_RECEIPT_ATHLETE_TABLE || 
-        action.type === ACTION_TYPES.LOAD_RETURNED_RECEIPT_TABLE || 
         action.type === ACTION_TYPES.LOAD_RECEIPT_TABLE) {
             
         let items = getTableItems(action)

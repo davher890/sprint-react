@@ -1,7 +1,7 @@
 import * as ACTION_TYPES from "../../constants/action_types";
 
-import { addData, addReceiptAthletes, findAll, findById, findReceiptAthleteById, deleteReceiptAthletes, deleteReceipt, downloadExcel, saveReceiptAthlete, validateData } from "../../../services/ReceiptService"
-import { findReceiptDataPagination, findReceiptIdAthleteDataPagination, findReturnedReceiptDataPagination } from "../../../services/TableService"
+import { addData, addReceiptAthletes, findAll, findById, findReceiptAthleteById, deleteReceiptAthletes, deleteReceipt, downloadExcel, saveReceiptAthlete, validateData, findReturnReceiptRegistered, findReturnReceiptUnregistered } from "../../../services/ReceiptService"
+import { findReceiptDataPagination, findReceiptIdAthleteDataPagination } from "../../../services/TableService"
 
 import { Order } from '../../../types/order'
 
@@ -13,11 +13,20 @@ export function getReceiptTable(page: number, size: number, filters: any, sort: 
     }
 }
 
-export function getReturnedReceiptTable(page: number, size: number, filters: any, sort: string, sortDirection: Order) {
+export function getReturnReceiptRegistered(season: string) {
     return function (dispatch: any) {
         dispatch({ type: ACTION_TYPES.API_CALL})
-        return findReturnedReceiptDataPagination(page, size, filters, sort, sortDirection).then(json => {
-            dispatch({ type: ACTION_TYPES.LOAD_RETURNED_RECEIPT_TABLE, payload: json });
+        return findReturnReceiptRegistered(season).then(json => {
+            dispatch({ type: ACTION_TYPES.GET_RETURNED_RECEIPT_REGISTERED, payload: json });
+        });
+    }
+}
+
+export function getReturnReceiptUnregistered(season: string) {
+    return function (dispatch: any) {
+        dispatch({ type: ACTION_TYPES.API_CALL})
+        return findReturnReceiptUnregistered(season).then(json => {
+            dispatch({ type: ACTION_TYPES.GET_RETURNED_RECEIPT_UNREGISTERED, payload: json });
         });
     }
 }

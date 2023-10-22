@@ -106,6 +106,10 @@ const ReceiptAthleteData: React.FC<any> = (props) => {
                                     }}
                                 />
                             </Grid>
+                            <Grid item xs>
+                                <TextField name="totalFee" label="Total" value={receiptAthlete.totalFee} type='number' disabled
+                                />
+                            </Grid>
                         </Grid>
                     </Card>
                 </Grid>
