@@ -1,6 +1,6 @@
 import * as ACTION_TYPES from "../../constants/action_types";
 
-import { addData, addReceiptAthletes, findAll, findById, findReceiptAthleteById, deleteReceiptAthletes, deleteReceipt, downloadExcel, saveReceiptAthlete, validateData, findReturnReceiptRegistered, findReturnReceiptUnregistered } from "../../../services/ReceiptService"
+import { addData, addReceiptAthletes, findAll, findById, findReceiptAthleteById, deleteReceiptAthletes, deleteReceipt, downloadExcel, saveReceiptAthlete, validateData, findReturnReceiptRegistered, findReturnReceiptUnregistered, findReceiptAthleteObservations } from "../../../services/ReceiptService"
 import { findReceiptDataPagination, findReceiptIdAthleteDataPagination } from "../../../services/TableService"
 
 import { Order } from '../../../types/order'
@@ -35,6 +35,14 @@ export function getAllReceipts() {
     return function (dispatch: any)  {
         return findAll().then(json => {
             dispatch({ type: ACTION_TYPES.LOAD_RECEIPTS, payload: json });
+        });
+    }
+}
+
+export function getReceiptAthleteObservations(id: number) {
+    return function (dispatch: any) {
+        return findReceiptAthleteObservations(id).then(json => {
+            dispatch({ type: ACTION_TYPES.GET_RECEIPT_ATHLETE_OBSERVATIONS, payload: json });
         });
     }
 }
