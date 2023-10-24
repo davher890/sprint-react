@@ -18,10 +18,10 @@ const AthleteReceipts: React.FC<any> = (props) => {
     }, [ props.id ])
 
     React.useEffect(() => {
-        if (props.receipt){
-            props.getAthleteReceipts(props.id)
+        if (props.receipts){
+            setReceipts(props.receipts)
         }
-    }, [ props.receipt ])
+    }, [ props.receipts ])
 
     return (
         <React.Fragment>
