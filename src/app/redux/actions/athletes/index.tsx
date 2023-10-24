@@ -189,9 +189,9 @@ export function removeAthlete(id: number) {
 }
 
 
-export function setAthleteReceiptStatus(id: number, receiptId: number, status: string, observations: string) {
+export function setAthleteReceiptStatus(id: number, receiptId: number, status: string) {
     return function (dispatch: any) {
-        return updateAthleteReceiptStatus(id, receiptId, status, observations).then(json => {
+        return updateAthleteReceiptStatus(id, receiptId, status).then(json => {
             dispatch({ type: ACTION_TYPES.SET_ATHLETE_RECEIPT_STATUS, payload: json });
         });
     }
