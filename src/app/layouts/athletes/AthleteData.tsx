@@ -5,7 +5,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import utils from "../../utils/Functions"
 import { Formik } from 'formik';
 
-import { CardHeader, Grid, AppBar, Toolbar, Snackbar, Typography, Box, Checkbox, Button } from '@material-ui/core';
+import { CardHeader, Grid, AppBar, Toolbar, Snackbar, Typography, Box, Checkbox, Button, Modal } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
@@ -35,10 +35,8 @@ import AthleteSportdata from './AthleteSportdata'
 
 // Redux
 import { connect } from "react-redux";
-import { addAthlete, getAthlete, getAthletesByPhone, getAthleteByCode, getAthletesBySurnames, doRegisterAthlete, doUnregisterAthlete, removeAthlete } from "../../redux/actions/athletes";
+import { addAthlete, getAthlete, getAthletesByPhone, getAthleteByCode, getAthletesBySurnames, getAthleteReceipts, doRegisterAthlete, doUnregisterAthlete, removeAthlete } from "../../redux/actions/athletes";
 import { getSportSchoolFee } from "../../redux/actions/sportSchools";
-
-
 
 import { isManager, isAdmin } from "../../services/LoginService";
 
@@ -66,6 +64,7 @@ const CreateAthlete: React.FC<any> = (props) => {
         if (props.athlete){
             setAthlete(props.athlete)
             props.getSportSchoolFee(props.athlete.sportSchoolId);
+            props.getAthleteReceipts(props.athlete.id)
         }
     }, [props.athlete])
 
@@ -170,6 +169,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                     enrollmentFee: (props.athlete_fee ? props.athlete_fee.enrollmentFee : 0) || 0,
                     membershipFee: (props.athlete_fee ? props.athlete_fee.membershipFee : 0) || 0,
                     monthlyFee: (props.athlete_fee ? props.athlete_fee.monthlyFee : 0) || 0,
+                    receipts: props.receipts,
                     // Dialogs
                     registerDate: utils.dateToLocalDate(new Date()),
                     registerObservations: '',
@@ -178,6 +178,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                     openReceiptsDialog: false,
                     openMatchingAthletes: false,
                     openDeleteDialog: false,
+                    openPendingReceipts: props.receipts && props.receipts.length > 0 && props.receipts.some((d:any) => d.status === 'return'),
                     selectedFamily: false,
 
                     lastRegisterDate: utils.dateToLocalDate(new Date()),
@@ -245,6 +246,28 @@ const CreateAthlete: React.FC<any> = (props) => {
                 return (
 
                 <form onSubmit={handleSubmit}>
+                    <Dialog fullWidth={true} open={values.openPendingReceipts} aria-labelledby="form-dialog-title"
+                        onClose={() => {
+                            setFieldValue("openPendingReceipts", false)
+                        }}
+                    >
+                        <DialogTitle id="form-dialog-title">El atleta tiene recibos pendientes de pago</DialogTitle>
+                        <DialogActions>
+                            <Button 
+                                onClick={(a: any) => { 
+                                    setFieldValue("openPendingReceipts", false)
+                            }}
+                            >Cerrar</Button>
+                        </DialogActions>
+
+                    </Dialog>
+                    {/* <Snackbar open={values.openPendingReceipts}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
+                        <Alert severity="error" onClose={() => { setFieldValue("openPendingReceipts", false) }}>
+                            <AlertTitle>Error</AlertTitle>
+                            <strong>El atleta tiene recibos pendientes de pago</strong>
+                        </Alert>
+                    </Snackbar> */}
                     <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
                         anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
                         <Alert severity="error" onClose={() => { setFieldValue("errorMessage", "") }}>
@@ -267,6 +290,14 @@ const CreateAthlete: React.FC<any> = (props) => {
                             <strong>{values.successMessage}</strong>
                         </Alert>
                     </Snackbar>
+                    <ConfirmDialog open={values.openDeleteDialog} 
+                        confirm={() => {
+                            props.removeAthlete(values.id);
+                            setFieldValue("openDeleteDialog", false);
+                            window.open("/athletes/list", "_self");
+                        }}
+                        cancel={() => setFieldValue("openDeleteDialog", false)}
+                    />
                     <ConfirmDialog open={values.openDeleteDialog} 
                         confirm={() => {
                             props.removeAthlete(values.id);
@@ -502,6 +533,10 @@ const CreateAthlete: React.FC<any> = (props) => {
                                             />
                                             Cuota anual de escuela
                                         </Grid>
+                                        }
+                                        { values.receipts && values.receipts && values.receipts.length > 0 && values.receipts.some((d:any) => d.status === 'return') && <>
+                                            <h3 style={{ color: 'red' }}>Recibos pendientes de pago</h3>
+                                        </>
                                         }
                                     </Grid>
                                 </Grid>
@@ -924,6 +959,7 @@ const mapDispatchToProps = {
     getAthleteByCode,
     getAthletesByPhone,
     getAthletesBySurnames,
+    getAthleteReceipts,
     doRegisterAthlete, 
     doUnregisterAthlete,
     removeAthlete,
@@ -935,6 +971,7 @@ const mapStateToProps = (state: any) => {
         athlete: state.athlete_reducer.athlete,
         athletes_by_phone: state.athlete_reducer.athletes_by_phone,
         athletes_by_surnames: state.athlete_reducer.athletes_by_surnames,
+        receipts: state.athlete_reducer.athlete_receipts,
         sportSchoolFee: state.sport_school_reducer.sport_school_fee,
         loading: state.api_reducer.loading
     };
