@@ -57,17 +57,12 @@ const CustomTable: React.FC<any> = (props) => {
 
 	const handleFilterChange = (filterType: string, filterField: string, filterValue: string, filterOptions?: any[]) => {
 
-		debounceFilterChange(filterType, filterField, filterValue, filterOptions);
-	}
-
-	const debounceFilterChange = React.useRef(
-		debounce((filterType: string, filterField: string, filterValue: string, filterOptions?: any[]) => {
 		if (!filterValue || filterValue === ''){
 			delete filterObj[filterField]
 			setFilterObj(filterObj)
 
 			setPage(0)
-			props.onPaginationFilterChange(0, pageSize, filterObj, orderBy, order)
+			debounceFilterChange(0, pageSize, filterObj, orderBy, order)
 		}
 		else {
 			if (filterValue.length > 2 || filterType === 'options'){
@@ -81,11 +76,14 @@ const CustomTable: React.FC<any> = (props) => {
 				setFilterObj(filterObj)
 
 				setPage(0)
-				props.onPaginationFilterChange(0, pageSize, filterObj, orderBy, order)
+				debounceFilterChange(0, pageSize, filterObj, orderBy, order)
 			}
 		}
+	}
+
+	const debounceFilterChange = debounce((page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
+		props.onPaginationFilterChange(page, size, filters, sort, sortDirection)
 	}, 500)
-	).current;
 
 	React.useEffect(() => {
 		return () => {

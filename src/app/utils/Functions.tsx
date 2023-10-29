@@ -334,11 +334,21 @@ const functions = {
 
     getPaymentTypes: function () {
         return [
-            // { id: "", name: "" },
             { id: "MET", name: "Efectivo" },
             { id: "TRANSF", name: "Transferencia" },
             { id: "DOM", name: "Domiciliación Bancaria" },
             { id: "SUBV", name: "Subvencionado" },
+        ]
+    },
+
+    getFeeTypes: function () {
+        return [
+            { id: "CLUB", name: "Club" },
+            { id: "CLUB_ANUAL", name: "Club anual" },
+            { id: "FED", name: "Federado" },
+            { id: "SOCIO", name: "Socio" },
+            { id: "PISTAS", name: "Pistas"},
+            { id: "PISTAS_FED", name: "Pistas/Federado"}
         ]
     },
 

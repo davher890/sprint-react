@@ -30,10 +30,6 @@ const GroupAthletesTable: React.FC<any> = (props) => {
         props.getGroupAthleteTable(groupId, scheduleIds)
     }
 
-    const fillSchedules = (groupId: number) => {
-        props.getGroupSchedules(groupId)
-    }
-
     return (
         <Grid container direction="column" spacing={3}>
             <Grid item xs>

@@ -10,6 +10,14 @@ export const findReceiptIdAthleteDataPagination = (id: number, page: number, siz
     return findDataPagination("receipts/" + id + "/athletes", page, size, filters, sort, sortDirection)
 }
 
+export const findReturnReceiptRegisterAthleteDataPagination = (season: string, page: number, size: number, filters: any, sort: string, sortDirection: Order) => {
+    return findDataPagination("receipts/athletes/return/registered?season=" + season, page, size, filters, sort, sortDirection)
+}
+
+export const findReturnReceiptUnregisterAthleteDataPagination = (season: string, page: number, size: number, filters: any, sort: string, sortDirection: Order) => {
+    return findDataPagination("receipts/athletes/return/unregistered?season=" + season, page, size, filters, sort, sortDirection)
+}
+
 export const findReceiptDataPagination = (page: number, size: number, filters: any, sort: string, sortDirection: Order) => {
     return findDataPagination("receipts", page, size, filters, sort, sortDirection)
 }

@@ -74,7 +74,10 @@ const Utils = {
             { dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
             { dataField: 'firstSurname', text : 'Primer apellido', filter: { type: "text" } }, 
             { dataField: 'secondSurname', text : 'Segundo apellido', filter: { type: "text" } }, 
-            { dataField: 'sportSchoolName', text : 'Escuela'},
+            { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
+                type: "options",
+                options : functions.getSportSchools()
+            }},
             { dataField: 'groupName', text : 'Grupo', filter: { type: "text" } }, 
             { dataField: 'days', text : 'Dias', sort: false }, 
             { dataField: 'numDays', text : 'Num. Dias', sort: false }, 

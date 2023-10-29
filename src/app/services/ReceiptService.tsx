@@ -1,3 +1,5 @@
+import utils from '../utils/TableUtils'
+
 import { getRequest, postRequest, deleteRequest, postExcelRequest } from "./ApiService"
 
 export const addData = (body: any) => {
@@ -23,15 +25,6 @@ export const findReceiptAthleteObservations = (id: number) => {
     return getRequest("/receipts/athletes/" + id + "/observations")
 }
 
-export const findReturnReceiptRegistered = (season: string) => {
-    return getRequest("/receipts/athletes/return/registered?season=" + season)
-}
-
-export const findReturnReceiptUnregistered = (season: string) => {
-    return getRequest("/receipts/athletes/return/unregistered?season=" + season)
-}
-
-
 export const validateData = (id: number) => {
     return getRequest("/receipts/" + id + "/validate")
 }
@@ -50,4 +43,22 @@ export const addReceiptAthletes = (id: number, athleteIds: number[]) => {
 
 export const downloadExcel = (id: number) => {
     return postExcelRequest('/receipts/' + id + '/excel', {}, 'receipt.xlsx')
+}
+
+export const downloadReturnReceiptRegisteredAthleteExcel = (season: string, columns: any,filters:any) => {
+    let endpoint = "/receipts/athletes/return/registered/excel?season=" + season
+    let filtersParams = '';
+    if (filters && Object.keys(filters).length > 0){
+        filtersParams = "&filters=" + utils.getFilterParams(filters)
+    }
+    return postExcelRequest(endpoint + filtersParams, columns, 'return_receipts_registered_' + season + '.xlsx')
+}
+
+export const downloadReturnReceiptUnregisteredAthleteExcel = (season: string, columns: any,filters:any) => {
+    let endpoint = "/receipts/athletes/return/unregistered/excel?season=" + season
+    let filtersParams = '';
+    if (filters && Object.keys(filters).length > 0){
+        filtersParams = "&filters=" + utils.getFilterParams(filters)
+    }
+    return postExcelRequest(endpoint + filtersParams, columns, 'return_receipts_unregistered_' + season + '.xlsx')
 }

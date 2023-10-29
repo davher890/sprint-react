@@ -2,101 +2,48 @@ import React from "react"
 
 import { connect } from "react-redux";
 
-import { Box, Grid, Tabs, Tab, Table, TableBody, TableHead, TableRow, TableCell, TableContainer } from '@material-ui/core';
-import { withTheme, makeStyles } from '@material-ui/core/styles';
+import { Box, Grid, Tabs, Tab } from '@material-ui/core';
 
+import Table from "../../components/custom/Table";
 import Card from '../../components/custom/Card';
 import Select from '../../components/custom/Select'
 
+import { Order } from '../../types/order'
+
 import Utils from "../../utils/TableUtils";
 
-import { getReturnReceiptRegistered, getReturnReceiptUnregistered } from "../../redux/actions/receipts";
+import { getReturnReceiptRegisteredAthleteTable, getReturnReceiptUnregisteredAthleteTable, downloadReturnReceiptRegisteredAthlete, downloadReturnReceiptUnregisteredAthlete } from "../../redux/actions/receipts";
 
 const ReturnedReceiptTable: React.FC<any> = (props) => {
 
-    const styles = makeStyles({
-		root: {
-			"& .MuiTableCell-head": {
-				color: props.theme.palette.secondary.main,
-				backgroundColor: props.theme.palette.primary.main
-			},
-			'& .MuiFormLabel-root.Mui-disabled': {
-				color: 'red',
-			},
-			"& .MuiFormLabel-root": {
-				color: props.theme.palette.secondary.main,
-			},
-			"& .MuiFormLabel-root.Mui-focused": {
-				color: props.theme.palette.secondary.main,
-			},
-			"& .MuiInputBase-input.MuiInput-input": {
-				color: props.theme.palette.secondary.main,
-			}
-		},
-		sortLabelIcon: {
-			color: props.theme.palette.secondary.main,
-			// fontSize: 30,
-			opacity: 1
-		}
-	});
-
-	const classes = styles();
-
     const [ season, setSeason ] = React.useState<string>()
-    const [ tabIndex, setTabIndex] = React.useState(0);
+    const [ tabIndex, setTabIndex ] = React.useState<number>(0);
 
     const handleTabChange = (event: any, newValue: number) => {
-      setTabIndex(newValue);
+        setTabIndex(newValue);
     };
 
-    const getTableHead = (columns: any[]) => {
-		return <TableHead className={classes.root}>
-			<TableRow>
-				{columns.map((column) => (
-					<TableCell style={{ minWidth: '250px' }} key={column.dataField}>
-						{ <strong>{column.text}</strong> }
-					</TableCell>
-				))}
-			</TableRow>
-		</TableHead>
+    const downloadData = (columns: any, filters: any) => {
+        if (tabIndex === 0){
+            props.downloadReturnReceiptRegisteredAthlete(season, columns, filters)
+        }
+        else {
+		    props.downloadReturnReceiptUnregisteredAthlete(season, columns, filters)
+        }
 	}
-
-    const getRowData = (row: any, columns: any[]) => {
-
-		let rowId = row.id
-		let columnNames : string[] = columns.map((c: any) => c.dataField)
-		return columnNames.map(column => (
-			<TableCell key={ rowId + "_" + column } onClick={() => window.open("/receipts/athletes/" + rowId, "_self")}>
-				{row[column]}
-			</TableCell>
-		))
-	}
-
-    const getTable = (data: any, columns: any[]) => {
-        return (
-            <TableContainer>
-                <Table stickyHeader size="small">
-                    { getTableHead(columns) }
-                    <TableBody>
-                    {
-                        data.map((row:any) => (
-                            <TableRow hover key={row.id}>
-                                { getRowData(row, columns) }
-                            </TableRow>
-                        ))
-                    }
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        )
-    }
 
     React.useEffect(() => {
 		if (season){
-            props.getReturnReceiptRegistered(season);
-            props.getReturnReceiptUnregistered(season);
+            if (tabIndex === 0){
+                props.getReturnReceiptRegisteredAthleteTable(season);
+            }
+
+            if (tabIndex === 1){
+                props.getReturnReceiptUnregisteredAthleteTable(season);
+            }
+            setSeason(season)
         }
-	}, [ season ])
+	}, [ season, tabIndex ])
 
     return (
         <>
@@ -104,7 +51,7 @@ const ReturnedReceiptTable: React.FC<any> = (props) => {
                 <Grid item xs>
                     <Card title="Datos de la remesa">
                         <Grid item xs>
-                            <Select fullWidth name="season" label="Temporada" error={!season}
+                            <Select fullWidth name="season" label="Temporada" //error={!season}
                                 options={[
                                     { id: "2021_2022", name: "2021 - 2022" },
                                     { id: "2022_2023", name: "2022 - 2023" },
@@ -128,17 +75,29 @@ const ReturnedReceiptTable: React.FC<any> = (props) => {
                         <Tab label="Historico" />
                     </Tabs>
                     
-                    { tabIndex === 0 && props.receipt_registered_athlete && props.receipt_registered_athlete.length > 0 && <Box width="100%" overflow="auto">
-						{ getTable(props.receipt_registered_athlete, Utils.getReturnedReceiptColumns('', '').filter((d:any) => d.show === undefined || d.show === true)) }
+                    <Box width="100%" overflow="auto">
+                        <Table 
+                            data={props.table_data}
+                            page={props.page}
+                            size={props.size}
+                            total={props.total}
+                            columns={Utils.getReturnedReceiptColumns('', '')} 
+                            downloadData={downloadData}
+						    showColumns={false}
+                            onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
+                                if (tabIndex === 0){
+                                    props.getReturnReceiptRegisteredAthleteTable(season, page, size, filters, sort, sortDirection);
+                                }
+                                if (tabIndex === 1){
+                                    props.getReturnReceiptUnregisteredAthleteTable(season, page, size, filters, sort, sortDirection);
+                                }
+                            }}
+                            onRowClick={(id: number) => {
+                                window.open("/receipts/athletes/" + id, "_self");
+                            }}
+                        />
                     </Box>
-                    }
-                    { tabIndex === 1 && props.receipt_unregistered_athlete && props.receipt_unregistered_athlete.length > 0 && <Box width="100%" overflow="auto">
-						{ getTable(props.receipt_unregistered_athlete, Utils.getReturnedReceiptColumns('', '').filter((d:any) => d.show === undefined || d.show === true)) }
-                    </Box>
-                    }
                 </Grid>
-
-
             </Grid>
         </>
                 
@@ -147,18 +106,22 @@ const ReturnedReceiptTable: React.FC<any> = (props) => {
 
 
 const mapDispatchToProps = {
-    getReturnReceiptRegistered, 
-    getReturnReceiptUnregistered
+    getReturnReceiptRegisteredAthleteTable, 
+    getReturnReceiptUnregisteredAthleteTable,
+    downloadReturnReceiptRegisteredAthlete, 
+    downloadReturnReceiptUnregisteredAthlete
 }
 
 const mapStateToProps = (state: any) => {
     return { 
-        receipt_registered_athlete: state.receipt_reducer.receipt_registered_athlete,
-        receipt_unregistered_athlete: state.receipt_reducer.receipt_unregistered_athlete
+        table_data: state.table_reducer.table_data,
+		page: state.table_reducer.page,
+		size: state.table_reducer.size,
+		total: state.table_reducer.total
     };
 };
 
 export default connect(
     mapStateToProps, 
     mapDispatchToProps
-)(withTheme(ReturnedReceiptTable));
+)(ReturnedReceiptTable);

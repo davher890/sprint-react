@@ -46,7 +46,7 @@ const CreateAthlete: React.FC<any> = (props) => {
 
     const [athlete, setAthlete] = React.useState<any>({})
 
-    React.useEffect(() => {
+    const getAthlete = (props:any) => { 
         if (!isNewAthlete()) {
             if (props.searchParams, props.searchParams.get('code')){
                 let code = props.searchParams.get('code')
@@ -57,7 +57,10 @@ const CreateAthlete: React.FC<any> = (props) => {
                 props.getAthlete(id)
             }
         }
-    }, [props.id])
+    }
+    React.useEffect(() => {
+        getAthlete(props)
+    }, [props.id, props.searchParams])
 
     React.useEffect(() => {
         if (props.athlete){
@@ -397,6 +400,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                     <Dialog fullWidth={true} maxWidth="xl" open={values.openReceiptsDialog} aria-labelledby="form-dialog-title"
                         onClose={() => {
                             setFieldValue('openReceiptsDialog', false)
+                            getAthlete(props)
                         }}
                     >
                         <DialogTitle id="form-dialog-title">Recibos</DialogTitle>
@@ -406,7 +410,10 @@ const CreateAthlete: React.FC<any> = (props) => {
                             </Grid>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={() => { setFieldValue('openReceiptsDialog', false) }}>Cerrar</Button>
+                            <Button onClick={() => { 
+                                setFieldValue('openReceiptsDialog', false) 
+                                getAthlete(props)
+                            }}>Cerrar</Button>
                         </DialogActions>
                     </Dialog>
                     

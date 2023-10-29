@@ -1,7 +1,7 @@
 import * as ACTION_TYPES from "../../constants/action_types";
 
-import { addData, addReceiptAthletes, findAll, findById, findReceiptAthleteById, deleteReceiptAthletes, deleteReceipt, downloadExcel, saveReceiptAthlete, validateData, findReturnReceiptRegistered, findReturnReceiptUnregistered, findReceiptAthleteObservations } from "../../../services/ReceiptService"
-import { findReceiptDataPagination, findReceiptIdAthleteDataPagination } from "../../../services/TableService"
+import { addData, addReceiptAthletes, findAll, findById, findReceiptAthleteById, deleteReceiptAthletes, deleteReceipt, downloadExcel, saveReceiptAthlete, validateData, findReceiptAthleteObservations, downloadReturnReceiptRegisteredAthleteExcel, downloadReturnReceiptUnregisteredAthleteExcel } from "../../../services/ReceiptService"
+import { findReceiptDataPagination, findReceiptIdAthleteDataPagination, findReturnReceiptRegisterAthleteDataPagination, findReturnReceiptUnregisterAthleteDataPagination } from "../../../services/TableService"
 
 import { Order } from '../../../types/order'
 
@@ -13,20 +13,36 @@ export function getReceiptTable(page: number, size: number, filters: any, sort: 
     }
 }
 
-export function getReturnReceiptRegistered(season: string) {
+export function getReturnReceiptRegisteredAthleteTable(season: string, page: number, size: number, filters: any, sort: string, sortDirection: Order) {
     return function (dispatch: any) {
-        dispatch({ type: ACTION_TYPES.API_CALL})
-        return findReturnReceiptRegistered(season).then(json => {
-            dispatch({ type: ACTION_TYPES.GET_RETURNED_RECEIPT_REGISTERED, payload: json });
+        return findReturnReceiptRegisterAthleteDataPagination(season, page, size, filters, sort, sortDirection).then(json => {
+            dispatch({ type: ACTION_TYPES.LOAD_RETURNED_RECEIPT_REGISTERED_ATHLETE_TABLE, payload: json });
         });
     }
 }
 
-export function getReturnReceiptUnregistered(season: string) {
+export function getReturnReceiptUnregisteredAthleteTable(season: string, page: number, size: number, filters: any, sort: string, sortDirection: Order) {
+    return function (dispatch: any) {
+        return findReturnReceiptUnregisterAthleteDataPagination(season, page, size, filters, sort, sortDirection).then(json => {
+            dispatch({ type: ACTION_TYPES.LOAD_RETURNED_RECEIPT_UNREGISTERED_ATHLETE_TABLE, payload: json });
+        });
+    }
+}
+
+export function downloadReturnReceiptRegisteredAthlete(season: string, columns: any, filters:any) {
     return function (dispatch: any) {
         dispatch({ type: ACTION_TYPES.API_CALL})
-        return findReturnReceiptUnregistered(season).then(json => {
-            dispatch({ type: ACTION_TYPES.GET_RETURNED_RECEIPT_UNREGISTERED, payload: json });
+        return downloadReturnReceiptRegisteredAthleteExcel(season, columns, filters).then(json => {
+            dispatch({ type: ACTION_TYPES.DOWNLOAD_ATHLETES, payload: json });
+        });
+    }
+}
+
+export function downloadReturnReceiptUnregisteredAthlete(season: string, columns: any, filters:any) {
+    return function (dispatch: any) {
+        dispatch({ type: ACTION_TYPES.API_CALL})
+        return downloadReturnReceiptUnregisteredAthleteExcel(season, columns, filters).then(json => {
+            dispatch({ type: ACTION_TYPES.DOWNLOAD_ATHLETES, payload: json });
         });
     }
 }

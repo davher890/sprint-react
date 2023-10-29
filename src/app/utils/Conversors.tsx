@@ -38,6 +38,36 @@ function receiptDataConversor(d: { id: number, name: string, season: string, rec
     }
 }
 
+function returnReceiptAthleteDataConversor(d: any) {
+    return {
+        id : d.id,
+        athleteId : d.athleteId,
+        name : d.name || '', 
+        firstSurname : d.firstSurname || '', 
+        secondSurname : d.secondSurname || '', 
+        
+        sportSchoolId: d.sportSchoolName, 
+        groupName: d.groupName,
+        days: d.days,
+        numDays: d.numDays,
+        code: d.code,
+        familyCode: d.familyCode,
+
+        specialization: d.specialization === true ? 'Si' : 'No',
+
+        paymentType: functions.getPaymentTypes().find(st => st.id === d.paymentType)?.name,
+        feeType: functions.getFeeTypes().find(ft => ft.id === d.feeType)?.name,
+        monthlyFee: d.monthlyFee,
+        enrollmentFee: d.enrollmentFee,
+        membershipFee: d.membershipFee,
+        sportSchoolAnnualFee: d.sportSchoolAnnualFee,
+        licenseTerritorialFee: d.licenseTerritorialFee,
+        licenseNationalFee: d.licenseNationalFee,
+        totalFee: d.totalFee,
+        status: functions.getReceiptStatus().find(st => st.id === d.status)?.name,
+    }
+}
+
 function receiptAthleteDataConversor(d: any) {
     return {
         id : d.id,
@@ -64,7 +94,7 @@ function receiptAthleteDataConversor(d: any) {
         specialization: d.specialization === true ? 'Si' : 'No',
 
         paymentType: functions.getPaymentTypes().find(st => st.id === d.paymentType)?.name,
-        feeType: d.feeType,
+        feeType: functions.getFeeTypes().find(ft => ft.id === d.feeType)?.name,
         monthlyFee: d.monthlyFee,
         enrollmentFee: d.enrollmentFee,
         membershipFee: d.membershipFee,
@@ -98,7 +128,7 @@ function athleteDataConversor(d: any) {
         dorsalCategory: functions?.getDorsalCategories().find(c => c.id === d.dorsalCategory)?.name,
         iban: d.iban,
         paymentType: functions.getPaymentTypes().find(st => st.id === d.paymentType)?.name,
-        feeType: d.feeType,
+        feeType: functions.getFeeTypes().find(ft => ft.id === d.feeType)?.name,
         holderName: d.holderName,
         holderFirstSurname: d.holderFirstSurname,
         holderSecondSurname: d.holderSecondSurname,
@@ -208,6 +238,11 @@ const Utils = (action: { type: string, payload: any }) => {
     else if (action.type === ACTION_TYPES.LOAD_RECEIPT_ATHLETE_TABLE){
         items = action.payload.content.map((d: any) => {
             return receiptAthleteDataConversor(d)
+        })
+    }
+    else if (action.type === ACTION_TYPES.LOAD_RETURNED_RECEIPT_REGISTERED_ATHLETE_TABLE || action.type === ACTION_TYPES.LOAD_RETURNED_RECEIPT_UNREGISTERED_ATHLETE_TABLE){
+        items = action.payload.content.map((d: any) => {
+            return returnReceiptAthleteDataConversor(d)
         })
     }
     else if (action.type === ACTION_TYPES.LOAD_FAMILY_TABLE){
