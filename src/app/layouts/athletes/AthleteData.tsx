@@ -261,13 +261,6 @@ const CreateAthlete: React.FC<any> = (props) => {
                         </DialogActions>
 
                     </Dialog>
-                    {/* <Snackbar open={values.openPendingReceipts}
-                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
-                        <Alert severity="error" onClose={() => { setFieldValue("openPendingReceipts", false) }}>
-                            <AlertTitle>Error</AlertTitle>
-                            <strong>El atleta tiene recibos pendientes de pago</strong>
-                        </Alert>
-                    </Snackbar> */}
                     <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
                         anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
                         <Alert severity="error" onClose={() => { setFieldValue("errorMessage", "") }}>
@@ -434,7 +427,6 @@ const CreateAthlete: React.FC<any> = (props) => {
                             getAthlete(props)
                         }}
                     >
-                        <DialogTitle id="form-dialog-title">Recibos</DialogTitle>
                         <DialogContent>
                             <Grid container>
                                 <AthleteReceipts id={values.id} />

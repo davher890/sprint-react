@@ -1,128 +1,181 @@
-import * as React from "react";
-import { AppBar, Toolbar, Menu, MenuItem, Typography, Link, IconButton } from '@material-ui/core';
-import { Link as Link1 } from "react-router-dom";
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import React, { useState } from "react";
 
-import * as LoginService from '../../../services/LoginService'
+import {
+    AppBar,
+    Toolbar,
+    Menu,
+    MenuItem,
+    IconButton,
+    Button,
+    Avatar,
+} from "@material-ui/core";
 
-const CustomAppBar: React.FC<any> = (props) => {
+import { Link as RouterLink } from "react-router-dom";
 
-    const [groupsAnchorEl, setGroupsAnchorEl] = React.useState<any | null>();
-    const [listingsAnchorEl, setListingsAnchorEl] = React.useState<any | null>();
-    const [athletesAnchorEl, setAthletesAnchorEl] = React.useState<any | null>();
-    const [receiptsAnchorEl, setReceiptsAnchorEl] = React.useState<any | null>();
-    
-    const handleAthletesMenuClick = (event: any) => {
-        setAthletesAnchorEl(event.currentTarget);
-    };
-  
-    const handleAthletesMenuClose = () => {
-        setAthletesAnchorEl(null);
-    };
+import {
+    AccountCircle,
+    ArrowDropDown,
+    Business,
+    FitnessCenter,
+    Sports,
+    People,
+    Assignment,
+    Receipt,
+} from "@material-ui/icons";
 
-    const handleListingsMenuClick = (event: any) => {
-        setListingsAnchorEl(event.currentTarget);
-    };
-  
-    const handleListingsMenuClose = () => {
-        setListingsAnchorEl(null);
-    };
+import * as LoginService from "../../../services/LoginService";
 
-    const handleGroupsMenuClick = (event: any) => {
-        setGroupsAnchorEl(event.currentTarget);
-    };
-  
-    const handleGroupsMenuClose = () => {
-        setGroupsAnchorEl(null);
-    };
+const CustomAppBar: React.FC = (props) => {
+    const [athletesAnchorEl, setAthletesAnchorEl] =
+        useState<null | HTMLElement>(null);
+    const [groupsAnchorEl, setGroupsAnchorEl] = useState<null | HTMLElement>(
+        null
+    );
+    const [listingsAnchorEl, setListingsAnchorEl] =
+        useState<null | HTMLElement>(null);
+    const [receiptsAnchorEl, setReceiptsAnchorEl] =
+        useState<null | HTMLElement>(null);
 
-    const handleReceiptsMenuClick = (event: any) => {
-        setReceiptsAnchorEl(event.currentTarget);
+    const handleMenuOpen = (
+        event: React.MouseEvent<HTMLElement>,
+        setAnchorEl: React.Dispatch<React.SetStateAction<null | HTMLElement>>
+    ) => {
+        setAnchorEl(event.currentTarget);
     };
 
-    const handleReceiptsMenuClose = () => {
-        setReceiptsAnchorEl(null);
+    const handleMenuClose = (
+        setAnchorEl: React.Dispatch<React.SetStateAction<null | HTMLElement>>
+    ) => {
+        setAnchorEl(null);
     };
 
     return (
         <AppBar position="static" color="primary">
             <Toolbar>
-                <Typography variant="button">
-                    <Link href="/sport_schools/list" color="inherit">Escuelas</Link>
-                </Typography>
-                
-                <Typography variant="button" aria-controls="athletes-menu" aria-haspopup="true" onClick={handleAthletesMenuClick}>
-                    <Link color="inherit">Atletas</Link>
-                </Typography>
-                <Menu id="athletes-menu"
-                        anchorEl={athletesAnchorEl}
-                        keepMounted
-                        open={Boolean(athletesAnchorEl)}
-                        onClose={handleAthletesMenuClose}>
-                    <MenuItem onClick={handleAthletesMenuClose} component={Link1} to="/athletes/list">Gestión</MenuItem>
-                    <MenuItem onClick={handleAthletesMenuClose} component={Link1} to="/athletes/historic">Histórico</MenuItem>
+                <Button
+                    component={RouterLink}
+                    to="/sport_schools/list"
+                    startIcon={<Business />}
+                >
+                    Escuelas
+                </Button>
+
+                <Button
+                    onClick={(event) =>
+                        handleMenuOpen(event, setAthletesAnchorEl)
+                    }
+                    startIcon={<People />}
+                    endIcon={<ArrowDropDown />}
+                >
+                    Atletas
+                </Button>
+                <Menu
+                    anchorEl={athletesAnchorEl}
+                    open={Boolean(athletesAnchorEl)}
+                    onClose={() => handleMenuClose(setAthletesAnchorEl)}
+                >
+                    <MenuItem component={RouterLink} to="/athletes/list">
+                        Gestión
+                    </MenuItem>
+                    <MenuItem component={RouterLink} to="/athletes/historic">
+                        Histórico
+                    </MenuItem>
                 </Menu>
 
-                <Typography variant="button" aria-controls="groups-menu" aria-haspopup="true" onClick={handleGroupsMenuClick}>
-                    <Link color="inherit">Grupos de entrenamiento</Link>
-                </Typography>
-                <Menu id="groups-menu"
-                        anchorEl={groupsAnchorEl}
-                        keepMounted
-                        open={Boolean(groupsAnchorEl)}
-                        onClose={handleGroupsMenuClose}>
-                    <MenuItem onClick={handleGroupsMenuClose} component={Link1} to="/groups/list">Gestión</MenuItem>
-                    { (LoginService.isAdmin() || LoginService.isManager()) && <MenuItem onClick={handleGroupsMenuClose} component={Link1} to="/groups/swap">Intercambio Masivo</MenuItem> }
-                    { (LoginService.isAdmin() || LoginService.isManager()) &&<MenuItem onClick={handleGroupsMenuClose} component={Link1} to="/schedules/list">Horarios</MenuItem> }
-                    { (LoginService.isAdmin() || LoginService.isManager()) && <MenuItem onClick={handleGroupsMenuClose} component={Link1} to="/trainers/list">Entrenadores</MenuItem> }
-                </Menu>
-                <Typography variant="button" aria-controls="listings-menu" aria-haspopup="true" onClick={handleListingsMenuClick}>
-                    Listados
-                </Typography>
-                <Menu id="listings-menu"
-                        anchorEl={listingsAnchorEl}
-                        keepMounted
-                        open={Boolean(listingsAnchorEl)}
-                        onClose={handleListingsMenuClose}
+                <Button
+                    onClick={(event) =>
+                        handleMenuOpen(event, setGroupsAnchorEl)
+                    }
+                    startIcon={<FitnessCenter />}
+                    endIcon={<ArrowDropDown />}
                 >
-                    <MenuItem onClick={handleListingsMenuClose} component={Link1} to="/groups/attendance">Asistencia</MenuItem>
-                    <MenuItem onClick={handleListingsMenuClose} component={Link1} to="/groups/athletes">Atletas-Grupos</MenuItem>
+                    Grupos de entrenamiento
+                </Button>
+                <Menu
+                    anchorEl={groupsAnchorEl}
+                    open={Boolean(groupsAnchorEl)}
+                    onClose={() => handleMenuClose(setGroupsAnchorEl)}
+                >
+                    <MenuItem component={RouterLink} to="/groups/list">
+                        Gestión
+                    </MenuItem>
+                    <MenuItem component={RouterLink} to="/groups/swap">
+                        Intercambio Masivo
+                    </MenuItem>
+                    <MenuItem component={RouterLink} to="/schedules/list">
+                        Horarios
+                    </MenuItem>
+                    <MenuItem component={RouterLink} to="/trainers/list">
+                        Entrenadores
+                    </MenuItem>
                 </Menu>
-                { (LoginService.isAdmin() || LoginService.isManager()) &&
-                    <Typography variant="button" component={Link1} to="/admin/users/list" color="inherit">Usuarios</Typography>
-                }
-                { LoginService.isAdmin() &&
-                    <Typography variant="button" component={Link1} to="/admin/athletes_by_date" color="inherit">Atletas por fecha</Typography>
-                }
-                { LoginService.isManager() &&
-                    <Typography variant="button" aria-controls="receipts-menu" aria-haspopup="true" onClick={handleReceiptsMenuClick}>
-                        Recibos
-                    </Typography>
-                }
-                <Menu id="receipts-menu"
-                        anchorEl={receiptsAnchorEl}
-                        keepMounted
-                        open={Boolean(receiptsAnchorEl)}
-                        onClose={handleReceiptsMenuClose}>
-                    <MenuItem onClick={handleReceiptsMenuClose} component={Link1} to="/receipts/list">Remesas</MenuItem>
-                    <MenuItem onClick={handleReceiptsMenuClose} component={Link1} to="/receipts/returned/list">Recibos devueltos</MenuItem>
+
+                <Button
+                    onClick={(event) =>
+                        handleMenuOpen(event, setListingsAnchorEl)
+                    }
+                    startIcon={<Assignment />}
+                    endIcon={<ArrowDropDown />}
+                >
+                    Listados
+                </Button>
+                <Menu
+                    anchorEl={listingsAnchorEl}
+                    open={Boolean(listingsAnchorEl)}
+                    onClose={() => handleMenuClose(setListingsAnchorEl)}
+                >
+                    <MenuItem component={RouterLink} to="/groups/attendance">
+                        Asistencia
+                    </MenuItem>
+                    <MenuItem component={RouterLink} to="/groups/athletes">
+                        Atletas-Grupos
+                    </MenuItem>
                 </Menu>
-                
-                <Typography variant="button" component={Link1} to="/incidences/list" color="inherit">Incidencias</Typography>
+
+                <Button
+                    onClick={(event) =>
+                        handleMenuOpen(event, setReceiptsAnchorEl)
+                    }
+                    startIcon={<Receipt />}
+                    endIcon={<ArrowDropDown />}
+                >
+                    Recibos
+                </Button>
+                <Menu
+                    anchorEl={receiptsAnchorEl}
+                    open={Boolean(receiptsAnchorEl)}
+                    onClose={() => handleMenuClose(setReceiptsAnchorEl)}
+                >
+                    <MenuItem component={RouterLink} to="/receipts/list">
+                        Remesas
+                    </MenuItem>
+                    <MenuItem
+                        component={RouterLink}
+                        to="/receipts/returned/list"
+                    >
+                        Recibos devueltos
+                    </MenuItem>
+                </Menu>
+
+                <Button
+                    component={RouterLink}
+                    to="/incidences/list"
+                    startIcon={<Sports />}
+                >
+                    Incidencias
+                </Button>
+
                 <IconButton
-                    // size="large"
-                    aria-label="account of current user"
-                    aria-controls="menu-appbar"
-                    aria-haspopup="true"
-                    href={"/users/" + LoginService.getUserId()}
-                    // onClick={handleMenu}
-                    color="inherit"
-                >   
-                    <AccountCircle />
+                    component={RouterLink}
+                    to={"/users/" + LoginService.getUserId()}
+                >
+                    <Avatar>
+                        <AccountCircle />
+                    </Avatar>
                 </IconButton>
             </Toolbar>
         </AppBar>
-    )
-}
+    );
+};
 
 export default CustomAppBar;

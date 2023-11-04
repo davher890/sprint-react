@@ -41,7 +41,11 @@ const CustomTable: React.FC<any> = (props) => {
 			color: props.theme.palette.secondary.main,
 			// fontSize: 30,
 			opacity: 1
-		}
+		},
+		tableContainer: {
+			maxHeight: "500px", // Adjust the height as needed
+			overflowY: "auto",
+		},
 	});
 
 	const classes = styles();
@@ -222,12 +226,13 @@ const CustomTable: React.FC<any> = (props) => {
 	}
 
 	return (
-		<>
-		{ false && props.loading ? <Spinner/> : 
+		<div className={classes.tableContainer}>
+		{ props.loading && <Spinner/> }
+		{!props.loading && (
 			<Grid container item direction="column" spacing={3}>
 				<Grid container item direction="row">
-					{ props.showColumns ? 
-						<Grid item xs={3}>
+					{ props.showColumns && (
+						<Grid item xs={12} sm={6} md={3}>
 							<ColumnsSelect 
 								columns={columns}
 								changeEvent={(cols: any) => { 
@@ -236,44 +241,44 @@ const CustomTable: React.FC<any> = (props) => {
 								}}
 							/>
 						</Grid>
-					: null }
-					{ props.downloadData &&
-						<Grid item xs={3}>
-							<DownloadButton onClick={(downloadData)}>Descargar Excel</DownloadButton>
+					)}
+					{ props.downloadData && (
+						<Grid item xs={12} sm={6} md={3}>
+							<DownloadButton onClick={(downloadData)}>
+								Descargar Excel
+							</DownloadButton>
 						</Grid>
-					}
+					)}
 				</Grid>
-				<Grid item xs>
-					<Box width="100%" overflow="auto">
-						<TableContainer>
-							<Table stickyHeader size="small">
-								{ getTableHead() }
-								<TableBody>
-								{
-									props.data.map((row:any) => (
-										<TableRow hover key={row.id}>
-											{ getRowData(row) }
-										</TableRow>
-									))
-								}
-								</TableBody>
-							</Table>
-						</TableContainer>
-						<TablePagination
-							rowsPerPageOptions={[5, 10, 25]}
-							component="div"
-							count={props.total}
-							page={page}
-							rowsPerPage={pageSize}
-							onPageChange={handlePageChange}
-							onRowsPerPageChange={handlePageSizeChange}
-							ActionsComponent={TablePaginationActions}
-						/>
-					</Box>
-				</Grid>
+				<Box width="100%" overflow="auto">
+					<TableContainer>
+						<Table stickyHeader size="small" className={classes.root}>
+							{ getTableHead() }
+							<TableBody>
+							{
+								props.data.map((row:any) => (
+									<TableRow hover key={row.id}>
+										{ getRowData(row) }
+									</TableRow>
+								))
+							}
+							</TableBody>
+						</Table>
+					</TableContainer>
+					<TablePagination
+						rowsPerPageOptions={[5, 10, 25]}
+						component="div"
+						count={props.total}
+						page={page}
+						rowsPerPage={pageSize}
+						onPageChange={handlePageChange}
+						onRowsPerPageChange={handlePageSizeChange}
+						ActionsComponent={TablePaginationActions}
+					/>
+				</Box>
 			</Grid>
-		}
-		</>
+		)}
+		</div>
 	)
 }
 
