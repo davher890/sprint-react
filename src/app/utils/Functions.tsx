@@ -323,8 +323,14 @@ const functions = {
             { id: "processing", name: "Procesando cuota de atletas" },
             { id: "pending", name: "Pendiente" },
             { id: "validated", name: "Validado" },
+        ]
+    },
+
+    getReceiptAthleteStatus: function () { 
+        return [ 
             { id: "paid", name: "Pagado" },
-            { id: "return", name: "Devuelto" }
+            { id: "return", name: "Devuelto" },
+            { id: "sent_by_error", name: "Enviado por error"}
         ]
     },
 

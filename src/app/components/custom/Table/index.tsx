@@ -59,6 +59,8 @@ const CustomTable: React.FC<any> = (props) => {
 	const [orderBy, setOrderBy] = React.useState<string>('id')
     const [order, setOrder] = React.useState<Order>('asc')
 
+	const [localFilters, setLocalFilters] = React.useState<any>({})
+
 	const handleFilterChange = (filterType: string, filterField: string, filterValue: string, filterOptions?: any[]) => {
 
 		if (!filterValue || filterValue === ''){
@@ -212,8 +214,9 @@ const CustomTable: React.FC<any> = (props) => {
 					/>
 				}
 				else {
-					return <TextField label={column.text}
-						onChange={(e: any) => {
+					return <TextField label={column.text} value={localFilters[column.text] || ''}
+						onChange={async (e: any) => {
+							await setLocalFilters({ ...localFilters, [column.text]: e.target.value })
 							handleFilterChange(column.filter.type, column.dataField, e.target.value)
 						}}
 					/>

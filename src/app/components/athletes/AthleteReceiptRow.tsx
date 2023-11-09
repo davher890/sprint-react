@@ -9,6 +9,7 @@ import SaveButton from "../custom/SaveButton";
 import DeleteButton from '../custom/DeleteButton'
 import TextField from '../custom/TextField';
 import ConfirmDialog from "../custom/ConfirmDialog";
+import Select from '../custom/Select'
 
 import Functions from "../../utils/Functions";
 
@@ -79,30 +80,24 @@ const AthleteReceiptRow: React.FC<any> = (props) => {
                 { receipt.totalFee }
             </Grid>
             <Grid item xs>
-                { Functions.getReceiptStatus().find(c => c.id === receipt.status)?.name }
+                { Functions.getReceiptAthleteStatus().find(c => c.id === receipt.status)?.name }
             </Grid>
-            <Grid item xs={1} onClick={() => {
+            <Grid item xs onClick={() => {
                 setOpenObservationsDialog(true)
             }}>
                 <Tooltip title={<h2>Observaciones</h2>}>
                     <InfoIcon/>
                 </Tooltip>
             </Grid>
-            <Grid item xs>
-            { (receipt.status === 'return') && 
-                    <SaveButton onClick={async () => {
-                        props.setAthleteReceiptStatus(receipt.athleteId, receipt.receiptId, 'paid').then(() => {
-                            setReceipt({ ...receipt, status: 'paid'})
+            <Grid item xs={1}>
+                <Select fullWidth name="receiptStatus" label="Estado" 
+                    options={Functions.getReceiptAthleteStatus()} value={receipt.status}
+                    error={props.error} onChange={(value: string, item: any) => {
+                        props.setAthleteReceiptStatus(receipt.athleteId, receipt.receiptId, item.id).then(() => {
+                            setReceipt({ ...receipt, status: item.id})
                         })
-                    }}>Pagar</SaveButton>
-            }
-            { (receipt.status === 'paid') && 
-                    <SaveButton onClick={async () => {
-                        props.setAthleteReceiptStatus(receipt.athleteId, receipt.receiptId, 'return').then(() => {
-                            setReceipt({ ...receipt, status: 'return'})
-                        })
-                    }}>Devolver</SaveButton>
-            }
+                    }}
+                />
             </Grid>
             <Dialog fullWidth={true} open={openObservationsDialog} aria-labelledby="form-dialog-title"
                 onClose={() => {
