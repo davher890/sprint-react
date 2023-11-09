@@ -335,7 +335,6 @@ const functions = {
     getPaymentTypes: function () {
         return [
             { id: "MET", name: "Efectivo" },
-            { id: "TRANSF", name: "Transferencia" },
             { id: "DOM", name: "Domiciliación Bancaria" },
             { id: "SUBV", name: "Subvencionado" },
         ]
