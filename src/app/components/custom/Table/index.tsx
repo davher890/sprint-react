@@ -41,11 +41,11 @@ const CustomTable: React.FC<any> = (props) => {
 			color: props.theme.palette.secondary.main,
 			// fontSize: 30,
 			opacity: 1
-		},
-		tableContainer: {
-			maxHeight: "500px", // Adjust the height as needed
-			overflowY: "auto",
-		},
+		}
+		// tableContainer: {
+		// 	maxHeight: "500px", // Adjust the height as needed
+		// 	overflowY: "auto",
+		// },
 	});
 
 	const classes = styles();
@@ -229,7 +229,7 @@ const CustomTable: React.FC<any> = (props) => {
 	}
 
 	return (
-		<div className={classes.tableContainer}>
+		<div> {/* //className={classes.tableContainer}> */}
 		{ props.loading && <Spinner/> }
 		{!props.loading && (
 			<Grid container item direction="column" spacing={3}>

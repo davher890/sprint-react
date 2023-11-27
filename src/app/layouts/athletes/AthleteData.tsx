@@ -574,7 +574,6 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                             onChange={handleChange}
                                                         />
                                                     </Grid>
-                                                    
                                                 </Grid>
                                                 <Grid container item spacing={1}>
                                                     <Grid item xs>
@@ -631,6 +630,14 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                             onChange={handleChange}
                                                         />
                                                     </Grid>
+                                                    <Grid container >
+                                                    <Button style={{maxWidth: '30%'}} onClick={() => {
+                                                        setFieldValue('holderName', values.name)
+                                                        setFieldValue('holderFirstSurname', values.firstSurname)
+                                                        setFieldValue('holderSecondSurname', values.secondSurname)
+                                                        setFieldValue('holderDni', values.dni)
+                                                    }}>Titular de la cuenta</Button>
+                                                </Grid>
                                                 </Grid>
                                             </Grid>
                                         </CustomCard>
