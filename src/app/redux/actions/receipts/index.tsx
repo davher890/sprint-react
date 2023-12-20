@@ -1,7 +1,7 @@
 import * as ACTION_TYPES from "../../constants/action_types";
 
 import { addData, addReceiptAthletes, findAll, findById, findReceiptAthleteById, deleteReceiptAthletes, deleteReceipt, downloadExcel, saveReceiptAthlete, validateData, findReceiptAthleteObservations, downloadReturnReceiptRegisteredAthleteExcel, downloadReturnReceiptUnregisteredAthleteExcel } from "../../../services/ReceiptService"
-import { findReceiptDataPagination, findReceiptIdAthleteDataPagination, findReturnReceiptRegisterAthleteDataPagination, findReturnReceiptUnregisterAthleteDataPagination } from "../../../services/TableService"
+import { findNotPaidReceiptRegisterAthleteDataPagination, findNotPaidReceiptUnregisterAthleteDataPagination, findReceiptDataPagination, findReceiptIdAthleteDataPagination, findReturnReceiptRegisterAthleteDataPagination, findReturnReceiptUnregisterAthleteDataPagination } from "../../../services/TableService"
 
 import { Order } from '../../../types/order'
 
@@ -25,6 +25,22 @@ export function getReturnReceiptUnregisteredAthleteTable(season: string, page: n
     return function (dispatch: any) {
         return findReturnReceiptUnregisterAthleteDataPagination(season, page, size, filters, sort, sortDirection).then(json => {
             dispatch({ type: ACTION_TYPES.LOAD_RETURNED_RECEIPT_UNREGISTERED_ATHLETE_TABLE, payload: json });
+        });
+    }
+}
+
+export function getNotPaidReceiptRegisteredAthleteTable(season: string, page: number, size: number, filters: any, sort: string, sortDirection: Order) {
+    return function (dispatch: any) {
+        return findNotPaidReceiptRegisterAthleteDataPagination(season, page, size, filters, sort, sortDirection).then(json => {
+            dispatch({ type: ACTION_TYPES.LOAD_NOT_PAID_RECEIPT_REGISTERED_ATHLETE_TABLE, payload: json });
+        });
+    }
+}
+
+export function getNotPaidReceiptUnregisteredAthleteTable(season: string, page: number, size: number, filters: any, sort: string, sortDirection: Order) {
+    return function (dispatch: any) {
+        return findNotPaidReceiptUnregisterAthleteDataPagination(season, page, size, filters, sort, sortDirection).then(json => {
+            dispatch({ type: ACTION_TYPES.LOAD_NOT_PAID_RECEIPT_UNREGISTERED_ATHLETE_TABLE, payload: json });
         });
     }
 }

@@ -45,6 +45,7 @@ import { Box } from '@material-ui/core';
 import AuthenticatedProtected from "./components/custom/AuthenticatedProtected";
 import AdminProtected from "./components/custom/AdminProtected";
 import ReturnedReceiptTable from "./layouts/receipts/ReturnedReceiptTable";
+import NotPaidReceiptTable from "./layouts/receipts/NotPaidReceiptTable";
 
 
 const AppBar: React.FC<any> = (props) => {
@@ -99,7 +100,8 @@ const AppBar: React.FC<any> = (props) => {
           <Route path="/receipts"                 element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptData/></Box></AuthenticatedProtected>}/>
           <Route path="/receipts/athletes/:id"    element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptAthleteData/></Box></AuthenticatedProtected>}/>
           <Route path="/receipts/returned/list"   element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReturnedReceiptTable/></Box></AuthenticatedProtected>}/>
-
+          <Route path="/receipts/not_paid/list"   element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><NotPaidReceiptTable/></Box></AuthenticatedProtected>}/>
+          
           <Route path="/trainers/list"            element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><TrainerTable/></Box></AuthenticatedProtected>}/>
           <Route path="/trainers/:id"             element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><TrainerData/></Box></AuthenticatedProtected>}/>
           <Route path="/trainers"                 element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><TrainerData/></Box></AuthenticatedProtected>}/>

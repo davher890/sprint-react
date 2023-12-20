@@ -14,13 +14,13 @@ import {
 import AthleteReceiptRow from "./AthleteReceiptRow";
 
 const AthleteReceipts: React.FC<any> = (props) => {
-    const [receipts, setReceipts] = React.useState<any[]>(props.receipts);
+    const [receipts, setReceipts] = React.useState<any[]>([]);
 
     React.useEffect(() => {
-        if (props.id) {
-            props.getAthleteReceipts(props.id);
+        if (props.athleteId) {
+            props.getAthleteReceipts(props.athleteId);
         }
-    }, [props.id]);
+    }, [props.athleteId]);
 
     React.useEffect(() => {
         if (props.receipts) {

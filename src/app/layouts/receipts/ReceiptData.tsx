@@ -262,13 +262,13 @@ const NewReceiptForm: React.FC<any> = (props) => {
                             </Grid>
                             <Grid container item xs spacing={4}>
                                 { isValidReceipt(receipt) && <Grid item xs={3}>
-                                    {(props.loading ? <Spinner/> : (!receipt.id || receipt.status === 'pending') && <SearchButton onClick={() => {
+                                    {(props.loading ? <Spinner/> : (!receipt.id || receipt.status === 'PENDING') && <SearchButton onClick={() => {
                                         saveReceipt(receipt)
                                     }}>Guardar</SearchButton>)
                                     }
                                 </Grid>
                                 }
-                                { receipt.status === 'pending' && 
+                                { receipt.status === 'PENDING' && 
                                     <Grid item xs={2}>
                                         <SelectButton onClick={async () => {
                                             props.validateReceipt(props.id)
@@ -311,7 +311,7 @@ const NewReceiptForm: React.FC<any> = (props) => {
                                             props.getReceiptIdAthleteTable(props.receipt.id, page, size, filters, sort, sortDirection);
                                         }
                                     }}
-                                    selectableRows={props.receipt.status !== 'validated'}
+                                    selectableRows={props.receipt.status !== 'VALIDATED'}
                                     selectedIds={selectedIds}
                                     onSelectedIds={(id: number, checked: boolean, row: any) =>{
                                         let ids = selectedIds

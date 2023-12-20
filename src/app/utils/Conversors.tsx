@@ -56,7 +56,7 @@ function returnReceiptAthleteDataConversor(d: any) {
         specialization: d.specialization === true ? 'Si' : 'No',
 
         paymentType: functions.getPaymentTypes().find(st => st.id === d.paymentType)?.name,
-        feeType: functions.getFeeTypes().find(ft => ft.id === d.feeType)?.name,
+        feeTypeId: d.feeTypeName,
         monthlyFee: d.monthlyFee,
         enrollmentFee: d.enrollmentFee,
         membershipFee: d.membershipFee,
@@ -94,7 +94,7 @@ function receiptAthleteDataConversor(d: any) {
         specialization: d.specialization === true ? 'Si' : 'No',
 
         paymentType: functions.getPaymentTypes().find(st => st.id === d.paymentType)?.name,
-        feeType: functions.getFeeTypes().find(ft => ft.id === d.feeType)?.name,
+        feeTypeId: d.feeTypeName,
         monthlyFee: d.monthlyFee,
         enrollmentFee: d.enrollmentFee,
         membershipFee: d.membershipFee,
@@ -128,7 +128,7 @@ function athleteDataConversor(d: any) {
         dorsalCategory: functions?.getDorsalCategories().find(c => c.id === d.dorsalCategory)?.name,
         iban: d.iban,
         paymentType: functions.getPaymentTypes().find(st => st.id === d.paymentType)?.name,
-        feeType: functions.getFeeTypes().find(ft => ft.id === d.feeType)?.name,
+        feeTypeId: d.feeTypeName,
         holderName: d.holderName,
         holderFirstSurname: d.holderFirstSurname,
         holderSecondSurname: d.holderSecondSurname,
@@ -240,7 +240,7 @@ const Utils = (action: { type: string, payload: any }) => {
             return receiptAthleteDataConversor(d)
         })
     }
-    else if (action.type === ACTION_TYPES.LOAD_RETURNED_RECEIPT_REGISTERED_ATHLETE_TABLE || action.type === ACTION_TYPES.LOAD_RETURNED_RECEIPT_UNREGISTERED_ATHLETE_TABLE){
+    else if (action.type === ACTION_TYPES.LOAD_RETURNED_RECEIPT_REGISTERED_ATHLETE_TABLE || action.type === ACTION_TYPES.LOAD_RETURNED_RECEIPT_UNREGISTERED_ATHLETE_TABLE || action.type === ACTION_TYPES.LOAD_NOT_PAID_RECEIPT_REGISTERED_ATHLETE_TABLE || action.type === ACTION_TYPES.LOAD_NOT_PAID_RECEIPT_UNREGISTERED_ATHLETE_TABLE){
         items = action.payload.content.map((d: any) => {
             return returnReceiptAthleteDataConversor(d)
         })

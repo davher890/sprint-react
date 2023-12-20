@@ -19,6 +19,12 @@ const session = {
             return {id: id, name: sportSchoolMap[id]}
         });
         sessionStorage.setItem('sport_schools', JSON.stringify(sportSchools))
+
+        let feeTypeMap = JSON.parse(decoded.fee_type_map)
+        let feeTypes = Object.keys(feeTypeMap).map((id: string) => {
+            return {id: id, name: feeTypeMap[id]}
+        });
+        sessionStorage.setItem('fee_types', JSON.stringify(feeTypes))
     }
 }
 export default session

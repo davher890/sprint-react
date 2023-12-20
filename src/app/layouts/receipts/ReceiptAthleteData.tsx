@@ -8,9 +8,13 @@ import { Alert, AlertTitle } from '@material-ui/lab';
 
 import Card from '../../components/custom/Card';
 import SaveButton from '../../components/custom/SaveButton'
+import ReturnButton from '../../components/custom/ReturnButton'
+import PayButton from '../../components/custom/PayButton'
 import TextField from '../../components/custom/TextField';
 
 import { getReceiptAthlete, addReceiptAthlete } from "../../redux/actions/receipts";
+import { setAthleteReceiptStatus } from "../../redux/actions/athletes";
+
 import SearchButton from "../../components/custom/SearchButton";
 
 const ReceiptAthleteData: React.FC<any> = (props) => {
@@ -118,6 +122,13 @@ const ReceiptAthleteData: React.FC<any> = (props) => {
                 <Toolbar>
                     { receiptAthlete.athleteId > 0 && <SearchButton onClick={() => window.open("/athletes/" + receiptAthlete.athleteId, "_self")}>Ir al atleta</SearchButton> }
                     <SaveButton text='Guardar' onClick={saveReceiptAthlete} />
+                    { (receiptAthlete.status === 'NOT_PAID' || receiptAthlete.status == 'RETURN') && <PayButton onClick={() => {
+                        props.setAthleteReceiptStatus(receiptAthlete.athleteId, receiptAthlete.receiptId, 'PAID').then(() => {
+                            setReceiptAthlete({ ...receiptAthlete, status: 'PAID' })
+                        })
+                        
+                    }}/> }
+                    <ReturnButton onClick={() => window.open("/receipts/" + receiptAthlete.receiptId, "_self")}/>
                 </Toolbar>
             </AppBar>
         </>
@@ -125,10 +136,10 @@ const ReceiptAthleteData: React.FC<any> = (props) => {
     )
 }
 
-
 const mapDispatchToProps = {
     getReceiptAthlete,
-    addReceiptAthlete
+    addReceiptAthlete,
+    setAthleteReceiptStatus
 }
 
 const mapStateToProps = (state: any) => {

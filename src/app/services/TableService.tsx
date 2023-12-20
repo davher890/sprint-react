@@ -18,6 +18,14 @@ export const findReturnReceiptUnregisterAthleteDataPagination = (season: string,
     return findDataPagination("receipts/athletes/return/unregistered?season=" + season, page, size, filters, sort, sortDirection)
 }
 
+export const findNotPaidReceiptRegisterAthleteDataPagination = (season: string, page: number, size: number, filters: any, sort: string, sortDirection: Order) => {
+    return findDataPagination("receipts/athletes/not_paid/registered?season=" + season, page, size, filters, sort, sortDirection)
+}
+
+export const findNotPaidReceiptUnregisterAthleteDataPagination = (season: string, page: number, size: number, filters: any, sort: string, sortDirection: Order) => {
+    return findDataPagination("receipts/athletes/not_paid/unregistered?season=" + season, page, size, filters, sort, sortDirection)
+}
+
 export const findReceiptDataPagination = (page: number, size: number, filters: any, sort: string, sortDirection: Order) => {
     return findDataPagination("receipts", page, size, filters, sort, sortDirection)
 }

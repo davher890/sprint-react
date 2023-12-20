@@ -80,7 +80,7 @@ const AthleteReceiptRow: React.FC<any> = (props) => {
                 { receipt.totalFee }
             </Grid>
             <Grid item xs>
-                { Functions.getReceiptAthleteStatus().find(c => c.id === receipt.status)?.name }
+                { Functions.getReceiptAthleteStatus(receipt.paymentType).find(c => c.id === receipt.status)?.name }
             </Grid>
             <Grid item xs onClick={() => {
                 setOpenObservationsDialog(true)
@@ -91,7 +91,7 @@ const AthleteReceiptRow: React.FC<any> = (props) => {
             </Grid>
             <Grid item xs={1}>
                 <Select fullWidth name="receiptStatus" label="Estado" 
-                    options={Functions.getReceiptAthleteStatus()} value={receipt.status}
+                    options={Functions.getReceiptAthleteStatus(receipt.paymentType)} value={receipt.status}
                     error={props.error} onChange={(value: string, item: any) => {
                         props.setAthleteReceiptStatus(receipt.athleteId, receipt.receiptId, item.id).then(() => {
                             setReceipt({ ...receipt, status: item.id})
