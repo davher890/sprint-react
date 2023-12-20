@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { Formik } from 'formik';
 
-import { AppBar, Box, Grid, Snackbar, Toolbar } from '@material-ui/core';
+import { AppBar, Box, Chip, Grid, Snackbar, Toolbar } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 import DeleteButton from "../../components/custom/DeleteButton";
@@ -63,6 +63,8 @@ const ConnectedForm: React.FC<any> = (props) => {
                     quarterThreeDays: props.fee.quarterThreeDays,
                     quarterSpecialization: props.fee.quarterSpecialization,
                     trackFee: props.fee.trackFee,
+                    feeTypeIds: props.sport_school.feeTypeIds || [],
+                    feeTypes: props.sport_school.feeTypes || [],
                     
                     openDeleteDialog: false,
                     
@@ -115,23 +117,33 @@ const ConnectedForm: React.FC<any> = (props) => {
                     </Snackbar>
                     <Box paddingBottom={7}>
                         <Grid container spacing={3}>
-                            <Grid item xs>
-                                <Card title="Datos de la Escuela deportiva">
-                                    <Grid container spacing={2}>
-                                        <Grid item xs>
-                                            <TextField name="name" label="Nombre" value={values.name} onChange={handleChange}
-                                                error={touched.name && errors.name} />
+                            <Grid container direction='column' item xs>
+                                <Grid item xs>
+                                    <Card title="Datos de la Escuela deportiva">
+                                        <Grid container spacing={2}>
+                                            <Grid item xs>
+                                                <TextField name="name" label="Nombre" value={values.name} onChange={handleChange}
+                                                    error={touched.name && errors.name} />
+                                            </Grid>
+                                            <Grid item xs>
+                                                <TextField name="municipality" label="Municipio" value={values.municipality} onChange={handleChange}
+                                                    error={touched.municipality && errors.municipality} />
+                                            </Grid>
+                                            <Grid item xs>
+                                                <TextField name="address" label="Dirección" value={values.address} onChange={handleChange}
+                                                    error={touched.address && errors.address} />
+                                            </Grid>
                                         </Grid>
-                                        <Grid item xs>
-                                            <TextField name="municipality" label="Municipio" value={values.municipality} onChange={handleChange}
-                                                error={touched.municipality && errors.municipality} />
-                                        </Grid>
-                                        <Grid item xs>
-                                            <TextField name="address" label="Dirección" value={values.address} onChange={handleChange}
-                                                error={touched.address && errors.address} />
-                                        </Grid>
-                                    </Grid>
-                                </Card>
+                                    </Card>
+                                </Grid>
+                                <Grid item xs>
+                                    <Card title="Tipos de cuota">
+                                        { values.feeTypes && values.feeTypes.length > 0 && values.feeTypes.map((ft: any) =>
+                                                <Chip label={ft.name}/>
+                                            )
+                                        }
+                                    </Card>
+                                </Grid>
                             </Grid>
                             <Grid item xs>
                                 <Card title="Cuotas">

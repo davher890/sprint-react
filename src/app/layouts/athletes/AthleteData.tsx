@@ -64,7 +64,9 @@ const CreateAthlete: React.FC<any> = (props) => {
         if (props.athlete){
             setAthlete(props.athlete)
             props.getSportSchoolFee(props.athlete.sportSchoolId);
-            props.getAthleteReceipts(props.athlete.id)
+            if (props.athlete.id){
+                props.getAthleteReceipts(props.athlete.id)
+            }
         }
     }, [props.athlete])
 
@@ -160,7 +162,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                     // Bank info
                     iban: athlete.iban || '',
                     paymentType: athlete.paymentType || '',
-                    feeType: athlete.feeType || '',
+                    feeTypeId: athlete.feeTypeId || '',
                     holderName: athlete.holderName || '',
                     holderFirstSurname: athlete.holderFirstSurname || '',
                     holderSecondSurname: athlete.holderSecondSurname || '',
@@ -204,7 +206,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                     if (values.postalCode  === '') errors.postalCode = true;
                     if (values.address  === '') errors.address = true;
                     if (values.paymentType  === '') errors.paymentType = true;
-                    if (values.feeType  === '') errors.feeType = true;
+                    if (values.feeTypeId  === '') errors.feeTypeId = true;
                                     
                     if(values.paymentType === "DOM") {
                         if (!values.iban || values.iban === '') {
@@ -342,7 +344,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                     setFieldValue("familiarTwoMail", athlete.familiarTwoMail)
                                     // Payment data
                                     setFieldValue("paymentType", athlete.paymentType)
-                                    setFieldValue("feeType", athlete.feeType)
+                                    setFieldValue("feeTypeId", athlete.feeTypeId)
                                     setFieldValue("iban", athlete.iban)
                                     setFieldValue("holderName", athlete.holderName)
                                     setFieldValue("holderFirstSurname", athlete.holderFirstSurname)
@@ -422,20 +424,20 @@ const CreateAthlete: React.FC<any> = (props) => {
                     </Dialog>
 
                     <Dialog fullWidth={true} maxWidth="xl" open={values.openReceiptsDialog} aria-labelledby="form-dialog-title"
-                        onClose={() => {
+                        onClose={async () => {
                             setFieldValue('openReceiptsDialog', false)
-                            getAthlete(props)
+                            await getAthlete(props)
                         }}
                     >
                         <DialogContent>
                             <Grid container>
-                                <AthleteReceipts id={values.id} />
+                                <AthleteReceipts athleteId={values.id} />
                             </Grid>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={() => { 
+                            <Button onClick={async () => { 
                                 setFieldValue('openReceiptsDialog', false) 
-                                getAthlete(props)
+                                await getAthlete(props)
                             }}>Cerrar</Button>
                         </DialogActions>
                     </Dialog>
@@ -756,10 +758,10 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                             />
                                                         </Grid>
                                                         <Grid item xs={4}>
-                                                            <FeeTypeSelect feeType={values.feeType} sportSchoolId={values.sportSchoolId}
-                                                                error={touched.feeType && errors.feeType}
-                                                                onChange={(feeType: string) => {
-                                                                    setFieldValue('feeType', feeType);
+                                                            <FeeTypeSelect feeType={values.feeTypeId} sportSchoolId={values.sportSchoolId}
+                                                                error={touched.feeTypeId && errors.feeTypeId}
+                                                                onChange={(feeTypeId: string) => {
+                                                                    setFieldValue('feeTypeId', feeTypeId);
                                                                 }}
                                                             />
                                                         </Grid>
@@ -810,7 +812,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                         </Grid>
                                     }  
                                 </Grid>
-                                <Grid container item style={{ display: values.sportSchoolId > 0 && values.feeType !== 'SOCIO' ? "block" : "none" }}>
+                                <Grid container item style={{ display: values.sportSchoolId > 0 && values.feeTypeId !== 4 ? "block" : "none" }}>
                                     <Grid item>
                                         <CustomCard title="Datos Deportivos" >
                                             <Grid container item spacing={1}>
@@ -865,7 +867,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                             
                                             
                                                 <Grid container spacing={1} direction="row">
-                                                    { values.feeType == 'PISTAS' || values.feeType == 'PISTAS_FED' ?
+                                                    { values.feeTypeId === 5 || values.feeTypeId === 6 ?
                                                     <Grid item xs={2}>
                                                         <Select name="trackHours" label="Num horas de pista" error={touched.trackHours && errors.trackHours}
                                                                 options={[{ id: "h_1_5", name: "1.5 h" }, { id: "h_3", name: "3 h" } ]} value={values.trackHours}

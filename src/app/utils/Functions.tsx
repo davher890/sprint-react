@@ -320,18 +320,24 @@ const functions = {
 
     getReceiptStatus: function () { 
         return [ 
-            { id: "processing", name: "Procesando cuota de atletas" },
-            { id: "pending", name: "Pendiente" },
-            { id: "validated", name: "Validado" },
+            { id: "PROCESSING", name: "Procesando cuota de atletas" },
+            { id: "PENDING", name: "Pendiente" },
+            { id: "VALIDATED", name: "Validado" },
         ]
     },
 
-    getReceiptAthleteStatus: function () { 
-        return [ 
-            { id: "paid", name: "Pagado" },
-            { id: "return", name: "Devuelto" },
-            { id: "sent_by_error", name: "Enviado por error"}
+    getReceiptAthleteStatus: function (paymentTypeId: string) { 
+        let statuses = [ 
+            { id: "PAID", name: "Pagado" },
         ]
+        if (paymentTypeId !== 'DOM'){
+            statuses.push({ id: "NOT_PAID", name: "No pagado" })
+        }
+        else {
+            statuses.push({ id: "RETURN", name: "Devuelto" })
+            statuses.push({ id: "SENT_BY_ERROR", name: "Enviado por error"})
+        }
+        return statuses
     },
 
     getSportSchools: function() {
@@ -347,14 +353,7 @@ const functions = {
     },
 
     getFeeTypes: function () {
-        return [
-            { id: "CLUB", name: "Club" },
-            { id: "CLUB_ANUAL", name: "Club anual" },
-            { id: "FED", name: "Federado" },
-            { id: "SOCIO", name: "Socio" },
-            { id: "PISTAS", name: "Pistas"},
-            { id: "PISTAS_FED", name: "Pistas/Federado"}
-        ]
+        return JSON.parse(sessionStorage.getItem('fee_types') || '[]')
     },
 
     leftPadding: (str: any, max: number, c: string): string => {

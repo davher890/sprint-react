@@ -4,6 +4,7 @@ import authReducer from "./authentication/index";
 import athleteReducer from "./athletes/index";
 import incidenceReducer from "./incidences/index";
 import feeReducer from "./fees/index";
+import feeTypeReducer from "./feeTypes/index";
 import groupReducer from "./groups/index";
 import receiptReducer from "./receipts/index";
 import scheduleReducer from "./schedules/index";
@@ -29,6 +30,7 @@ export default createStore(
     incidence_reducer: incidenceReducer,
     fee_reducer: feeReducer,
     group_reducer: groupReducer,
+    feeTypeReducer: feeTypeReducer,
     receipt_reducer: receiptReducer,
     schedule_reducer: scheduleReducer,
     sport_school_reducer: sportSchoolReducer,

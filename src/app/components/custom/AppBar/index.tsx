@@ -26,26 +26,16 @@ import {
 import * as LoginService from "../../../services/LoginService";
 
 const CustomAppBar: React.FC = (props) => {
-    const [athletesAnchorEl, setAthletesAnchorEl] =
-        useState<null | HTMLElement>(null);
-    const [groupsAnchorEl, setGroupsAnchorEl] = useState<null | HTMLElement>(
-        null
-    );
-    const [listingsAnchorEl, setListingsAnchorEl] =
-        useState<null | HTMLElement>(null);
-    const [receiptsAnchorEl, setReceiptsAnchorEl] =
-        useState<null | HTMLElement>(null);
+    const [athletesAnchorEl, setAthletesAnchorEl] = useState<null | HTMLElement>(null);
+    const [groupsAnchorEl, setGroupsAnchorEl] = useState<null | HTMLElement>(null);
+    const [listingsAnchorEl, setListingsAnchorEl] = useState<null | HTMLElement>(null);
+    const [receiptsAnchorEl, setReceiptsAnchorEl] = useState<null | HTMLElement>(null);
 
-    const handleMenuOpen = (
-        event: React.MouseEvent<HTMLElement>,
-        setAnchorEl: React.Dispatch<React.SetStateAction<null | HTMLElement>>
-    ) => {
+    const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, setAnchorEl: React.Dispatch<React.SetStateAction<null | HTMLElement>>) => {
         setAnchorEl(event.currentTarget);
     };
 
-    const handleMenuClose = (
-        setAnchorEl: React.Dispatch<React.SetStateAction<null | HTMLElement>>
-    ) => {
+    const handleMenuClose = (setAnchorEl: React.Dispatch<React.SetStateAction<null | HTMLElement>>) => {
         setAnchorEl(null);
     };
 
@@ -74,10 +64,10 @@ const CustomAppBar: React.FC = (props) => {
                     open={Boolean(athletesAnchorEl)}
                     onClose={() => handleMenuClose(setAthletesAnchorEl)}
                 >
-                    <MenuItem component={RouterLink} to="/athletes/list">
+                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setAthletesAnchorEl)} to="/athletes/list">
                         Gestión
                     </MenuItem>
-                    <MenuItem component={RouterLink} to="/athletes/historic">
+                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setAthletesAnchorEl)} to="/athletes/historic">
                         Histórico
                     </MenuItem>
                 </Menu>
@@ -96,16 +86,16 @@ const CustomAppBar: React.FC = (props) => {
                     open={Boolean(groupsAnchorEl)}
                     onClose={() => handleMenuClose(setGroupsAnchorEl)}
                 >
-                    <MenuItem component={RouterLink} to="/groups/list">
+                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setGroupsAnchorEl)} to="/groups/list">
                         Gestión
                     </MenuItem>
-                    <MenuItem component={RouterLink} to="/groups/swap">
+                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setGroupsAnchorEl)} to="/groups/swap">
                         Intercambio Masivo
                     </MenuItem>
-                    <MenuItem component={RouterLink} to="/schedules/list">
+                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setGroupsAnchorEl)} to="/schedules/list">
                         Horarios
                     </MenuItem>
-                    <MenuItem component={RouterLink} to="/trainers/list">
+                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setGroupsAnchorEl)} to="/trainers/list">
                         Entrenadores
                     </MenuItem>
                 </Menu>
@@ -124,10 +114,10 @@ const CustomAppBar: React.FC = (props) => {
                     open={Boolean(listingsAnchorEl)}
                     onClose={() => handleMenuClose(setListingsAnchorEl)}
                 >
-                    <MenuItem component={RouterLink} to="/groups/attendance">
+                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setListingsAnchorEl)} to="/groups/attendance">
                         Asistencia
                     </MenuItem>
-                    <MenuItem component={RouterLink} to="/groups/athletes">
+                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setListingsAnchorEl)} to="/groups/athletes">
                         Atletas-Grupos
                     </MenuItem>
                 </Menu>
@@ -146,14 +136,22 @@ const CustomAppBar: React.FC = (props) => {
                     open={Boolean(receiptsAnchorEl)}
                     onClose={() => handleMenuClose(setReceiptsAnchorEl)}
                 >
-                    <MenuItem component={RouterLink} to="/receipts/list">
+                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setReceiptsAnchorEl)} to="/receipts/list">
                         Remesas
                     </MenuItem>
                     <MenuItem
                         component={RouterLink}
+                        onClick={() => handleMenuClose(setReceiptsAnchorEl)}
                         to="/receipts/returned/list"
                     >
                         Recibos devueltos
+                    </MenuItem>
+                    <MenuItem
+                        component={RouterLink}
+                        onClick={() => handleMenuClose(setReceiptsAnchorEl)}
+                        to="/receipts/not_paid/list"
+                    >
+                        Recibos no pagados
                     </MenuItem>
                 </Menu>
 

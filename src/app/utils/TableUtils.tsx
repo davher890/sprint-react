@@ -42,7 +42,10 @@ const Utils = {
             } },
             { dataField: 'iban', text : 'IBAN', show: false, filter: { type: "text" } },
             { dataField: 'paymentType', text : 'Forma de pago', show: false, filter: { type: "text" } },
-            { dataField: 'feeType', text : 'Tipo de cuota', show: false, filter: { type: "text" } },
+            { dataField: 'feeTypeId', text : 'Tipo de cuota', filter: { 
+                type: "options",
+                options : functions.getFeeTypes()
+            }}, 
             { dataField: 'holderName', text : 'Nombre Tit. Cuenta', show: false, filter: { type: "text" } },
             { dataField: 'holderFirstSurname', text : '1er Apellido Tit. Cuenta', show: false, filter: { type: "text" } },
             { dataField: 'holderSecondSurname', text : '2o Apellido Tit. Cuenta', show: false, filter: { type: "text" } },
@@ -86,7 +89,10 @@ const Utils = {
             { dataField: 'paymentType', text : 'Forma de pago' }
         ]
         let trimestralColumns = [
-            { dataField: 'feeType', text : 'Tipo de cuota' },
+            { dataField: 'feeTypeId', text : 'Tipo de cuota', filter: { 
+                type: "options",
+                options : functions.getFeeTypes()
+            }}, 
             { dataField: 'monthlyFee', text : 'Mensualidad', sort: true }, 
             { dataField: 'enrollmentFee', text : 'Matricula', sort: true }, 
             { dataField: 'membershipFee', text : 'Cuota de socio', sort: true }
@@ -106,20 +112,19 @@ const Utils = {
         return finalColumns;
     },
 
+    getNotPaidReceiptColumns: (receiptType: string, sportSchoolFee: any) => {
+        return Utils.getReturnedReceiptColumns(receiptType, sportSchoolFee)
+    },
+
     getReceiptAthleteColumns: (receiptType: string, sportSchoolFee: any) => {
         let commonColumns = [
             { dataField: 'athlete_id', text: 'athlete_id', show: false },
-            { dataField: 'code', text : 'Codigo', filter: { type: "number" } }, 
-            { dataField: 'familyCode', text : 'Codigo familia', filter: { type: "number" } }, 
+            // { dataField: 'code', text : 'Codigo', filter: { type: "number" } }, 
+            // { dataField: 'familyCode', text : 'Codigo familia', filter: { type: "number" } }, 
             { dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
             { dataField: 'firstSurname', text : 'Primer apellido', filter: { type: "text" } }, 
             { dataField: 'secondSurname', text : 'Segundo apellido', filter: { type: "text" } }, 
-            { dataField: 'lastRegisterDate', text : 'Fecha incorporacion', sort: false, type: "date" },
-            { dataField: 'sportSchoolId', text : 'Escuela', filter: { 
-                type: "options",
-                options : functions.getSportSchools()
-            }},
-            { dataField: 'groupName', text : 'Grupo', filter: { type: "text" } }, 
+            { dataField: 'groupName', text : 'Grupo', filter: { type: "text" },  sort: true }, 
             { dataField: 'days', text : 'Dias', sort: false }, 
             { dataField: 'numDays', text : 'Num. Dias', sort: false }, 
             { dataField: 'specialization', text : 'Especializacion', sort: false }, 
@@ -127,7 +132,7 @@ const Utils = {
             { dataField: 'paymentType', text : 'Forma de pago' }
         ] 
         let trimestralColumns = [
-            { dataField: 'feeType', text : 'Tipo de cuota' },
+            { dataField: 'feeTypeId', text : 'Tipo de cuota', sort: true },
             { dataField: 'monthlyFee', text : 'Mensualidad', sort: true }, 
             { dataField: 'enrollmentFee', text : 'Matricula', sort: true }, 
             { dataField: 'membershipFee', text : 'Cuota de socio', sort: true }
