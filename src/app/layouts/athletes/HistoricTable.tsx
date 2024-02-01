@@ -22,27 +22,21 @@ const HistoricTableComponent: React.FC<any> = (props) => {
 	}
 
 	return (
-		<React.Suspense fallback={<div>Cargando...</div>}>
-			<Grid container direction="column">
-				<Grid item xs >
-					<Table 
-						data={props.table_data}
-						page={props.page}
-						size={props.size}
-						total={props.total}
-						columns={Utils.getAthleteColumns()} 
-						downloadData={downloadData}
-						showColumns={true}
-						onPaginationFilterChange={(page: number, size: number, filters: any, sort: string, sortDirection: Order) => {
-							props.getHistoricTable(page, size, filters, sort, sortDirection);
-						}}
-						onRowClick={(id: number) => {
-							window.open("/athletes/" + id, "_self");
-						}}>
-					</Table>
-				</Grid>
-			</Grid>
-		</React.Suspense>
+		<Table 
+			data={props.table_data}
+			page={props.page}
+			size={props.size}
+			total={props.total}
+			columns={Utils.getAthleteColumns()} 
+			downloadData={downloadData}
+			showColumns={true}
+			onPaginationFilterChange={(page: number, size: number, filters: any, sort: string, sortDirection: Order) => {
+				props.getHistoricTable(page, size, filters, sort, sortDirection);
+			}}
+			onRowClick={(id: number) => {
+				window.open("/athletes/" + id, "_self");
+			}}>
+		</Table>
 	)
 }
 

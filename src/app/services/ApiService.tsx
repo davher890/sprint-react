@@ -8,11 +8,25 @@ const headers: any = {
     'Authorization': sessionStorage.getItem('token')
 }
 
+const fileHeaders: any = { 
+    // 'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    // 'Accept': 'multipart/form-data',
+    'Authorization': sessionStorage.getItem('token')
+}
+
 const getPostRequestOptions = (body: any) => {
     return {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(body)
+    }
+}
+
+const getPostFileRequestOptions = (formData: FormData) => {
+    return {
+        method: 'POST',
+        headers: fileHeaders,
+        body: formData
     }
 }
 
@@ -55,7 +69,6 @@ export const postRequest = (endpoint: string, body: Object) => {
         return res.json()
     })
 }
-
 
 export const getExcelRequest = (endpoint: string, excelName: string) => {
     return fetch((serverUrl || '') + endpoint, { headers })
@@ -103,4 +116,17 @@ export const postExcelRequest = (endpoint: string, body: Object, excelName: stri
 
 export const loginRequest = (endpoint: string, body: Object) => {
     return fetch((serverUrl || '') + endpoint, getPostRequestOptions(body))
+}
+
+export const uploadExcelFile = (endpoint: string, file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    return fetch((serverUrl || '') + endpoint, getPostFileRequestOptions(formData))
+    .then(res => {
+        console.log(res);
+        return res.json();
+    })
+    .catch(function () {
+        console.log("error");
+    });
 }

@@ -14,6 +14,8 @@ import ScheduleTable from './layouts/schedules/ScheduleTable';
 import IncidenceData from './components/incidences/IncidenceData';
 import IncidenceTable from './components/incidences/IncidenceTable';
 
+import LicenseUpload from './components/licenses/LicenseUpload';
+
 import ReceiptData from './layouts/receipts/ReceiptData';
 import ReceiptTable from './layouts/receipts/ReceiptTable';
 import ReceiptAthleteData from './layouts/receipts/ReceiptAthleteData';
@@ -94,7 +96,9 @@ const AppBar: React.FC<any> = (props) => {
           <Route path="/incidences/list"          element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><IncidenceTable/></Box></AuthenticatedProtected>}/>
           <Route path="/incidences/:id"           element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><IncidenceData/></Box></AuthenticatedProtected>}/>
           <Route path="/incidences"               element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><IncidenceData/></Box></AuthenticatedProtected>}/>
-          
+
+          <Route path="/licenses"                 element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><LicenseUpload/></Box></AuthenticatedProtected></AdminProtected>}/>
+
           <Route path="/receipts/list"            element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptTable/></Box></AuthenticatedProtected>}/>
           <Route path="/receipts/:id"             element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptData/></Box></AuthenticatedProtected>}/>
           <Route path="/receipts"                 element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptData/></Box></AuthenticatedProtected>}/>

@@ -41,7 +41,7 @@ const AthleteTable: React.FC<any> = (props) => {
 	}
 
 	return (
-		<React.Suspense fallback={<div>Cargando...</div>}>
+		<>
 			<ConfirmDialog open={openGroupChangeConfirmDialog} 
 				confirm={() => {
 					props.swapGroup(groupChangeId, selectedIds);
@@ -157,7 +157,7 @@ const AthleteTable: React.FC<any> = (props) => {
 					/>
 				</Grid>
 			</Grid>
-		</React.Suspense>
+		</>
 	)
 }
 

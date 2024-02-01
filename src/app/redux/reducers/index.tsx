@@ -3,6 +3,7 @@ import apiReducer from "./api/index";
 import authReducer from "./authentication/index";
 import athleteReducer from "./athletes/index";
 import incidenceReducer from "./incidences/index";
+import licenseReducer from "./licenses/index";
 import feeReducer from "./fees/index";
 import feeTypeReducer from "./feeTypes/index";
 import groupReducer from "./groups/index";
@@ -28,6 +29,7 @@ export default createStore(
     auth_reducer: authReducer,
     athlete_reducer: athleteReducer,
     incidence_reducer: incidenceReducer,
+    license_reducer: licenseReducer,
     fee_reducer: feeReducer,
     group_reducer: groupReducer,
     feeTypeReducer: feeTypeReducer,

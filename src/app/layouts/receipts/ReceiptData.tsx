@@ -49,8 +49,23 @@ const NewReceiptForm: React.FC<any> = (props) => {
     
     const licenseTypes = {'national' : 'Nacional', 'territorial': 'Territorial'}
 
+    const getSportSchoolReceiptType = (sportSchoolId: number) => {
+        if (sportSchoolId === 3){
+            return [
+                { id: "ANNUAL", name: "Anual" }
+            ]
+        }
+        else {
+            return [
+                { id: "TRIMESTRAL", name: "Trimestral" },
+                { id: "LICENSE", name: "Cuotas de licencias federativas" },
+            ]
+        }
+    }
+
     const isValidReceipt = (r:any) => {
-        return r.name && r.receiptType && r.sportSchoolId && r.sportSchoolId > 0 && r.paymentType && ((r.receiptType === 'TRIMESTRAL' && r.startDate && r.endDate && numMonths > 0 && r.creationDate && r.creationDate.length > 0) || (r.receiptType === 'LICENSE' && r.licenseTypes && r.licenseTypes.length > 0)) ;
+        return r.name && r.receiptType && r.sportSchoolId && r.sportSchoolId > 0 && r.paymentType && 
+        ((r.receiptType === 'TRIMESTRAL' && r.startDate && r.endDate && numMonths > 0 && r.creationDate && r.creationDate.length > 0) || r.receiptType === 'ANNUAL' || (r.receiptType === 'LICENSE' && r.licenseTypes && r.licenseTypes.length > 0)) ;
     }
     const saveReceipt = (r: any) => {
         if (isValidReceipt(r)){
@@ -156,15 +171,6 @@ const NewReceiptForm: React.FC<any> = (props) => {
                                     />
                                 </Grid>
                                 <Grid item xs>
-                                    <SportSchoolSelect sportSchoolId={receipt.sportSchoolId} error={!receipt.sportSchoolId}
-                                        onChange={(id: number) => {
-                                            setReceipt({ ...receipt, sportSchoolId: id });
-                                            props.getSportSchoolCollections(id)
-                                            props.getSportSchoolFee(id);
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item xs>
                                     <Select fullWidth name="paymentType" label="Forma de pago" error={!receipt.paymentType}
                                         options={[
                                             { id: "METTRANSF", name: "Efectivo y transferencia" },
@@ -176,16 +182,25 @@ const NewReceiptForm: React.FC<any> = (props) => {
                                     />
                                 </Grid>
                                 <Grid item xs>
-                                    <Select fullWidth name="receiptType" label="Tipo de remesa" error={!receipt.receiptType}
-                                        options={[
-                                            { id: "TRIMESTRAL", name: "Trimestral" },
-                                            { id: "LICENSE", name: "Cuotas de licencias federativas" },
-                                        ]} value={receipt.receiptType}
-                                        onChange={(e: any, value: any) => {
-                                            setReceipt({ ...receipt, receiptType: value ? value.id : ""})
+                                    <SportSchoolSelect sportSchoolId={receipt.sportSchoolId} error={!receipt.sportSchoolId}
+                                        onChange={(id: number) => {
+                                            setReceipt({ ...receipt, sportSchoolId: id });
+                                            props.getSportSchoolCollections(id)
+                                            props.getSportSchoolFee(id);
                                         }}
                                     />
                                 </Grid>
+                                
+                                { receipt.sportSchoolId &&
+                                    <Grid item xs>
+                                        <Select fullWidth name="receiptType" label="Tipo de remesa" error={!receipt.receiptType}
+                                            options={getSportSchoolReceiptType(receipt.sportSchoolId)} value={receipt.receiptType}
+                                            onChange={(e: any, value: any) => {
+                                                setReceipt({ ...receipt, receiptType: value ? value.id : ""})
+                                            }}
+                                        />
+                                    </Grid>
+                                }
                                 { receipt.receiptType && receipt.receiptType === 'LICENSE' && 
                                     <Grid container item direction="column" xs>
                                         { Object.entries(licenseTypes).map(([licenseType, translation]) => {
@@ -294,10 +309,9 @@ const NewReceiptForm: React.FC<any> = (props) => {
                                     { isAdmin() && <Grid item xs spacing={2}>
                                         <Chip label={"Socio: " + props.receipt.membershipFee} color="primary" />
                                         <Chip label={"Matricula: " + props.receipt.enrollmentFee} color="primary" />
-                                        <Chip label={"Anual: " + props.receipt.sportSchoolAnnualFee} color="primary" />
                                         <Chip label={"Trimestral: " + props.receipt.monthlyFee} color="primary" />
                                         <Chip label={"Licencias: " + props.receipt.licenseFee} color="primary" />
-                                        <Chip label={"Total: " + (props.receipt.monthlyFee + props.receipt.enrollmentFee+ props.receipt.membershipFee + props.receipt.licenseFee + props.receipt.sportSchoolAnnualFee)} color="secondary" />
+                                        <Chip label={"Total: " + (props.receipt.monthlyFee + props.receipt.enrollmentFee+ props.receipt.membershipFee + props.receipt.licenseFee )} color="secondary" />
                                     </Grid> }
                                 </Grid>
                                 <Table 
@@ -305,7 +319,7 @@ const NewReceiptForm: React.FC<any> = (props) => {
                                     page={props.page}
                                     size={props.size}
                                     total={props.total}
-                                    columns={ Utils.getReceiptAthleteColumns(props.receipt.receiptType, props.sportSchoolFee) }
+                                    columns={ Utils.getReceiptAthleteColumns(props.receipt.receiptType, receipt.sportSchoolId) }
                                     onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
                                         if (props.receipt.id){
                                             props.getReceiptIdAthleteTable(props.receipt.id, page, size, filters, sort, sortDirection);

@@ -116,15 +116,13 @@ const Utils = {
         return Utils.getReturnedReceiptColumns(receiptType, sportSchoolFee)
     },
 
-    getReceiptAthleteColumns: (receiptType: string, sportSchoolFee: any) => {
+    getReceiptAthleteColumns: (receiptType: string, sportSchoolId: any) => {
         let commonColumns = [
             { dataField: 'athlete_id', text: 'athlete_id', show: false },
-            // { dataField: 'code', text : 'Codigo', filter: { type: "number" } }, 
-            // { dataField: 'familyCode', text : 'Codigo familia', filter: { type: "number" } }, 
             { dataField: 'name', text : 'Nombre', filter: { type: "text" } }, 
             { dataField: 'firstSurname', text : 'Primer apellido', filter: { type: "text" } }, 
             { dataField: 'secondSurname', text : 'Segundo apellido', filter: { type: "text" } }, 
-            { dataField: 'groupName', text : 'Grupo', filter: { type: "text" },  sort: true }, 
+            { dataField: 'groupName', text : 'Grupo', filter: { type: "text" },  sort: false }, 
             { dataField: 'days', text : 'Dias', sort: false }, 
             { dataField: 'numDays', text : 'Num. Dias', sort: false }, 
             { dataField: 'specialization', text : 'Especializacion', sort: false }, 
@@ -132,22 +130,32 @@ const Utils = {
             { dataField: 'paymentType', text : 'Forma de pago' }
         ] 
         let trimestralColumns = [
-            { dataField: 'feeTypeId', text : 'Tipo de cuota', sort: true },
+            { dataField: 'feeTypeId', text : 'Tipo de cuota', sort: false },
             { dataField: 'monthlyFee', text : 'Mensualidad', sort: true }, 
             { dataField: 'enrollmentFee', text : 'Matricula', sort: true }, 
             { dataField: 'membershipFee', text : 'Cuota de socio', sort: true }
         ]
-        if (sportSchoolFee && sportSchoolFee.sportSchoolAnnualFee && sportSchoolFee.sportSchoolAnnualFee > 0){
-            trimestralColumns.push({ dataField: 'sportSchoolAnnualFee', text : 'Cuota anual/escuela', sort: true })
-        }
-
+        
         let licenseColumns = [
             { dataField: 'licenseType', text : 'Tipo de licencia'},
             { dataField: 'licenseTerritorialFee', text : 'Licencia territorial', sort: true }, 
             { dataField: 'licenseNationalFee', text : 'Licencia nacional', sort: true }
         ]
 
-        let finalColumns = receiptType !== undefined && receiptType === 'LICENSE' ? [ ...commonColumns, ...licenseColumns] : [ ...commonColumns, ...trimestralColumns]
+        let finalColumns = commonColumns
+
+        if (sportSchoolId === 3){
+            finalColumns = [ ...commonColumns, ...trimestralColumns, ...licenseColumns]
+        }
+        else {
+            if (receiptType !== undefined && receiptType === 'LICENSE'){
+                finalColumns = [ ...commonColumns, ...licenseColumns]
+            }
+            else {
+                finalColumns = [ ...commonColumns, ...trimestralColumns]
+            }
+
+        }
         finalColumns.push({ dataField: 'totalFee', text : 'Importe total', sort: false })
         return finalColumns;
     },

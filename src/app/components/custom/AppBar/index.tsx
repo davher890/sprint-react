@@ -25,7 +25,7 @@ import {
 
 import * as LoginService from "../../../services/LoginService";
 
-const CustomAppBar: React.FC = (props) => {
+const CustomAppBar: React.FC = () => {
     const [athletesAnchorEl, setAthletesAnchorEl] = useState<null | HTMLElement>(null);
     const [groupsAnchorEl, setGroupsAnchorEl] = useState<null | HTMLElement>(null);
     const [listingsAnchorEl, setListingsAnchorEl] = useState<null | HTMLElement>(null);
@@ -119,6 +119,9 @@ const CustomAppBar: React.FC = (props) => {
                     </MenuItem>
                     <MenuItem component={RouterLink} onClick={() => handleMenuClose(setListingsAnchorEl)} to="/groups/athletes">
                         Atletas-Grupos
+                    </MenuItem>
+                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setListingsAnchorEl)} to="/licenses">
+                        Licencias
                     </MenuItem>
                 </Menu>
 
