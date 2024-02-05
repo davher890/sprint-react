@@ -2,7 +2,8 @@ import * as ACTION_TYPES from "../../constants/action_types";
 
 const initialState = {
     loading: false,
-    go_to_page: null
+    go_to_page: null,
+    job_result_log: {}
 };
 
 function rootReducer(state = initialState, action: { type: string, payload: any }) {
@@ -50,6 +51,12 @@ function rootReducer(state = initialState, action: { type: string, payload: any 
             loading: true,
             go_to_page: "/receipts/" + action.payload.id
         }
+    }
+    else if (action.type === ACTION_TYPES.UPLOAD_LICENSES) {
+        return {
+            ...state,
+            job_result_log: action.payload
+        }   
     }
     else {
         return state;

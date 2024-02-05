@@ -1,0 +1,1 @@
+REACT_APP_SERVER_URL=http://sprint-api-env.eba-het9pcf7.us-east-1.elasticbeanstalk.com npm run build && npm run deploy

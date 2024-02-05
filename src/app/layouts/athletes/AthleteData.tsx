@@ -144,6 +144,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                     nextCategory: (athlete.birthDate && athlete.birthDate.length > 0 ? utils.calculateCategory(athlete.birthDate[0] - 1) : '') || '',
                     dorsalCategory: athlete.dorsalCategory || '',
                     dorsalNumber: athlete.dorsalNumber || '',
+                    membershipType: athlete.membershipType || '',
                     license: athlete.license || '',
                     licenseType: athlete.licenseType || '',
                     licenseNationalFee: athlete.licenseNationalFee || '',
@@ -834,19 +835,33 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                         }}
                                                     />
                                                 </Grid>
-                                                <Grid item xs={2}>
-                                                    <Select fullWidth name="dorsalCategory" label="Categoría dorsal"
-                                                        options={utils.getDorsalCategories()} 
-                                                        value={values.dorsalCategory}
-                                                        onChange={(e: any, value: any) => {
-                                                            setFieldValue('selectedDorsalCategory', 'true')
-                                                            setFieldValue('dorsalCategory', value ? value.id : "")
-                                                        }}
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={2}>
-                                                    <TextField fullWidth name="dorsalNumber" label="Dorsal" type="number" value={values.dorsalNumber} onChange={handleChange} />
-                                                </Grid>
+                                                { values.sportSchoolId === 3 ? 
+                                                    <Grid item xs={2}>
+                                                        <Select fullWidth name="membershipType" label="Tipo de socio"
+                                                            options={utils.getMembershipTypes()} 
+                                                            value={values.membershipType}
+                                                            onChange={(e: any, value: any) => {
+                                                                setFieldValue('membershipType', value ? value.id : "")
+                                                            }}
+                                                        />
+                                                    </Grid>
+                                                : 
+                                                    <>
+                                                        <Grid item xs={2}>
+                                                            <Select fullWidth name="dorsalCategory" label="Categoría dorsal"
+                                                                options={utils.getDorsalCategories()} 
+                                                                value={values.dorsalCategory}
+                                                                onChange={(e: any, value: any) => {
+                                                                    setFieldValue('selectedDorsalCategory', 'true')
+                                                                    setFieldValue('dorsalCategory', value ? value.id : "")
+                                                                }}
+                                                            />
+                                                        </Grid>
+                                                        <Grid item xs={2}>
+                                                            <TextField fullWidth name="dorsalNumber" label="Dorsal" type="number" value={values.dorsalNumber} onChange={handleChange} />
+                                                        </Grid>
+                                                    </>
+                                                }
                                             </Grid>
                                             <Grid container item spacing={1}>
                                                 <Grid item xs={2}>

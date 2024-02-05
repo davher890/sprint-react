@@ -259,6 +259,15 @@ const functions = {
         return category
     },
 
+    getMembershipTypes: function() {
+        return [
+            { id: "athlete", name: "Atleta" },
+            { id: "subsidized", name: "Atleta subvencionado" },
+            { id: "trainer", name: "Entrenador" },
+            { id: "director", name: "Junta directiva" },
+            { id: "membership", name: "Socio" }
+        ]
+    },
     getCategories: function () {
         return [
             // { id: "", name: "" },

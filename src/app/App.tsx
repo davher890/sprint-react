@@ -97,7 +97,7 @@ const AppBar: React.FC<any> = (props) => {
           <Route path="/incidences/:id"           element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><IncidenceData/></Box></AuthenticatedProtected>}/>
           <Route path="/incidences"               element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><IncidenceData/></Box></AuthenticatedProtected>}/>
 
-          <Route path="/licenses"                 element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><LicenseUpload/></Box></AuthenticatedProtected></AdminProtected>}/>
+          <Route path="/licenses"                 element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><LicenseUpload/></Box></AuthenticatedProtected>}/>
 
           <Route path="/receipts/list"            element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptTable/></Box></AuthenticatedProtected>}/>
           <Route path="/receipts/:id"             element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptData/></Box></AuthenticatedProtected>}/>

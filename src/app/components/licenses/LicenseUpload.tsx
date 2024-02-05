@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 
+import { Grid } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
+
 import { uploadLicenses } from "../../redux/actions/licenses";
 
 const LicenseUpload: React.FC<any> = (props) => {
@@ -27,35 +30,52 @@ const LicenseUpload: React.FC<any> = (props) => {
         </label>
         <input id="file" type="file" onChange={handleFileChange} />
       </div> */}
-      <div>
-        <form id="fileUploadForm" encType="multipart/form-data">
-          <input type="file" id="fileInput" name="file" onChange={handleFileChange} />
-          <button type="button" onClick={handleUpload}>Upload File</button>
-        </form>
-      </div>
-      {file && (
-        <section>
-          File details:
-          <ul>
-            <li>Name: {file.name}</li>
-            <li>Type: {file.type}</li>
-            <li>Size: {file.size} bytes</li>
-          </ul>
-        </section>
-      )}
+      <Grid container direction="column">
+        <Grid item xs> 
+          <div>
+            <form id="fileUploadForm" encType="multipart/form-data">
+              <input type="file" id="fileInput" name="file" onChange={handleFileChange} />
+            </form>
+          </div>
+          {file && (
+            <section>
+              Detalles del archivo:
+              <ul>
+                <li>Nombre: {file.name}</li>
+                <li>Tipo: {file.type}</li>
+                <li>Tamaño: {file.size} bytes</li>
+              </ul>
+            </section>
+          )}
 
-      {file && <button onClick={handleUpload}>Upload a file</button>}
+          {file && <button onClick={handleUpload}>Subir archivo</button>}
+        </Grid>
+        <Grid item xs>
+        { props.job_result_log && props.job_result_log.errorMessages && 
+          <ul>
+            { props.job_result_log.errorMessages.map((message:string) => {
+                return <Alert severity="error">{message}</Alert>
+            })
+            }
+          </ul>
+        }
+        { props.job_result_log && props.job_result_log.infoMessages && 
+          <ul>
+            { props.job_result_log.infoMessages.map((message:string) => {
+                return <Alert severity="success">{message}</Alert>
+            })
+            }
+          </ul>
+        }
+        </Grid>
+      </Grid>
     </>
   );
 };
 
-
 function mapStateToProps(state: any) {
 	return {
-		// table_data: state.table_reducer.table_data,
-		// page: state.table_reducer.page,
-		// size: state.table_reducer.size,
-		// total: state.table_reducer.total
+		job_result_log: state.api_reducer.job_result_log
 	};
 }
 
