@@ -1,7 +1,6 @@
 import * as React from "react"
-// import { withRouter } from 'react-router-dom';
 
-import { Grid } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 
 import Select from '../Select'
 
@@ -39,14 +38,16 @@ const TrainerSelect: React.FC<any> = (props) => {
     }
 
     return (
-        <Grid container>
-            <Grid item xs>
+        <>
+            { props.trainers && props.trainers.length > 0 ?
                 <Select name="trainerId" label="Entrenador" 
                     options={props.trainers} value={trainerId}
                     error={props.error} onChange={onChange}
                 />
-            </Grid>
-        </Grid>
+            :
+                <Alert severity="error">No existen entrenadores. Es necesario crear al menos una para poder continuar. Grupos de entrenamiento - Entrenadores</Alert>
+            }
+        </>
     )
 }
 

@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { Grid } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 
 import Select from '../Select'
 
@@ -34,14 +34,16 @@ const SportSchoolSelect: React.FC<any> = (props) => {
     }
 
     return (
-        <Grid container>
-            <Grid item xs>
+        <>
+            { props.sportSchools && props.sportSchools.length > 0 ?
                 <Select name="sportSchoolId" label="Escuela Deportiva" 
                     options={props.sportSchools} value={sportSchoolId}
                     error={props.error} onChange={onChange}
                 />
-            </Grid>
-        </Grid>
+            :
+                <Alert severity="error">No existen escuelas deportivas. Es necesario crear al menos una para poder continuar. Escuelas - Nueva escuela deportiva</Alert>
+            }
+        </>
     )
 }
 

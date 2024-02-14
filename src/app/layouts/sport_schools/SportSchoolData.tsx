@@ -138,9 +138,11 @@ const ConnectedForm: React.FC<any> = (props) => {
                                 </Grid>
                                 <Grid item xs>
                                     <Card title="Tipos de cuota">
-                                        { values.feeTypes && values.feeTypes.length > 0 && values.feeTypes.map((ft: any) =>
+                                        { values.feeTypes && values.feeTypes.length > 0 ? values.feeTypes.map((ft: any) =>
                                                 <Chip label={ft.name}/>
                                             )
+                                            :
+                                                <Alert severity="error">No existen cuotas asociadas. Contacte con el administrador.</Alert>
                                         }
                                     </Card>
                                 </Grid>

@@ -450,7 +450,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                     <Grid item xs={6}>
                                         <CustomCard>
                                             <Grid container spacing={2}>
-                                                <Grid item xs={5}>
+                                                <Grid item xs>
                                                     <SportSchoolSelect sportSchoolId={values.sportSchoolId} error={touched.sportSchoolId && errors.sportSchoolId}
                                                         onChange={(sportSchoolId: number) => {
                                                             setFieldValue('sportSchoolId', sportSchoolId);

@@ -79,7 +79,7 @@ const CreateGroup: React.FC<any> = (props) => {
                     setSubmitting(false);
                     handleSubmit(values)
                 }}
-                >
+            >
                 {({ handleSubmit, handleChange, values, touched, setFieldValue, errors, isSubmitting }) => (
     
                     <form onSubmit={handleSubmit}>
@@ -115,7 +115,7 @@ const CreateGroup: React.FC<any> = (props) => {
                                 <Grid item xs>
                                     <Card title="Datos del grupo">
                                         <Grid container spacing={2}>
-                                            <Grid container item spacing={2}>
+                                            <Grid container item xs={6} spacing={2}>
                                                 <Grid item xs>
                                                     <SportSchoolSelect sportSchoolId={values.sportSchoolId} error={touched.sportSchoolId && errors.sportSchoolId}
                                                         onChange={(sportSchoolId: number) => {
@@ -132,21 +132,23 @@ const CreateGroup: React.FC<any> = (props) => {
                                                         Especialización
                                                 </Grid>
                                             </Grid>
-                                            <Grid container item spacing={2}>
+                                            <Grid container item xs={6} spacing={2}>
                                                 <Grid item xs>
                                                     <TextField fullWidth name="name" label="Nombre" value={values.name} onChange={handleChange}
                                                         error={touched.name && errors.name} />
                                                 </Grid>
-                                                <Grid item xs>
-                                                    <TrainerSelect 
-                                                        trainerId={values.trainerId} 
-                                                        sportSchoolId={values.sportSchoolId}  
-                                                        error={touched.trainerId && errors.trainerId}
-                                                        onChange={(trainerId: number) => {
-                                                            setFieldValue('trainerId', trainerId);
-                                                        }}
-                                                    />
-                                                </Grid>
+                                                { values.sportSchoolId && 
+                                                    <Grid item xs>
+                                                        <TrainerSelect 
+                                                            trainerId={values.trainerId} 
+                                                            sportSchoolId={values.sportSchoolId}  
+                                                            error={touched.trainerId && errors.trainerId}
+                                                            onChange={(trainerId: number) => {
+                                                                setFieldValue('trainerId', trainerId);
+                                                            }}
+                                                        />
+                                                    </Grid>
+                                                }
                                             </Grid>
                                         </Grid>
                                     </Card>
