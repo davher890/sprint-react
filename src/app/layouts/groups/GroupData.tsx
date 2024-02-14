@@ -114,8 +114,8 @@ const CreateGroup: React.FC<any> = (props) => {
                             <Grid container direction='row' spacing={3}>
                                 <Grid item xs>
                                     <Card title="Datos del grupo">
-                                        <Grid container spacing={2}>
-                                            <Grid container item xs={6} spacing={2}>
+                                        <Grid container spacing={2} direction="column">
+                                            <Grid container item xs spacing={2}>
                                                 <Grid item xs>
                                                     <SportSchoolSelect sportSchoolId={values.sportSchoolId} error={touched.sportSchoolId && errors.sportSchoolId}
                                                         onChange={(sportSchoolId: number) => {
@@ -132,7 +132,7 @@ const CreateGroup: React.FC<any> = (props) => {
                                                         Especialización
                                                 </Grid>
                                             </Grid>
-                                            <Grid container item xs={6} spacing={2}>
+                                            <Grid container item xs spacing={2}>
                                                 <Grid item xs>
                                                     <TextField fullWidth name="name" label="Nombre" value={values.name} onChange={handleChange}
                                                         error={touched.name && errors.name} />

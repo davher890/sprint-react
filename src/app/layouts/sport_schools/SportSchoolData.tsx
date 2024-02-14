@@ -43,7 +43,7 @@ const ConnectedForm: React.FC<any> = (props) => {
 
 
     return (
-        <React.Suspense fallback={<div>Cargando...</div>}>
+        <Box height="100vh">
 
             <Formik enableReinitialize
                 initialValues={{
@@ -115,9 +115,14 @@ const ConnectedForm: React.FC<any> = (props) => {
                             <strong>{values.successMessage}</strong>
                         </Alert>
                     </Snackbar>
-                    <Box paddingBottom={7}>
-                        <Grid container spacing={3}>
-                            <Grid container direction='column' item xs>
+                        <Grid container spacing={3} direction='row' 
+                            style={{
+                                height: '100%',
+                                // justifyContent: "flex-start",
+                                alignItems:"flex-start"
+                            }}
+                        >
+                            <Grid container direction='column' item xs spacing={3}>
                                 <Grid item xs>
                                     <Card title="Datos de la Escuela deportiva">
                                         <Grid container spacing={2}>
@@ -147,64 +152,69 @@ const ConnectedForm: React.FC<any> = (props) => {
                                     </Card>
                                 </Grid>
                             </Grid>
-                            <Grid item xs>
-                                <Card title="Cuotas">
-                                    <Grid container direction='column' spacing={2}>
-                                        <Grid container item spacing={2}>
-                                            <Grid item xs>
-                                                <TextField name="enrollmentFee" label="Matricula" value={values.enrollmentFee} onChange={handleChange}
-                                                    error={touched.enrollmentFee && errors.enrollmentFee} type='number' />
-                                            </Grid>
-                                            <Grid item xs>
-                                                <TextField name="membershipFee" label="Socio" value={values.membershipFee} onChange={handleChange}
-                                                    error={touched.membershipFee && errors.membershipFee} type='number' />
-                                            </Grid>
-                                            <Grid item xs>
-                                                <TextField name="equipmentAnnualFee" label="Pack de equipación competición" value={values.equipmentAnnualFee} onChange={handleChange}
-                                                    error={touched.equipmentAnnualFee && errors.equipmentAnnualFee} type='number' />
-                                            </Grid>
-                                            <Grid item xs>
-                                                <TextField name="sportSchoolAnnualFee" label={`Cuota Anual ${values.name}`} value={values.sportSchoolAnnualFee} onChange={handleChange}
-                                                    error={touched.sportSchoolAnnualFee && errors.sportSchoolAnnualFee} type='number' />
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Card>
-                                <Card title="Entrenamiento">
-                                    <Grid container direction='column' spacing={2}> 
-                                        <Grid container item spacing={2}>
-                                            <Grid item xs>
-                                                <TextField name="quarterOneDay" label="Cuota trimestral 1 dia" value={values.quarterOneDay} onChange={handleChange}
-                                                    error={touched.quarterOneDay && errors.quarterOneDay} type='number' />
-                                            </Grid>
-                                            <Grid item xs>
-                                                <TextField name="quarterTwoDays" label="Cuota trimestral 2 dias" value={values.quarterTwoDays} onChange={handleChange}
-                                                    error={touched.quarterTwoDays && errors.quarterTwoDays} type='number' />
-                                            </Grid>
-                                            <Grid item xs>
-                                                <TextField name="quarterThreeDays" label="Cuota trimestral 3 dias" value={values.quarterThreeDays} onChange={handleChange}
-                                                    error={touched.quarterThreeDays && errors.quarterThreeDays} type='number' />
-                                            </Grid>
-                                            <Grid item xs>
-                                                <TextField name="quarterSpecialization" label="Cuota trimestral especializacion" value={values.quarterSpecialization} onChange={handleChange}
-                                                    error={touched.quarterSpecialization && errors.quarterSpecialization} type='number' />
+                            <Grid container direction='column' item xs spacing={3}>
+                                <Grid item xs>
+                                    <Card title="Cuotas">
+                                        <Grid container direction='column' spacing={2}>
+                                            <Grid container item spacing={2}>
+                                                <Grid item xs>
+                                                    <TextField name="enrollmentFee" label="Matricula" value={values.enrollmentFee} onChange={handleChange}
+                                                        error={touched.enrollmentFee && errors.enrollmentFee} type='number' />
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <TextField name="membershipFee" label="Socio" value={values.membershipFee} onChange={handleChange}
+                                                        error={touched.membershipFee && errors.membershipFee} type='number' />
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <TextField name="equipmentAnnualFee" label="Pack de equipación competición" value={values.equipmentAnnualFee} onChange={handleChange}
+                                                        error={touched.equipmentAnnualFee && errors.equipmentAnnualFee} type='number' />
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <TextField name="sportSchoolAnnualFee" label={`Cuota Anual ${values.name}`} value={values.sportSchoolAnnualFee} onChange={handleChange}
+                                                        error={touched.sportSchoolAnnualFee && errors.sportSchoolAnnualFee} type='number' />
+                                                </Grid>
                                             </Grid>
                                         </Grid>
-                                    </Grid>
-                                </Card>
-                                <Card title="Pista">
-                                    <Grid container direction='column' spacing={2}>
-                                        <Grid container item spacing={2}>
-                                            <Grid item xs>
-                                                <TextField name="trackFee" label="Precio/hora" value={values.trackFee} onChange={handleChange}
-                                                    error={touched.trackFee && errors.trackFee} type='number' />
+                                    </Card>
+                                </Grid>
+                                <Grid item xs>
+                                    <Card title="Entrenamiento">
+                                        <Grid container direction='column' spacing={2}> 
+                                            <Grid container item spacing={2}>
+                                                <Grid item xs>
+                                                    <TextField name="quarterOneDay" label="Cuota trimestral 1 dia" value={values.quarterOneDay} onChange={handleChange}
+                                                        error={touched.quarterOneDay && errors.quarterOneDay} type='number' />
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <TextField name="quarterTwoDays" label="Cuota trimestral 2 dias" value={values.quarterTwoDays} onChange={handleChange}
+                                                        error={touched.quarterTwoDays && errors.quarterTwoDays} type='number' />
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <TextField name="quarterThreeDays" label="Cuota trimestral 3 dias" value={values.quarterThreeDays} onChange={handleChange}
+                                                        error={touched.quarterThreeDays && errors.quarterThreeDays} type='number' />
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <TextField name="quarterSpecialization" label="Cuota trimestral especializacion" value={values.quarterSpecialization} onChange={handleChange}
+                                                        error={touched.quarterSpecialization && errors.quarterSpecialization} type='number' />
+                                                </Grid>
                                             </Grid>
                                         </Grid>
-                                    </Grid>
-                                </Card>
+                                    </Card>
+                                </Grid>
+                                <Grid item xs>
+                                    <Card title="Pista">
+                                        <Grid container direction='column' spacing={2}>
+                                            <Grid container item spacing={2}>
+                                                <Grid item xs>
+                                                    <TextField name="trackFee" label="Precio/hora" value={values.trackFee} onChange={handleChange}
+                                                        error={touched.trackFee && errors.trackFee} type='number' />
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                    </Card>
+                                </Grid>
                             </Grid>
                         </Grid>
-                    </Box>
                     { (isAdmin() || isManager()) &&
                         <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
                             <Toolbar>
@@ -219,7 +229,7 @@ const ConnectedForm: React.FC<any> = (props) => {
                 </form>
             )}
             </Formik>
-        </React.Suspense>
+        </Box>
     );
 }
 

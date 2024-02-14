@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 
-import { Grid, Snackbar } from '@material-ui/core';
+import { Box, Grid, Snackbar } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 import TextField from "../../components/custom/TextField"
@@ -29,7 +29,35 @@ const LoginForm: React.FC<any> = (props) => {
     }
     
     return (
-        <Grid container>
+        <Box height="100vh">
+            <Grid container direction='column' 
+                style={{
+                    height: '100%',
+                    justifyContent: "center",
+                    alignItems:"center"
+                }}
+            >
+                <Card>
+                    <Grid container direction="column" spacing={5}
+                        style={{
+                            height: '100%',
+                            justifyContent: "center",
+                            alignItems:"center"
+                        }}>
+                        <Grid item xs>
+                            <TextField name="email" value={email} label="Email" onChange={handleEmailChange}/>
+                        </Grid>
+                        <Grid item xs>
+                            <TextField name="password" value={password} label="Contraseña" type="password"
+                                onKeyPress={handleKeyPress}
+                                onChange={handlePasswordChange}/>
+                        </Grid>
+                        <Grid item xs>
+                            <SearchButton onClick={() => {props.signUp(email, password)}}>Entrar</SearchButton>
+                        </Grid>
+                    </Grid>
+                </Card>
+            </Grid>
             <Snackbar open={props.login && props.login.errorMessage !== undefined && props.login.errorMessage !== ''}
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
                 <Alert severity="error" 
@@ -41,22 +69,7 @@ const LoginForm: React.FC<any> = (props) => {
                     <strong>{props.login?.errorMessage || ''}</strong>
                 </Alert>
             </Snackbar>
-            <Grid item xs={4}>
-                <Card>
-                    <Grid item xs>
-                        <TextField name="email" value={email} label="Email" onChange={handleEmailChange}/>
-                    </Grid>
-                    <Grid item xs>
-                        <TextField name="password" value={password} label="Contraseña" type="password"
-                            onKeyPress={handleKeyPress}
-                            onChange={handlePasswordChange}/>
-                    </Grid>
-                    <Grid item xs>
-                        <SearchButton onClick={() => {props.signUp(email, password)}}>Entrar</SearchButton>
-                    </Grid>
-                </Card>
-            </Grid>
-        </Grid>
+        </Box>
     )
 }
 
