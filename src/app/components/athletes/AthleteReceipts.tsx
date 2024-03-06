@@ -102,8 +102,7 @@ const AthleteReceipts: React.FC<any> = (props) => {
 
 function mapStateToProps(state: any) {
     return {
-        receipts: state.athlete_reducer.athlete_receipts,
-        receipt: state.receipt_reducer.receipt,
+        receipts: state.athlete_reducer.athlete_receipts
     };
 }
 

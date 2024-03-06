@@ -172,7 +172,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                     enrollmentFee: (props.athlete_fee ? props.athlete_fee.enrollmentFee : 0) || 0,
                     membershipFee: (props.athlete_fee ? props.athlete_fee.membershipFee : 0) || 0,
                     monthlyFee: (props.athlete_fee ? props.athlete_fee.monthlyFee : 0) || 0,
-                    receipts: props.receipts,
+                    // receipts: props.receipts,
                     // Dialogs
                     registerDate: utils.dateToLocalDate(new Date()),
                     registerObservations: '',
@@ -181,7 +181,8 @@ const CreateAthlete: React.FC<any> = (props) => {
                     openReceiptsDialog: false,
                     openMatchingAthletes: false,
                     openDeleteDialog: false,
-                    openPendingReceipts: props.receipts && props.receipts.length > 0 && props.receipts.some((d:any) => d.status === 'return'),
+                    pendingReceipts: props.receipts && props.receipts.length > 0 && props.receipts.some((d:any) => d.status.toUpperCase() === 'RETURN'),
+                    openPendingReceipts: props.receipts && props.receipts.length > 0 && props.receipts.some((d:any) => d.status.toUpperCase() === 'RETURN'),
                     selectedFamily: false,
 
                     lastRegisterDate: utils.dateToLocalDate(new Date()),
@@ -529,7 +530,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                             Cuota anual de escuela
                                         </Grid>
                                         }
-                                        { values.receipts && values.receipts && values.receipts.length > 0 && values.receipts.some((d:any) => d.status === 'return') && <>
+                                        { values.pendingReceipts && <>
                                             <h3 style={{ color: 'red' }}>Recibos pendientes de pago</h3>
                                         </>
                                         }
@@ -949,7 +950,6 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                 return false;
                                             }}
                                         >Guardar y salir</SaveButton>
-                                    
                                     <SaveButton type="submit" disabled={isSubmitting}>Guardar y continuar</SaveButton>
                                     {props.id ? <DeleteButton onClick={() => setFieldValue("openDeleteDialog", true)}/> : null }
                                     <ReturnButton onClick={() => window.open("/athletes/list", "_self")}/>
