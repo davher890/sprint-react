@@ -101,6 +101,7 @@ function receiptAthleteDataConversor(d: any) {
         sportSchoolAnnualFee: d.sportSchoolAnnualFee,
         licenseTerritorialFee: d.licenseTerritorialFee,
         licenseNationalFee: d.licenseNationalFee,
+        licenseOtherFee: d.licenseOtherFee,
         totalFee: d.totalFee,
         status: functions.getReceiptStatus().find(st => st.id === d.status)?.name,
     }

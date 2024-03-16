@@ -14,7 +14,7 @@ import ScheduleTable from './layouts/schedules/ScheduleTable';
 import IncidenceData from './components/incidences/IncidenceData';
 import IncidenceTable from './components/incidences/IncidenceTable';
 
-import LicenseUpload from './components/licenses/LicenseUpload';
+import LicenseUpload from './layouts/licenses/LicenseUpload';
 
 import ReceiptData from './layouts/receipts/ReceiptData';
 import ReceiptTable from './layouts/receipts/ReceiptTable';

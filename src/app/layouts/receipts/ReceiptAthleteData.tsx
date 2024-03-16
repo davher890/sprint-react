@@ -111,6 +111,13 @@ const ReceiptAthleteData: React.FC<any> = (props) => {
                                 />
                             </Grid>
                             <Grid item xs>
+                                <TextField name="licenseOtherFee" label="Otros conceptos de licencia" value={receiptAthlete.licenseOtherFee} type='number'
+                                    onChange={(e:any) => {
+                                        setReceiptAthlete({ ...receiptAthlete, licenseOtherFee: e.target.value })
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs>
                                 <TextField name="totalFee" label="Total" value={receiptAthlete.totalFee} type='number' disabled
                                 />
                             </Grid>

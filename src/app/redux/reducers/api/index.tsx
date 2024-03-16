@@ -55,6 +55,7 @@ function rootReducer(state = initialState, action: { type: string, payload: any 
     else if (action.type === ACTION_TYPES.UPLOAD_LICENSES) {
         return {
             ...state,
+            loading: false,
             job_result_log: action.payload
         }   
     }

@@ -139,7 +139,8 @@ const Utils = {
         let licenseColumns = [
             { dataField: 'licenseType', text : 'Tipo de licencia'},
             { dataField: 'licenseTerritorialFee', text : 'Licencia territorial', sort: true }, 
-            { dataField: 'licenseNationalFee', text : 'Licencia nacional', sort: true }
+            { dataField: 'licenseNationalFee', text : 'Licencia nacional', sort: true },
+            { dataField: 'licenseOtherFee', text : 'Otros conceptos de licencia', sort: true }
         ]
 
         let finalColumns = commonColumns

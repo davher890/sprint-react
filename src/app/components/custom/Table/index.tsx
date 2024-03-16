@@ -89,7 +89,7 @@ const CustomTable: React.FC<any> = (props) => {
 
 	const debounceFilterChange = debounce((page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
 		props.onPaginationFilterChange(page, size, filters, sort, sortDirection)
-	}, 500)
+	}, 1000)
 
 	React.useEffect(() => {
 		return () => {

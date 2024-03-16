@@ -149,6 +149,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                     licenseType: athlete.licenseType || '',
                     licenseNationalFee: athlete.licenseNationalFee || '',
                     licenseTerritorialFee: athlete.licenseTerritorialFee || '',
+                    licenseOtherFee: athlete.licenseOtherFee || '',
                     groupId: athlete.groupId || '',
                     scheduleIds: athlete.scheduleIds || [],
                     trackHours: athlete.trackHours,
@@ -825,90 +826,95 @@ const CreateAthlete: React.FC<any> = (props) => {
                                         </Grid>
                                     }  
                                 </Grid>
-                                <Grid container item style={{ display: values.sportSchoolId > 0 && values.feeTypeId !== 4 ? "block" : "none" }}>
-                                    <Grid item>
+                                <Grid container item>
+                                    <Grid item xs>
                                         <CustomCard title="Datos Deportivos" >
-                                            <Grid container item spacing={1}>
-                                                <Grid item xs={2}>
-                                                    <Select fullWidth name="category" label="Categoría"
-                                                        options={utils.getCategories()} 
-                                                        value={values.category}
-                                                        onChange={(e: any, value: any) => {
-                                                            setFieldValue('category', value ? value.id : "")
-                                                        }}
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={2}>
-                                                    <Select fullWidth name="nextCategory" label="Siguiente categoría"
-                                                        options={utils.getCategories()} 
-                                                        value={values.nextCategory}
-                                                        onChange={(e: any, value: any) => {
-                                                            setFieldValue('nextCategory', value ? value.id : "")
-                                                        }}
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={2}>
-                                                    <Select fullWidth name="dorsalCategory" label="Categoría dorsal"
-                                                        options={utils.getDorsalCategories()} 
-                                                        value={values.dorsalCategory}
-                                                        onChange={(e: any, value: any) => {
-                                                            setFieldValue('selectedDorsalCategory', 'true')
-                                                            setFieldValue('dorsalCategory', value ? value.id : "")
-                                                        }}
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={2}>
-                                                    <TextField fullWidth name="dorsalNumber" label="Dorsal" type="number" value={values.dorsalNumber} onChange={handleChange} />
-                                                </Grid>
-                                            </Grid>
-                                            <Grid container item spacing={1}>
-                                                <Grid item xs={2}>
-                                                    <Select fullWidth name="licenseType" label="Tipo de Licencia"
-                                                        value={values.licenseType} options={utils.getLicenseTypes()}
-                                                        onChange={(e: any, value: any) => setFieldValue('licenseType', value ? value.id : "")}
-                                                    />
-                                                </Grid>
-                                                <Grid item>
-                                                    <TextField fullWidth name="license" label="Licencia" value={values.license} onChange={handleChange} />
-                                                </Grid>
-                                                <Grid item>
-                                                    <TextField fullWidth name="licenseNationalFee" label="Cuota licencia nacional" type="number" value={values.licenseNationalFee} onChange={handleChange} />
-                                                </Grid>
-                                                <Grid item>
-                                                    <TextField fullWidth name="licenseTerritorialFee" label="Cuota licencia territorial" type="number" value={values.licenseTerritorialFee} onChange={handleChange} />
-                                                </Grid>
-                                            
-                                            
-                                                <Grid container spacing={1} direction="row">
-                                                    { values.feeTypeId === 5 || values.feeTypeId === 6 ?
+                                            <Grid container spacing={1} direction="column">
+                                                <Grid container item xs spacing={1}>
                                                     <Grid item xs={2}>
-                                                        <Select name="trackHours" label="Num horas de pista" error={touched.trackHours && errors.trackHours}
-                                                                options={[{ id: "h_1_5", name: "1.5 h" }, { id: "h_3", name: "3 h" } ]} value={values.trackHours}
-                                                                onChange={(e: any, value: any) => {
-                                                                    setFieldValue('trackHours', value ? value.id : "")
-                                                                }}
+                                                        <Select fullWidth name="category" label="Categoría"
+                                                            options={utils.getCategories()} 
+                                                            value={values.category}
+                                                            onChange={(e: any, value: any) => {
+                                                                setFieldValue('category', value ? value.id : "")
+                                                            }}
                                                         />
                                                     </Grid>
-                                                    :
-                                                        <Grid item xs>
-                                                            <GroupScheduleSelect 
-                                                                groupId={values.groupId}
-                                                                sportSchoolId={values.sportSchoolId}
-                                                                scheduleIds={values.scheduleIds}
-                                                                onGroupChange={(grId: number) => {
-                                                                    setFieldValue('groupId', grId)
-                                                                    if (grId === athlete.groupId){
-                                                                        setFieldValue('scheduleIds', athlete.scheduleIds)
-                                                                    }
-                                                                }}
-                                                                onScheduleChange={(scheduleIds: number[]) => {
-                                                                    setFieldValue('scheduleIds', scheduleIds)
-
-                                                                }}
+                                                    <Grid item xs={2}>
+                                                        <Select fullWidth name="nextCategory" label="Siguiente categoría"
+                                                            options={utils.getCategories()} 
+                                                            value={values.nextCategory}
+                                                            onChange={(e: any, value: any) => {
+                                                                setFieldValue('nextCategory', value ? value.id : "")
+                                                            }}
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={2}>
+                                                        <Select fullWidth name="dorsalCategory" label="Categoría dorsal"
+                                                            options={utils.getDorsalCategories()} 
+                                                            value={values.dorsalCategory}
+                                                            onChange={(e: any, value: any) => {
+                                                                setFieldValue('selectedDorsalCategory', 'true')
+                                                                setFieldValue('dorsalCategory', value ? value.id : "")
+                                                            }}
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={2}>
+                                                        <TextField fullWidth name="dorsalNumber" label="Dorsal" type="number" value={values.dorsalNumber} onChange={handleChange} />
+                                                    </Grid>
+                                                </Grid>
+                                                <Grid container item xs spacing={1}>
+                                                    <Grid item xs={2}>
+                                                        <Select fullWidth name="licenseType" label="Tipo de Licencia"
+                                                            value={values.licenseType} options={utils.getLicenseTypes()}
+                                                            onChange={(e: any, value: any) => setFieldValue('licenseType', value ? value.id : "")}
+                                                        />
+                                                    </Grid>
+                                                    <Grid item>
+                                                        <TextField fullWidth name="license" label="Licencia" value={values.license} onChange={handleChange} />
+                                                    </Grid>
+                                                    <Grid item>
+                                                        <TextField fullWidth name="licenseNationalFee" label="Cuota licencia nacional" type="number" value={values.licenseNationalFee} onChange={handleChange} />
+                                                    </Grid>
+                                                    <Grid item>
+                                                        <TextField fullWidth name="licenseTerritorialFee" label="Cuota licencia territorial" type="number" value={values.licenseTerritorialFee} onChange={handleChange} />
+                                                    </Grid>
+                                                    <Grid item>
+                                                        <TextField fullWidth name="licenseOtherFee" label="Otros conceptos de licencia" type="number" value={values.licenseOtherFee} onChange={handleChange} />
+                                                    </Grid>
+                                                </Grid>
+                                                
+                                                { values.sportSchoolId > 0 && values.feeTypeId == 1 &&
+                                                    <Grid container spacing={1} direction="row">
+                                                        { values.feeTypeId === 5 || values.feeTypeId === 6 ?
+                                                        <Grid item xs={2}>
+                                                            <Select name="trackHours" label="Num horas de pista" error={touched.trackHours && errors.trackHours}
+                                                                    options={[{ id: "h_1_5", name: "1.5 h" }, { id: "h_3", name: "3 h" } ]} value={values.trackHours}
+                                                                    onChange={(e: any, value: any) => {
+                                                                        setFieldValue('trackHours', value ? value.id : "")
+                                                                    }}
                                                             />
                                                         </Grid>
-                                                    }
-                                                </Grid>
+                                                        :
+                                                            <Grid item xs>
+                                                                <GroupScheduleSelect 
+                                                                    groupId={values.groupId}
+                                                                    sportSchoolId={values.sportSchoolId}
+                                                                    scheduleIds={values.scheduleIds}
+                                                                    onGroupChange={(grId: number) => {
+                                                                        setFieldValue('groupId', grId)
+                                                                        if (grId === athlete.groupId){
+                                                                            setFieldValue('scheduleIds', athlete.scheduleIds)
+                                                                        }
+                                                                    }}
+                                                                    onScheduleChange={(scheduleIds: number[]) => {
+                                                                        setFieldValue('scheduleIds', scheduleIds)
+                                                                    }}
+                                                                />
+                                                            </Grid>
+                                                        }
+                                                    </Grid>
+                                                }
                                             </Grid>
                                         </CustomCard>
                                     </Grid>

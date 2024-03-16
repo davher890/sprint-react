@@ -4,6 +4,7 @@ import { uploadLicenseFile } from "../../../services/LicenseService"
 
 export function uploadLicenses(file: File) {
     return function (dispatch: any)  {
+        dispatch({ type: ACTION_TYPES.API_CALL})
         return uploadLicenseFile(file).then(json => {
             dispatch({ type: ACTION_TYPES.UPLOAD_LICENSES, payload: json });
         });
