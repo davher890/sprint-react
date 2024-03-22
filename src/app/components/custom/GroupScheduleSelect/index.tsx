@@ -11,7 +11,8 @@ import { getGroupSchedules } from "../../../redux/actions/groups";
 
 const GroupScheduleSelect: React.FC<any> = (props) => {
 
-    const [specialization, setSpecialization] = React.useState<boolean>(false)
+    const [ specialization, setSpecialization ] = React.useState<boolean>(false)
+    const [ scheduleIds, setScheduleIds ] = React.useState<any[]>(props.scheduleIds)
 
     React.useEffect(() => {
         if (props.groupId > 0){
@@ -26,9 +27,9 @@ const GroupScheduleSelect: React.FC<any> = (props) => {
             schIds = groupScheduleIds
         }
         else {
-            const result = props.scheduleIds.every((val:number) => groupScheduleIds.includes(val));
+            const result = scheduleIds.every((val:number) => groupScheduleIds.includes(val));
             if (result){
-                schIds = props.scheduleIds
+                schIds = scheduleIds
             }
         }
         if (props.onChange){
@@ -40,7 +41,7 @@ const GroupScheduleSelect: React.FC<any> = (props) => {
         if (props.onScheduleChange){
             props.onScheduleChange(schIds)
         }
-    }, [props.group_schedules])
+    }, [props.group_schedules, scheduleIds])
 
     return (
         <Grid container item direction="row" spacing={2}>
@@ -53,7 +54,7 @@ const GroupScheduleSelect: React.FC<any> = (props) => {
                         setSpecialization(spec)
                         props.getGroupSchedules(grId)
                         if (props.onChange){
-                            props.onChange(grId, spec, props.scheduleIds)
+                            props.onChange(grId, spec, scheduleIds)
                         }
                         if (props.onGroupChange){
                             props.onGroupChange(grId, spec)
@@ -65,14 +66,14 @@ const GroupScheduleSelect: React.FC<any> = (props) => {
                 <ScheduleSelect
                     disabled={props.disabled || false}
                     schedules={props.group_schedules}
-                    scheduleIds={props.scheduleIds}
+                    scheduleIds={scheduleIds}
                     specialization={specialization}
-                    onChange={(scheduleIds: number[]) => {
+                    onChange={(schIds: number[]) => {
                         if (props.onChange){
-                            props.onChange(props.groupId, specialization, scheduleIds)
+                            props.onChange(props.groupId, specialization, schIds)
                         }
                         if (props.onScheduleChange){
-                            props.onScheduleChange(scheduleIds)
+                            props.onScheduleChange(schIds)
                         }
                     }}
                 />

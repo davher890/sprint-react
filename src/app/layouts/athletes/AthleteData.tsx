@@ -885,7 +885,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                 </Grid>
                                                 
                                                 { values.sportSchoolId > 0 && values.feeTypeId == 1 &&
-                                                    <Grid container spacing={1} direction="row">
+                                                    <Grid container item xs spacing={1} direction="row">
                                                         { values.feeTypeId === 5 || values.feeTypeId === 6 ?
                                                         <Grid item xs={2}>
                                                             <Select name="trackHours" label="Num horas de pista" error={touched.trackHours && errors.trackHours}
