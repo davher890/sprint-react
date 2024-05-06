@@ -67,7 +67,10 @@ const Utils = {
             { dataField: 'address', text: 'Dirección', filter: { type: "text" } },
             { dataField: 'municipality', text: 'Municipio', filter: { type: "text" } },
             { dataField: 'code', text : 'Codigo atleta', show: false, filter: { type: "number" } },
-            { dataField: 'familyCode', text : 'Codigo familia', show: false, filter: { type: "number" } }
+            { dataField: 'familyCode', text : 'Codigo familia', show: false, filter: { type: "number" } },
+            { dataField: 'licenseNationalFee', text : 'Licencia Nacional', show: false },
+            { dataField: 'licenseTerritorialFee', text : 'Licencia Territorial', show: false },
+            { dataField: 'licenseOtherFee', text : 'Licencia (otros)', show: false }
         ]
     },
 

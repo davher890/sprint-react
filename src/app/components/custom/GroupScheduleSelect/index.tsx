@@ -14,6 +14,12 @@ const GroupScheduleSelect: React.FC<any> = (props) => {
     const [ specialization, setSpecialization ] = React.useState<boolean>(false)
     const [ scheduleIds, setScheduleIds ] = React.useState<any[]>(props.scheduleIds)
 
+    // React.useEffect(() => {
+    //     // if (props.scheduleIds){
+    //         setScheduleIds(props.scheduleIds)
+    //     // }
+    // }, [props.scheduleIds])
+
     React.useEffect(() => {
         if (props.groupId > 0){
             props.getGroupSchedules(props.groupId)
@@ -73,6 +79,7 @@ const GroupScheduleSelect: React.FC<any> = (props) => {
                             props.onChange(props.groupId, specialization, schIds)
                         }
                         if (props.onScheduleChange){
+                            setScheduleIds(schIds)
                             props.onScheduleChange(schIds)
                         }
                     }}
