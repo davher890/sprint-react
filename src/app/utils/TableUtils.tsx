@@ -234,7 +234,9 @@ const Utils = {
     getUserColumns: () => {
         return [
             { dataField: 'username', text: 'Nombre', filter: { type: "text" } },
-            { dataField: 'email', text: 'Email', filter: { type: "text" } }
+            { dataField: 'email', text: 'Email', filter: { type: "text" } },
+            { dataField: 'admin', text: 'Admin' },
+            { dataField: 'manager', text: 'Manager' }
         ]
     },
 

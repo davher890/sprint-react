@@ -96,7 +96,7 @@ const AthleteObservations: React.FC<any> = (props) => {
                 })}
                 <Grid container item direction="row" xs>
                     <Grid item xs>
-                        <TextField fullWidth name="obsText" value={obsText} label="Observaciones" multiline 
+                        <TextField { ...props } fullWidth name="obsText" value={obsText} label="Observaciones" multiline 
                             onChange={(e: any) => setObsText(e.target.value) } />
                     </Grid>
                     { (isAdmin() || isManager()) && 

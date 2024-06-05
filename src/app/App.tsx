@@ -37,7 +37,6 @@ import FamilyTable from './layouts/families/FamilyTable';
 import FamilyData from './layouts/families/FamilyData';
 
 import Login from './layouts/login';
-import Payment from './components/payments';
 
 import CustomAppBar from './components/custom/AppBar'
 
@@ -57,12 +56,10 @@ const AppBar: React.FC<any> = (props) => {
         <Routes>
           <Route path="/" element={<Login/>}/>
           <Route path="/login" element={<Login/>}/>
-          <Route path="/admin/users"              element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" ><UserData/></Box></AuthenticatedProtected></AdminProtected>}/>
+          <Route path="/admin/users"              element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" ><UserData/></Box></AuthenticatedProtected>}/>
           <Route path="/admin/athletes_by_date"   element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" ><SportSchoolAthletesByDate/></Box></AuthenticatedProtected></AdminProtected>}/>
-          
-          <Route path="/admin/payments"           element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" ><Payment/></Box></AuthenticatedProtected>}/>
-          
-          <Route path="/admin/users/:id"          element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%"><UserData/></Box></AuthenticatedProtected></AdminProtected>}/>
+                    
+          <Route path="/admin/users/:id"          element={<AuthenticatedProtected><CustomAppBar/><Box m="2%"><UserData/></Box></AuthenticatedProtected>}/>
           <Route path="/admin/users/list"         element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><UserTable/></Box></AuthenticatedProtected>}/>
           <Route path="/users/:id"                element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><UserData/></Box></AuthenticatedProtected>}/>
           

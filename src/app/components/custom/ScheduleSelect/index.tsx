@@ -68,6 +68,7 @@ const ScheduleSelect: React.FC<any> = (props) => {
                                     <Checkbox
                                         name={d}
                                         key={`sch-${d}`}
+                                        disabled={props.disabled || props.specialization}
                                         checked={days.includes(d)}
                                         onChange={e => {
                                             if (e.target.checked) {

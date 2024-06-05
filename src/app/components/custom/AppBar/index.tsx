@@ -23,13 +23,14 @@ import {
     Receipt,
 } from "@material-ui/icons";
 
-import * as LoginService from "../../../services/LoginService";
+import { isManager, isAdmin, getUserId } from "../../../services/LoginService";
 
 const CustomAppBar: React.FC = () => {
     const [athletesAnchorEl, setAthletesAnchorEl] = useState<null | HTMLElement>(null);
     const [groupsAnchorEl, setGroupsAnchorEl] = useState<null | HTMLElement>(null);
     const [listingsAnchorEl, setListingsAnchorEl] = useState<null | HTMLElement>(null);
     const [receiptsAnchorEl, setReceiptsAnchorEl] = useState<null | HTMLElement>(null);
+    const [adminAnchorEl, setAdminAnchorEl] = useState<null | HTMLElement>(null);
 
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, setAnchorEl: React.Dispatch<React.SetStateAction<null | HTMLElement>>) => {
         setAnchorEl(event.currentTarget);
@@ -89,15 +90,18 @@ const CustomAppBar: React.FC = () => {
                     <MenuItem component={RouterLink} onClick={() => handleMenuClose(setGroupsAnchorEl)} to="/groups/list">
                         Gestión
                     </MenuItem>
-                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setGroupsAnchorEl)} to="/groups/swap">
+                    { (isAdmin() || isManager() ) && <MenuItem component={RouterLink} onClick={() => handleMenuClose(setGroupsAnchorEl)} to="/groups/swap">
                         Intercambio Masivo
                     </MenuItem>
-                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setGroupsAnchorEl)} to="/schedules/list">
+                    }
+                    { (isAdmin() || isManager() ) && <MenuItem component={RouterLink} onClick={() => handleMenuClose(setGroupsAnchorEl)} to="/schedules/list">
                         Horarios
                     </MenuItem>
-                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setGroupsAnchorEl)} to="/trainers/list">
+                    }
+                    { (isAdmin() || isManager() ) && <MenuItem component={RouterLink} onClick={() => handleMenuClose(setGroupsAnchorEl)} to="/trainers/list">
                         Entrenadores
                     </MenuItem>
+                    }
                 </Menu>
 
                 <Button
@@ -120,43 +124,49 @@ const CustomAppBar: React.FC = () => {
                     <MenuItem component={RouterLink} onClick={() => handleMenuClose(setListingsAnchorEl)} to="/groups/athletes">
                         Atletas-Grupos
                     </MenuItem>
-                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setListingsAnchorEl)} to="/licenses">
+                    { (isAdmin() || isManager() ) && <MenuItem component={RouterLink} onClick={() => handleMenuClose(setListingsAnchorEl)} to="/licenses">
                         Licencias
                     </MenuItem>
+                    }
                 </Menu>
 
-                <Button
-                    onClick={(event) =>
-                        handleMenuOpen(event, setReceiptsAnchorEl)
-                    }
-                    startIcon={<Receipt />}
-                    endIcon={<ArrowDropDown />}
-                >
-                    Recibos
-                </Button>
-                <Menu
-                    anchorEl={receiptsAnchorEl}
-                    open={Boolean(receiptsAnchorEl)}
-                    onClose={() => handleMenuClose(setReceiptsAnchorEl)}
-                >
-                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setReceiptsAnchorEl)} to="/receipts/list">
-                        Remesas
-                    </MenuItem>
-                    <MenuItem
-                        component={RouterLink}
-                        onClick={() => handleMenuClose(setReceiptsAnchorEl)}
-                        to="/receipts/returned/list"
-                    >
-                        Recibos devueltos
-                    </MenuItem>
-                    <MenuItem
-                        component={RouterLink}
-                        onClick={() => handleMenuClose(setReceiptsAnchorEl)}
-                        to="/receipts/not_paid/list"
-                    >
-                        Recibos no pagados
-                    </MenuItem>
-                </Menu>
+                { (isAdmin() || isManager()) && (
+                    <>
+                        <Button
+                            onClick={(event) =>
+                                handleMenuOpen(event, setReceiptsAnchorEl)
+                            }
+                            startIcon={<Receipt />}
+                            endIcon={<ArrowDropDown />}
+                        >
+                            Recibos
+                        </Button>
+                        <Menu
+                            anchorEl={receiptsAnchorEl}
+                            open={Boolean(receiptsAnchorEl)}
+                            onClose={() => handleMenuClose(setReceiptsAnchorEl)}
+                        >
+                            <MenuItem component={RouterLink} onClick={() => handleMenuClose(setReceiptsAnchorEl)} to="/receipts/list">
+                                Remesas
+                            </MenuItem>
+                            <MenuItem
+                                component={RouterLink}
+                                onClick={() => handleMenuClose(setReceiptsAnchorEl)}
+                                to="/receipts/returned/list"
+                            >
+                                Recibos devueltos
+                            </MenuItem>
+                            <MenuItem
+                                component={RouterLink}
+                                onClick={() => handleMenuClose(setReceiptsAnchorEl)}
+                                to="/receipts/not_paid/list"
+                            >
+                                Recibos no pagados
+                            </MenuItem>
+                        </Menu>
+                    </>
+                )
+                }
 
                 <Button
                     component={RouterLink}
@@ -166,9 +176,46 @@ const CustomAppBar: React.FC = () => {
                     Incidencias
                 </Button>
 
+                { (isAdmin() || isManager()) && (
+                    <>
+                        <Button
+                            onClick={(event) =>
+                                handleMenuOpen(event, setAdminAnchorEl)
+                            }
+                            startIcon={<Receipt />}
+                            endIcon={<ArrowDropDown />}
+                        >
+                            Admin
+                        </Button>
+                        <Menu
+                            anchorEl={adminAnchorEl}
+                            open={Boolean(adminAnchorEl)}
+                            onClose={() => handleMenuClose(setAdminAnchorEl)}
+                        >
+                            <MenuItem
+                                component={RouterLink}
+                                onClick={() => handleMenuClose(setAdminAnchorEl)}
+                                to="/admin/users/list"
+                            >
+                                Usuarios
+                            </MenuItem>
+                            { isAdmin() && 
+                                <MenuItem
+                                    component={RouterLink}
+                                    onClick={() => handleMenuClose(setAdminAnchorEl)}
+                                    to="/admin/athletes_by_date"
+                                >
+                                    Usuarios / dia
+                                </MenuItem>
+                            }
+                        </Menu>
+                    </>
+                )
+                }
+
                 <IconButton
                     component={RouterLink}
-                    to={"/users/" + LoginService.getUserId()}
+                    to={"/users/" + getUserId()}
                 >
                     <Avatar>
                         <AccountCircle />

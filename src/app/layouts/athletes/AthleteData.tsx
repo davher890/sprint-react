@@ -454,7 +454,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                             <Grid container spacing={2}>
                                                 <Grid item xs>
                                                     <SportSchoolSelect sportSchoolId={values.sportSchoolId} error={touched.sportSchoolId && errors.sportSchoolId}
-                                                        onChange={(sportSchoolId: number) => {
+                                                        disabled={!(isManager() || isAdmin())} onChange={(sportSchoolId: number) => {
                                                             setFieldValue('sportSchoolId', sportSchoolId);
                                                             if (sportSchoolId !== values.sportSchoolId){
                                                                 setFieldValue('groupId', 0);
@@ -502,12 +502,12 @@ const CreateAthlete: React.FC<any> = (props) => {
                                             {values.id ? <Button onClick={() => { setFieldValue('openSportdataDialog', true) }} >Histórico deportivo</Button> : null}
                                         </Grid>
                                         <Grid item xs>
-                                            {values.id ? <Button onClick={() => { setFieldValue('openReceiptsDialog', true) }} >Recibos</Button> : null}
+                                            {values.id && (isAdmin() || isManager()) ? <Button onClick={() => { setFieldValue('openReceiptsDialog', true) }} >Recibos</Button> : null}
                                         </Grid>
                                     </Grid>
                                     <Grid item xs>
                                         <Grid item xs>
-                                            <Checkbox name="enrollmentFeePaid" checked={values.enrollmentFeePaid === true} 
+                                            <Checkbox name="enrollmentFeePaid" disabled={!(isManager() || isAdmin())} checked={values.enrollmentFeePaid === true} 
                                                 onChange={e => {
                                                     setFieldValue('enrollmentFeePaid', e.target.checked)
                                                 }}
@@ -515,7 +515,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                             Matricula pagada
                                         </Grid>
                                         <Grid item xs>
-                                            <Checkbox name="membershipFeePaid" checked={values.membershipFeePaid === true} 
+                                            <Checkbox name="membershipFeePaid" disabled={!(isManager() || isAdmin())} checked={values.membershipFeePaid === true} 
                                                 onChange={e => {
                                                     setFieldValue('membershipFeePaid', e.target.checked)
                                                 }}
@@ -543,12 +543,12 @@ const CreateAthlete: React.FC<any> = (props) => {
                                             <Grid container direction="column" spacing={2}>
                                                 <Grid container item spacing={1}>
                                                     <Grid item xs>
-                                                        <TextField name="name" label="Nombre" value={values.name} margin="dense"
+                                                        <TextField name="name" label="Nombre" value={values.name} disabled={!(isManager() || isAdmin())} margin="dense"
                                                             error={touched.name && errors.name} onChange={handleChange} 
                                                         />
                                                     </Grid>
                                                     <Grid item xs>
-                                                        <TextField name="firstSurname" label="Primer Apellido" value={values.firstSurname} margin="dense"
+                                                        <TextField name="firstSurname" label="Primer Apellido" value={values.firstSurname} disabled={!(isManager() || isAdmin())} margin="dense"
                                                             error={touched.firstSurname && errors.firstSurname}
                                                             onBlur={(e: any) => {
                                                                 if (values.familiarOneFirstSurname === '') {
@@ -564,7 +564,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                         />
                                                     </Grid>
                                                     <Grid item xs>
-                                                        <TextField name="secondSurname" label="Segundo Apellido" value={values.secondSurname} margin="dense"
+                                                        <TextField name="secondSurname" label="Segundo Apellido" value={values.secondSurname} disabled={!(isManager() || isAdmin())} margin="dense"
                                                             error={touched.secondSurname && errors.secondSurname}
                                                             onBlur={(e: any) => {
                                                                 if (values.familiarTwoFirstSurname === '') {
@@ -583,7 +583,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                 <Grid container item spacing={1}>
                                                     <Grid item xs>
                                                         <DateField value={values.birthDate} label="Fecha de nacimiento"
-                                                            error={touched.birthDate && errors.birthDate}
+                                                            error={touched.birthDate && errors.birthDate} disabled={!(isManager() || isAdmin())} 
                                                             max={moment(new Date()).format("YYYY-MM-DD")}
                                                             onChange={(e: any) => {
                                                                 let age: number = utils.ageCalculator(e)
@@ -602,14 +602,15 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                         <TextField label="Edad" type="number" disabled value={values.age} margin="dense" />
                                                     </Grid>
                                                     <Grid item xs>
-                                                        <TextField name="birthPlace" label="Lugar de nacimiento" type="text" value={values.birthPlace}
+                                                        <TextField name="birthPlace" label="Lugar de nacimiento" type="text" value={values.birthPlace} disabled={!(isManager() || isAdmin())}
                                                             error={touched.birthPlace && errors.birthPlace} onChange={handleChange}
                                                         />
                                                     </Grid>
                                                 </Grid>
                                                 <Grid container item spacing={1}>
                                                     <Grid item xs>
-                                                        <TextField name="dni" label="Dni/Nie" type="text" value={values.dni} error={touched.dni && errors.dni} onChange={handleChange}
+                                                        <TextField name="dni" label="Dni/Nie" type="text" value={values.dni} error={touched.dni && errors.dni} disabled={!(isManager() || isAdmin())}
+                                                            onChange={handleChange}
                                                             onBlur={() => {
                                                                 if (!utils.isValidDni(values.dni)){
                                                                     setFieldTouched("dni", true, false);
@@ -621,6 +622,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                     <Grid item xs>
                                                         <Select fullWidth name="gender" label="Género" error={touched.gender && errors.gender}
                                                             options={[{ id: "male", name: "Hombre" }, { id: "female", name: "Mujer" }]} value={values.gender}
+                                                            disabled={!(isManager() || isAdmin())}
                                                             onChange={(e: any, value: any) => {
                                                                 setFieldValue('gender', value ? value.id : "")
                                                                 if (values.gender && values.birthDate && values.birthDate.length > 0){
@@ -631,17 +633,19 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                     </Grid>
                                                     <Grid item xs>
                                                         <TextField name="nationality" label="Nacionalidad" type="text" value={values.nationality}
+                                                            disabled={!(isManager() || isAdmin())}
                                                             error={touched.nationality && errors.nationality}
                                                             onChange={handleChange}
                                                         />
                                                     </Grid>
                                                     <Grid container >
-                                                    <Button style={{maxWidth: '30%'}} onClick={() => {
+                                                    { (isManager() || isAdmin()) && <Button style={{maxWidth: '30%'}} onClick={() => {
                                                         setFieldValue('holderName', values.name)
                                                         setFieldValue('holderFirstSurname', values.firstSurname)
                                                         setFieldValue('holderSecondSurname', values.secondSurname)
                                                         setFieldValue('holderDni', values.dni)
                                                     }}>Titular de la cuenta</Button>
+                                                    }
                                                 </Grid>
                                                 </Grid>
                                             </Grid>
@@ -653,10 +657,12 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                 <Grid container item spacing={1}>
                                                     <Grid item xs>
                                                         <TextField fullWidth name="mail" label="Email" type="email" value={values.mail} 
+                                                            disabled={!(isManager() || isAdmin())}
                                                             onChange={handleChange} error={touched.mail && errors.mail} />
                                                     </Grid>
                                                 </Grid>
                                                 <PhoneCard phone1={values.phone1} phone2={values.phone2} phone3={values.phone3}
+                                                    disabled={!(isManager() || isAdmin())}
                                                     errorPhone1={touched.phone1 && errors.phone1}
                                                     onChange={(phone1:string, phone2:string, phone3:string) => {
                                                         setFieldValue('phone1', phone1)
@@ -675,17 +681,17 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                     <> 
                                                         <Grid container item spacing={1}>
                                                             <Grid item xs>
-                                                                <TextField name="municipality" label="Municipio" value={values.municipality} onChange={handleChange}
+                                                                <TextField disabled={!(isManager() || isAdmin())} name="municipality" label="Municipio" value={values.municipality} onChange={handleChange}
                                                                     error={touched.municipality && errors.municipality} />
                                                             </Grid>
                                                             <Grid item xs>
-                                                                <TextField name="postalCode" label="C.P." value={values.postalCode} onChange={handleChange}
+                                                                <TextField disabled={!(isManager() || isAdmin())} name="postalCode" label="C.P." value={values.postalCode} onChange={handleChange}
                                                                     error={touched.postalCode && errors.postalCode} />
                                                             </Grid>
                                                         </Grid>
                                                         <Grid container item spacing={1}>
                                                             <Grid item xs>
-                                                                <TextField fullWidth name="address" label="Dirección" value={values.address} onChange={handleChange}
+                                                                <TextField disabled={!(isManager() || isAdmin())} fullWidth name="address" label="Dirección" value={values.address} onChange={handleChange}
                                                                     error={touched.address && errors.address} />
                                                             </Grid>
                                                         </Grid>
@@ -701,16 +707,18 @@ const CreateAthlete: React.FC<any> = (props) => {
                                             <Grid container item direction="column" spacing={2}>
                                                 <Grid container alignItems="flex-start">
                                                     <Typography color="textSecondary">Familiar 1</Typography>
-                                                    <Button style={{maxWidth: '30%'}} onClick={() => {
+                                                    { (isManager() || isAdmin()) && <Button style={{maxWidth: '30%'}} onClick={() => {
                                                         setFieldValue('holderName', values.familiarOneName)
                                                         setFieldValue('holderFirstSurname', values.familiarOneFirstSurname)
                                                         setFieldValue('holderSecondSurname', values.familiarOneSecondSurname)
                                                         setFieldValue('holderDni', values.familiarOneDni)
                                                     }}>Titular de la cuenta</Button>
+                                                    }
                                                 </Grid>
                                                 <AthleteFamilyData key={`familiar-one-${values.id}`} name={values.familiarOneName} firstSurname={values.familiarOneFirstSurname} secondSurname={values.familiarOneSecondSurname}
                                                     dni={values.familiarOneDni} touchedDni={touched.familiarOneDni} errorsDni={errors.familiarOneDni}
                                                     mail={values.familiarOneMail}
+                                                    disabled={!(isManager() || isAdmin())}
                                                     dniOnBlur={() => {
                                                         if (values.familiarOneDni && !utils.isValidDni(values.familiarOneDni)){
                                                             setFieldTouched("familiarOneDni", true, false);
@@ -723,16 +731,18 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                 />
                                                 <Grid container alignItems="flex-start">
                                                     <Typography color="textSecondary">Familiar 2</Typography>
-                                                    <Button style={{maxWidth: '30%'}} onClick={() => {
+                                                    { (isManager() || isAdmin()) && <Button style={{maxWidth: '30%'}} onClick={() => {
                                                         setFieldValue('holderName', values.familiarTwoName)
                                                         setFieldValue('holderFirstSurname', values.familiarTwoFirstSurname)
                                                         setFieldValue('holderSecondSurname', values.familiarTwoSecondSurname)
                                                         setFieldValue('holderDni', values.familiarTwoDni)
                                                     }}>Titular de la cuenta</Button>
+                                                    }
                                                 </Grid>
                                                 <AthleteFamilyData key={`familiar-two-${values.id}`} name={values.familiarTwoName} firstSurname={values.familiarTwoFirstSurname} secondSurname={values.familiarTwoSecondSurname}
                                                     dni={values.familiarTwoDni} touchedDni={touched.familiarTwoDni} errorsDni={errors.familiarTwoDni}
                                                     mail={values.familiarTwoMail}
+                                                    disabled={!(isManager() || isAdmin())}
                                                     dniOnBlur={() => {
                                                         if (values.familiarTwoDni && !utils.isValidDni(values.familiarTwoDni)){
                                                             setFieldTouched("familiarTwoDni", true, false);
@@ -833,6 +843,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                 <Grid container item xs spacing={1}>
                                                     <Grid item xs={2}>
                                                         <Select fullWidth name="category" label="Categoría"
+                                                            disabled={!(isManager() || isAdmin())}
                                                             options={utils.getCategories()} 
                                                             value={values.category}
                                                             onChange={(e: any, value: any) => {
@@ -842,6 +853,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                     </Grid>
                                                     <Grid item xs={2}>
                                                         <Select fullWidth name="nextCategory" label="Siguiente categoría"
+                                                            disabled={!(isManager() || isAdmin())}
                                                             options={utils.getCategories()} 
                                                             value={values.nextCategory}
                                                             onChange={(e: any, value: any) => {
@@ -851,6 +863,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                     </Grid>
                                                     <Grid item xs={2}>
                                                         <Select fullWidth name="dorsalCategory" label="Categoría dorsal"
+                                                            disabled={!(isManager() || isAdmin())}
                                                             options={utils.getDorsalCategories()} 
                                                             value={values.dorsalCategory}
                                                             onChange={(e: any, value: any) => {
@@ -860,28 +873,36 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                         />
                                                     </Grid>
                                                     <Grid item xs={2}>
-                                                        <TextField fullWidth name="dorsalNumber" label="Dorsal" type="number" value={values.dorsalNumber} onChange={handleChange} />
+                                                        <TextField fullWidth name="dorsalNumber" label="Dorsal" type="number" value={values.dorsalNumber} 
+                                                            disabled={!(isManager() || isAdmin())} onChange={handleChange} />
                                                     </Grid>
                                                 </Grid>
                                                 <Grid container item xs spacing={1}>
                                                     <Grid item xs={2}>
                                                         <Select fullWidth name="licenseType" label="Tipo de Licencia"
+                                                            disabled={!(isManager() || isAdmin())}
                                                             value={values.licenseType} options={utils.getLicenseTypes()}
                                                             onChange={(e: any, value: any) => setFieldValue('licenseType', value ? value.id : "")}
                                                         />
                                                     </Grid>
                                                     <Grid item>
-                                                        <TextField fullWidth name="license" label="Licencia" value={values.license} onChange={handleChange} />
+                                                        <TextField fullWidth name="license" label="Licencia" value={values.license} 
+                                                            disabled={!(isManager() || isAdmin())}
+                                                            onChange={handleChange} 
+                                                        />
                                                     </Grid>
-                                                    <Grid item>
-                                                        <TextField fullWidth name="licenseNationalFee" label="Cuota licencia nacional" type="number" value={values.licenseNationalFee} onChange={handleChange} />
-                                                    </Grid>
-                                                    <Grid item>
-                                                        <TextField fullWidth name="licenseTerritorialFee" label="Cuota licencia territorial" type="number" value={values.licenseTerritorialFee} onChange={handleChange} />
-                                                    </Grid>
-                                                    <Grid item>
-                                                        <TextField fullWidth name="licenseOtherFee" label="Otros conceptos de licencia" type="number" value={values.licenseOtherFee} onChange={handleChange} />
-                                                    </Grid>
+                                                    { (isManager() || isAdmin()) && <>
+                                                        <Grid item>
+                                                            <TextField fullWidth name="licenseNationalFee" label="Cuota licencia nacional" type="number" value={values.licenseNationalFee} onChange={handleChange} />
+                                                        </Grid>
+                                                        <Grid item>
+                                                            <TextField fullWidth name="licenseTerritorialFee" label="Cuota licencia territorial" type="number" value={values.licenseTerritorialFee} onChange={handleChange} />
+                                                        </Grid>
+                                                        <Grid item>
+                                                            <TextField fullWidth name="licenseOtherFee" label="Otros conceptos de licencia" type="number" value={values.licenseOtherFee} onChange={handleChange} />
+                                                        </Grid>
+                                                    </>
+                                                    }
                                                 </Grid>
                                                 
                                                 { values.sportSchoolId > 0 && values.feeTypeId == 1 &&
@@ -889,6 +910,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                         { values.feeTypeId === 5 || values.feeTypeId === 6 ?
                                                         <Grid item xs={2}>
                                                             <Select name="trackHours" label="Num horas de pista" error={touched.trackHours && errors.trackHours}
+                                                                    disabled={!(isManager() || isAdmin())}
                                                                     options={[{ id: "h_1_5", name: "1.5 h" }, { id: "h_3", name: "3 h" } ]} value={values.trackHours}
                                                                     onChange={(e: any, value: any) => {
                                                                         setFieldValue('trackHours', value ? value.id : "")
@@ -901,6 +923,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                                     groupId={values.groupId}
                                                                     sportSchoolId={values.sportSchoolId}
                                                                     scheduleIds={values.scheduleIds}
+                                                                    disabled={!(isManager() || isAdmin())}
                                                                     onGroupChange={(grId: number) => {
                                                                         setFieldValue('groupId', grId)
                                                                         if (grId === athlete.groupId){
@@ -925,6 +948,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                             <Grid container spacing={1}>
                                                 <Grid item xs={3}>
                                                     <Checkbox name="imageAuth" checked={values.imageAuth === true} 
+                                                        disabled={!(isManager() || isAdmin())}
                                                         onChange={e => {
                                                             setFieldValue('imageAuth', e.target.checked)
                                                         }}
@@ -932,7 +956,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                     Autorización de Imágenes
                                                 </Grid>
                                                 <Grid item xs={9}>
-                                                    <AthletesObservations athleteId={values.id}/>
+                                                    <AthletesObservations athleteId={values.id} disabled={!(isManager() || isAdmin())}/>
                                                 </Grid>
                                             </Grid>
                                         </CustomCard>

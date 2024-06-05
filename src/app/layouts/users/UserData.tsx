@@ -9,6 +9,7 @@ import { Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/
 import TextField from "../../components/custom/TextField";
 import Card from "../../components/custom/Card";
 import SaveButton from "../../components/custom/SaveButton";
+import Spinner from '../../components/custom/Spinner'
 
 import { addUser, getUser, changeUserPassword } from "../../redux/actions/users";
 import { getAllSportSchools, getSportSchoolsGroups } from "../../redux/actions/sportSchools";
@@ -20,76 +21,72 @@ import { getUserId, isAdmin, isManager } from "../../services/LoginService";
 import SportSchoolMultiSelect from "../../components/custom/SportSchoolMultiSelect";
 import GroupMultiSelect from "../../components/custom/GroupMultiSelect";
 
-class ConnectedForm extends React.Component<any, any> {
-    constructor(props: any) {
-        super(props);
-        this.state = {};
-        this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    }
+const CreateUser: React.FC<any> = (props) => {
 
-    componentDidMount(){
-        this.props.getAllSportSchools()
+    const [user, setUser] = React.useState<any>({})
 
-        console.log(this.props.id)
-        if (this.props.id) {
-            let id = this.props.id
-
+    React.useEffect(() => {
+        props.getAllSportSchools()
+        if (props.id) {
+            let id = props.id
             if (id && id === 'me'){
                 id = getUserId().toString()
             }
-            this.getUser(id)
+            getUser(id)
         }
-    }
+    }, [])
 
-    getUser(id: number){
-        this.props.getUser(id).then((u:any) => {
-            this.props.getSportSchoolsGroups(this.props.user.sportSchoolIds)
-        })
-    }
+    React.useEffect(() => {
+        if (props.user.sportSchoolIds && props.user.sportSchoolIds.length > 0){
+            props.getSportSchoolsGroups(props.user.sportSchoolIds)
+        }
+    }, [ props.user])
 
-    handleFormSubmit() {
-        this.props.addUser(this.state);
-    }
+    const getUser = ((id: number) => {
+        props.getUser(id)
+    })
 
-    render() {
-        return (
-            <React.Suspense fallback={<div>Cargando...</div>}>
 
-                <Formik enableReinitialize
-                    initialValues={{
-                        id: this.props.user.id || 0,
-                        username: this.props.user.username || '',
-                        email: this.props.user.email || '',
-                        password: this.props.user.password || '',
-                        sportSchoolIds: this.props.user.sportSchoolIds || [],
-                        groupIds: this.props.user.groupIds || [],
-                        admin: this.props.user.admin || false,
-                        manager: this.props.user.manager || false,
+    const handleSubmit = ((values: any) => {
+        props.addUser(values);
+    })
 
-                        openChangePassword: false,
-                        oldPassword: this.props.user.oldPassword,
-                        newPassword: this.props.user.newPassword,
+    return (
+        <React.Suspense fallback={<div>Cargando...</div>}>
 
-                        errorMessage: this.props.user.errorMessage || '',
-                        successMessage: this.props.user.successMessage || ''
-                    }}
-                    validate={(values) => {
-                        let errors: any = {};
+            <Formik enableReinitialize
+                initialValues={{
+                    id: props.user.id || 0,
+                    username: props.user.username || '',
+                    email: props.user.email || '',
+                    password: props.user.password || '',
+                    sportSchoolIds: props.user.sportSchoolIds || [],
+                    groupIds: props.user.groupIds || [],
+                    admin: props.user.admin || false,
+                    manager: props.user.manager || false,
 
-                        if (values.username === '') errors.username = true
+                    openChangePassword: false,
+                    oldPassword: props.user.oldPassword,
+                    newPassword: props.user.newPassword,
 
-                        //check if my values have errors
-                        return errors;
-                    }}
-                    onSubmit={(values, { setSubmitting }) => {
-                        this.setState(values)
-                        setSubmitting(false);
-                        this.handleFormSubmit()
-                    }}
-                >
-                {({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, errors, isSubmitting }) => {
+                    errorMessage: props.user.errorMessage || '',
+                    successMessage: props.user.successMessage || ''
+                }}
+                validate={(values) => {
+                    let errors: any = {};
 
-                    return (
+                    if (values.username === '') errors.username = true
+
+                    //check if my values have errors
+                    return errors;
+                }}
+                onSubmit={(values, { setSubmitting }) => {
+                    setUser(values)
+                    setSubmitting(false);
+                    handleSubmit(values)
+                }}
+            >
+                {({ handleSubmit, handleChange, values, touched, setFieldValue, setFieldTouched, errors, isSubmitting }) => (
 
                     <form onSubmit={handleSubmit}>
                         <Snackbar open={values.errorMessage !== undefined && values.errorMessage !== ''}
@@ -105,6 +102,7 @@ class ConnectedForm extends React.Component<any, any> {
                             anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
                             <Alert severity="success" onClose={() => { 
                                     setFieldValue("successMessage", "")
+                                    window.open("/admin/users/list", "_self");
                                 }}>
                                 <AlertTitle>Ok!</AlertTitle>
                                 <strong>{values.successMessage}</strong>
@@ -133,7 +131,7 @@ class ConnectedForm extends React.Component<any, any> {
                             <DialogActions>
                                 <Button 
                                     onClick={(a: any) => {
-                                        this.props.changeUserPassword(values);
+                                        props.changeUserPassword(values);
                                     }}
                                 >Guardar</Button>
                                 <Button 
@@ -164,26 +162,25 @@ class ConnectedForm extends React.Component<any, any> {
                                             </Grid>
                                         </Card>
                                     </Grid>
-                                    { isAdmin() || isManager() ?
-                                        <Grid item xs={2}>
-                                            <Checkbox name="manager" checked={values.manager === true} 
-                                                onChange={e => {
-                                                    setFieldValue('manager', e.target.checked)
-                                                }}
-                                            />
-                                            Manager
-                                        </Grid>
-                                        : null
-                                    }
-                                    { !isAdmin() ? null :
-                                        <Grid item xs={2}>
-                                            <Checkbox name="admin" checked={values.admin === true} 
-                                                onChange={e => {
-                                                    setFieldValue('admin', e.target.checked)
-                                                }}
-                                            />
-                                            Admin
-                                        </Grid>
+                                    { isAdmin() &&
+                                        <>
+                                            <Grid item xs={2}>
+                                                <Checkbox name="manager" checked={values.manager === true} 
+                                                    onChange={e => {
+                                                        setFieldValue('manager', e.target.checked)
+                                                    }}
+                                                />
+                                                Manager
+                                            </Grid>
+                                            <Grid item xs={2}>
+                                                <Checkbox name="admin" checked={values.admin === true} 
+                                                    onChange={e => {
+                                                        setFieldValue('admin', e.target.checked)
+                                                    }}
+                                                />
+                                                Admin
+                                            </Grid>
+                                        </>
                                     }
                                 </Grid>
                                 
@@ -191,14 +188,14 @@ class ConnectedForm extends React.Component<any, any> {
                                     <Grid container item direction="row" spacing={3}>
                                         <Grid item xs>
                                             <SportSchoolMultiSelect
-                                                sportSchools={this.props.sport_schools}
+                                                sportSchools={props.sport_schools}
                                                 sportSchoolIds={values.sportSchoolIds}
                                                 onChange={((ssIds: number[]) => {
                                                     setFieldValue('sportSchoolIds', ssIds)
-                                                    this.props.getSportSchoolsGroups(ssIds).then(() => {
+                                                    props.getSportSchoolsGroups(ssIds).then(() => {
                                                         // Check that every id in groupIds is in groups.id
-                                                        if (Object.keys(this.props.sport_schools_groups).length > 0){
-                                                            let grIds = this.props.sport_schools_groups.map((gr: {id:number}) => gr.id)
+                                                        if (Object.keys(props.sport_schools_groups).length > 0){
+                                                            let grIds = props.sport_schools_groups.map((gr: {id:number}) => gr.id)
                                                             let auxIds = values.groupIds.filter((id: number) => {
                                                                 return grIds.includes(id)
                                                             })
@@ -209,13 +206,13 @@ class ConnectedForm extends React.Component<any, any> {
                                             />
                                         </Grid>
                                         <Grid item xs>
-                                             <GroupMultiSelect
-                                                groups={this.props.sport_schools_groups || []}
-                                                 groupIds={values.groupIds}
-                                                 onChange={((grIds: number[], grId: number, checked: boolean) => {
+                                                <GroupMultiSelect
+                                                    groups={props.sport_schools_groups || []}
+                                                    groupIds={values.groupIds}
+                                                    onChange={((grIds: number[], grId: number, checked: boolean) => {
                                                     setFieldValue('groupIds', grIds)
                                                 })}
-                                             />
+                                                />
                                         </Grid>
                                     </Grid>
                                 }
@@ -223,23 +220,22 @@ class ConnectedForm extends React.Component<any, any> {
                         </Box>
                         <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
                             <Toolbar>
-                                <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
+                                { props.loading ? <Spinner/> : <>
+                                    <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
+                                    { values.id > 0 &&
+                                        <SaveButton onClick={() => {
+                                            setFieldValue("openChangePassword", true)
+                                        }} >Cambiar contraseña</SaveButton>
+                                    }
+                                    </>
+                                }
                             </Toolbar>
-                            { values.id > 0 ? 
-                                <Toolbar>
-                                    <SaveButton onClick={() => {
-                                        setFieldValue("openChangePassword", true)
-                                    }} >Cambiar contraseña</SaveButton>
-                                </Toolbar>
-                            : null }
                         </AppBar>
                     </form>
-                )}}
+                )}
             </Formik>
-
-            </React.Suspense>
-        );
-    }
+        </React.Suspense>
+    );
 }
 
 const mapDispatchToProps = {
@@ -254,11 +250,12 @@ const mapStateToProps = (state: any) => {
     return { 
         user: state.user_reducer.user,
         sport_schools: state.sport_school_reducer.sport_schools,
-        sport_schools_groups: state.group_reducer.sport_schools_groups
+        sport_schools_groups: state.group_reducer.sport_schools_groups,
+        loading: state.api_reducer.loading
     };
 };
 
-const ConnectedComponent = connect(mapStateToProps, mapDispatchToProps)(ConnectedForm);
+const ConnectedComponent = connect(mapStateToProps, mapDispatchToProps)(CreateUser);
 
 const WithRouterWrapper = () => {
     let { id } = useParams()

@@ -74,6 +74,8 @@ function athleteDataConversor(d: any) {
             category: functions?.getCategories().find(c => c.id === d.category)?.name,
             dorsalCategory: functions?.getDorsalCategories().find(c => c.id === d.dorsalCategory)?.name,
             paymentType: functions.getPaymentTypes().find(st => st.id === d.paymentType)?.name,
+            feeTypeId: d.feeTypeName,
+            sportSchoolId: d.sportSchoolName,
             lastRegisterDate: d.lastRegisterDate ? new Intl.DateTimeFormat('sq-AL').format(new Date(d.lastRegisterDate)) : '',
             lastUnregisterDate: d.lastUnregisterDate ? new Intl.DateTimeFormat('sq-AL').format(new Date(d.lastUnregisterDate)) : '',
     }
@@ -96,7 +98,7 @@ function trainerDataConversor(d: { id: number, name: string, sportSchoolName: st
     return d
 }
 
-function userDataConversor(d: { id: number, username: string, email: string }){
+function userDataConversor(d: { id: number, username: string, email: string, admin: string, manager: string }){
     return d
 }
 

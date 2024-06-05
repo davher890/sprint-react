@@ -34,7 +34,7 @@ const GroupAttendante: React.FC<any> = (props) => {
     return (
         <CustomCard>
             <Grid container spacing={3}>
-                <Grid container item direction="column" xs={2}>
+                <Grid container item direction="column">
                     <Grid item xs>
                         <SportSchoolSelect sportSchoolId={sportSchoolId}
                             onChange={(sportSchoolId: number) => {
@@ -63,7 +63,7 @@ const GroupAttendante: React.FC<any> = (props) => {
                 </Grid>
                 <Grid item xs>
                     <DownloadButton type="submit"
-                        disabled={!(month >= 0)}
+                        disabled={month == 0 || sportSchoolId == 0}
                         onClick={handleFormSubmit}
                     />
                 </Grid>

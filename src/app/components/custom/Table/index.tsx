@@ -52,7 +52,7 @@ const CustomTable: React.FC<any> = (props) => {
 
 	const [columns, setColumns] = React.useState<any[]>(props.columns || []);
 	const [page, setPage] = React.useState<number>(props.page || 0)
-	const [pageSize, setPageSize] = React.useState<number>(props.pageSize || 10)
+	const [pageSize, setPageSize] = React.useState<number>(localStorage.getItem('pageSize') || props.size || 10)
 	const [visibleColumns, setVisibleColumns] = React.useState<any[]>(props.columns.filter((c: any) => c.show === undefined || c.show === true) || []);
 	const [filterObj, setFilterObj] = React.useState<any>(props.filters || {});
 
@@ -104,6 +104,8 @@ const CustomTable: React.FC<any> = (props) => {
 		}
 	}
 	const handlePageSizeChange = (event: any) => {
+		
+		localStorage.setItem('pageSize', event.target.value)
 		setPageSize(parseInt(event.target.value))
 		if (props.onPaginationFilterChange){
 			props.onPaginationFilterChange(page, event.target.value, filterObj, orderBy, order)

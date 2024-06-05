@@ -36,7 +36,8 @@ const SportSchoolSelect: React.FC<any> = (props) => {
     return (
         <>
             { props.sportSchools && props.sportSchools.length > 0 ?
-                <Select name="sportSchoolId" label="Escuela Deportiva" 
+                <Select {...props}
+                    name="sportSchoolId" label="Escuela Deportiva" 
                     options={props.sportSchools} value={sportSchoolId}
                     error={props.error} onChange={onChange}
                 />

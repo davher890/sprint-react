@@ -27,7 +27,7 @@ const FeeTypeSelect: React.FC<any> = (props) => {
     })
     
     return (
-        <Select fullWidth name="feeType" label="Tipo de cuota"
+        <Select { ...props } fullWidth name="feeType" label="Tipo de cuota"
             options={props.fee_types} value={feeType} 
             error={props.error} onChange={onChange}
         />

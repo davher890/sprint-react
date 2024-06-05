@@ -111,6 +111,11 @@ export const findGroupAthletesDataPagination = (groupId: number, scheduleIds: nu
 
 const findDataPagination = (entity: string, page=0, size=10, filters: any, sort: string='id', sortDirection: Order='desc') => {
 
+    const pageSizeLS = localStorage.getItem('pageSize') ?? ''
+    if (pageSizeLS){
+        size = parseInt(pageSizeLS)
+    }
+
     let paramsSeparator = entity.includes("?") ? "&" : "?"
     let pageParams = paramsSeparator + "page=" + page
     let sizeParams = "&size=" + size
