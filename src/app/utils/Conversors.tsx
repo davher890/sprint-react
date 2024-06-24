@@ -9,7 +9,10 @@ function sportSchoolDataConversor(d: { id: number, name: string, municipality: s
 }
 
 function groupDataConversor(d: { id: number, name: string, sportSchoolName: string }) {
-    return d
+    return {
+        ...d,
+        sportSchoolId: d.sportSchoolName
+    }   
 }
 
 function receiptDataConversor(d: { id: number, name: string, season: string, receiptType: string, sportSchoolName: string, createdAt: number, status: string, collectionName: string, enrollmentFee: number, membershipFee: number, monthlyFee: number, licenseFee: number }) {
@@ -95,7 +98,10 @@ function scheduleDataConversor(d: {id: number, day: string, startHour: number, s
 }
 
 function trainerDataConversor(d: { id: number, name: string, sportSchoolName: string }){
-    return d
+    return {
+        ...d,
+        sportSchoolId: d.sportSchoolName
+    }
 }
 
 function userDataConversor(d: { id: number, username: string, email: string, admin: string, manager: string }){

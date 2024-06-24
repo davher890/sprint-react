@@ -40,8 +40,8 @@ import Login from './layouts/login';
 
 import CustomAppBar from './components/custom/AppBar'
 
-import GroupAthletesTable from './components/listings/GroupAthletesTable';
-import GroupAttendance from './components/listings/GroupAttendance';
+import GroupAthletesTable from './layouts/listings/GroupAthletesTable';
+import GroupAttendance from './layouts/listings/GroupAttendance';
 import { Box } from '@material-ui/core';
 import AuthenticatedProtected from "./components/custom/AuthenticatedProtected";
 import AdminProtected from "./components/custom/AdminProtected";

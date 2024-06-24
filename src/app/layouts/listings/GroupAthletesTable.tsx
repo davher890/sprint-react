@@ -3,11 +3,11 @@ import { useState } from "react";
 
 import { Grid } from '@material-ui/core';
 
-import SearchButton from '../custom/SearchButton'
-import Table from "../custom/Table";
-import CustomCard from '../custom/Card'
-import GroupScheduleSelect from '../custom/GroupScheduleSelect'
-import SportSchoolSelect from "../custom/SportSchoolSelect";
+import SearchButton from '../../components/custom/SearchButton'
+import Table from "../../components/custom/Table";
+import CustomCard from '../../components/custom/Card'
+import GroupScheduleSelect from '../../components/custom/GroupScheduleSelect'
+import SportSchoolSelect from "../../components/custom/SportSchoolSelect";
 
 import Utils from "../../utils/TableUtils"
 import { connect } from "react-redux";
@@ -48,8 +48,14 @@ const GroupAthletesTable: React.FC<any> = (props) => {
                                     sportSchoolId={sportSchoolId}
                                     groupId={groupId}
                                     scheduleIds={scheduleIds}
-                                    onChange={(groupId: number, specialization: boolean, scheduleIds: number[]) => {
-                                        setGroupId(groupId)
+                                    // onChange={(grId: number, spec: boolean, schIds: number[]) => {
+                                    //     setGroupId(grId)
+                                    //     setScheduleIds(schIds)
+                                    // }}
+                                    onGroupChange={(grId: number) => {
+                                        setGroupId(grId)
+                                    }}
+                                    onScheduleChange={(scheduleIds: number[]) => {
                                         setScheduleIds(scheduleIds)
                                     }}
                                 />

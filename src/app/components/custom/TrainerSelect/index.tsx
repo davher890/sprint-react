@@ -19,12 +19,18 @@ const TrainerSelect: React.FC<any> = (props) => {
         }
         if (props.sportSchoolId !== sportSchoolId){
             setSportSchoolId(props.sportSchoolId)
-            if (props.sportSchoolId > 0){
-                props.getSportSchoolTrainers(props.sportSchoolId)
-            }
+            // if (props.sportSchoolId > 0){
+            //     props.getSportSchoolTrainers(props.sportSchoolId)
+            // }
         }
         
-    }, [props.trainerId, props.sportSchoolId, trainerId, sportSchoolId])
+    }, [props.trainerId, props.sportSchoolId])
+
+    React.useEffect(() => {
+        if (sportSchoolId > 0){
+            props.getSportSchoolTrainers(sportSchoolId)
+        }
+    }, [sportSchoolId])
 
     const onChange = (value: String, item: any) => {
         if (props.onChange){

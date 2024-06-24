@@ -12,7 +12,8 @@ import { getGroupSchedules } from "../../../redux/actions/groups";
 const GroupScheduleSelect: React.FC<any> = (props) => {
 
     const [ specialization, setSpecialization ] = React.useState<boolean>(false)
-    const [ scheduleIds, setScheduleIds ] = React.useState<any[]>(props.scheduleIds)
+    // const [ scheduleIds, setScheduleIds ] = React.useState<any[]>(props.scheduleIds)
+    const [ groupId, setGroupId ] = React.useState<number>(props.groupId)
 
     // React.useEffect(() => {
     //     // if (props.scheduleIds){
@@ -33,21 +34,22 @@ const GroupScheduleSelect: React.FC<any> = (props) => {
             schIds = groupScheduleIds
         }
         else {
-            const result = scheduleIds.every((val:number) => groupScheduleIds.includes(val));
+            const result = props.scheduleIds.every((val:number) => groupScheduleIds.includes(val));
             if (result){
-                schIds = scheduleIds
+                schIds = props.scheduleIds
             }
         }
+
         if (props.onChange){
-            props.onChange(props.groupId, specialization, schIds)
+            props.onChange(groupId, specialization, schIds)
         }
         if (props.onGroupChange){
-            props.onGroupChange(props.groupId, specialization)
+            props.onGroupChange(groupId, specialization)
         }
         if (props.onScheduleChange){
             props.onScheduleChange(schIds)
         }
-    }, [props.group_schedules, scheduleIds])
+    }, [props.group_schedules])
 
     return (
         <Grid container item direction="row" spacing={2}>
@@ -58,13 +60,14 @@ const GroupScheduleSelect: React.FC<any> = (props) => {
                     groupId={props.groupId}
                     onChange={(grId: number, spec: boolean) => {
                         setSpecialization(spec)
+                        setGroupId(grId)
                         props.getGroupSchedules(grId)
-                        if (props.onChange){
-                            props.onChange(grId, spec, scheduleIds)
-                        }
-                        if (props.onGroupChange){
-                            props.onGroupChange(grId, spec)
-                        }
+                        // if (props.onChange){
+                        //     props.onChange(grId, spec, scheduleIds)
+                        // }
+                        // if (props.onGroupChange){
+                        //     props.onGroupChange(grId, spec)
+                        // }
                     }}
                 />
             </Grid>
@@ -72,14 +75,14 @@ const GroupScheduleSelect: React.FC<any> = (props) => {
                 <ScheduleSelect
                     disabled={props.disabled || false}
                     schedules={props.group_schedules}
-                    scheduleIds={scheduleIds}
+                    scheduleIds={props.scheduleIds}
                     specialization={specialization}
                     onChange={(schIds: number[]) => {
                         if (props.onChange){
                             props.onChange(props.groupId, specialization, schIds)
                         }
                         if (props.onScheduleChange){
-                            setScheduleIds(schIds)
+                            // setScheduleIds(schIds)
                             props.onScheduleChange(schIds)
                         }
                     }}

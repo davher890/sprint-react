@@ -1,10 +1,40 @@
 import * as React from "react"
 
 import CustomCard from '../Card';
-import { Box, Grid, Checkbox, Typography } from '@material-ui/core';
+import { Box, Grid, Checkbox, FormControlLabel } from '@material-ui/core';
 
 import utils from "../../../utils/Functions"
 
+const ScheduleItem: React.FC<any> = (props) => {
+
+    const { specialization, disabled, scheduleIds, id, startHour, startMinute, endHour, endMinute, dayTranslate, onChange } = props
+
+    const label = `${dayTranslate} - ${utils.leftPadding(startHour.toString(), 2, "0")}:${utils.leftPadding(startMinute.toString(), 2, "0")} - ${utils.leftPadding(endHour.toString(), 2, "0")}:${utils.leftPadding(endMinute.toString(), 2, "0")}`
+    return (
+        <FormControlLabel
+            label={label}
+            control={
+                <Checkbox
+                    disabled={specialization || disabled}
+                    name="scheduleIds"
+                    key={`sch${id}`}
+                    checked={specialization || scheduleIds.includes(id)}
+                    onChange={e => {
+                        if (e.target.checked) {
+                            let s = scheduleIds.concat([id])
+                            onChange(s)
+                        } else {
+                            let schIds = scheduleIds
+                            const idx = scheduleIds.indexOf(id);
+                            schIds.splice(idx, 1);
+                            onChange(schIds)
+                        }
+                    }}
+                /> 
+            }
+        />
+    )
+}
 const ScheduleSelect: React.FC<any> = (props) => {
 
     const [ days, setDays ] = React.useState<string[]>([])
@@ -35,27 +65,12 @@ const ScheduleSelect: React.FC<any> = (props) => {
                                 return props.scheduleIds.includes(sch.id)
                             })
                             .map((sch: {id: number, startHour: number, startMinute: number, endHour: number, endMinute: number, dayTranslate: string}) => {
-                                // return <Typography variant="h6">{sch.dayTranslate} - {utils.leftPadding(sch.startHour.toString(), 2, "0")}:{utils.leftPadding(sch.startMinute.toString(), 2, "0")} - {utils.leftPadding(sch.endHour.toString(), 2, "0")}:{utils.leftPadding(sch.endMinute.toString(), 2, "0")}</Typography>
-                                return <Grid item key={`row_sch${sch.id}`} xs>
-                                    <Checkbox
-                                        disabled={props.disabled || props.specialization}
-                                        name="scheduleIds"
-                                        key={`sch${sch.id}`}
-                                        checked={props.scheduleIds.includes(sch.id)}
-                                        onChange={e => {
-                                            if (e.target.checked) {
-                                                let s = props.scheduleIds.concat([sch.id])
-                                                onChange(s)
-                                            } else {
-                                                let schIds = props.scheduleIds
-                                                const idx = props.scheduleIds.indexOf(sch.id);
-                                                schIds.splice(idx, 1);
-                                                onChange(schIds)
-                                            }
-                                        }}
+                                return <Grid item key={`row_sch_1_${sch.id}`} xs>
+                                    <ScheduleItem 
+                                        { ...props } { ...sch }
+                                        onChange={onChange}
                                     />
-                                    {sch.dayTranslate} - {utils.leftPadding(sch.startHour.toString(), 2, "0")}:{utils.leftPadding(sch.startMinute.toString(), 2, "0")} - {utils.leftPadding(sch.endHour.toString(), 2, "0")}:{utils.leftPadding(sch.endMinute.toString(), 2, "0")}
-                                </Grid>
+                                   </Grid>
                             })
                         }
                         </CustomCard>
@@ -91,25 +106,11 @@ const ScheduleSelect: React.FC<any> = (props) => {
                                 })
                                 .map((sch: {id: number, startHour: number, startMinute: number, endHour: number, endMinute: number, dayTranslate: string}) => {
                                     return (
-                                        <Grid item key={`row_sch${sch.id}`} xs>
-                                            <Checkbox
-                                                disabled={props.disabled || props.specialization}
-                                                name="scheduleIds"
-                                                key={`sch${sch.id}`}
-                                                checked={props.scheduleIds.includes(sch.id)}
-                                                onChange={e => {
-                                                    if (e.target.checked) {
-                                                        let s = props.scheduleIds.concat([sch.id])
-                                                        onChange(s)
-                                                    } else {
-                                                        let schIds = props.scheduleIds
-                                                        const idx = props.scheduleIds.indexOf(sch.id);
-                                                        schIds.splice(idx, 1);
-                                                        onChange(schIds)
-                                                    }
-                                                }}
+                                        <Grid item key={`row_sch_2_${sch.id}`} xs>
+                                            <ScheduleItem 
+                                                { ...props } { ...sch }
+                                                onChange={onChange}
                                             />
-                                            {sch.dayTranslate} - {utils.leftPadding(sch.startHour.toString(), 2, "0")}:{utils.leftPadding(sch.startMinute.toString(), 2, "0")} - {utils.leftPadding(sch.endHour.toString(), 2, "0")}:{utils.leftPadding(sch.endMinute.toString(), 2, "0")}
                                         </Grid>
                                     )
                                 })
