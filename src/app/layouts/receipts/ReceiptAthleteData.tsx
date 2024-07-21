@@ -3,8 +3,8 @@ import React from "react"
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
 
-import { Grid, AppBar, Toolbar, Snackbar } from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Grid, AppBar, Toolbar, Snackbar } from '@mui/material';
+import { Alert, AlertTitle } from '@mui/lab';
 
 import Card from '../../components/custom/Card';
 import SaveButton from '../../components/custom/SaveButton'

@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/lab/Autocomplete';
 
 const Select: React.FC<any> = (props) => {
     
@@ -24,7 +24,7 @@ const Select: React.FC<any> = (props) => {
                 }}
                 // getItemValue={(item: any) => item.label}
 
-                getOptionSelected={(option: {id: string, name: string}, value) => option.id === value.id}
+                getOptionSelected={(option: {id: string, name: string}, value: {id: string, name: string}) => option.id === value.id}
                 value={
                     {id: props.value, name: props.options.find((e: { id: string }) => e.id === props.value) ? props.options.find((e: { id: string }) => e.id === props.value).name : ''}
                 }

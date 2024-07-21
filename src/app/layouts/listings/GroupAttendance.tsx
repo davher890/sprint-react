@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 
 import DownloadButton from '../../components/custom/DownloadButton'
 import GroupSelect from '../../components/custom/GroupSelect'

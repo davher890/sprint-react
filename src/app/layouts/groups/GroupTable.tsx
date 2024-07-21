@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 
 import Table from "../../components/custom/Table";
 import Button from '../../components/custom/AddButton'
@@ -13,47 +13,39 @@ import { Order } from '../../types/order'
 
 import { isManager, isAdmin } from "../../services/LoginService";
 
-class GroupTable extends React.Component<any, any> {
-    constructor(props: any) {
-        super(props);
-        this.state = { 
-    		columns : Utils.getGroupColumns()
-        };
-    }
+const GroupTable: React.FC<any> = (props) => {
 
-	componentDidMount() {
-		this.props.getGroupTable();
-	}
+	React.useEffect(() => {
+		props.getGroupTable();
+	}, [])
 
-    render() {
-		return (
-			<React.Suspense fallback={<div>Cargando...</div>}>
-				<Grid container direction="column" spacing={3}>
-					{ (isAdmin() || isManager()) &&	
-						<Grid item xs>
-							<Button text="Nuevo Grupo" href={'/groups'}/>
-						</Grid>
-					}
+	return (
+		<React.Suspense fallback={<div>Cargando...</div>}>
+			<Grid container direction="column" spacing={3}>
+				{ (isAdmin() || isManager()) &&	
 					<Grid item xs>
-						<Table 
-							data={this.props.table_data}
-							page={this.props.page}
-							size={this.props.size}
-							total={this.props.total}
-							orderBy="name"
-							columns={this.state.columns}
-							onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
-								this.props.getGroupTable(page, size, filters, sort, sortDirection);
-							}}
-							onRowClick={(id: number) => {
-								window.open("/groups/" + id, "_self");
-							}}
-						/>
+						<Button text="Nuevo Grupo" href={'/groups'}/>
 					</Grid>
+				}
+				<Grid item xs>
+					<Table 
+						data={props.table_data}
+						page={props.page}
+						size={props.size}
+						total={props.total}
+						orderBy="name"
+						columns={Utils.getGroupColumns()}
+						onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
+							props.getGroupTable(page, size, filters, sort, sortDirection);
+						}}
+						onRowClick={(id: number) => {
+							window.open("/groups/" + id, "_self");
+						}}
+					/>
 				</Grid>
-			</React.Suspense>
-		)
-	}
+			</Grid>
+		</React.Suspense>
+	)
 }
 
 function mapStateToProps(state: any) {

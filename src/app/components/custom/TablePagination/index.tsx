@@ -1,13 +1,15 @@
 import * as React from "react"
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
+import { useTheme, createTheme } from '@mui/material/styles';
 
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import LastPageIcon from '@material-ui/icons/LastPage';
-import { Grid, IconButton } from "@material-ui/core";
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import { Grid, IconButton } from "@mui/material";
 
+// const theme = createTheme();
 const useStyles1 = makeStyles((theme) => ({
     root: {
       flexShrink: 0,

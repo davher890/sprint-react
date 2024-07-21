@@ -2,8 +2,8 @@ import * as React from "react"
 
 import { Formik } from 'formik';
 
-import { AppBar, Box, Chip, Grid, Snackbar, Toolbar } from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { AppBar, Box, Chip, Grid, Snackbar, Toolbar } from '@mui/material';
+import { Alert, AlertTitle } from '@mui/lab';
 
 import DeleteButton from "../../components/custom/DeleteButton";
 import Card from '../../components/custom/Card';

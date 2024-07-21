@@ -1,11 +1,11 @@
 import React from 'react'
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 
-import { Table, TableBody, TableHead, TableRow, TableCell, TableContainer, TableSortLabel } from '@material-ui/core';
+import { Table, TableBody, TableHead, TableRow, TableCell, TableContainer, TableSortLabel } from '@mui/material';
 
 import { Order } from '../../../../types/order'
 
-import { withTheme, makeStyles } from '@material-ui/core/styles';
+import { withTheme, makeStyles } from '@mui/styles';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {

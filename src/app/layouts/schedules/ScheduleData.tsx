@@ -2,8 +2,8 @@ import * as React from "react"
 
 import { Formik } from 'formik';
 
-import { Grid, AppBar, Toolbar, Snackbar } from "@material-ui/core";
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Grid, AppBar, Toolbar, Snackbar } from "@mui/material";
+import { Alert, AlertTitle } from '@mui/lab';
 
 import TextField from '../../components/custom/TextField';
 import Select from '../../components/custom/Select';

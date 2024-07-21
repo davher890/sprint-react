@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import {Grid, Dialog, DialogContent, DialogTitle, DialogActions, Button} from '@material-ui/core';
+import {Grid, Dialog, DialogContent, DialogTitle, DialogActions, Button} from '@mui/material';
 
 import MultiSelect from '../MultiSelect'
 import SelectButton from '../SelectButton'

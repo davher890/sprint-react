@@ -5,10 +5,10 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import utils from "../../utils/Functions"
 import { Formik } from 'formik';
 
-import { CardHeader, Grid, AppBar, Toolbar, Snackbar, Typography, Box, Checkbox, Button, Modal } from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { CardHeader, Grid, AppBar, Toolbar, Snackbar, Typography, Box, Checkbox, Button, Modal } from '@mui/material';
+import { Alert, AlertTitle } from '@mui/lab';
 
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
 import CustomCard from '../../components/custom/Card'
 import DateField from '../../components/custom/DateField'
@@ -842,24 +842,28 @@ const CreateAthlete: React.FC<any> = (props) => {
                                             <Grid container spacing={1} direction="column">
                                                 <Grid container item xs spacing={1}>
                                                     <Grid item xs={2}>
-                                                        <Select fullWidth name="category" label="Categoría"
+                                                        <TextField fullWidth name="category" label="Categoría" value={values.category} 
+                                                            disabled={true} />
+                                                        {/* <Select fullWidth name="category" label="Categoría"
                                                             disabled={!(isManager() || isAdmin())}
                                                             options={utils.getCategories()} 
                                                             value={values.category}
                                                             onChange={(e: any, value: any) => {
                                                                 setFieldValue('category', value ? value.id : "")
                                                             }}
-                                                        />
+                                                        /> */}
                                                     </Grid>
                                                     <Grid item xs={2}>
-                                                        <Select fullWidth name="nextCategory" label="Siguiente categoría"
+                                                        {/* <Select fullWidth name="nextCategory" label="Siguiente categoría"
                                                             disabled={!(isManager() || isAdmin())}
                                                             options={utils.getCategories()} 
                                                             value={values.nextCategory}
                                                             onChange={(e: any, value: any) => {
                                                                 setFieldValue('nextCategory', value ? value.id : "")
                                                             }}
-                                                        />
+                                                        /> */}
+                                                        <TextField fullWidth name="nextCategory" label="Siguiente categoría" value={values.nextCategory} 
+                                                            disabled={true} />
                                                     </Grid>
                                                     <Grid item xs={2}>
                                                         <Select fullWidth name="dorsalCategory" label="Categoría dorsal"

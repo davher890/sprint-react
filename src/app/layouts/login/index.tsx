@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 
-import { Box, Grid, Snackbar } from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Box, Grid, Snackbar } from '@mui/material';
+import { Alert, AlertTitle } from '@mui/lab';
 
 import TextField from "../../components/custom/TextField"
 import SearchButton from "../../components/custom/SearchButton"

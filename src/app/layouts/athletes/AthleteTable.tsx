@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { Grid, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
+import { Grid, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
 import Table from "../../components/custom/Table";
 import Button from '../../components/custom/AddButton'

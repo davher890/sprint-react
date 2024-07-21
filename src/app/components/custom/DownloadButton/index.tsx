@@ -1,6 +1,6 @@
 import React from 'react'
-import { Button } from '@material-ui/core';
-import Icon from '@material-ui/icons/CloudDownload';
+import { Button } from '@mui/material';
+import Icon from '@mui/icons-material/CloudDownload';
 
 import Spinner from '../Spinner'
 import { connect } from "react-redux";

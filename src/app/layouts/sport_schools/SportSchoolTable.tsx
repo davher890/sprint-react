@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 
 import Table from "../../components/custom/Table";
 import Button from '../../components/custom/AddButton'
@@ -13,53 +13,47 @@ import { Order } from '../../types/order'
 
 import { isManager, isAdmin } from "../../services/LoginService";
 
-class SportSchoolTable extends React.Component<any, any> {
-	constructor(props: any) {
-		super(props);
-		this.state = {
-			columns: Utils.getSportSchoolColumns()
-		};
-		this.downloadData = this.downloadData.bind(this)
+const SportSchoolTable: React.FC<any> = (props) => {
+
+	React.useEffect(() => {
+		props.getSportSchoolTable();
+	}, [])
+
+	const downloadData = (columns: any) => {
+		props.downloadSportSchools(columns)
 	}
 
-	componentDidMount() {
-		this.props.getSportSchoolTable();
-	}
-
-	downloadData() {
-		this.props.downloadSportSchools(this.state.columns)
-	}
-
-	render() {
-		return (
-			<React.Suspense fallback={<div>Cargando...</div>}>
-				<Grid container direction="column" spacing={3}>
-					{ (isAdmin() || isManager()) &&
-						<Grid item xs>
-							<Button text="Nueva Escuela Deportiva" href={'/sport_schools'} />
-						</Grid>
-					}
+	return (
+		<React.Suspense fallback={<div>Cargando...</div>}>
+			<Grid container direction="column" spacing={3}>
+				{ (isAdmin() || isManager()) &&
 					<Grid item xs>
-						<Table
-							data={this.props.table_data}
-							page={this.props.page}
-							size={this.props.size}
-							total={this.props.total}
-							columns={this.state.columns}
-							downloadData={this.downloadData}
-							showColumns={true}
-							onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
-								this.props.getSportSchoolTable(page, size, filters, sort, sortDirection);
-							}}
-							onRowClick={(id: number) => {
-								window.open("/sport_schools/" + id, "_self");
-							}}
+						<Button
+							text="Nueva Escuela Deportiva" 
+							href={'/sport_schools'} 
 						/>
 					</Grid>
+				}
+				<Grid item xs>
+					<Table
+						data={props.table_data}
+						page={props.page}
+						size={props.size}
+						total={props.total}
+						columns={Utils.getSportSchoolColumns()}
+						downloadData={downloadData}
+						showColumns={true}
+						onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
+							props.getSportSchoolTable(page, size, filters, sort, sortDirection);
+						}}
+						onRowClick={(id: number) => {
+							window.open("/sport_schools/" + id, "_self");
+						}}
+					/>
 				</Grid>
-			</React.Suspense>
-		)
-	}
+			</Grid>
+		</React.Suspense>
+	)
 }
 
 function mapStateToProps(state: any) {

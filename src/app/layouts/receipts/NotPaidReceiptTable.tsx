@@ -2,7 +2,7 @@ import React from "react"
 
 import { connect } from "react-redux";
 
-import { Box, Grid, Tabs, Tab } from '@material-ui/core';
+import { Box, Grid, Tabs, Tab } from '@mui/material';
 
 import Table from "../../components/custom/Table";
 import Card from '../../components/custom/Card';

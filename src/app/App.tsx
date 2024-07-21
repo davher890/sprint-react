@@ -38,11 +38,13 @@ import FamilyData from './layouts/families/FamilyData';
 
 import Login from './layouts/login';
 
+import Index from './layouts/index';
+
 import CustomAppBar from './components/custom/AppBar'
 
 import GroupAthletesTable from './layouts/listings/GroupAthletesTable';
 import GroupAttendance from './layouts/listings/GroupAttendance';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import AuthenticatedProtected from "./components/custom/AuthenticatedProtected";
 import AdminProtected from "./components/custom/AdminProtected";
 import ReturnedReceiptTable from "./layouts/receipts/ReturnedReceiptTable";
@@ -54,7 +56,7 @@ const AppBar: React.FC<any> = (props) => {
   return (
     <Router>
         <Routes>
-          <Route path="/" element={<Login/>}/>
+          <Route path="/" element={<Index/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/admin/users"              element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" ><UserData/></Box></AuthenticatedProtected>}/>
           <Route path="/admin/athletes_by_date"   element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" ><SportSchoolAthletesByDate/></Box></AuthenticatedProtected></AdminProtected>}/>

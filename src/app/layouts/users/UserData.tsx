@@ -2,9 +2,9 @@ import * as React from "react"
 
 import { Formik } from 'formik';
 
-import { Grid, Snackbar, AppBar, Toolbar, Box, Button, Checkbox } from "@material-ui/core";
-import { Alert, AlertTitle } from '@material-ui/lab';
-import { Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
+import { Grid, Snackbar, AppBar, Toolbar, Box, Button, Checkbox } from "@mui/material";
+import { Alert, AlertTitle } from '@mui/lab';
+import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
 import TextField from "../../components/custom/TextField";
 import Card from "../../components/custom/Card";

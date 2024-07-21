@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 
 import Table from "../custom/Table";
 import Button from '../custom/AddButton'

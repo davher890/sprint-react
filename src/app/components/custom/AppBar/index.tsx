@@ -8,7 +8,7 @@ import {
     IconButton,
     Button,
     Avatar,
-} from "@material-ui/core";
+} from "@mui/material";
 
 import { Link as RouterLink } from "react-router-dom";
 
@@ -21,7 +21,7 @@ import {
     People,
     Assignment,
     Receipt,
-} from "@material-ui/icons";
+} from "@mui/icons-material";
 
 import { isManager, isAdmin, getUserId } from "../../../services/LoginService";
 

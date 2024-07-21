@@ -1,6 +1,6 @@
 import React from 'react'
-import { Grid, Button } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { Grid, Button } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 const AddButton: React.FC<any> = (props) => (
 	<Grid container spacing={1}>

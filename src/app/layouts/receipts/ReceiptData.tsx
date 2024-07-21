@@ -2,8 +2,8 @@ import React, { useState } from "react"
 
 import moment from 'moment'
 
-import { Grid, AppBar, Checkbox, Chip, Snackbar, Toolbar } from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Grid, AppBar, Checkbox, Chip, Snackbar, Toolbar } from '@mui/material';
+import { Alert, AlertTitle } from '@mui/lab';
 
 import Table from '../../components/custom/Table';
 import TextField from '../../components/custom/TextField';
