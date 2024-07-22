@@ -1,5 +1,6 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Container, Grid, Paper, Box } from '@mui/material';
+import LoginForm from '../../components/custom/LoginForm';
 
 interface FeatureProps {
   title: string;
@@ -40,19 +41,6 @@ const testimonials: TestimonialProps[] = [
 const Index: React.FC = () => {
   return (
     <Box>
-    {/* <ThemeProvider theme={theme}>
-      <AppBar position="static" color="primary">
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Gestor de Clubes Deportivos
-          </Typography>
-          <Button color="secondary">Características</Button>
-          <Button color="secondary">Precios</Button>
-          <Button color="secondary">Testimonios</Button>
-          <Button color="secondary">Sobre Nosotros</Button>
-          <Button color="secondary">Contacto</Button>
-        </Toolbar>
-      </AppBar> */}
       <Box
         sx={{
           background: 'url(hero-image.jpg) no-repeat center center/cover',
@@ -67,7 +55,7 @@ const Index: React.FC = () => {
         </Typography>
         <Button variant="contained" color="secondary" size="large" 
           onClick={(e) => {
-            window.open("/login", "_self")
+            window.open("/signup", "_self")
           }}>
           Empezar
         </Button>
@@ -141,7 +129,9 @@ const Index: React.FC = () => {
         <Typography variant="h4" color="primary" gutterBottom>
           ¿Listo para optimizar la gestión de tu club?
         </Typography>
-        <Button variant="contained" color="secondary" size="large">
+        <Button variant="contained" color="secondary" size="large" onClick={(e) => {
+            window.open("/signup", "_self")
+        }}>
           Regístrate
         </Button>
       </Container>
@@ -159,7 +149,6 @@ const Index: React.FC = () => {
           <a href="#" style={{ color: '#ffe500', textDecoration: 'none', margin: '0 10px' }}>LinkedIn</a>
         </Box>
       </footer>
-    {/* </ThemeProvider> */}
     </Box>
   );
 };

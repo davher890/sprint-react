@@ -36,11 +36,12 @@ import GroupSwap from './layouts/groups/GroupSwap';
 import FamilyTable from './layouts/families/FamilyTable';
 import FamilyData from './layouts/families/FamilyData';
 
-import Login from './layouts/login';
+import Signup from './layouts/signup';
 
-import Index from './layouts/index';
+import Home from './layouts/home/index';
 
 import CustomAppBar from './components/custom/AppBar'
+import PublicAppBar from './components/custom/PublicAppBar'
 
 import GroupAthletesTable from './layouts/listings/GroupAthletesTable';
 import GroupAttendance from './layouts/listings/GroupAttendance';
@@ -56,8 +57,8 @@ const AppBar: React.FC<any> = (props) => {
   return (
     <Router>
         <Routes>
-          <Route path="/" element={<Index/>}/>
-          <Route path="/login" element={<Login/>}/>
+          <Route path="/"                         element={<Box><PublicAppBar/><Home/></Box>}/>
+          <Route path="/signup"                   element={<Box m="2%"><PublicAppBar/><Signup/></Box>}/>
           <Route path="/admin/users"              element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" ><UserData/></Box></AuthenticatedProtected>}/>
           <Route path="/admin/athletes_by_date"   element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" ><SportSchoolAthletesByDate/></Box></AuthenticatedProtected></AdminProtected>}/>
                     
