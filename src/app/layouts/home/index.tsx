@@ -1,6 +1,5 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Container, Grid, Paper, Box } from '@mui/material';
-import LoginForm from '../../components/custom/LoginForm';
+import { Typography, Button, Container, Grid, Paper, Box } from '@mui/material';
 
 interface FeatureProps {
   title: string;
@@ -60,8 +59,8 @@ const Index: React.FC = () => {
           Empezar
         </Button>
       </Box>
-      <Container sx={{ my: 5 }}>
-        <Typography variant="h4" color="primary" align="center" gutterBottom>
+      <Container id="features" sx={{ my: 5 }}>
+        <Typography variant="h4" color="primary" align="center" gutterBottom >
           Características
         </Typography>
         <Grid container spacing={3}>
@@ -77,7 +76,7 @@ const Index: React.FC = () => {
           ))}
         </Grid>
       </Container>
-      <Container sx={{ my: 5 }}>
+      <Container  id="how-it-works" sx={{ my: 5 }}>
         <Typography variant="h4" color="primary" align="center" gutterBottom>
           Cómo Funciona
         </Typography>
@@ -95,7 +94,7 @@ const Index: React.FC = () => {
           ))}
         </Grid>
       </Container>
-      <Container sx={{ my: 5 }}>
+      <Container id="testimonials" sx={{ my: 5 }}>
         <Typography variant="h4" color="primary" align="center" gutterBottom>
           Testimonios
         </Typography>
@@ -112,7 +111,7 @@ const Index: React.FC = () => {
           ))}
         </Grid>
       </Container>
-      <Box sx={{ backgroundColor: '#f9f9f9', py: 5 }}>
+      <Box id="pricing" sx={{ backgroundColor: '#f9f9f9', py: 5 }}>
         <Container>
           <Typography variant="h4" color="primary" align="center" gutterBottom>
             Precios
@@ -125,7 +124,7 @@ const Index: React.FC = () => {
           </Typography>
         </Container>
       </Box>
-      <Container sx={{ my: 5, textAlign: 'center' }}>
+      <Container id="cta" sx={{ my: 5, textAlign: 'center' }}>
         <Typography variant="h4" color="primary" gutterBottom>
           ¿Listo para optimizar la gestión de tu club?
         </Typography>

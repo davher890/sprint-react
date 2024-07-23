@@ -37,8 +37,8 @@ export const login = (email: string, password: string) => {
     })
 }
 
-export const signup = (data: any) => {
-    return postRequest("/signup", data).then((res: any) => {
-        window.open("/login", "_self");
-    })
-}
+// export const signup = (data: any) => {
+//     return postRequest("/signup", data).then((res: any) => {
+//         window.open("/login", "_self");
+//     })
+// }

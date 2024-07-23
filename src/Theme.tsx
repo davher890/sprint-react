@@ -34,23 +34,23 @@ const theme = createTheme({
                 variant: "contained",
                 color: "primary",
             },
-            // styleOverrides: {
-            //     root: {
+            styleOverrides: {
+                root: {
             //         color: secondary,
             //         borderRadius: 15,
             //         backgroundColor: secondary,
-            //         "&:hover": {
-            //             backgroundColor: "#D8CF80",
-            //         },
-            //     },
-            //     containedPrimary: {
+                    "&:hover": {
+                        backgroundColor: "#D8CF80",
+                    },
+                },
+                containedPrimary: {
             //         color: primary,
             //         backgroundColor: secondary,
-            //         "&:hover": {
-            //             backgroundColor: "#D8CF80", 
-            //         },
-            //     },
-            // }
+                    "&:hover": {
+                        backgroundColor: "#D8CF80", 
+                    },
+                },
+            }
         },
         MuiIconButton: {
             styleOverrides: {

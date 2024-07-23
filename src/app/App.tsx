@@ -58,7 +58,8 @@ const AppBar: React.FC<any> = (props) => {
     <Router>
         <Routes>
           <Route path="/"                         element={<Box><PublicAppBar/><Home/></Box>}/>
-          <Route path="/signup"                   element={<Box m="2%"><PublicAppBar/><Signup/></Box>}/>
+          <Route path="/home"                     element={<Box><PublicAppBar/><Home/></Box>}/>
+          <Route path="/signup"                   element={<Box><PublicAppBar/><Signup/></Box>}/>
           <Route path="/admin/users"              element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" ><UserData/></Box></AuthenticatedProtected>}/>
           <Route path="/admin/athletes_by_date"   element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" ><SportSchoolAthletesByDate/></Box></AuthenticatedProtected></AdminProtected>}/>
                     

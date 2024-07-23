@@ -30,7 +30,7 @@ const Select: React.FC<any> = (props) => {
                 }
                 onChange={props.onChange}
                 renderInput={(params) => 
-                    <TextField {...params} label={props.label} error={props.error} InputLabelProps={props.InputLabelProps}
+                    <TextField {...params} label={props.label} error={props.error} InputLabelProps={props.InputLabelProps} variant='standard'
                     />
                 }
                 fullWidth={props.fullWidth}

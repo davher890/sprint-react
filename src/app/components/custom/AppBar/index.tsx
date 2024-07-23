@@ -6,7 +6,6 @@ import {
     Menu,
     MenuItem,
     IconButton,
-    Button,
     Avatar,
 } from "@mui/material";
 
@@ -22,6 +21,8 @@ import {
     Assignment,
     Receipt,
 } from "@mui/icons-material";
+
+import Button from "../Button"
 
 import { isManager, isAdmin, getUserId } from "../../../services/LoginService";
 
@@ -52,7 +53,7 @@ const CustomAppBar: React.FC = () => {
                 </Button>
 
                 <Button
-                    onClick={(event) =>
+                    onClick={(event:any) =>
                         handleMenuOpen(event, setAthletesAnchorEl)
                     }
                     startIcon={<People />}
@@ -74,7 +75,7 @@ const CustomAppBar: React.FC = () => {
                 </Menu>
 
                 <Button
-                    onClick={(event) =>
+                    onClick={(event:any) =>
                         handleMenuOpen(event, setGroupsAnchorEl)
                     }
                     startIcon={<FitnessCenter />}
@@ -105,7 +106,8 @@ const CustomAppBar: React.FC = () => {
                 </Menu>
 
                 <Button
-                    onClick={(event) =>
+                    color="secondary"
+                    onClick={(event:any) =>
                         handleMenuOpen(event, setListingsAnchorEl)
                     }
                     startIcon={<Assignment />}
@@ -133,7 +135,8 @@ const CustomAppBar: React.FC = () => {
                 { (isAdmin() || isManager()) && (
                     <>
                         <Button
-                            onClick={(event) =>
+                            color="secondary"
+                            onClick={(event:any) =>
                                 handleMenuOpen(event, setReceiptsAnchorEl)
                             }
                             startIcon={<Receipt />}
@@ -179,7 +182,7 @@ const CustomAppBar: React.FC = () => {
                 { (isAdmin() || isManager()) && (
                     <>
                         <Button
-                            onClick={(event) =>
+                            onClick={(event:any) =>
                                 handleMenuOpen(event, setAdminAnchorEl)
                             }
                             startIcon={<Receipt />}

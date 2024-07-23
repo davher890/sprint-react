@@ -36,7 +36,7 @@ export const getRequest = (endpoint: string) => {
     .then(res => {
         if (res.status === 403){
             session.saveLastUrl(window.location.href)
-            window.open("/login", "_self");
+            window.open("/home", "_self");
         }
         session.saveToken(res.headers)
         return res.json()

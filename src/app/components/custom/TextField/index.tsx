@@ -6,6 +6,8 @@ const CustomTextField: React.FC<any> = (props) => (
     <TextField 
 
         {...props}
+
+        variant='standard'
         
         InputLabelProps={{
             ...props.InputLabelProps,

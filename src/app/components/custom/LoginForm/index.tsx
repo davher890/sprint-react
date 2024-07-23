@@ -97,7 +97,7 @@ const LoginForm: React.FC<any> = (props) => {
                     />
                 </Grid>
                 <Grid item xs>
-                    <SearchButton onClick={() => {props.signUp(email, password)}}>Entrar</SearchButton>
+                    <SearchButton onClick={() => {props.logIn(email, password)}}>Entrar</SearchButton>
                 </Grid>
             </Grid>
             <Snackbar open={props.login && props.login.errorMessage !== undefined && props.login.errorMessage !== ''}

@@ -5,7 +5,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import utils from "../../utils/Functions"
 import { Formik } from 'formik';
 
-import { CardHeader, Grid, AppBar, Toolbar, Snackbar, Typography, Box, Checkbox, Button, Modal } from '@mui/material';
+import { CardHeader, Grid, AppBar, Toolbar, Snackbar, Typography, Box, Checkbox, Modal } from '@mui/material';
 import { Alert, AlertTitle } from '@mui/lab';
 
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
@@ -16,6 +16,7 @@ import GroupScheduleSelect from '../../components/custom/GroupScheduleSelect'
 import FeeTypeSelect from '../../components/custom/FeeTypeSelect'
 import SportSchoolSelect from '../../components/custom/SportSchoolSelect'
 import SaveButton from '../../components/custom/SaveButton'
+import Button from '../../components/custom/Button'
 import ReturnButton from '../../components/custom/ReturnButton'
 import DeleteButton from "../../components/custom/DeleteButton";
 import ConfirmDialog from "../../components/custom/ConfirmDialog";
@@ -704,15 +705,17 @@ const CreateAthlete: React.FC<any> = (props) => {
                                 <Grid container item spacing={2}>
                                     <Grid item xs>
                                         <CustomCard title="Datos Familiares">
-                                            <Grid container item direction="column" spacing={2}>
-                                                <Grid container alignItems="flex-start">
-                                                    <Typography color="textSecondary">Familiar 1</Typography>
-                                                    { (isManager() || isAdmin()) && <Button style={{maxWidth: '30%'}} onClick={() => {
+                                            <Grid container item xs direction="column" spacing={2}>
+                                                <Grid container item xs alignItems="flex-start">
+                                                    <Grid item xs>
+                                                        <Typography color="textSecondary">Familiar 1</Typography>
+                                                    </Grid>
+                                                    { (isManager() || isAdmin()) && <Grid item xs><Button fullWidth style={{maxWidth: '90%'}} onClick={() => {
                                                         setFieldValue('holderName', values.familiarOneName)
                                                         setFieldValue('holderFirstSurname', values.familiarOneFirstSurname)
                                                         setFieldValue('holderSecondSurname', values.familiarOneSecondSurname)
                                                         setFieldValue('holderDni', values.familiarOneDni)
-                                                    }}>Titular de la cuenta</Button>
+                                                    }}>Titular de la cuenta</Button></Grid>
                                                     }
                                                 </Grid>
                                                 <AthleteFamilyData key={`familiar-one-${values.id}`} name={values.familiarOneName} firstSurname={values.familiarOneFirstSurname} secondSurname={values.familiarOneSecondSurname}
@@ -729,14 +732,16 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                         setFieldValue('familiarOne' + p.name, p.value)
                                                     }}
                                                 />
-                                                <Grid container alignItems="flex-start">
-                                                    <Typography color="textSecondary">Familiar 2</Typography>
-                                                    { (isManager() || isAdmin()) && <Button style={{maxWidth: '30%'}} onClick={() => {
+                                                <Grid container item xs alignItems="flex-start">
+                                                    <Grid item xs>
+                                                        <Typography color="textSecondary">Familiar 2</Typography>
+                                                    </Grid>
+                                                    { (isManager() || isAdmin()) && <Grid item xs><Button fullWidth style={{maxWidth: '90%'}} onClick={() => {
                                                         setFieldValue('holderName', values.familiarTwoName)
                                                         setFieldValue('holderFirstSurname', values.familiarTwoFirstSurname)
                                                         setFieldValue('holderSecondSurname', values.familiarTwoSecondSurname)
                                                         setFieldValue('holderDni', values.familiarTwoDni)
-                                                    }}>Titular de la cuenta</Button>
+                                                    }}>Titular de la cuenta</Button></Grid>
                                                     }
                                                 </Grid>
                                                 <AthleteFamilyData key={`familiar-two-${values.id}`} name={values.familiarTwoName} firstSurname={values.familiarTwoFirstSurname} secondSurname={values.familiarTwoSecondSurname}

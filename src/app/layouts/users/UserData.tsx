@@ -23,7 +23,7 @@ import GroupMultiSelect from "../../components/custom/GroupMultiSelect";
 
 const CreateUser: React.FC<any> = (props) => {
 
-    const [user, setUser] = React.useState<any>({})
+    // const [user, setUser] = React.useState<any>({})
 
     React.useEffect(() => {
         props.getAllSportSchools()
@@ -81,7 +81,7 @@ const CreateUser: React.FC<any> = (props) => {
                     return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                    setUser(values)
+                    // setUser(values)
                     setSubmitting(false);
                     handleSubmit(values)
                 }}

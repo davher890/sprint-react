@@ -112,7 +112,7 @@ const CreateGroup: React.FC<any> = (props) => {
                         </Snackbar>
                         <Box paddingBottom={7}>
                             <Grid container direction='row' spacing={3}>
-                                <Grid item xs>
+                                <Grid item xs={6}>
                                     <Card title="Datos del grupo">
                                         <Grid container spacing={2} direction="column">
                                             <Grid container item xs spacing={2}>
@@ -153,7 +153,7 @@ const CreateGroup: React.FC<any> = (props) => {
                                         </Grid>
                                     </Card>
                                 </Grid>
-                                <Grid container item xs spacing={2}>
+                                <Grid item xs={6} spacing={2}>
                                     <ScheduleSelect 
                                         schedules={props.schedules}
                                         scheduleIds={values.scheduleIds}

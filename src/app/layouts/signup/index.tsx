@@ -1,9 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { signUp } from "../../redux/actions/login"
+// import { signUp } from "../../redux/actions/login"
 
-import { Container, TextField, Button, Typography, Box, Paper } from '@mui/material';
+import { Container, Typography, Box, Paper } from '@mui/material';
+
+import Button from '../../components/custom/Button'
+import TextField from '../../components/custom/TextField'
+
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -92,8 +96,6 @@ const SignupForm: React.FC = () => {
             type="submit"
             fullWidth
             variant="contained"
-            color="primary"
-            sx={{ mt: 3, mb: 2 }}
           >
             Registrarse
           </Button>
@@ -106,7 +108,7 @@ const SignupForm: React.FC = () => {
 
 
 const mapDispatchToProps = {
-    signUp
+    // signUp
 }
 
 const mapStateToProps = (state: any) => {

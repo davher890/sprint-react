@@ -22,7 +22,7 @@ const ReceiptTable: React.FC<any> = (props) => {
 			<Grid item xs>
 				<Button text="Nueva remesa" href={'/receipts'} />
 			</Grid>
-			<Grid item xs>
+			<Grid container item xs>
 				<Table
 					data={props.table_data}
 					page={props.page}
