@@ -2,7 +2,7 @@
   "name": "sprint-react-typescript",
   "version": "0.1.0",
   "engines": {
-    "node": "16.14.0"
+    "node": "v22.1.0"
   },
   "private": true,
   "dependencies": {
@@ -60,6 +60,8 @@
     ]
   },
   "devDependencies": {
-    "@types/material-ui": "^0.21.9"
+    "@types/material-ui": "^0.21.9",
+    "@types/react-scroll": "^1.8.10",
+    "react-scroll": "^1.9.0"
   }
 }
