@@ -3,12 +3,10 @@ import { Drawer, List, ListItem, ListItemIcon, ListItemText, Collapse } from '@m
 
 import { Link } from 'react-router-dom';
 
-import { styled, useTheme, Theme } from '@mui/material/styles';
-import clsx from 'clsx';
+import { styled } from '@mui/material/styles';
 
 import {
     AccountCircle,
-    ArrowDropDown,
     ExitToApp,
     ExpandLess,
     ExpandMore,
@@ -20,7 +18,7 @@ import {
     Receipt,
 } from "@mui/icons-material";
 
-import { isManager, isAdmin } from "../../../services/LoginService";
+import { isManager, isAdmin, getUserId } from "../../../services/LoginService";
 
 import session from "../../../utils/Session";
 
@@ -167,12 +165,20 @@ const Sidebar: React.FC = () => {
                             <ListItem component={Link} to="/admin/users/list" sx={{ pl: 4 }}>
                                 <ListItemText primary="Usuarios" />
                             </ListItem>
-                            <ListItem component={Link} to="/admin/athletes_by_date" sx={{ pl: 4 }}>
-                                <ListItemText primary="Usuarios / dia" />
-                            </ListItem>
+                            { isAdmin() && 
+                                <ListItem component={Link} to="/admin/athletes_by_date" sx={{ pl: 4 }}>
+                                    <ListItemText primary="Usuarios / dia" />
+                                </ListItem>
+                            }
                         </List>
                     </Collapse>
                 </> }
+                <ListItem component={Link} to={"/users/" + getUserId()}>
+                    <ListItemIcon >
+                        <AccountCircle />
+                    </ListItemIcon>
+                    <ListItemText primary="Perfil" />
+                </ListItem>
                 <ListItem>
                     <ListItemIcon onClick={logout}>
                         <ExitToApp />
