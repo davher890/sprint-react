@@ -21,7 +21,6 @@ const GroupAthletesTable: React.FC<any> = (props) => {
 	const [groupId, setGroupId] = useState<number>(0)
     const [scheduleIds, setScheduleIds] = useState<number[]>([])
 	
-
     const downloadData = (columns: any, filters: any) => {
 		props.downloadGroupSchedulesAthletes(groupId, scheduleIds, columns, filters)
 	}
@@ -36,7 +35,7 @@ const GroupAthletesTable: React.FC<any> = (props) => {
                 <CustomCard>
                     <Grid container direction="column" spacing={3}>
                         <Grid container item spacing={1}>
-                            <Grid item xs={2}>
+                            <Grid container item xs>
                                 <SportSchoolSelect sportSchoolId={sportSchoolId}
                                     onChange={(sportSchoolId: number) => {
                                         setSportSchoolId(sportSchoolId)
@@ -69,7 +68,7 @@ const GroupAthletesTable: React.FC<any> = (props) => {
                     </Grid>
                 </CustomCard>
             </Grid>
-            <Grid item xs>
+            <Grid container item xs>
                 <Table 
                     data={props.table_data}
                     page={props.page}
