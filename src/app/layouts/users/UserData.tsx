@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { Formik } from 'formik';
 
-import { Grid, Snackbar, AppBar, Toolbar, Box, Button, Checkbox } from "@mui/material";
+import { Grid, Snackbar, AppBar, Box, Button, Checkbox } from "@mui/material";
 import { Alert, AlertTitle } from '@mui/lab';
 import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
@@ -10,6 +10,7 @@ import TextField from "../../components/custom/TextField";
 import Card from "../../components/custom/Card";
 import SaveButton from "../../components/custom/SaveButton";
 import Spinner from '../../components/custom/Spinner'
+import BottomAppBar from "../../components/custom/BottomAppBar";
 
 import { addUser, getUser, changeUserPassword } from "../../redux/actions/users";
 import { getAllSportSchools, getSportSchoolsGroups } from "../../redux/actions/sportSchools";
@@ -218,19 +219,17 @@ const CreateUser: React.FC<any> = (props) => {
                                 }
                             </Grid>
                         </Box>
-                        <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
-                            <Toolbar>
-                                { props.loading ? <Spinner/> : <>
-                                    <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
-                                    { values.id > 0 &&
-                                        <SaveButton onClick={() => {
-                                            setFieldValue("openChangePassword", true)
-                                        }} >Cambiar contraseña</SaveButton>
-                                    }
-                                    </>
+                        <BottomAppBar>
+                            { props.loading ? <Spinner/> : <>
+                                <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
+                                { values.id > 0 &&
+                                    <SaveButton onClick={() => {
+                                        setFieldValue("openChangePassword", true)
+                                    }} >Cambiar contraseña</SaveButton>
                                 }
-                            </Toolbar>
-                        </AppBar>
+                                </>
+                            }
+                        </BottomAppBar>
                     </form>
                 )}
             </Formik>

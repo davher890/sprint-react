@@ -1,12 +1,11 @@
 import * as React from "react"
 
-import { useParams, useSearchParams } from 'react-router-dom';
 import { Grid } from '@mui/material';
 
-import SaveButton from '../../components/custom/SaveButton'
-import DeleteButton from '../../components/custom/DeleteButton'
-import Table from "../../components/custom/Table";
-import TextField from "../../components/custom/TextField"
+import SaveButton from '../custom/SaveButton'
+import DeleteButton from '../custom/DeleteButton'
+import Table from "../custom/Table";
+import TextField from "../custom/TextField"
 import Utils from "../../utils/TableUtils";
 
 import { Formik } from 'formik';

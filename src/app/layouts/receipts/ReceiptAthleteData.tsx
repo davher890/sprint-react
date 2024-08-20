@@ -3,7 +3,7 @@ import React from "react"
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
 
-import { Grid, AppBar, Toolbar, Snackbar } from '@mui/material';
+import { Grid, Snackbar } from '@mui/material';
 import { Alert, AlertTitle } from '@mui/lab';
 
 import Card from '../../components/custom/Card';
@@ -11,11 +11,11 @@ import SaveButton from '../../components/custom/SaveButton'
 import ReturnButton from '../../components/custom/ReturnButton'
 import PayButton from '../../components/custom/PayButton'
 import TextField from '../../components/custom/TextField';
+import BottomAppBar from "../../components/custom/BottomAppBar";
+import SearchButton from "../../components/custom/SearchButton";
 
 import { getReceiptAthlete, addReceiptAthlete } from "../../redux/actions/receipts";
 import { setAthleteReceiptStatus } from "../../redux/actions/athletes";
-
-import SearchButton from "../../components/custom/SearchButton";
 
 const ReceiptAthleteData: React.FC<any> = (props) => {
 
@@ -125,19 +125,17 @@ const ReceiptAthleteData: React.FC<any> = (props) => {
                     </Card>
                 </Grid>
             </Grid>
-            <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
-                <Toolbar>
-                    { receiptAthlete.athleteId > 0 && <SearchButton onClick={() => window.open("/athletes/" + receiptAthlete.athleteId, "_self")}>Ir al atleta</SearchButton> }
-                    <SaveButton text='Guardar' onClick={saveReceiptAthlete} />
-                    { (receiptAthlete.status === 'NOT_PAID' || receiptAthlete.status == 'RETURN') && <PayButton onClick={() => {
-                        props.setAthleteReceiptStatus(receiptAthlete.athleteId, receiptAthlete.receiptId, 'PAID').then(() => {
-                            setReceiptAthlete({ ...receiptAthlete, status: 'PAID' })
-                        })
-                        
-                    }}/> }
-                    <ReturnButton onClick={() => window.open("/receipts/" + receiptAthlete.receiptId, "_self")}/>
-                </Toolbar>
-            </AppBar>
+            <BottomAppBar>
+                { receiptAthlete.athleteId > 0 && <SearchButton onClick={() => window.open("/athletes/" + receiptAthlete.athleteId, "_self")}>Ir al atleta</SearchButton> }
+                <SaveButton text='Guardar' onClick={saveReceiptAthlete} />
+                { (receiptAthlete.status === 'NOT_PAID' || receiptAthlete.status == 'RETURN') && <PayButton onClick={() => {
+                    props.setAthleteReceiptStatus(receiptAthlete.athleteId, receiptAthlete.receiptId, 'PAID').then(() => {
+                        setReceiptAthlete({ ...receiptAthlete, status: 'PAID' })
+                    })
+                    
+                }}/> }
+                <ReturnButton onClick={() => window.open("/receipts/" + receiptAthlete.receiptId, "_self")}/>
+            </BottomAppBar>
         </>
                 
     )

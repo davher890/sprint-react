@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { Formik } from 'formik';
 
-import { Grid, Snackbar, Checkbox, AppBar, Toolbar, Box } from "@mui/material";
+import { Grid, Snackbar, Checkbox, AppBar, Box } from "@mui/material";
 import { Alert, AlertTitle } from '@mui/lab';
 
 import TextField from '../../components/custom/TextField';
@@ -11,6 +11,7 @@ import DeleteButton from '../../components/custom/DeleteButton'
 import Card from '../../components/custom/Card'
 import ScheduleSelect from '../../components/custom/ScheduleSelect'
 import Spinner from '../../components/custom/Spinner'
+import BottomAppBar from "../../components/custom/BottomAppBar";
 
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
@@ -167,7 +168,7 @@ const CreateGroup: React.FC<any> = (props) => {
                         </Box>
                         { (isAdmin() || isManager()) &&
                             <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
-                                <Toolbar>
+                                <BottomAppBar>
                                     { props.loading ? <Spinner/> : <>
                                         <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
                                         {props.id ? 
@@ -176,7 +177,7 @@ const CreateGroup: React.FC<any> = (props) => {
                                         }
                                     </>
                                     }
-                                </Toolbar>
+                                </BottomAppBar>
                             </AppBar>
                         }
                     </form>

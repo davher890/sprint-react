@@ -51,7 +51,7 @@ export const deleteRequest = (endpoint: string) => {
     return fetch((serverUrl || '') + endpoint, requestOptions).then(res => {
         if (res.status === 403){
             session.saveLastUrl(window.location.href)
-            window.open("/login", "_self");
+            window.open("/home", "_self");
         }
         session.saveToken(res.headers)
         // return res.json()
@@ -63,7 +63,7 @@ export const postRequest = (endpoint: string, body: Object) => {
     .then(res => {
         if (res.status === 403){
             session.saveLastUrl(window.location.href)
-            window.open("/login", "_self");
+            window.open("/home", "_self");
         }
         session.saveToken(res.headers)
         return res.json()
@@ -75,7 +75,7 @@ export const getExcelRequest = (endpoint: string, excelName: string) => {
     .then(res => {
         if (res.status === 403){
             session.saveLastUrl(window.location.href)
-            window.open("/login", "_self");
+            window.open("/home", "_self");
         }
         else {
             res.blob().then(blob => {
@@ -97,7 +97,7 @@ export const postExcelRequest = (endpoint: string, body: Object, excelName: stri
     .then(res => {
         if (res.status === 403){
             session.saveLastUrl(window.location.href)
-            window.open("/login", "_self");
+            window.open("/home", "_self");
         }
         else {
             res.blob().then(blob => {
@@ -116,6 +116,17 @@ export const postExcelRequest = (endpoint: string, body: Object, excelName: stri
 
 export const loginRequest = (endpoint: string, body: Object) => {
     return fetch((serverUrl || '') + endpoint, getPostRequestOptions(body))
+}
+
+export const publicPostRequest = (endpoint: string, body: Object) => {
+    return fetch((serverUrl || '') + endpoint, {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(body)
+    })
 }
 
 export const uploadExcelFile = (endpoint: string, file: File) => {

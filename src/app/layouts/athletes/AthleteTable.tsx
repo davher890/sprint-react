@@ -108,23 +108,24 @@ const AthleteTable: React.FC<any> = (props) => {
 			</Dialog>
 			<Grid container direction="column" spacing={3}>
 				{ (isAdmin() || isManager()) &&
-					<Grid container item >
-						<Grid item xs={3}>
-							<Button text="Nuevo Atleta" href={'/athletes'}/>
-						</Grid>
-						{selectedIds.length > 0 ? 
-							<><Grid item xs={3}>
-								<Button text="Cambiar de grupo" 
-									onClick={() => setOpenGroupChangeDialog(true)}/>
-							</Grid>
-							<Grid item xs={3}>
-								<Button text="Añadir a remesa" 
-									onClick={() => setOpenAddReceiptDialog(true)}/>
-							</Grid>
-							</>
-							
-						: null}
+					<>
+					<Grid item xs={3}>
+						<Button text="Nuevo Atleta" href={'/athletes'}/>
 					</Grid>
+					{ selectedIds.length > 0 ? 
+						<>
+						<Grid item xs={3}>
+							<Button text="Cambiar de grupo" 
+								onClick={() => setOpenGroupChangeDialog(true)}/>
+						</Grid>
+						<Grid item xs={3}>
+							<Button text="Añadir a remesa" 
+								onClick={() => setOpenAddReceiptDialog(true)}/>
+						</Grid>
+						</>
+					: null
+					}
+					</>
 				}
 				<Grid container item xs>
 					<Table 

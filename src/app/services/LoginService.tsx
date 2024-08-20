@@ -1,4 +1,4 @@
-import { loginRequest, postRequest } from "./ApiService"
+import { loginRequest, publicPostRequest } from "./ApiService"
 import session from "../utils/Session";
 
 export const isAuthenticated = (): boolean => {
@@ -37,8 +37,8 @@ export const login = (email: string, password: string) => {
     })
 }
 
-// export const signup = (data: any) => {
-//     return postRequest("/signup", data).then((res: any) => {
-//         window.open("/login", "_self");
-//     })
-// }
+export const signup = (data: any) => {
+    publicPostRequest("/signup/", data).then((res: any) => {
+        window.open("/home", "_self");
+    })
+}

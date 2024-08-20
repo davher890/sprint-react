@@ -23,12 +23,16 @@ const LoginForm: React.FC<any> = (props) => {
 
     const handleKeyPress = (event: any) => {
         if(event.key === 'Enter'){
-            props.login(email, password)
+            login(email, password)
         }
+    }
+
+    const login = (email: string, password: string) => {
+      props.logIn(email, password)
     }
     
     return (
-        <Box>
+        <Box { ...props }>
             <Grid container direction='row' spacing={1}
                 style={{
                     height: '100%',
@@ -97,7 +101,7 @@ const LoginForm: React.FC<any> = (props) => {
                     />
                 </Grid>
                 <Grid item xs>
-                    <SearchButton onClick={() => {props.logIn(email, password)}}>Entrar</SearchButton>
+                    <SearchButton onClick={() => {login(email, password)}}>Entrar</SearchButton>
                 </Grid>
             </Grid>
             <Snackbar open={props.login && props.login.errorMessage !== undefined && props.login.errorMessage !== ''}

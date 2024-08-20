@@ -5,7 +5,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import utils from "../../utils/Functions"
 import { Formik } from 'formik';
 
-import { CardHeader, Grid, AppBar, Toolbar, Snackbar, Typography, Box, Checkbox, Modal } from '@mui/material';
+import { CardHeader, Grid, Snackbar, Typography, Box, Checkbox } from '@mui/material';
 import { Alert, AlertTitle } from '@mui/lab';
 
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
@@ -20,6 +20,7 @@ import Button from '../../components/custom/Button'
 import ReturnButton from '../../components/custom/ReturnButton'
 import DeleteButton from "../../components/custom/DeleteButton";
 import ConfirmDialog from "../../components/custom/ConfirmDialog";
+import BottomAppBar from "../../components/custom/BottomAppBar";
 
 import Select from '../../components/custom/Select'
 import TextField from '../../components/custom/TextField'
@@ -31,8 +32,7 @@ import AthletesList from '../../components/custom/Athletes/AthletesList'
 import AthleteFamilyData from '../../components/athletes/AthleteFamilyData'
 import AthletesObservations from '../../components/athletes/AthleteObservations'
 import AthleteReceipts from '../../components/athletes/AthleteReceipts'
-
-import AthleteSportdata from './AthleteSportdata'
+import AthleteSportdata from '../../components/athletes/AthleteSportdata'
 
 // Redux
 import { connect } from "react-redux";
@@ -47,7 +47,7 @@ const CreateAthlete: React.FC<any> = (props) => {
 
     const getAthlete = (props:any) => { 
         if (!isNewAthlete()) {
-            if (props.searchParams, props.searchParams.get('code')){
+            if (props.searchParams && props.searchParams.get('code')){
                 let code = props.searchParams.get('code')
                 props.getAthleteByCode(code)
             }
@@ -446,7 +446,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                         </DialogActions>
                     </Dialog>
                     
-                    <Box paddingBottom={7}>
+                    <Box paddingBottom={10}>
                         <Grid container spacing={3}>
                             <Grid container item spacing={3}>
                                 <Grid container item spacing={1}>
@@ -980,22 +980,20 @@ const CreateAthlete: React.FC<any> = (props) => {
                         </Grid>
                     </Box>
                     { (isAdmin() || isManager()) && 
-                        <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
-                            <Toolbar>
-                                { props.loading ? <Spinner/> : <>
-                                    <SaveButton type="submit" disabled={isSubmitting}
-                                            onClick={() => {
-                                                setFieldValue('exit', true)
-                                                return false;
-                                            }}
-                                        >Guardar y salir</SaveButton>
-                                    <SaveButton type="submit" disabled={isSubmitting}>Guardar y continuar</SaveButton>
-                                    {props.id ? <DeleteButton onClick={() => setFieldValue("openDeleteDialog", true)}/> : null }
-                                    <ReturnButton onClick={() => window.open("/athletes/list", "_self")}/>
-                                </>
-                                }
-                            </Toolbar>
-                        </AppBar>
+                        <BottomAppBar>
+                            { props.loading ? <Spinner/> : <>
+                                <SaveButton type="submit" disabled={isSubmitting}
+                                        onClick={() => {
+                                            setFieldValue('exit', true)
+                                            return false;
+                                        }}
+                                    >Guardar y salir</SaveButton>
+                                <SaveButton type="submit" disabled={isSubmitting}>Guardar y continuar</SaveButton>
+                                {props.id ? <DeleteButton onClick={() => setFieldValue("openDeleteDialog", true)}/> : null }
+                                <ReturnButton onClick={() => window.open("/athletes/list", "_self")}/>
+                            </>
+                            }
+                        </BottomAppBar>
                     }
                 </form>
             )}}

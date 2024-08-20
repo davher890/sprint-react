@@ -23,7 +23,7 @@ const AdminPage: React.FC<any> = (props) => {
     }, [])
 
     if (!props.isAdmin) {
-        return <Navigate to="/login" replace />;
+        return <Navigate to="/home" replace />;
     }
     return (
         <React.Suspense fallback={<div>Cargando...</div>}>

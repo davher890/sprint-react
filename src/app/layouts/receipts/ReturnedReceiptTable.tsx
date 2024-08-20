@@ -50,7 +50,7 @@ const ReturnedReceiptTable: React.FC<any> = (props) => {
             <Grid container direction="column" spacing={1}>
                 <Grid item xs>
                     <Card title="Datos de la remesa">
-                        <Grid item xs>
+                        <Grid container item xs>
                             <Select fullWidth name="season" label="Temporada" //error={!season}
                                 options={[
                                     { id: "2021_2022", name: "2021 - 2022" },
@@ -64,18 +64,19 @@ const ReturnedReceiptTable: React.FC<any> = (props) => {
                         </Grid>
                     </Card>
                 </Grid>
-                <Grid item xs>
-                    <Tabs
-                        value={tabIndex}
-                        indicatorColor="primary"
-                        textColor="primary"
-                        onChange={handleTabChange}
-                    >
-                        <Tab label="Gestion" />
-                        <Tab label="Historico" />
-                    </Tabs>
-                    
-                    <Box width="100%" overflow="auto">
+                <Grid container item xs>
+                    <Grid item xs>
+                        <Tabs
+                            value={tabIndex}
+                            indicatorColor="primary"
+                            textColor="primary"
+                            onChange={handleTabChange}
+                        >
+                            <Tab label="Gestion" />
+                            <Tab label="Historico" />
+                        </Tabs>
+                    </Grid>
+                    <Grid container item xs>
                         <Table 
                             data={props.table_data}
                             page={props.page}
@@ -96,7 +97,7 @@ const ReturnedReceiptTable: React.FC<any> = (props) => {
                                 window.open("/receipts/athletes/" + id, "_self");
                             }}
                         />
-                    </Box>
+                    </Grid>
                 </Grid>
             </Grid>
         </>

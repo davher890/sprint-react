@@ -1,5 +1,17 @@
 import React from 'react';
-import { Typography, Button, Container, Grid, Paper, Box } from '@mui/material';
+import {  
+  Box,
+  Button, 
+  Container, 
+  Fab,
+  Grid, 
+  Paper,
+  Typography
+} from '@mui/material';
+
+import ContactMailIcon from '@mui/icons-material/ContactMail';
+
+import ContactForm from '../../components/custom/dialogs/ContactForm'
 
 interface FeatureProps {
   title: string;
@@ -12,9 +24,9 @@ interface StepProps {
   desc: string;
 }
 
-interface TestimonialProps {
-  quote: string;
-  name: string;
+interface BenefitsProps {
+  title: string;
+  desc: string;
 }
 
 const features: FeatureProps[] = [
@@ -32,24 +44,32 @@ const steps: StepProps[] = [
   { step: 'Paso 4', title: 'Obtén Informes', desc: 'Genera informes y rastrea el progreso.' },
 ];
 
-const testimonials: TestimonialProps[] = [
-  { quote: "Esta aplicación ha revolucionado cómo gestionamos nuestro club. ¡Es fácil de usar y eficiente!", name: 'Juan Pérez, Club Deportivo ABC' },
-  { quote: "Un imprescindible para cualquier club deportivo. Las características son increíblemente útiles.", name: 'Ana García, Atletismo XYZ' },
+const benefits: BenefitsProps[] = [
+  { title: 'Ahorro de Tiempo', desc: 'Automatiza tareas repetitivas y reduce la carga administrativa.' },
+  { title: 'Accesibilidad', desc: 'Accede a tu información desde cualquier lugar y en cualquier momento.' },
+  { title: 'Colaboración Mejorada', desc: 'Facilita la comunicación y colaboración entre entrenadores y atletas.' },
+  { title: 'Informes Detallados', desc: 'Obtén informes detallados sobre el rendimiento de tus atletas y la gestión del club.' },
+  { title: 'Seguridad de Datos', desc: 'Mantén tus datos seguros con medidas de seguridad avanzadas.' }
 ];
 
 const Index: React.FC = () => {
+
+  const [ contactFormOpen, setContactFormOpen ] = React.useState<boolean>(false)
+
   return (
-    <Box>
+    <Box
+      component="main"
+    >
       <Box
         sx={{
           background: 'url(hero-image.jpg) no-repeat center center/cover',
           color: '#fff',
           textAlign: 'center',
-          py: 10,
+          py: 6,
         }}
       >
-        <Typography variant="h3">Gestiona Tu Club Deportivo Sin Esfuerzo</Typography>
-        <Typography variant="h6" sx={{ my: 2 }}>
+        <Typography variant="h3" color="primary">Gestiona Tu Club Deportivo Sin Esfuerzo</Typography>
+        <Typography variant="h6" color="primary" sx={{ my: 1 }}>
           La solución definitiva para gestionar atletas, entrenadores, grupos y recibos.
         </Typography>
         <Button variant="contained" color="secondary" size="large" 
@@ -94,20 +114,20 @@ const Index: React.FC = () => {
           ))}
         </Grid>
       </Container>
-      <Container id="testimonials" sx={{ my: 5 }}>
+      <Container id="benefits" sx={{ my: 5 }}>
         <Typography variant="h4" color="primary" align="center" gutterBottom>
-          Testimonios
+          Beneficios
         </Typography>
         <Grid container spacing={3}>
-          {testimonials.map((testimonial) => (
-            <Grid item xs={12} md={6} key={testimonial.name}>
-              <Paper elevation={3} sx={{ p: 3, textAlign: 'center' }}>
-                <Typography variant="h6" color="primary">
-                  {testimonial.quote}
-                </Typography>
-                <Typography>{testimonial.name}</Typography>
-              </Paper>
-            </Grid>
+          {benefits.map((benefit) => (
+              <Grid item xs={12} md={4} key={benefit.title}>
+                <Paper elevation={3} sx={{ p: 3, textAlign: 'center' }}>
+                  <Typography variant="h6" color="primary">
+                    {benefit.title}
+                  </Typography>
+                  <Typography>{benefit.desc}</Typography>
+                </Paper>
+              </Grid>
           ))}
         </Grid>
       </Container>
@@ -117,10 +137,10 @@ const Index: React.FC = () => {
             Precios
           </Typography>
           <Typography variant="h6" align="center" sx={{ my: 2 }}>
-            Solo 30 centavos por mes por atleta.
+            Solo 30 cnts por mes por atleta.
           </Typography>
           <Typography variant="h6" align="center" sx={{ mb: 5 }}>
-            Empieza con una prueba gratuita y ve los beneficios.
+            Empieza con una prueba gratuita y verás los beneficios.
           </Typography>
         </Container>
       </Box>
@@ -134,9 +154,24 @@ const Index: React.FC = () => {
           Regístrate
         </Button>
       </Container>
-      <footer style={{ backgroundColor: '#272727', color: '#ffe500', padding: '1em 0', textAlign: 'center' }}>
+      <Container sx={{ my: 5 }}>
+        <ContactForm 
+          open={contactFormOpen}
+          onClose={() => {
+            setContactFormOpen(false)
+          }}/>
+      </Container>
+      <Fab
+        color="primary"
+        aria-label="contact"
+        sx={{ position: 'fixed', bottom: 16, right: 16 }}
+        onClick={() => setContactFormOpen(true) }
+      >
+        <ContactMailIcon />
+      </Fab>
+      <footer id="contact" style={{ backgroundColor: '#272727', color: '#ffe500', padding: '1em 0', textAlign: 'center' }}>
         <Typography variant="body1">&copy; 2024 Gestor de Clubes Deportivos</Typography>
-        <Typography variant="body1">
+        {/* <Typography variant="body1">
           <a href="#" style={{ color: '#ffe500', textDecoration: 'none', margin: '0 1em' }}>Política de Privacidad</a>
           <a href="#" style={{ color: '#ffe500', textDecoration: 'none', margin: '0 1em' }}>Términos de Servicio</a>
           <a href="#" style={{ color: '#ffe500', textDecoration: 'none', margin: '0 1em' }}>Soporte</a>
@@ -146,7 +181,7 @@ const Index: React.FC = () => {
           <a href="#" style={{ color: '#ffe500', textDecoration: 'none', margin: '0 10px' }}>Facebook</a>
           <a href="#" style={{ color: '#ffe500', textDecoration: 'none', margin: '0 10px' }}>Twitter</a>
           <a href="#" style={{ color: '#ffe500', textDecoration: 'none', margin: '0 10px' }}>LinkedIn</a>
-        </Box>
+        </Box> */}
       </footer>
     </Box>
   );

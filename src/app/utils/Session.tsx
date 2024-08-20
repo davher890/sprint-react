@@ -3,7 +3,9 @@ import jwt_decode from 'jwt-decode';
 const session = {
     
     saveLastUrl: (url: string) => {
-        sessionStorage.setItem('last_url', url || '');
+        if (!url.includes('signup') && !url.includes('home')){
+            sessionStorage.setItem('last_url', url || '');
+        }
     },
 
     saveToken: (headers: Headers) => {
@@ -25,6 +27,10 @@ const session = {
             return {id: id, name: feeTypeMap[id]}
         });
         sessionStorage.setItem('fee_types', JSON.stringify(feeTypes))
+    },
+
+    clear: () => {
+        sessionStorage.clear()
     }
 }
 export default session

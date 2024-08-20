@@ -4,7 +4,7 @@ import moment from "moment"
 
 import { Grid } from '@mui/material';
 
-import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts"
 
 import { connect } from "react-redux";
 import { getSportSchoolAthletesByDate } from "../../redux/actions/sportSchools";

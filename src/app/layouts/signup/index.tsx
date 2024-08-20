@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-// import { signUp } from "../../redux/actions/login"
+import { signUp } from "../../redux/actions/login"
 
 import { Container, Typography, Box, Paper } from '@mui/material';
 
@@ -21,22 +21,22 @@ const validationSchema = Yup.object({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password'), ''], 'Las contraseñas deben coincidir')
     .required('Confirmar contraseña es obligatorio'),
-  userName: Yup.string()
+  username: Yup.string()
     .required('El nombre de usuario es obligatorio')
 });
 
-const SignupForm: React.FC = () => {
+const SignupForm: React.FC<any> = (props) => {
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
       confirmPassword: '',
-      userName: '',
+      username: '',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
-    },
+      props.signUp(values)
+    }
   });
 
   return (
@@ -59,13 +59,13 @@ const SignupForm: React.FC = () => {
           />
           <TextField
             fullWidth
-            id="userName"
-            name="userName"
+            id="username"
+            name="username"
             label="Nombre de Usuario"
-            value={formik.values.userName}
+            value={formik.values.username}
             onChange={formik.handleChange}
-            error={formik.touched.userName && Boolean(formik.errors.userName)}
-            helperText={formik.touched.userName && formik.errors.userName}
+            error={formik.touched.username && Boolean(formik.errors.username)}
+            helperText={formik.touched.username && formik.errors.username}
             margin="normal"
           />
           <TextField
@@ -105,15 +105,13 @@ const SignupForm: React.FC = () => {
   );
 };
 
-
-
 const mapDispatchToProps = {
-    // signUp
+    signUp
 }
 
 const mapStateToProps = (state: any) => {
     return { 
-        login: state.auth_reducer.login
+        signup: state.auth_reducer.signup
     };
 };
 
