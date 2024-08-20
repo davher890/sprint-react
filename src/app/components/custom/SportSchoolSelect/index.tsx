@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { Alert } from '@material-ui/lab';
+import { Alert } from '@mui/lab';
 
 import Select from '../Select'
 

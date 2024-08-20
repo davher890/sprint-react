@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
   BrowserRouter as Router, Routes, Route
 } from "react-router-dom";
@@ -25,7 +27,6 @@ import SportSchoolData from './layouts/sport_schools/SportSchoolData';
 import SportSchoolTable from './layouts/sport_schools/SportSchoolTable';
 
 import AthleteData from './layouts/athletes/AthleteData';
-import AthleteSportdata from './layouts/athletes/AthleteSportdata';
 import AthleteTable from './layouts/athletes/AthleteTable';
 import HistoricTable from './layouts/athletes/HistoricTable';
 
@@ -36,78 +37,131 @@ import GroupSwap from './layouts/groups/GroupSwap';
 import FamilyTable from './layouts/families/FamilyTable';
 import FamilyData from './layouts/families/FamilyData';
 
-import Login from './layouts/login';
+import Signup from './layouts/signup';
 
-import CustomAppBar from './components/custom/AppBar'
+import Home from './layouts/home/index';
+
+import PublicAppBar from './components/custom/PublicAppBar'
+import SideBar from './components/custom/SideBar'
 
 import GroupAthletesTable from './layouts/listings/GroupAthletesTable';
 import GroupAttendance from './layouts/listings/GroupAttendance';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import AuthenticatedProtected from "./components/custom/AuthenticatedProtected";
 import AdminProtected from "./components/custom/AdminProtected";
 import ReturnedReceiptTable from "./layouts/receipts/ReturnedReceiptTable";
 import NotPaidReceiptTable from "./layouts/receipts/NotPaidReceiptTable";
+import { ReactElement, ReactNode } from "react";
 
+type CustomRouteProps = {
+  admin: boolean, 
+  authenticated: boolean, 
+  path: string, 
+  component: ReactElement, 
+  isPublic: ReactElement
+};
 
-const AppBar: React.FC<any> = (props) => {
+const getRouteFromJson = ({admin, authenticated, path, component, isPublic}: CustomRouteProps) => {
+
+  const element = (
+    <>
+      { isPublic ? 
+        <>
+          <PublicAppBar/> 
+          <Box 
+            component="main" 
+            sx={{
+              flexGrow: 1,
+              textAlign: 'center',
+              width: '100%',
+              overflow: 'auto',
+              paddingBottom: '1%'
+            }}
+          >
+            {component}
+          </Box>
+        </>
+      :   
+        <Box sx={{ display: 'flex' }}>
+          <SideBar/>
+          <Box 
+            component="main" 
+            sx={{
+              flexGrow: 1,
+              // textAlign: 'center',
+              width: '100%',
+              overflow: 'auto'
+            }}
+          >
+            <Box m="2%">
+              {component}
+            </Box>
+          </Box>
+        </Box>
+      }
+    </>)
+
+  return <Route 
+        path={path}
+        element={ element
+          // !authenticated ? {element} :
+          // !admin ? <AuthenticatedProtected>{element}</AuthenticatedProtected> : <AdminProtected><AuthenticatedProtected>{element}</AuthenticatedProtected></AdminProtected> 
+        }
+    />
+}
+
+const pathArray: any[] = [
+  { path:"/", admin:false, authenticated:false, isPublic: true, component:<Home/> },
+  { path:"/home", admin:false, authenticated:false, isPublic: true, component:<Home/> },
+  { path:"/signup", admin:false, authenticated:false, isPublic: true, component:<Signup/> },
+  { path:"/admin/users", admin:false, authenticated:true, isPublic: false, component:<UserData/>},
+  { path:"/admin/athletes_by_date", admin:true, authenticated:true, isPublic: false, component:<SportSchoolAthletesByDate/> },
+  { path:"/admin/users/:id", admin:false, authenticated:true, isPublic: false, component:<UserData/> },
+  { path:"/admin/users/list", admin:false, authenticated:true, isPublic: false, component:<UserTable/> },
+  { path:"/users/:id", admin:false, authenticated:true, isPublic: false, component:<UserData/> },
+  { path:"/sport_schools/list", admin:false, authenticated:true, isPublic: false, component:<SportSchoolTable/> },
+  { path:"/sport_schools/:id", admin:false, authenticated:true, isPublic: false, component:<SportSchoolData/> },
+  { path:"/sport_schools", admin:false, authenticated:true, isPublic: false, component:<SportSchoolData/> },
+  { path:"/families/list", admin:false, authenticated:true, isPublic: false, component:<FamilyTable/> },
+  { path:"/families/:id", admin:false, authenticated:true, isPublic: false, component:<FamilyData/> },
+  { path:"/families", admin:false, authenticated:true, isPublic: false, component:<FamilyData/> },
+  { path:"/athletes/list", admin:false, authenticated:true, isPublic: false, component:<AthleteTable/>},
+  { path:"/athletes/:id/historic",    admin:false, authenticated:true, isPublic: false, component:<AthleteData/>},
+  { path:"/athletes/historic",        admin:false, authenticated:true, isPublic: false, component:<HistoricTable/> },
+  { path:"/athletes/:id", admin:false, authenticated:true, isPublic: false, component:<AthleteData/> },
+  { path:"/athletes/code?code::code", admin:false, authenticated:true, isPublic: false, component:<AthleteData/> },
+  { path:"/athletes", admin:false, authenticated:true, isPublic: false, component:<AthleteData/> },
+  { path:"/groups/attendance", admin:false, authenticated:true, isPublic: false, component:<GroupAttendance/> },
+  { path:"/groups/athletes", admin:false, authenticated:true, isPublic: false, component:<GroupAthletesTable/> },
+  { path:"/groups/swap", admin:false, authenticated:true, isPublic: false, component:<GroupSwap/> },
+  { path:"/groups/list", admin:false, authenticated:true, isPublic: false, component:<GroupTable/> },
+  { path:"/groups/:id", admin:false, authenticated:true, isPublic: false, component:<GroupData/> },
+  { path:"/groups", admin:false, authenticated:true, isPublic: false, component:<GroupData/> },
+  { path:"/schedules/list", admin:false, authenticated:true, isPublic: false, component:<ScheduleTable/> },
+  { path:"/schedules/:id", admin:false, authenticated:true, isPublic: false, component:<ScheduleData/> },
+  { path:"/schedules", admin:false, authenticated:true, isPublic: false, component:<ScheduleData/> },
+  { path:"/incidences/list", admin:false, authenticated:true, isPublic: false, component:<IncidenceTable/> },
+  { path:"/incidences/:id", admin:false, authenticated:true, isPublic: false, component:<IncidenceData/> },
+  { path:"/incidences", admin:false, authenticated:true, isPublic: false, component:<IncidenceData/> },
+  { path:"/licenses", admin:false, authenticated:true, isPublic: false, component:<LicenseUpload/> },
+  { path:"/receipts/list", admin:false, authenticated:true, isPublic: false, component:<ReceiptTable/> },
+  { path:"/receipts/:id", admin:false, authenticated:true, isPublic: false, component:<ReceiptData/> },
+  { path:"/receipts", admin:false, authenticated:true, isPublic: false, component:<ReceiptData/> },
+  { path:"/receipts/athletes/:id", admin:false, authenticated:true, isPublic: false, component:<ReceiptAthleteData/> },
+  { path:"/receipts/returned/list", admin:false, authenticated:true, isPublic: false, component:<ReturnedReceiptTable/> },
+  { path:"/receipts/not_paid/list", admin:false, authenticated:true, isPublic: false, component:<NotPaidReceiptTable/> },
+  { path:"/trainers/list", admin:false, authenticated:true, isPublic: false, component:<TrainerTable/> },
+  { path:"/trainers/:id", admin:false, authenticated:true, isPublic: false, component:<TrainerData/> },
+  { path:"/trainers", admin:false, authenticated:true, isPublic: false, component:<TrainerData/> },
+]
+
+const AppBar: React.FC<any> = () => {
 
   return (
     <Router>
         <Routes>
-          <Route path="/" element={<Login/>}/>
-          <Route path="/login" element={<Login/>}/>
-          <Route path="/admin/users"              element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" ><UserData/></Box></AuthenticatedProtected>}/>
-          <Route path="/admin/athletes_by_date"   element={<AdminProtected><AuthenticatedProtected><CustomAppBar/><Box m="2%" ><SportSchoolAthletesByDate/></Box></AuthenticatedProtected></AdminProtected>}/>
-                    
-          <Route path="/admin/users/:id"          element={<AuthenticatedProtected><CustomAppBar/><Box m="2%"><UserData/></Box></AuthenticatedProtected>}/>
-          <Route path="/admin/users/list"         element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><UserTable/></Box></AuthenticatedProtected>}/>
-          <Route path="/users/:id"                element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><UserData/></Box></AuthenticatedProtected>}/>
-          
-          <Route path="/sport_schools/list"       element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><SportSchoolTable/></Box></AuthenticatedProtected>}/>
-          <Route path="/sport_schools/:id"        element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><SportSchoolData/></Box></AuthenticatedProtected>}/>
-          <Route path="/sport_schools"            element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><SportSchoolData/></Box></AuthenticatedProtected>}/>
-          
-          <Route path="/families/list"            element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><FamilyTable/></Box></AuthenticatedProtected>}/>
-          <Route path="/families/:id"             element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><FamilyData/></Box></AuthenticatedProtected>}/>
-          <Route path="/families"                 element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><FamilyData/></Box></AuthenticatedProtected>}/>
-          
-          <Route path="/athletes/list"            element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><AthleteTable/></Box></AuthenticatedProtected>}/>
-          <Route path="/athletes/:id/historic"    element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><AthleteData/></Box></AuthenticatedProtected>} />
-          <Route path="/athletes/:id/sport_data"  element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><AthleteSportdata/></Box></AuthenticatedProtected>} />
-          <Route path="/athletes/historic"        element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><HistoricTable/></Box></AuthenticatedProtected>} />
-          <Route path="/athletes/:id"             element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><AthleteData/></Box></AuthenticatedProtected>} />
-          <Route path="/athletes/code?code=:code" element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><AthleteData/></Box></AuthenticatedProtected>} />
-          <Route path="/athletes"                 element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><AthleteData/></Box></AuthenticatedProtected>} />
-          
-          <Route path="/groups/attendance"        element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><GroupAttendance/></Box></AuthenticatedProtected>}/>
-          <Route path="/groups/athletes"          element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><GroupAthletesTable/></Box></AuthenticatedProtected>}/>
-          <Route path="/groups/swap"              element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><GroupSwap/></Box></AuthenticatedProtected>}/>
-          <Route path="/groups/list"              element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><GroupTable/></Box></AuthenticatedProtected>}/>
-          <Route path="/groups/:id"               element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><GroupData/></Box></AuthenticatedProtected>}/>
-          <Route path="/groups"                   element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><GroupData/></Box></AuthenticatedProtected>} />
-          
-          <Route path="/schedules/list"           element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ScheduleTable/></Box></AuthenticatedProtected>}/>
-          <Route path="/schedules/:id"            element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ScheduleData/></Box></AuthenticatedProtected>}/>
-          <Route path="/schedules"                element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ScheduleData/></Box></AuthenticatedProtected>}/>
-          
-          <Route path="/incidences/list"          element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><IncidenceTable/></Box></AuthenticatedProtected>}/>
-          <Route path="/incidences/:id"           element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><IncidenceData/></Box></AuthenticatedProtected>}/>
-          <Route path="/incidences"               element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><IncidenceData/></Box></AuthenticatedProtected>}/>
-
-          <Route path="/licenses"                 element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><LicenseUpload/></Box></AuthenticatedProtected>}/>
-
-          <Route path="/receipts/list"            element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptTable/></Box></AuthenticatedProtected>}/>
-          <Route path="/receipts/:id"             element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptData/></Box></AuthenticatedProtected>}/>
-          <Route path="/receipts"                 element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptData/></Box></AuthenticatedProtected>}/>
-          <Route path="/receipts/athletes/:id"    element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReceiptAthleteData/></Box></AuthenticatedProtected>}/>
-          <Route path="/receipts/returned/list"   element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><ReturnedReceiptTable/></Box></AuthenticatedProtected>}/>
-          <Route path="/receipts/not_paid/list"   element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><NotPaidReceiptTable/></Box></AuthenticatedProtected>}/>
-          
-          <Route path="/trainers/list"            element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><TrainerTable/></Box></AuthenticatedProtected>}/>
-          <Route path="/trainers/:id"             element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><TrainerData/></Box></AuthenticatedProtected>}/>
-          <Route path="/trainers"                 element={<AuthenticatedProtected><CustomAppBar/><Box m="2%" display="flex"><TrainerData/></Box></AuthenticatedProtected>}/>
-          </Routes>
-      
+          { pathArray.map(e => { return getRouteFromJson(e) })}
+        </Routes>
     </Router>
   );
 }

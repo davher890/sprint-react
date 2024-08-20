@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 
 import Table from "../../components/custom/Table";
 import Button from '../../components/custom/AddButton'
@@ -27,7 +27,7 @@ class UserTable extends React.Component<any, any> {
 
 	render() {
 		return (
-			<React.Suspense fallback={<div>Cargando...</div>}>
+			<>
 				<Grid container direction="column" spacing={3}>
 					{ isAdmin() || isManager() ?
 						<Grid item xs>
@@ -51,7 +51,7 @@ class UserTable extends React.Component<any, any> {
 						/>
 					</Grid>
 				</Grid>
-			</React.Suspense>
+			</>
 		)
 	}
 }

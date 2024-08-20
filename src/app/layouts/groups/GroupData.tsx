@@ -2,8 +2,8 @@ import * as React from "react"
 
 import { Formik } from 'formik';
 
-import { Grid, Snackbar, Checkbox, AppBar, Toolbar, Box } from "@material-ui/core";
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Grid, Snackbar, Checkbox, AppBar, Box } from "@mui/material";
+import { Alert, AlertTitle } from '@mui/lab';
 
 import TextField from '../../components/custom/TextField';
 import SaveButton from '../../components/custom/SaveButton'
@@ -11,6 +11,7 @@ import DeleteButton from '../../components/custom/DeleteButton'
 import Card from '../../components/custom/Card'
 import ScheduleSelect from '../../components/custom/ScheduleSelect'
 import Spinner from '../../components/custom/Spinner'
+import BottomAppBar from "../../components/custom/BottomAppBar";
 
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
@@ -112,7 +113,7 @@ const CreateGroup: React.FC<any> = (props) => {
                         </Snackbar>
                         <Box paddingBottom={7}>
                             <Grid container direction='row' spacing={3}>
-                                <Grid item xs>
+                                <Grid item xs={6}>
                                     <Card title="Datos del grupo">
                                         <Grid container spacing={2} direction="column">
                                             <Grid container item xs spacing={2}>
@@ -153,7 +154,7 @@ const CreateGroup: React.FC<any> = (props) => {
                                         </Grid>
                                     </Card>
                                 </Grid>
-                                <Grid container item xs spacing={2}>
+                                <Grid item xs={6} spacing={2}>
                                     <ScheduleSelect 
                                         schedules={props.schedules}
                                         scheduleIds={values.scheduleIds}
@@ -167,7 +168,7 @@ const CreateGroup: React.FC<any> = (props) => {
                         </Box>
                         { (isAdmin() || isManager()) &&
                             <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
-                                <Toolbar>
+                                <BottomAppBar>
                                     { props.loading ? <Spinner/> : <>
                                         <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
                                         {props.id ? 
@@ -176,7 +177,7 @@ const CreateGroup: React.FC<any> = (props) => {
                                         }
                                     </>
                                     }
-                                </Toolbar>
+                                </BottomAppBar>
                             </AppBar>
                         }
                     </form>

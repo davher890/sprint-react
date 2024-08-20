@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { Container, Grid } from '@material-ui/core';
+import { Container, Grid } from '@mui/material';
 
 import AthleteTable from "../athletes/AthleteTable";
 import TextField from "../../components/custom/TextField";

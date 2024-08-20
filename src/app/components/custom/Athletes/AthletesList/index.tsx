@@ -1,8 +1,8 @@
 import React from 'react'
-import { Grid, Button } from '@material-ui/core';
+import { Grid, Button } from '@mui/material';
 import SearchButton from '../../../custom/SearchButton'
 
-import { Table, TableBody, TableHead, TableRow, TableCell, TableContainer } from '@material-ui/core';
+import { Table, TableBody, TableHead, TableRow, TableCell, TableContainer } from '@mui/material';
 
 const AthletesList: React.FC<any> = (props) => {
 

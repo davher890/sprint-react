@@ -2,22 +2,20 @@ import React, { useState } from "react"
 
 import moment from 'moment'
 
-import { Grid, AppBar, Checkbox, Chip, Snackbar, Toolbar } from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Box, Checkbox, Chip, Grid, Snackbar } from '@mui/material';
+import { Alert, AlertTitle } from '@mui/lab';
 
 import Table from '../../components/custom/Table';
 import TextField from '../../components/custom/TextField';
 import Card from '../../components/custom/Card';
 import ConfirmDialog from "../../components/custom/ConfirmDialog";
-
+import BottomAppBar from "../../components/custom/BottomAppBar";
 import Select from '../../components/custom/Select'
-
 import SelectButton from '../../components/custom/SelectButton'
 import RefreshButton from '../../components/custom/RefreshButton'
 import SearchButton from '../../components/custom/SearchButton'
 import DeleteButton from '../../components/custom/DeleteButton'
 import DownloadButton from '../../components/custom/DownloadButton'
-
 import DateField from "../../components/custom/DateField";
 import SportSchoolSelect from "../../components/custom/SportSchoolSelect";
 import Spinner from '../../components/custom/Spinner'
@@ -113,7 +111,7 @@ const NewReceiptForm: React.FC<any> = (props) => {
     },[receipt.startDate, receipt.endDate])
 
     return (
-        <>
+        <Box paddingBottom={10}>
             <Snackbar open={props.receipt.errorMessage !== undefined && props.receipt.errorMessage !== ''}
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
                 <Alert severity="error">
@@ -146,13 +144,13 @@ const NewReceiptForm: React.FC<any> = (props) => {
                 }}
                 cancel={() => setOpenDeleteAthletesDialog(false)}
             />
-            <Grid container direction="column" spacing={1}>
+            <Grid container direction="column" spacing={3}>
                 <Grid item xs>
                     <Card title="Datos de la remesa">
                         <Grid container direction="column" spacing={5}>
-                            <Grid container item xs spacing={3}>
+                            <Grid container item xs spacing={2}>
                                 <Grid item xs>
-                                    <TextField name="name" label="Nombre de la remesa" type="text" value={receipt.name}
+                                    <TextField fullWidth name="name" label="Nombre de la remesa" type="text" value={receipt.name}
                                         error={!receipt.name} onChange={(e:any) => {
                                             setReceipt({ ...receipt, name: e.target.value })
                                         }}
@@ -295,74 +293,81 @@ const NewReceiptForm: React.FC<any> = (props) => {
                         </Grid>
                     </Card>
                 </Grid>
-                { props.receipt.id && props.sportSchoolFee.sportSchoolAnnualFee !== undefined && <>
-                    <Grid item xs>
+                { props.receipt.id && props.sportSchoolFee.sportSchoolAnnualFee !== undefined && 
+                <>
+                    <Grid container item xs>
                         <Card title="Atletas">
-                            <>
-                                <Grid container xs>
-                                    <RefreshButton onClick={() => {
-                                        getReceiptIdAthletes()
-                                        props.getReceipt(props.receipt.id)
-                                    }}>Refrescar datos</RefreshButton>
-                                    { selectedIds && selectedIds.length > 0 && <DeleteButton onClick={() => setOpenDeleteAthletesDialog(true)}>Eliminar de la remesa</DeleteButton> }
-                                    { <DownloadButton onClick={(downloadData)}>Descargar Excel</DownloadButton> }
-                                    { isAdmin() && <Grid item xs spacing={2}>
-                                        <Chip label={"Socio: " + props.receipt.membershipFee} color="primary" />
-                                        <Chip label={"Matricula: " + props.receipt.enrollmentFee} color="primary" />
-                                        <Chip label={"Trimestral: " + props.receipt.monthlyFee} color="primary" />
-                                        <Chip label={"Licencias: " + props.receipt.licenseFee} color="primary" />
-                                        <Chip label={"Total: " + (props.receipt.monthlyFee + props.receipt.enrollmentFee+ props.receipt.membershipFee + props.receipt.licenseFee )} color="secondary" />
-                                    </Grid> }
+                            <Grid container direction="column" spacing={3}>
+                                <Grid container item xs>
+                                    <RefreshButton 
+                                        onClick={() => {
+                                            getReceiptIdAthletes()
+                                            props.getReceipt(props.receipt.id)
+                                        }}>Refrescar datos
+                                    </RefreshButton>
+                                    { selectedIds && selectedIds.length > 0 && 
+                                        <DeleteButton onClick={() => setOpenDeleteAthletesDialog(true)}>Eliminar de la remesa</DeleteButton>
+                                    }
+                                    <DownloadButton onClick={(downloadData)}>Descargar Excel</DownloadButton>
+                                    { isAdmin() && 
+                                        <Grid item xs spacing={4}>
+                                            <Chip label={"Socio: " + props.receipt.membershipFee} color="primary" />
+                                            <Chip label={"Matricula: " + props.receipt.enrollmentFee} color="primary" />
+                                            <Chip label={"Trimestral: " + props.receipt.monthlyFee} color="primary" />
+                                            <Chip label={"Licencias: " + props.receipt.licenseFee} color="primary" />
+                                            <Chip label={"Total: " + (props.receipt.monthlyFee + props.receipt.enrollmentFee+ props.receipt.membershipFee + props.receipt.licenseFee )} color="secondary" />
+                                        </Grid> 
+                                    }
                                 </Grid>
-                                <Table 
-                                    data={props.table_data}
-                                    page={props.page}
-                                    size={props.size}
-                                    total={props.total}
-                                    columns={ Utils.getReceiptAthleteColumns(props.receipt.receiptType, receipt.sportSchoolId) }
-                                    onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
-                                        if (props.receipt.id){
-                                            props.getReceiptIdAthleteTable(props.receipt.id, page, size, filters, sort, sortDirection);
-                                        }
-                                    }}
-                                    selectableRows={props.receipt.status !== 'VALIDATED'}
-                                    selectedIds={selectedIds}
-                                    onSelectedIds={(id: number, checked: boolean, row: any) =>{
-                                        let ids = selectedIds
-                                        let athleteIds = selectedAthleteIds
-                                        if (checked){
-                                            ids.push(id)
-                                            athleteIds.push(row.athleteId)
-                                        }
-                                        else {
-                                            ids = ids.filter(t => t !== id)
-                                            athleteIds = athleteIds.filter(t => t !== row.athleteId)
-                                        }
-                                        ids = Array.from(new Set(ids))
-                                        athleteIds = Array.from(new Set(athleteIds))
-                                        setSelectedIds(ids)
-                                        setSelectedAthleteIds(athleteIds)
-                                    }}
-                                    onRowClick={(id: number) => {
-                                        window.open("/receipts/athletes/" + id, "_self");
-                                    }}
-                                />
-                            </>
+                                <Grid container item xs>
+                                    <Table 
+                                        data={props.table_data}
+                                        page={props.page}
+                                        size={props.size}
+                                        total={props.total}
+                                        columns={ Utils.getReceiptAthleteColumns(props.receipt.receiptType, receipt.sportSchoolId) }
+                                        onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
+                                            if (props.receipt.id){
+                                                props.getReceiptIdAthleteTable(props.receipt.id, page, size, filters, sort, sortDirection);
+                                            }
+                                        }}
+                                        selectableRows={props.receipt.status !== 'VALIDATED'}
+                                        selectedIds={selectedIds}
+                                        onSelectedIds={(id: number, checked: boolean, row: any) =>{
+                                            let ids = selectedIds
+                                            let athleteIds = selectedAthleteIds
+                                            if (checked){
+                                                ids.push(id)
+                                                athleteIds.push(row.athleteId)
+                                            }
+                                            else {
+                                                ids = ids.filter(t => t !== id)
+                                                athleteIds = athleteIds.filter(t => t !== row.athleteId)
+                                            }
+                                            ids = Array.from(new Set(ids))
+                                            athleteIds = Array.from(new Set(athleteIds))
+                                            setSelectedIds(ids)
+                                            setSelectedAthleteIds(athleteIds)
+                                        }}
+                                        onRowClick={(id: number) => {
+                                            window.open("/receipts/athletes/" + id, "_self");
+                                        }}
+                                    />
+                                </Grid>
+                            </Grid>
                         </Card>
                     </Grid>
                 </>
                 }
             </Grid>
-            <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
-                <Toolbar>
-                    {props.receipt.id &&
-                        <DeleteButton text='Borrar' 
-                            onClick={() => setOpenDeleteDialog(true)}
-                        />
-                    }
-                </Toolbar>
-            </AppBar>
-        </>
+            <BottomAppBar>
+                {props.receipt.id &&
+                    <DeleteButton text='Borrar' 
+                        onClick={() => setOpenDeleteDialog(true)}
+                    />
+                }
+            </BottomAppBar>
+        </Box>
     );
 }
 

@@ -2,13 +2,14 @@ import * as React from "react"
 
 import { Formik } from 'formik';
 
-import { Grid, AppBar, Toolbar, Snackbar } from "@material-ui/core";
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Grid, Snackbar } from "@mui/material";
+import { Alert, AlertTitle } from '@mui/lab';
 
 import TextField from '../../components/custom/TextField';
 import Select from '../../components/custom/Select';
 import SaveButton from '../../components/custom/SaveButton'
 import Card from '../../components/custom/Card';
+import BottomAppBar from "../../components/custom/BottomAppBar";
 
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
@@ -143,13 +144,9 @@ const CreateSchedule: React.FC<any> = (props) => {
                             </Grid>
                         </Grid>
                     </Card>
-                    <Grid>
-                        <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
-                            <Toolbar>
-                                <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
-                            </Toolbar>
-                        </AppBar>                            
-                    </Grid>
+                    <BottomAppBar>
+                        <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
+                    </BottomAppBar>                            
                 </form>
             )}
             </Formik>

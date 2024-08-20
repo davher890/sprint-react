@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 
 import Table from "../custom/Table";
 import Button from '../custom/AddButton'
@@ -23,7 +23,7 @@ const AdminPage: React.FC<any> = (props) => {
     }, [])
 
     if (!props.isAdmin) {
-        return <Navigate to="/login" replace />;
+        return <Navigate to="/home" replace />;
     }
     return (
         <React.Suspense fallback={<div>Cargando...</div>}>

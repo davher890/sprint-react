@@ -1,8 +1,9 @@
 import * as React from "react"
 
 import { connect } from "react-redux";
-import { withTheme, makeStyles } from '@material-ui/core/styles';
-import { Box, Grid, Table, TableBody, TableHead, TableRow, TablePagination, TableCell, TableContainer, TableSortLabel, Checkbox } from '@material-ui/core';
+import { withTheme, makeStyles } from '@mui/styles';
+
+import { Box, Grid, Table, TableBody, TableHead, TableRow, TablePagination, TableCell, TableContainer, TableSortLabel, Checkbox } from '@mui/material';
 
 import ColumnsSelect from "../ColumnsSelect";
 import TextField from "../TextField";
@@ -231,15 +232,12 @@ const CustomTable: React.FC<any> = (props) => {
 	}
 
 	return (
-		<Box 
-			height='100vh'
-			width='100vw'
-		>
+		<Grid container>
 			{ props.loading && <Spinner/> }
 			{!props.loading && (
 				<Grid container item direction="column" spacing={3}
 					style={{
-						width: '97%'
+						width: '100%'
 					}}
 				>
 					<Grid container item xs direction="row">
@@ -259,7 +257,9 @@ const CustomTable: React.FC<any> = (props) => {
 						)}
 					</Grid>
 					
-					<Grid item xs>
+					<Grid item xs style={{
+						width: '100%'
+					}}>
 						<Box overflow="auto">
 							<TableContainer>
 								<Table stickyHeader size="small" className={classes.root}>
@@ -290,7 +290,7 @@ const CustomTable: React.FC<any> = (props) => {
 				</Grid>
 			)
 		}
-		</Box>
+		</Grid>
 	)
 }
 

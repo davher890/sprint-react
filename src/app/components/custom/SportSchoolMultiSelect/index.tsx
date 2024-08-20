@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import CustomCard from '../Card';
-import { Grid, Checkbox } from '@material-ui/core';
+import { Grid, Checkbox } from '@mui/material';
 
 const SportSchoolMultiSelect: React.FC<any> = (props) => {
 

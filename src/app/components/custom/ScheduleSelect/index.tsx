@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import CustomCard from '../Card';
-import { Box, Grid, Checkbox, FormControlLabel } from '@material-ui/core';
+import { Box, Grid, Checkbox, FormControlLabel } from '@mui/material';
 
 import utils from "../../../utils/Functions"
 

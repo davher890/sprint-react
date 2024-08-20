@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useState } from "react";
 
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 
 import SearchButton from '../../components/custom/SearchButton'
 import Table from "../../components/custom/Table";

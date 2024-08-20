@@ -2,8 +2,8 @@ import * as React from "react"
 import moment from 'moment'
 import { connect } from "react-redux";
 
-import { Dialog, DialogActions, DialogContent, DialogTitle, Grid, Button, Tooltip } from '@material-ui/core';
-import InfoIcon from '@material-ui/icons/Info';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Grid, Button, Tooltip } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
 
 import SaveButton from "../custom/SaveButton";
 import DeleteButton from '../custom/DeleteButton'

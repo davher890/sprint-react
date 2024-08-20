@@ -1,6 +1,6 @@
 import * as React from "react"
-import { Grid, Snackbar, AppBar, Toolbar, Box } from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Grid, Snackbar, Box } from '@mui/material';
+import { Alert, AlertTitle } from '@mui/lab';
 
 import { Formik } from 'formik';
 
@@ -11,6 +11,7 @@ import DeleteButton from '../../components/custom/DeleteButton'
 import ConfirmDialog from "../../components/custom/ConfirmDialog";
 import SportSchoolSelect from "../../components/custom/SportSchoolSelect";
 import Spinner from '../../components/custom/Spinner'
+import BottomAppBar from "../../components/custom/BottomAppBar";
 
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
@@ -127,18 +128,16 @@ const CreateTrainer: React.FC<any> = (props) => {
                         </Grid>
                     </Box>
                     { (isAdmin() || isManager()) &&
-                        <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
-                            <Toolbar>
-                                { props.loading ? <Spinner/> : <>
-                                    <SaveButton type="submit" disabled={isSubmitting}/>
-                                    { props.id ? 
-                                        <DeleteButton text='Borrar' onClick={() => setFieldValue("openDeleteDialog", true)}/>
-                                        : null
-                                    }
-                                </>
+                        <BottomAppBar>
+                            { props.loading ? <Spinner/> : <>
+                                <SaveButton type="submit" disabled={isSubmitting}/>
+                                { props.id ? 
+                                    <DeleteButton text='Borrar' onClick={() => setFieldValue("openDeleteDialog", true)}/>
+                                    : null
                                 }
-                            </Toolbar>
-                        </AppBar>
+                            </>
+                            }
+                        </BottomAppBar>
                     }
                 </form>
             )}

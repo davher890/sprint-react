@@ -1,11 +1,11 @@
 import React from 'react'
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 
-import { Table, TableBody, TableHead, TableRow, TableCell, TableContainer, TableSortLabel } from '@material-ui/core';
+import { Table, TableBody, TableHead, TableRow, TableCell, TableContainer, TableSortLabel } from '@mui/material';
 
 import { Order } from '../../../../types/order'
 
-import { withTheme, makeStyles } from '@material-ui/core/styles';
+import { withTheme, makeStyles } from '@mui/styles';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
@@ -89,64 +89,62 @@ const GroupSwapAthletesList: React.FC<any> = (props) => {
     };
     
     return ( 
-        <Grid container style={{ width: "100%", overflowX: "auto" }}>
-            <Grid item xs>
-                <TableContainer><Table stickyHeader size="small">
-                    <TableHead className={classes.root}>
-                        <TableRow>
-                            <TableCell>
-                                <TableSortLabel
-                                    active={orderBy === 'name'}
-                                    direction={orderBy === 'name' ? order : 'asc'}
-                                    onClick={createSortHandler('name')}
-                                >Nombre</TableSortLabel>
-                            </TableCell>
-                            <TableCell>
-                                <TableSortLabel
-                                    active={orderBy === 'firstSurname'}
-                                    direction={orderBy === 'firstSurname' ? order : 'asc'}
-                                    onClick={createSortHandler('firstSurname')}
-                                >Primer Apellido</TableSortLabel>
-                            </TableCell>
-                            <TableCell>
-                                <TableSortLabel
-                                    active={orderBy === 'secondSurname'}
-                                    direction={orderBy === 'secondSurname' ? order : 'asc'}
-                                    onClick={createSortHandler('secondSurname')}
-                                >Segundo Apellido</TableSortLabel>
-                            </TableCell>   
-                            <TableCell>
-                                <TableSortLabel
-                                    active={orderBy === 'birthDate'}
-                                    direction={orderBy === 'birthDate' ? order : 'asc'}
-                                    onClick={createSortHandler('birthDate')}
-                                >Fecha Nac.</TableSortLabel>
-                            </TableCell>
-                            <TableCell>
-                                <TableSortLabel
-                                    active={orderBy === 'category'}
-                                    direction={orderBy === 'category' ? order : 'asc'}
-                                    onClick={createSortHandler('category')}
-                                >Categoría</TableSortLabel>
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {
-                            stableSort(athletes, getComparator(order, orderBy)).map((row: any) => {
-                                return <TableRow hover key={row.id} onClick={() => onRowClick(row)}>
-                                    <TableCell>{ row.name }</TableCell>
-                                    <TableCell>{ row.firstSurname }</TableCell>
-                                    <TableCell>{ row.secondSurname }</TableCell>
-                                    <TableCell>{ new Intl.DateTimeFormat('sq-AL').format(new Date(row.birthDate)) }</TableCell>
-                                    <TableCell>{ row.category }</TableCell>
-                                </TableRow>
-                            })
-                        }
-                    </TableBody>
-                </Table></TableContainer>
-            </Grid>
-        </Grid>
+        <TableContainer>
+            <Table stickyHeader size="medium">
+                <TableHead className={classes.root}>
+                    <TableRow>
+                        <TableCell>
+                            <TableSortLabel
+                                active={orderBy === 'name'}
+                                direction={orderBy === 'name' ? order : 'asc'}
+                                onClick={createSortHandler('name')}
+                            >Nombre</TableSortLabel>
+                        </TableCell>
+                        <TableCell>
+                            <TableSortLabel
+                                active={orderBy === 'firstSurname'}
+                                direction={orderBy === 'firstSurname' ? order : 'asc'}
+                                onClick={createSortHandler('firstSurname')}
+                            >Primer Apellido</TableSortLabel>
+                        </TableCell>
+                        <TableCell>
+                            <TableSortLabel
+                                active={orderBy === 'secondSurname'}
+                                direction={orderBy === 'secondSurname' ? order : 'asc'}
+                                onClick={createSortHandler('secondSurname')}
+                            >Segundo Apellido</TableSortLabel>
+                        </TableCell>   
+                        <TableCell>
+                            <TableSortLabel
+                                active={orderBy === 'birthDate'}
+                                direction={orderBy === 'birthDate' ? order : 'asc'}
+                                onClick={createSortHandler('birthDate')}
+                            >Fecha Nac.</TableSortLabel>
+                        </TableCell>
+                        <TableCell>
+                            <TableSortLabel
+                                active={orderBy === 'category'}
+                                direction={orderBy === 'category' ? order : 'asc'}
+                                onClick={createSortHandler('category')}
+                            >Categoría</TableSortLabel>
+                        </TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {
+                        stableSort(athletes, getComparator(order, orderBy)).map((row: any) => {
+                            return <TableRow hover key={row.id} onClick={() => onRowClick(row)}>
+                                <TableCell>{ row.name }</TableCell>
+                                <TableCell>{ row.firstSurname }</TableCell>
+                                <TableCell>{ row.secondSurname }</TableCell>
+                                <TableCell>{ new Intl.DateTimeFormat('sq-AL').format(new Date(row.birthDate)) }</TableCell>
+                                <TableCell>{ row.category }</TableCell>
+                            </TableRow>
+                        })
+                    }
+                </TableBody>
+            </Table>
+        </TableContainer>
     )
 }
 export default withTheme(GroupSwapAthletesList);

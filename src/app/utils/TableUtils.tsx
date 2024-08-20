@@ -242,7 +242,7 @@ const Utils = {
 
     getSportSchoolColumns: () => {
         return [
-            { dataField: 'id', text: 'Id', show: false },
+            // { dataField: 'id', text: 'Id', show: false },
             { dataField: 'name', text: 'Nombre', filter: { type: "text" } },
             { dataField: 'municipality', text: 'Municipio', filter: { type: "text" } },
             { dataField: 'address', text: 'Dirección', filter: { type: "text" } }

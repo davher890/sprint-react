@@ -211,47 +211,47 @@ const functions = {
                 case 3:
                 case 4:
                 case 5:
-                    category = "chupetin"
+                    category = "CHUPETIN"
                     break;
                 case 6:
                 case 7:
-                    category = "sub8"
+                    category = "SUB8"
                     break;
                 case 8:
                 case 9:
-                    category = "sub10"
+                    category = "SUB10"
                     break;
                 case 10:
                 case 11:
-                    category = "sub12"
+                    category = "SUB12"
                     break;
                 case 12:
                 case 13:
-                    category = "sub14"
+                    category = "SUB14"
                     break;
                 case 14:
                 case 15:
-                    category = "sub16"
+                    category = "SUB16"
                     break;
                 case 16:
                 case 17:
-                    category = "sub18"
+                    category = "SUB18"
                     break;
                 case 18:
                 case 19:
-                    category = "sub20"
+                    category = "SUB20"
                     break;
                 case 20:
                 case 21:
                 case 22:
-                    category = "sub23"
+                    category = "SUB23"
                     break;
                 default:
                     if (currentYear - year  > 22 && currentYear - year < 35) {
-                        category = "senior"
+                        category = "SENIOR"
                     }
                     else {
-                        category = "master"
+                        category = "MASTER"
                     }
                     break;
             }

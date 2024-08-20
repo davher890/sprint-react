@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 
 import DownloadButton from '../../components/custom/DownloadButton'
 import GroupSelect from '../../components/custom/GroupSelect'
 import Select from '../../components/custom/Select'
 import CustomCard from '../../components/custom/Card'
-
 import SportSchoolSelect from "../../components/custom/SportSchoolSelect";
 
 import utils from "../../utils/Functions"

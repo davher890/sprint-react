@@ -1,6 +1,6 @@
 import * as React from "react"
 import moment from 'moment'
-import { Grid } from '@material-ui/core'
+import { Grid } from '@mui/material'
 import TextField from "../custom/TextField"
 
 import { connect } from "react-redux";

@@ -1,6 +1,6 @@
 import React from "react"
 
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 
 import Table from "../../components/custom/Table";
 import Button from '../../components/custom/AddButton'
@@ -22,7 +22,7 @@ const ReceiptTable: React.FC<any> = (props) => {
 			<Grid item xs>
 				<Button text="Nueva remesa" href={'/receipts'} />
 			</Grid>
-			<Grid item xs>
+			<Grid container item xs>
 				<Table
 					data={props.table_data}
 					page={props.page}

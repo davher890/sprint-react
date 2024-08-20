@@ -2,15 +2,15 @@ import * as React from "react"
 
 import { Formik } from 'formik';
 
-import { AppBar, Box, Chip, Grid, Snackbar, Toolbar } from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Box, Chip, Grid, Snackbar } from '@mui/material';
+import { Alert, AlertTitle } from '@mui/lab';
 
 import DeleteButton from "../../components/custom/DeleteButton";
 import Card from '../../components/custom/Card';
 import ConfirmDialog from "../../components/custom/ConfirmDialog";
 import SaveButton from '../../components/custom/SaveButton'
 import TextField from '../../components/custom/TextField';
-
+import BottomAppBar from "../../components/custom/BottomAppBar";
 
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
@@ -216,15 +216,13 @@ const ConnectedForm: React.FC<any> = (props) => {
                             </Grid>
                         </Grid>
                     { (isAdmin() || isManager()) &&
-                        <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
-                            <Toolbar>
-                                <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
-                                {(props.id) ? 
-                                    <DeleteButton text='Borrar' onClick={() => setFieldValue("openDeleteDialog", true)}/>
-                                    : null
-                                }
-                            </Toolbar>
-                        </AppBar>
+                        <BottomAppBar>
+                            <SaveButton type="submit" text='Guardar' disabled={isSubmitting} />
+                            {(props.id) ? 
+                                <DeleteButton text='Borrar' onClick={() => setFieldValue("openDeleteDialog", true)}/>
+                                : null
+                            }
+                        </BottomAppBar>
                     }
                 </form>
             )}

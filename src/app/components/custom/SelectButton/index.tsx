@@ -1,6 +1,6 @@
 import React from 'react'
-import { Button } from '@material-ui/core';
-import Icon from '@material-ui/icons/ViewColumn';
+import { Button } from '@mui/material';
+import Icon from '@mui/icons-material/ViewColumn';
 
 const SelectButton: React.FC<any> = (props) => (
 	<Button color={props.color || "secondary"} {...props}>

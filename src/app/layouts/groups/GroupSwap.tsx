@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-import { Grid, AppBar, Toolbar, Snackbar } from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Grid, AppBar, Toolbar, Snackbar } from '@mui/material';
+import { Alert, AlertTitle } from '@mui/lab';
 
 import SaveButton from '../../components/custom/SaveButton'
 import SelectButton from '../../components/custom/SelectButton'
@@ -11,8 +11,10 @@ import AthletesList from '../../components/custom/Athletes/GroupSwapAthletesList
 import SportSchoolSelect from "../../components/custom/SportSchoolSelect";
 import Spinner from '../../components/custom/Spinner'
 
+
 import { connect } from "react-redux";
 import { getGroupAAthletes, getGroupBAthletes, swapGroups } from "../../redux/actions/groups";
+import BottomAppBar from "../../components/custom/BottomAppBar";
 
 const GroupSwap: React.FC<any> = (props) => {
 
@@ -44,7 +46,7 @@ const GroupSwap: React.FC<any> = (props) => {
     }, [groupBId])
     
     return (
-        <Grid container>
+        <>
             <Snackbar open={success}
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }} autoHideDuration={6000}>
                 <Alert severity="success" onClose={() => { 
@@ -54,7 +56,7 @@ const GroupSwap: React.FC<any> = (props) => {
                     <AlertTitle>Cambios guardados!</AlertTitle>
                 </Alert>
             </Snackbar>
-            <Grid container item direction="column" spacing={2} xs>
+            <Grid container direction="column" spacing={2}>
                 <Grid container item xs direction="row" spacing={2}>
                     <Grid item xs>
                         <CustomCard>
@@ -151,23 +153,21 @@ const GroupSwap: React.FC<any> = (props) => {
                     }
                 </Grid>
             </Grid>
-            <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
-                <Toolbar>
-                    {props.loading ? <Spinner/> : <SaveButton
-                        disabled={!(groupAId && groupAId > 0 && groupBId && groupBId > 0)} 
-                        onClick={() => { 
-                            props.swapGroups(
-                                groupAId, groupBId, 
-                                groupAAthletes.map((x:any) => x.id), 
-                                groupBAthletes.map((x:any) => x.id)
-                            ).then(() => {
-                                setSuccess(true)
-                            })
-                        }}>Guardar</SaveButton>
-                    }
-                </Toolbar>
-            </AppBar>
-        </Grid>
+            <BottomAppBar>
+                {props.loading ? <Spinner/> : <SaveButton
+                    disabled={!(groupAId && groupAId > 0 && groupBId && groupBId > 0)} 
+                    onClick={() => { 
+                        props.swapGroups(
+                            groupAId, groupBId, 
+                            groupAAthletes.map((x:any) => x.id), 
+                            groupBAthletes.map((x:any) => x.id)
+                        ).then(() => {
+                            setSuccess(true)
+                        })
+                    }}>Guardar</SaveButton>
+                }
+            </BottomAppBar>
+        </>
     )
 }
 

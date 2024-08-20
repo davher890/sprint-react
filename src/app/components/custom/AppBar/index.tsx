@@ -2,13 +2,14 @@ import React, { useState } from "react";
 
 import {
     AppBar,
-    Toolbar,
+    Avatar,
+    Grid,
     Menu,
     MenuItem,
-    IconButton,
-    Button,
-    Avatar,
-} from "@material-ui/core";
+    Toolbar,
+    Link,
+    Typography
+} from "@mui/material";
 
 import { Link as RouterLink } from "react-router-dom";
 
@@ -21,7 +22,11 @@ import {
     People,
     Assignment,
     Receipt,
-} from "@material-ui/icons";
+} from "@mui/icons-material";
+
+import Button from "../Button"
+
+import session from "../../../utils/Session";
 
 import { isManager, isAdmin, getUserId } from "../../../services/LoginService";
 
@@ -31,6 +36,7 @@ const CustomAppBar: React.FC = () => {
     const [listingsAnchorEl, setListingsAnchorEl] = useState<null | HTMLElement>(null);
     const [receiptsAnchorEl, setReceiptsAnchorEl] = useState<null | HTMLElement>(null);
     const [adminAnchorEl, setAdminAnchorEl] = useState<null | HTMLElement>(null);
+    const [profileAnchorEl, setProfileAnchorEl] = useState<null | HTMLElement>(null);
 
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, setAnchorEl: React.Dispatch<React.SetStateAction<null | HTMLElement>>) => {
         setAnchorEl(event.currentTarget);
@@ -40,187 +46,220 @@ const CustomAppBar: React.FC = () => {
         setAnchorEl(null);
     };
 
+    const logout = (e:any) => {
+        e.preventDefault()
+        handleMenuClose(setProfileAnchorEl)
+        session.clear()
+        window.open("/home", "_self")
+    }
+
     return (
         <AppBar position="static" color="primary">
             <Toolbar>
-                <Button
-                    component={RouterLink}
-                    to="/sport_schools/list"
-                    startIcon={<Business />}
-                >
-                    Escuelas
-                </Button>
-
-                <Button
-                    onClick={(event) =>
-                        handleMenuOpen(event, setAthletesAnchorEl)
-                    }
-                    startIcon={<People />}
-                    endIcon={<ArrowDropDown />}
-                >
-                    Atletas
-                </Button>
-                <Menu
-                    anchorEl={athletesAnchorEl}
-                    open={Boolean(athletesAnchorEl)}
-                    onClose={() => handleMenuClose(setAthletesAnchorEl)}
-                >
-                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setAthletesAnchorEl)} to="/athletes/list">
-                        Gestión
-                    </MenuItem>
-                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setAthletesAnchorEl)} to="/athletes/historic">
-                        Histórico
-                    </MenuItem>
-                </Menu>
-
-                <Button
-                    onClick={(event) =>
-                        handleMenuOpen(event, setGroupsAnchorEl)
-                    }
-                    startIcon={<FitnessCenter />}
-                    endIcon={<ArrowDropDown />}
-                >
-                    Grupos de entrenamiento
-                </Button>
-                <Menu
-                    anchorEl={groupsAnchorEl}
-                    open={Boolean(groupsAnchorEl)}
-                    onClose={() => handleMenuClose(setGroupsAnchorEl)}
-                >
-                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setGroupsAnchorEl)} to="/groups/list">
-                        Gestión
-                    </MenuItem>
-                    { (isAdmin() || isManager() ) && <MenuItem component={RouterLink} onClick={() => handleMenuClose(setGroupsAnchorEl)} to="/groups/swap">
-                        Intercambio Masivo
-                    </MenuItem>
-                    }
-                    { (isAdmin() || isManager() ) && <MenuItem component={RouterLink} onClick={() => handleMenuClose(setGroupsAnchorEl)} to="/schedules/list">
-                        Horarios
-                    </MenuItem>
-                    }
-                    { (isAdmin() || isManager() ) && <MenuItem component={RouterLink} onClick={() => handleMenuClose(setGroupsAnchorEl)} to="/trainers/list">
-                        Entrenadores
-                    </MenuItem>
-                    }
-                </Menu>
-
-                <Button
-                    onClick={(event) =>
-                        handleMenuOpen(event, setListingsAnchorEl)
-                    }
-                    startIcon={<Assignment />}
-                    endIcon={<ArrowDropDown />}
-                >
-                    Listados
-                </Button>
-                <Menu
-                    anchorEl={listingsAnchorEl}
-                    open={Boolean(listingsAnchorEl)}
-                    onClose={() => handleMenuClose(setListingsAnchorEl)}
-                >
-                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setListingsAnchorEl)} to="/groups/attendance">
-                        Asistencia
-                    </MenuItem>
-                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setListingsAnchorEl)} to="/groups/athletes">
-                        Atletas-Grupos
-                    </MenuItem>
-                    { (isAdmin() || isManager() ) && <MenuItem component={RouterLink} onClick={() => handleMenuClose(setListingsAnchorEl)} to="/licenses">
-                        Licencias
-                    </MenuItem>
-                    }
-                </Menu>
-
-                { (isAdmin() || isManager()) && (
-                    <>
+                <Grid container>
+                    <Grid container xs={2}alignItems="center" justifyContent="center" >
+                        <Typography variant="h6" component="div">
+                            <Link href="/home" underline="none" color="secondary">
+                                SCM
+                            </Link>
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={8}>
                         <Button
-                            onClick={(event) =>
-                                handleMenuOpen(event, setReceiptsAnchorEl)
+                            component={RouterLink}
+                            to="/sport_schools/list"
+                            startIcon={<Business />}
+                        >
+                            Escuelas
+                        </Button>
+
+                        <Button
+                            onClick={(event:any) =>
+                                handleMenuOpen(event, setAthletesAnchorEl)
                             }
-                            startIcon={<Receipt />}
+                            startIcon={<People />}
                             endIcon={<ArrowDropDown />}
                         >
-                            Recibos
+                            Atletas
                         </Button>
                         <Menu
-                            anchorEl={receiptsAnchorEl}
-                            open={Boolean(receiptsAnchorEl)}
-                            onClose={() => handleMenuClose(setReceiptsAnchorEl)}
+                            anchorEl={athletesAnchorEl}
+                            open={Boolean(athletesAnchorEl)}
+                            onClose={() => handleMenuClose(setAthletesAnchorEl)}
                         >
-                            <MenuItem component={RouterLink} onClick={() => handleMenuClose(setReceiptsAnchorEl)} to="/receipts/list">
-                                Remesas
+                            <MenuItem component={RouterLink} onClick={() => handleMenuClose(setAthletesAnchorEl)} to="/athletes/list">
+                                Gestión
                             </MenuItem>
-                            <MenuItem
-                                component={RouterLink}
-                                onClick={() => handleMenuClose(setReceiptsAnchorEl)}
-                                to="/receipts/returned/list"
-                            >
-                                Recibos devueltos
-                            </MenuItem>
-                            <MenuItem
-                                component={RouterLink}
-                                onClick={() => handleMenuClose(setReceiptsAnchorEl)}
-                                to="/receipts/not_paid/list"
-                            >
-                                Recibos no pagados
+                            <MenuItem component={RouterLink} onClick={() => handleMenuClose(setAthletesAnchorEl)} to="/athletes/historic">
+                                Histórico
                             </MenuItem>
                         </Menu>
-                    </>
-                )
-                }
 
-                <Button
-                    component={RouterLink}
-                    to="/incidences/list"
-                    startIcon={<Sports />}
-                >
-                    Incidencias
-                </Button>
-
-                { (isAdmin() || isManager()) && (
-                    <>
                         <Button
-                            onClick={(event) =>
-                                handleMenuOpen(event, setAdminAnchorEl)
+                            onClick={(event:any) =>
+                                handleMenuOpen(event, setGroupsAnchorEl)
                             }
-                            startIcon={<Receipt />}
+                            startIcon={<FitnessCenter />}
                             endIcon={<ArrowDropDown />}
                         >
-                            Admin
+                            Grupos de entrenamiento
                         </Button>
                         <Menu
-                            anchorEl={adminAnchorEl}
-                            open={Boolean(adminAnchorEl)}
-                            onClose={() => handleMenuClose(setAdminAnchorEl)}
+                            anchorEl={groupsAnchorEl}
+                            open={Boolean(groupsAnchorEl)}
+                            onClose={() => handleMenuClose(setGroupsAnchorEl)}
                         >
-                            <MenuItem
-                                component={RouterLink}
-                                onClick={() => handleMenuClose(setAdminAnchorEl)}
-                                to="/admin/users/list"
-                            >
-                                Usuarios
+                            <MenuItem component={RouterLink} onClick={() => handleMenuClose(setGroupsAnchorEl)} to="/groups/list">
+                                Gestión
                             </MenuItem>
-                            { isAdmin() && 
-                                <MenuItem
-                                    component={RouterLink}
-                                    onClick={() => handleMenuClose(setAdminAnchorEl)}
-                                    to="/admin/athletes_by_date"
+                            { (isAdmin() || isManager() ) && <MenuItem component={RouterLink} onClick={() => handleMenuClose(setGroupsAnchorEl)} to="/groups/swap">
+                                Intercambio Masivo
+                            </MenuItem>
+                            }
+                            { (isAdmin() || isManager() ) && <MenuItem component={RouterLink} onClick={() => handleMenuClose(setGroupsAnchorEl)} to="/schedules/list">
+                                Horarios
+                            </MenuItem>
+                            }
+                            { (isAdmin() || isManager() ) && <MenuItem component={RouterLink} onClick={() => handleMenuClose(setGroupsAnchorEl)} to="/trainers/list">
+                                Entrenadores
+                            </MenuItem>
+                            }
+                        </Menu>
+
+                        <Button
+                            color="secondary"
+                            onClick={(event:any) =>
+                                handleMenuOpen(event, setListingsAnchorEl)
+                            }
+                            startIcon={<Assignment />}
+                            endIcon={<ArrowDropDown />}
+                        >
+                            Listados
+                        </Button>
+                        <Menu
+                            anchorEl={listingsAnchorEl}
+                            open={Boolean(listingsAnchorEl)}
+                            onClose={() => handleMenuClose(setListingsAnchorEl)}
+                        >
+                            <MenuItem component={RouterLink} onClick={() => handleMenuClose(setListingsAnchorEl)} to="/groups/attendance">
+                                Asistencia
+                            </MenuItem>
+                            <MenuItem component={RouterLink} onClick={() => handleMenuClose(setListingsAnchorEl)} to="/groups/athletes">
+                                Atletas-Grupos
+                            </MenuItem>
+                            { (isAdmin() || isManager() ) && <MenuItem component={RouterLink} onClick={() => handleMenuClose(setListingsAnchorEl)} to="/licenses">
+                                Licencias
+                            </MenuItem>
+                            }
+                        </Menu>
+
+                        { (isAdmin() || isManager()) && (
+                            <>
+                                <Button
+                                    color="secondary"
+                                    onClick={(event:any) =>
+                                        handleMenuOpen(event, setReceiptsAnchorEl)
+                                    }
+                                    startIcon={<Receipt />}
+                                    endIcon={<ArrowDropDown />}
                                 >
-                                    Usuarios / dia
-                                </MenuItem>
-                            }
-                        </Menu>
-                    </>
-                )
-                }
+                                    Recibos
+                                </Button>
+                                <Menu
+                                    anchorEl={receiptsAnchorEl}
+                                    open={Boolean(receiptsAnchorEl)}
+                                    onClose={() => handleMenuClose(setReceiptsAnchorEl)}
+                                >
+                                    <MenuItem component={RouterLink} onClick={() => handleMenuClose(setReceiptsAnchorEl)} to="/receipts/list">
+                                        Remesas
+                                    </MenuItem>
+                                    <MenuItem
+                                        component={RouterLink}
+                                        onClick={() => handleMenuClose(setReceiptsAnchorEl)}
+                                        to="/receipts/returned/list"
+                                    >
+                                        Recibos devueltos
+                                    </MenuItem>
+                                    <MenuItem
+                                        component={RouterLink}
+                                        onClick={() => handleMenuClose(setReceiptsAnchorEl)}
+                                        to="/receipts/not_paid/list"
+                                    >
+                                        Recibos no pagados
+                                    </MenuItem>
+                                </Menu>
+                            </>
+                        )
+                        }
 
-                <IconButton
-                    component={RouterLink}
-                    to={"/users/" + getUserId()}
-                >
-                    <Avatar>
-                        <AccountCircle />
-                    </Avatar>
-                </IconButton>
+                        <Button
+                            component={RouterLink}
+                            to="/incidences/list"
+                            startIcon={<Sports />}
+                        >
+                            Incidencias
+                        </Button>
+
+                        { (isAdmin() || isManager()) && (
+                            <>
+                                <Button
+                                    onClick={(event:any) =>
+                                        handleMenuOpen(event, setAdminAnchorEl)
+                                    }
+                                    startIcon={<Receipt />}
+                                    endIcon={<ArrowDropDown />}
+                                >
+                                    Admin
+                                </Button>
+                                <Menu
+                                    anchorEl={adminAnchorEl}
+                                    open={Boolean(adminAnchorEl)}
+                                    onClose={() => handleMenuClose(setAdminAnchorEl)}
+                                >
+                                    <MenuItem
+                                        component={RouterLink}
+                                        onClick={() => handleMenuClose(setAdminAnchorEl)}
+                                        to="/admin/users/list"
+                                    >
+                                        Usuarios
+                                    </MenuItem>
+                                    { isAdmin() && 
+                                        <MenuItem
+                                            component={RouterLink}
+                                            onClick={() => handleMenuClose(setAdminAnchorEl)}
+                                            to="/admin/athletes_by_date"
+                                        >
+                                            Usuarios / dia
+                                        </MenuItem>
+                                    }
+                                </Menu>
+                            </>
+                        )
+                        }
+                    </Grid>
+
+                    <Grid container item xs justifyContent="flex-end">
+                        <Avatar
+                            onClick={(event:any) =>
+                                handleMenuOpen(event, setProfileAnchorEl)
+                            }
+                        >
+                            <AccountCircle />
+                        </Avatar>
+                        <Menu
+                            anchorEl={profileAnchorEl}
+                            open={Boolean(profileAnchorEl)}
+                            onClose={() => handleMenuClose(setProfileAnchorEl)}
+                        >
+                            <MenuItem onClick={logout}>
+                                Log out
+                            </MenuItem>
+                            <MenuItem component={RouterLink} onClick={() => handleMenuClose(setProfileAnchorEl)} to={"/users/" + getUserId()}>
+                                Profile
+                            </MenuItem>
+                        </Menu>
+                    </Grid>
+                </Grid>
             </Toolbar>
         </AppBar>
     );

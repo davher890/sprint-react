@@ -5,10 +5,10 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import utils from "../../utils/Functions"
 import { Formik } from 'formik';
 
-import { CardHeader, Grid, AppBar, Toolbar, Snackbar, Typography, Box, Checkbox, Button, Modal } from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { CardHeader, Grid, Snackbar, Typography, Box, Checkbox } from '@mui/material';
+import { Alert, AlertTitle } from '@mui/lab';
 
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
 import CustomCard from '../../components/custom/Card'
 import DateField from '../../components/custom/DateField'
@@ -16,9 +16,11 @@ import GroupScheduleSelect from '../../components/custom/GroupScheduleSelect'
 import FeeTypeSelect from '../../components/custom/FeeTypeSelect'
 import SportSchoolSelect from '../../components/custom/SportSchoolSelect'
 import SaveButton from '../../components/custom/SaveButton'
+import Button from '../../components/custom/Button'
 import ReturnButton from '../../components/custom/ReturnButton'
 import DeleteButton from "../../components/custom/DeleteButton";
 import ConfirmDialog from "../../components/custom/ConfirmDialog";
+import BottomAppBar from "../../components/custom/BottomAppBar";
 
 import Select from '../../components/custom/Select'
 import TextField from '../../components/custom/TextField'
@@ -30,8 +32,7 @@ import AthletesList from '../../components/custom/Athletes/AthletesList'
 import AthleteFamilyData from '../../components/athletes/AthleteFamilyData'
 import AthletesObservations from '../../components/athletes/AthleteObservations'
 import AthleteReceipts from '../../components/athletes/AthleteReceipts'
-
-import AthleteSportdata from './AthleteSportdata'
+import AthleteSportdata from '../../components/athletes/AthleteSportdata'
 
 // Redux
 import { connect } from "react-redux";
@@ -46,7 +47,7 @@ const CreateAthlete: React.FC<any> = (props) => {
 
     const getAthlete = (props:any) => { 
         if (!isNewAthlete()) {
-            if (props.searchParams, props.searchParams.get('code')){
+            if (props.searchParams && props.searchParams.get('code')){
                 let code = props.searchParams.get('code')
                 props.getAthleteByCode(code)
             }
@@ -445,7 +446,7 @@ const CreateAthlete: React.FC<any> = (props) => {
                         </DialogActions>
                     </Dialog>
                     
-                    <Box paddingBottom={7}>
+                    <Box paddingBottom={10}>
                         <Grid container spacing={3}>
                             <Grid container item spacing={3}>
                                 <Grid container item spacing={1}>
@@ -704,15 +705,17 @@ const CreateAthlete: React.FC<any> = (props) => {
                                 <Grid container item spacing={2}>
                                     <Grid item xs>
                                         <CustomCard title="Datos Familiares">
-                                            <Grid container item direction="column" spacing={2}>
-                                                <Grid container alignItems="flex-start">
-                                                    <Typography color="textSecondary">Familiar 1</Typography>
-                                                    { (isManager() || isAdmin()) && <Button style={{maxWidth: '30%'}} onClick={() => {
+                                            <Grid container item xs direction="column" spacing={2}>
+                                                <Grid container item xs alignItems="flex-start">
+                                                    <Grid item xs>
+                                                        <Typography color="textSecondary">Familiar 1</Typography>
+                                                    </Grid>
+                                                    { (isManager() || isAdmin()) && <Grid item xs><Button fullWidth style={{maxWidth: '90%'}} onClick={() => {
                                                         setFieldValue('holderName', values.familiarOneName)
                                                         setFieldValue('holderFirstSurname', values.familiarOneFirstSurname)
                                                         setFieldValue('holderSecondSurname', values.familiarOneSecondSurname)
                                                         setFieldValue('holderDni', values.familiarOneDni)
-                                                    }}>Titular de la cuenta</Button>
+                                                    }}>Titular de la cuenta</Button></Grid>
                                                     }
                                                 </Grid>
                                                 <AthleteFamilyData key={`familiar-one-${values.id}`} name={values.familiarOneName} firstSurname={values.familiarOneFirstSurname} secondSurname={values.familiarOneSecondSurname}
@@ -729,14 +732,16 @@ const CreateAthlete: React.FC<any> = (props) => {
                                                         setFieldValue('familiarOne' + p.name, p.value)
                                                     }}
                                                 />
-                                                <Grid container alignItems="flex-start">
-                                                    <Typography color="textSecondary">Familiar 2</Typography>
-                                                    { (isManager() || isAdmin()) && <Button style={{maxWidth: '30%'}} onClick={() => {
+                                                <Grid container item xs alignItems="flex-start">
+                                                    <Grid item xs>
+                                                        <Typography color="textSecondary">Familiar 2</Typography>
+                                                    </Grid>
+                                                    { (isManager() || isAdmin()) && <Grid item xs><Button fullWidth style={{maxWidth: '90%'}} onClick={() => {
                                                         setFieldValue('holderName', values.familiarTwoName)
                                                         setFieldValue('holderFirstSurname', values.familiarTwoFirstSurname)
                                                         setFieldValue('holderSecondSurname', values.familiarTwoSecondSurname)
                                                         setFieldValue('holderDni', values.familiarTwoDni)
-                                                    }}>Titular de la cuenta</Button>
+                                                    }}>Titular de la cuenta</Button></Grid>
                                                     }
                                                 </Grid>
                                                 <AthleteFamilyData key={`familiar-two-${values.id}`} name={values.familiarTwoName} firstSurname={values.familiarTwoFirstSurname} secondSurname={values.familiarTwoSecondSurname}
@@ -842,24 +847,28 @@ const CreateAthlete: React.FC<any> = (props) => {
                                             <Grid container spacing={1} direction="column">
                                                 <Grid container item xs spacing={1}>
                                                     <Grid item xs={2}>
-                                                        <Select fullWidth name="category" label="Categoría"
+                                                        <TextField fullWidth name="category" label="Categoría" value={values.category} 
+                                                            disabled={true} />
+                                                        {/* <Select fullWidth name="category" label="Categoría"
                                                             disabled={!(isManager() || isAdmin())}
                                                             options={utils.getCategories()} 
                                                             value={values.category}
                                                             onChange={(e: any, value: any) => {
                                                                 setFieldValue('category', value ? value.id : "")
                                                             }}
-                                                        />
+                                                        /> */}
                                                     </Grid>
                                                     <Grid item xs={2}>
-                                                        <Select fullWidth name="nextCategory" label="Siguiente categoría"
+                                                        {/* <Select fullWidth name="nextCategory" label="Siguiente categoría"
                                                             disabled={!(isManager() || isAdmin())}
                                                             options={utils.getCategories()} 
                                                             value={values.nextCategory}
                                                             onChange={(e: any, value: any) => {
                                                                 setFieldValue('nextCategory', value ? value.id : "")
                                                             }}
-                                                        />
+                                                        /> */}
+                                                        <TextField fullWidth name="nextCategory" label="Siguiente categoría" value={values.nextCategory} 
+                                                            disabled={true} />
                                                     </Grid>
                                                     <Grid item xs={2}>
                                                         <Select fullWidth name="dorsalCategory" label="Categoría dorsal"
@@ -971,22 +980,20 @@ const CreateAthlete: React.FC<any> = (props) => {
                         </Grid>
                     </Box>
                     { (isAdmin() || isManager()) && 
-                        <AppBar position="fixed" style={{ bottom: 0, top: 'auto' }}>
-                            <Toolbar>
-                                { props.loading ? <Spinner/> : <>
-                                    <SaveButton type="submit" disabled={isSubmitting}
-                                            onClick={() => {
-                                                setFieldValue('exit', true)
-                                                return false;
-                                            }}
-                                        >Guardar y salir</SaveButton>
-                                    <SaveButton type="submit" disabled={isSubmitting}>Guardar y continuar</SaveButton>
-                                    {props.id ? <DeleteButton onClick={() => setFieldValue("openDeleteDialog", true)}/> : null }
-                                    <ReturnButton onClick={() => window.open("/athletes/list", "_self")}/>
-                                </>
-                                }
-                            </Toolbar>
-                        </AppBar>
+                        <BottomAppBar>
+                            { props.loading ? <Spinner/> : <>
+                                <SaveButton type="submit" disabled={isSubmitting}
+                                        onClick={() => {
+                                            setFieldValue('exit', true)
+                                            return false;
+                                        }}
+                                    >Guardar y salir</SaveButton>
+                                <SaveButton type="submit" disabled={isSubmitting}>Guardar y continuar</SaveButton>
+                                {props.id ? <DeleteButton onClick={() => setFieldValue("openDeleteDialog", true)}/> : null }
+                                <ReturnButton onClick={() => window.open("/athletes/list", "_self")}/>
+                            </>
+                            }
+                        </BottomAppBar>
                     }
                 </form>
             )}}

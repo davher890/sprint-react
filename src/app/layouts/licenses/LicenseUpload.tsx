@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 
-import { Grid } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
+import { Grid } from '@mui/material'
+import { Alert } from '@mui/lab'
 
 import Spinner from '../../components/custom/Spinner'
 

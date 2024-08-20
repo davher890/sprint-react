@@ -53,7 +53,6 @@ function receiptAthleteDataConversor(d: any) {
         secondSurname : d.secondSurname || '', 
         lastRegisterDate: d.lastRegisterDate ? new Intl.DateTimeFormat('sq-AL').format(new Date(d.lastRegisterDate)) : '',
         
-        category: functions?.getCategories().find(c => c.id === d.category)?.name,
         licenseType: d.licenseType && d.licenseType === 'NATIONAL' ? 'Nacional' : 'Territorial',
         dorsalCategory: functions?.getDorsalCategories().find(c => c.id === d.dorsalCategory)?.name,
         
@@ -74,7 +73,6 @@ function athleteDataConversor(d: any) {
             secondSurname : d.secondSurname || '', 
             birthDate: new Intl.DateTimeFormat('sq-AL').format(new Date(d.birthDate)), 
             gender: d.gender === 'male' ? 'Masculino' : 'Femenino',
-            category: functions?.getCategories().find(c => c.id === d.category)?.name,
             dorsalCategory: functions?.getDorsalCategories().find(c => c.id === d.dorsalCategory)?.name,
             paymentType: functions.getPaymentTypes().find(st => st.id === d.paymentType)?.name,
             feeTypeId: d.feeTypeName,
@@ -111,7 +109,6 @@ function userDataConversor(d: { id: number, username: string, email: string, adm
 function sportDataConversor(d: any){
     return {
         ...d,
-        category: functions?.getCategories().find(c => c.id === d.category)?.name
     }
 }
 

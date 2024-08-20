@@ -1,11 +1,13 @@
 import * as React from "react";
-import { TextField } from '@material-ui/core';
+import { TextField } from '@mui/material';
 
 const CustomTextField: React.FC<any> = (props) => (
 
     <TextField 
 
         {...props}
+
+        variant='standard'
         
         InputLabelProps={{
             ...props.InputLabelProps,

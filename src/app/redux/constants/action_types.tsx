@@ -85,6 +85,7 @@ export const GET_FAMILY = "GET_FAMILY";
 
 export const DELETE_SPORTDATA = "DELETE_SPORTDATA";
 
+export const LOGIN = "LOGIN";
 export const SIGNUP = "SIGNUP";
 
 export const API_CALL = "API_CALL";

@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { Container, Grid } from '@material-ui/core';
+import { Container, Grid } from '@mui/material';
 
 import Table from "../../components/custom/Table";
 
@@ -8,43 +8,35 @@ import { connect } from "react-redux";
 import { getFamilyTable } from "../../redux/actions/families/index";
 import Utils from "../../utils/TableUtils";
 
-class FamilyTable extends React.Component<any, any> {
-    constructor(props: any) {
-        super(props);
-        this.state = {
-        	columns : Utils.getFamilyColumns()
-        }
-    }
+const FamilyTable: React.FC<any> = (props) => {
 
-	componentDidMount() {
-		this.props.getFamilyTable();
-	}
+	React.useEffect(() => {
+		props.getFamilyTable();
+	}, [])
 
-	render() {
-		return (
-			<Container fixed>
-				<React.Suspense fallback={<div>Cargando...</div>}>
-					<Grid container direction="column">
-						<Grid item xs>
-							<Table 
-								data={this.props.table_data}
-								page={this.props.page}
-								size={this.props.size}
-								total={this.props.total}
-								columns={this.state.columns} 
-								onPaginationFilterChange={(page: number, size: number, filters:any) => {
-									this.props.getFamilyTable(page, size, filters);
-								}}
-								onRowClick={(id: number) => {
-									window.open("/families/" + id, "_self");
-								}}
-							/>
-						</Grid>
+	return (
+		<Container fixed>
+			<React.Suspense fallback={<div>Cargando...</div>}>
+				<Grid container direction="column">
+					<Grid item xs>
+						<Table 
+							data={props.table_data}
+							page={props.page}
+							size={props.size}
+							total={props.total}
+							columns={Utils.getFamilyColumns()} 
+							onPaginationFilterChange={(page: number, size: number, filters:any) => {
+								props.getFamilyTable(page, size, filters);
+							}}
+							onRowClick={(id: number) => {
+								window.open("/families/" + id, "_self");
+							}}
+						/>
 					</Grid>
-				</React.Suspense>
-			</Container>
-		)
-	}
+				</Grid>
+			</React.Suspense>
+		</Container>
+	)
 }
 
 function mapStateToProps(state: any) {
