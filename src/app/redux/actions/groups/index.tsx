@@ -2,7 +2,7 @@ import * as ACTION_TYPES from "../../constants/action_types";
 
 import { Order } from '../../../types/order'
 
-import { findGroupSchedules, downloadGroupSchedulesExcel, addData, findById, findGroupAttendance, deleteGroup, findGroupAthletes, swapGroupsAthletes, swapGroupAthletes } from "../../../services/GroupService"
+import { findGroupSchedules, downloadGroupSchedulesExcel, addData, findById, findGroupAttendance, deleteGroup, findGroupAthletes, swapGroupsAthletes, swapGroupAthletes, sendGroupCommunication } from "../../../services/GroupService"
 import { findGroupDataPagination, findGroupAthletesDataPagination } from "../../../services/TableService"
 
 export function getGroupTable(page: number, size: number, filters: any, sort: string='name', sortDirection: Order='asc') {
@@ -72,6 +72,14 @@ export function removeGroup(id: number) {
     return function (dispatch: any)  {
         return deleteGroup(id).then(json => {
             dispatch({ type: ACTION_TYPES.DELETE_GROUP, payload: json });
+        });
+    }
+}
+
+export function groupCommunication(id: number, subject: string, body: string) {
+    return function (dispatch: any)  {
+        return sendGroupCommunication(id, subject, body).then(json => {
+            dispatch({ type: ACTION_TYPES.SEND_GROUP_COMMUNICATION, payload: json });
         });
     }
 }

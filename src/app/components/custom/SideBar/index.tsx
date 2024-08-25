@@ -7,14 +7,15 @@ import { styled } from '@mui/material/styles';
 
 import {
     AccountCircle,
+    Assignment,
+    Business,
     ExitToApp,
     ExpandLess,
     ExpandMore,
-    Business,
     FitnessCenter,
-    Sports,
+    Message,
     People,
-    Assignment,
+    Sports,
     Receipt,
 } from "@mui/icons-material";
 
@@ -151,6 +152,12 @@ const Sidebar: React.FC = () => {
                         <Sports />
                     </ListItemIcon>
                     <ListItemText primary="Incidencias" />
+                </ListItem>
+                <ListItem component={Link} to="/communication">
+                    <ListItemIcon>
+                        <Message />
+                    </ListItemIcon>
+                    <ListItemText primary="Comunicacion" />
                 </ListItem>
                 { (isAdmin() || isManager()) && <>
                     <ListItem onClick={() => handleClick(adminOpen, setAdminOpen)}>

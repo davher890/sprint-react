@@ -29,6 +29,10 @@ export const deleteGroup = (id: number) => {
     return deleteRequest("/groups/" + id)
 }
 
+export const sendGroupCommunication = (id: number, subject: string, body: string) => {
+    return postRequest("/groups/" + id + "/communication", { subject, body })
+}
+
 export const downloadGroupSchedulesExcel = (groupId: number, scheduleIds: number[], columns: any, filters:any) => {
     let endpoint = "/groups/" + groupId + "/schedules/" + scheduleIds.join(",") + "/athletes/excel"
     let filtersParams = '';

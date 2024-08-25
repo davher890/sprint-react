@@ -8,7 +8,16 @@ import { Grid } from '@mui/material';
 import { connect } from "react-redux";
 import { getSportSchoolGroups } from "../../../redux/actions/sportSchools";
 
-const GroupSelect: React.FC<any> = (props) => {
+interface Props {
+    sportSchoolId: number;
+    groupId: number;
+    onChange?: any;
+    getSportSchoolGroups: any;
+    groups: any[];
+    disabled?: boolean;
+  }
+
+const GroupSelect: React.FC<Props> = (props) => {
 
     React.useEffect(() => {
         if (props.sportSchoolId){
@@ -23,7 +32,7 @@ const GroupSelect: React.FC<any> = (props) => {
     }
 
     const getGroups = (specialization: boolean) =>{
-        return props.groups.filter((gr: any) => {
+        return props.groups?.filter((gr: any) => {
             return gr.specialization === specialization
         })
     }

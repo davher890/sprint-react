@@ -52,7 +52,8 @@ import AdminProtected from "./components/custom/AdminProtected";
 import ReturnedReceiptTable from "./layouts/receipts/ReturnedReceiptTable";
 import NotPaidReceiptTable from "./layouts/receipts/NotPaidReceiptTable";
 import { ReactElement } from "react";
-import { Pageview } from '@mui/icons-material';
+import Communication from './layouts/communication';
+import PageView from './components/pageview';
 
 type CustomRouteProps = {
   admin: boolean, 
@@ -151,6 +152,7 @@ const pathArray: any[] = [
   { path:"/groups/list", admin:false, authenticated:true, isPublic: false, component:<GroupTable/> },
   { path:"/groups/:id", admin:false, authenticated:true, isPublic: false, component:<GroupData/> },
   { path:"/groups", admin:false, authenticated:true, isPublic: false, component:<GroupData/> },
+  { path:"/communication", admin:false, authenticated:true, isPublic: false, component:<Communication/> },
   { path:"/schedules/list", admin:false, authenticated:true, isPublic: false, component:<ScheduleTable/> },
   { path:"/schedules/:id", admin:false, authenticated:true, isPublic: false, component:<ScheduleData/> },
   { path:"/schedules", admin:false, authenticated:true, isPublic: false, component:<ScheduleData/> },
@@ -173,7 +175,7 @@ const AppBar: React.FC<any> = () => {
 
   return (
     <Router>
-        <Pageview/>
+        <PageView/>
         <Routes>
           { pathArray.map(e => { return getRouteFromJson(e) })}
         </Routes>
