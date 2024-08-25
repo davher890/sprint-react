@@ -51,7 +51,8 @@ import AuthenticatedProtected from "./components/custom/AuthenticatedProtected";
 import AdminProtected from "./components/custom/AdminProtected";
 import ReturnedReceiptTable from "./layouts/receipts/ReturnedReceiptTable";
 import NotPaidReceiptTable from "./layouts/receipts/NotPaidReceiptTable";
-import { ReactElement, ReactNode } from "react";
+import { ReactElement } from "react";
+import { Pageview } from '@mui/icons-material';
 
 type CustomRouteProps = {
   admin: boolean, 
@@ -93,7 +94,7 @@ const getRouteFromJson = ({admin, authenticated, path, component, isPublic}: Cus
               overflow: 'auto'
             }}
           >
-            <Box m="2%">
+            <Box m="1%">
               {component}
             </Box>
           </Box>
@@ -101,12 +102,25 @@ const getRouteFromJson = ({admin, authenticated, path, component, isPublic}: Cus
       }
     </>)
 
+    
+  const getAuthElement = () => {
+
+    if (!authenticated) {
+      return element
+    }
+    else {
+      if (admin){
+        return <AdminProtected><AuthenticatedProtected>{element}</AuthenticatedProtected></AdminProtected>
+      }
+      else {
+        return <AuthenticatedProtected>{element}</AuthenticatedProtected>
+      }
+    }
+  }
+
   return <Route 
         path={path}
-        element={ element
-          // !authenticated ? {element} :
-          // !admin ? <AuthenticatedProtected>{element}</AuthenticatedProtected> : <AdminProtected><AuthenticatedProtected>{element}</AuthenticatedProtected></AdminProtected> 
-        }
+        element={getAuthElement()}
     />
 }
 
@@ -159,6 +173,7 @@ const AppBar: React.FC<any> = () => {
 
   return (
     <Router>
+        <Pageview/>
         <Routes>
           { pathArray.map(e => { return getRouteFromJson(e) })}
         </Routes>
