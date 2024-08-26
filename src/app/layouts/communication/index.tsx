@@ -47,7 +47,6 @@ const Communication: React.FC<Props> = (props) => {
                     <Grid item xs>
                         <CustomCard>
                             <Grid container direction="column" spacing={3}>
-                                <Grid container item spacing={1}>
                                     <Grid item xs>
                                         <SportSchoolSelect sportSchoolId={sportSchoolId}
                                             onChange={(sportSchoolId: number) => {
@@ -67,35 +66,34 @@ const Communication: React.FC<Props> = (props) => {
                                             // }}
                                         />
                                     </Grid>
+                                <Grid container item xs>
+                                    <AthletesList athletes={props.group_athletes}/>
                                 </Grid>
-                            </Grid>
-                            <Grid container item xs>
-                                <AthletesList athletes={props.group_athletes}/>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    fullWidth
-                                    label="Asunto"
-                                    value={subject}
-                                    onChange={(e:any) => setSubject(e.target.value)}
-                                    required
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    fullWidth
-                                    label="Mensaje"
-                                    value={body}
-                                    onChange={(e:any) => setBody(e.target.value)}
-                                    multiline
-                                    rows={4}
-                                    required
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Button type="submit" variant="contained" color="primary" fullWidth>
-                                Enviar Correo
-                                </Button>
+                                <Grid item xs>
+                                    <TextField
+                                        fullWidth
+                                        label="Asunto"
+                                        value={subject}
+                                        onChange={(e:any) => setSubject(e.target.value)}
+                                        required
+                                    />
+                                </Grid>
+                                <Grid item xs>
+                                    <TextField
+                                        fullWidth
+                                        label="Mensaje"
+                                        value={body}
+                                        onChange={(e:any) => setBody(e.target.value)}
+                                        multiline
+                                        rows={4}
+                                        required
+                                    />
+                                </Grid>
+                                <Grid item xs>
+                                    <Button type="submit" variant="contained" color="primary" fullWidth>
+                                    Enviar Correo
+                                    </Button>
+                                </Grid>
                             </Grid>
                         </CustomCard>
                     </Grid>

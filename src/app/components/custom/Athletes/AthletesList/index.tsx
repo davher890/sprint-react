@@ -2,13 +2,24 @@ import React from 'react'
 import { Grid, Button } from '@mui/material';
 import SearchButton from '../../../custom/SearchButton'
 
-import { Table, TableBody, TableHead, TableRow, TableCell, TableContainer } from '@mui/material';
+import { Table, TableBody, TableHead, TableRow, TableCell, TableContainer, tableCellClasses } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 interface Props {
     athletes: any[];
     onSelectFamily?: any;
     onSelectAthlete?: any
 }
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.secondary.main,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
 
 const AthletesList: React.FC<Props> = (props) => {
 
@@ -24,19 +35,19 @@ const AthletesList: React.FC<Props> = (props) => {
                 <TableContainer><Table stickyHeader>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Nombre</TableCell>
-                            <TableCell>Primer Apellido</TableCell>
-                            <TableCell>Segundo Apellido</TableCell>   
-                            <TableCell>Email</TableCell>   
-                            <TableCell>Código Atleta</TableCell>
-                            <TableCell>Código Familia</TableCell>
-                            <TableCell>Teléfono 1</TableCell>
-                            <TableCell>Teléfono 2</TableCell>
-                            <TableCell>Teléfono 3</TableCell>
-                            <TableCell>Fam 1. Email </TableCell>
-                            <TableCell>Fam 2. Email </TableCell>
-                            { props.onSelectFamily ? <TableCell></TableCell> : null }
-                            { props.onSelectAthlete ? <TableCell></TableCell> : null }
+                            <StyledTableCell>Nombre</StyledTableCell>
+                            <StyledTableCell>Primer Apellido</StyledTableCell>
+                            <StyledTableCell>Segundo Apellido</StyledTableCell>   
+                            <StyledTableCell>Email</StyledTableCell>   
+                            <StyledTableCell>Código Atleta</StyledTableCell>
+                            <StyledTableCell>Código Familia</StyledTableCell>
+                            <StyledTableCell>Teléfono 1</StyledTableCell>
+                            <StyledTableCell>Teléfono 2</StyledTableCell>
+                            <StyledTableCell>Teléfono 3</StyledTableCell>
+                            <StyledTableCell>Fam 1. Email </StyledTableCell>
+                            <StyledTableCell>Fam 2. Email </StyledTableCell>
+                            { props.onSelectFamily ? <StyledTableCell></StyledTableCell> : null }
+                            { props.onSelectAthlete ? <StyledTableCell></StyledTableCell> : null }
                         </TableRow>
                     </TableHead>
                     <TableBody>

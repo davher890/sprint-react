@@ -34,7 +34,7 @@ const features: FeatureProps[] = [
   { title: 'Gestión de Atletas', desc: 'Rastrea y gestiona los perfiles y el rendimiento de los atletas.' },
   { title: 'Gestión de Grupos', desc: 'Crea y gestiona grupos de entrenamiento sin problemas.' },
   { title: 'Gestión de Entrenadores', desc: 'Asigna entrenadores a grupos y gestiona horarios.' },
-  { title: 'Recibos y Facturación', desc: 'Maneja todas las transacciones financieras sin esfuerzo.' },
+  { title: 'Recibos y Facturación', desc: 'Gestiona los recibos sin esfuerzo.' },
 ];
 
 const steps: StepProps[] = [
@@ -47,7 +47,7 @@ const steps: StepProps[] = [
 const benefits: BenefitsProps[] = [
   { title: 'Ahorro de Tiempo', desc: 'Automatiza tareas repetitivas y reduce la carga administrativa.' },
   { title: 'Accesibilidad', desc: 'Accede a tu información desde cualquier lugar y en cualquier momento.' },
-  { title: 'Colaboración Mejorada', desc: 'Facilita la comunicación y colaboración entre entrenadores y atletas.' },
+  { title: 'Colaboración Mejorada', desc: 'Facilita la comunicación entre entrenadores, atletas y administradores.' },
   { title: 'Informes Detallados', desc: 'Obtén informes detallados sobre el rendimiento de tus atletas y la gestión del club.' },
   { title: 'Seguridad de Datos', desc: 'Mantén tus datos seguros con medidas de seguridad avanzadas.' }
 ];

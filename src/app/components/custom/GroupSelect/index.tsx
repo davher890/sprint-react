@@ -22,6 +22,7 @@ const GroupSelect: React.FC<Props> = (props) => {
     React.useEffect(() => {
         if (props.sportSchoolId){
             props.getSportSchoolGroups(props.sportSchoolId)
+            
         }
     }, [props.sportSchoolId])
 
@@ -38,8 +39,9 @@ const GroupSelect: React.FC<Props> = (props) => {
     }
     
     return (
-        <Grid container direction="row" spacing={3}>
+        <Grid container direction="row" spacing={3} style={{textAlign: "center"}}>
             { props.sportSchoolId > 0 && <>
+                { getGroups(true) && getGroups(true).length > 0 && 
                 <Grid item xs>
                     <RadioList title="Especialización"
                         disabled={props.disabled || false}
@@ -50,7 +52,8 @@ const GroupSelect: React.FC<Props> = (props) => {
                         }}
                     />
                 </Grid>
-                <Grid item xs>
+                }
+                { getGroups(false) && getGroups(false).length > 0 && <Grid item xs>
                     <RadioList title="No especialización"
                         disabled={props.disabled || false}
                         options={getGroups(false)}
@@ -60,6 +63,7 @@ const GroupSelect: React.FC<Props> = (props) => {
                         }}
                     />
                 </Grid>
+                }
             </>
             }
         </Grid>

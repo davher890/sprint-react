@@ -5,6 +5,9 @@ import { Formik } from 'formik';
 import { Grid, Snackbar, Checkbox, AppBar, Box } from "@mui/material";
 import { Alert, AlertTitle } from '@mui/lab';
 
+import { connect } from "react-redux";
+import { useParams } from 'react-router-dom';
+
 import TextField from '../../components/custom/TextField';
 import SaveButton from '../../components/custom/SaveButton'
 import DeleteButton from '../../components/custom/DeleteButton'
@@ -12,15 +15,14 @@ import Card from '../../components/custom/Card'
 import ScheduleSelect from '../../components/custom/ScheduleSelect'
 import Spinner from '../../components/custom/Spinner'
 import BottomAppBar from "../../components/custom/BottomAppBar";
-
-import { connect } from "react-redux";
-import { useParams } from 'react-router-dom';
-
-import { addGroup, getGroup, removeGroup } from "../../redux/actions/groups";
-import { getSchedules } from "../../redux/actions/schedules";
 import TrainerSelect from "../../components/custom/TrainerSelect";
 import SportSchoolSelect from "../../components/custom/SportSchoolSelect";
 import ConfirmDialog from "../../components/custom/ConfirmDialog";
+import AthletesList from "../../components/custom/Athletes/AthletesList";
+
+import { addGroup, getGroup, removeGroup } from "../../redux/actions/groups";
+import { getSchedules } from "../../redux/actions/schedules";
+import { getGroupAthletes } from "../../redux/actions/groups";
 
 import { isManager, isAdmin } from "../../services/LoginService";
 
@@ -33,6 +35,7 @@ const CreateGroup: React.FC<any> = (props) => {
             let id = props.id
             if (id) {
                 props.getGroup(id)
+                props.getGroupAthletes(id)
             }
         }
         props.getSchedules()
@@ -111,58 +114,63 @@ const CreateGroup: React.FC<any> = (props) => {
                                 <strong>{values.successMessage}</strong>
                             </Alert>
                         </Snackbar>
-                        <Box paddingBottom={7}>
-                            <Grid container direction='row' spacing={3}>
-                                <Grid item xs={6}>
-                                    <Card title="Datos del grupo">
-                                        <Grid container spacing={2} direction="column">
-                                            <Grid container item xs spacing={2}>
-                                                <Grid item xs>
-                                                    <SportSchoolSelect sportSchoolId={values.sportSchoolId} error={touched.sportSchoolId && errors.sportSchoolId}
-                                                        onChange={(sportSchoolId: number) => {
-                                                            setFieldValue('sportSchoolId', sportSchoolId);
-                                                        }}
-                                                    />
-                                                </Grid>
-                                                <Grid item xs>
-                                                    <Checkbox name="specialization" checked={values.specialization === true} 
-                                                            onChange={e => {
-                                                                setFieldValue('specialization', e.target.checked)
-                                                            }}
-                                                        />
-                                                        Especialización
-                                                </Grid>
-                                            </Grid>
-                                            <Grid container item xs spacing={2}>
-                                                <Grid item xs>
-                                                    <TextField fullWidth name="name" label="Nombre" value={values.name} onChange={handleChange}
-                                                        error={touched.name && errors.name} />
-                                                </Grid>
-                                                { values.sportSchoolId && 
+                        <Box paddingBottom={2}>
+                            <Grid container direction='column' spacing={3}>
+                                <Grid container item direction='row' spacing={3}>
+                                    <Grid item xs={6}>
+                                        <Card title="Datos del grupo">
+                                            <Grid container spacing={2} direction="column">
+                                                <Grid container item xs spacing={2}>
                                                     <Grid item xs>
-                                                        <TrainerSelect 
-                                                            trainerId={values.trainerId} 
-                                                            sportSchoolId={values.sportSchoolId}  
-                                                            error={touched.trainerId && errors.trainerId}
-                                                            onChange={(trainerId: number) => {
-                                                                setFieldValue('trainerId', trainerId);
+                                                        <SportSchoolSelect sportSchoolId={values.sportSchoolId} error={touched.sportSchoolId && errors.sportSchoolId}
+                                                            onChange={(sportSchoolId: number) => {
+                                                                setFieldValue('sportSchoolId', sportSchoolId);
                                                             }}
                                                         />
                                                     </Grid>
-                                                }
+                                                    <Grid item xs>
+                                                        <Checkbox name="specialization" checked={values.specialization === true} 
+                                                                onChange={e => {
+                                                                    setFieldValue('specialization', e.target.checked)
+                                                                }}
+                                                            />
+                                                            Especialización
+                                                    </Grid>
+                                                </Grid>
+                                                <Grid container item xs spacing={2}>
+                                                    <Grid item xs>
+                                                        <TextField fullWidth name="name" label="Nombre" value={values.name} onChange={handleChange}
+                                                            error={touched.name && errors.name} />
+                                                    </Grid>
+                                                    { values.sportSchoolId && 
+                                                        <Grid item xs>
+                                                            <TrainerSelect 
+                                                                trainerId={values.trainerId} 
+                                                                sportSchoolId={values.sportSchoolId}  
+                                                                error={touched.trainerId && errors.trainerId}
+                                                                onChange={(trainerId: number) => {
+                                                                    setFieldValue('trainerId', trainerId);
+                                                                }}
+                                                            />
+                                                        </Grid>
+                                                    }
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                    </Card>
+                                        </Card>
+                                    </Grid>
+                                    <Grid item xs={6} spacing={2}>
+                                        <ScheduleSelect 
+                                            schedules={props.schedules}
+                                            scheduleIds={values.scheduleIds}
+                                            specialization={false}
+                                            onChange={(scheduleIds: number[]) => {
+                                                setFieldValue('scheduleIds', scheduleIds)
+                                            }}
+                                        />
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={6} spacing={2}>
-                                    <ScheduleSelect 
-                                        schedules={props.schedules}
-                                        scheduleIds={values.scheduleIds}
-                                        specialization={false}
-                                        onChange={(scheduleIds: number[]) => {
-                                            setFieldValue('scheduleIds', scheduleIds)
-                                        }}
-                                    />
+                                <Grid container item xs>
+                                    <AthletesList athletes={props.group_athletes}/>
                                 </Grid>
                             </Grid>
                         </Box>
@@ -191,14 +199,16 @@ const mapDispatchToProps =  {
     addGroup,
     getGroup,
     removeGroup,
-    getSchedules
+    getSchedules,
+    getGroupAthletes
 }
 
 const mapStateToProps = (state: any) => {
     return { 
         group: state.group_reducer.group,
         schedules: state.schedule_reducer.schedules,
-        loading: state.api_reducer.loading
+        loading: state.api_reducer.loading,
+        group_athletes: state.group_reducer.group_athletes
     };
 };
 
