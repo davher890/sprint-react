@@ -1,7 +1,7 @@
-import { LOAD_USER_TABLE, ADD_USER, GET_USER, CURRENT_USER_ID, API_CALL } from "../../constants/action_types";
+import { LOAD_USER_TABLE, ADD_USER, GET_USER, CURRENT_USER_ID, API_CALL, GET_USER_STATISTICS } from "../../constants/action_types";
 
 import { findUserDataPagination } from "../../../services/TableService"
-import { addData, changePassword, findById } from "../../../services/UserService"
+import { addData, changePassword, findById, findUserStatistics } from "../../../services/UserService"
 
 import { getUserId } from "../../../services/LoginService";
 import { Order } from '../../../types/order'
@@ -19,6 +19,14 @@ export function getUser(id: number) {
     return function (dispatch: any)  {
         return findById(id).then(json => {
             dispatch({ type: GET_USER, payload: json });
+        });
+    }
+}
+
+export function getUserStatistics(id: number) {
+    return function (dispatch: any)  {
+        return findUserStatistics(id).then(json => {
+            dispatch({ type: GET_USER_STATISTICS, payload: json });
         });
     }
 }

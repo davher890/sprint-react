@@ -12,6 +12,8 @@ import Utils from "../../utils/TableUtils";
 import { Order } from '../../types/order'
 
 import { isAdmin, isManager } from "../../services/LoginService";
+import UserCard from "../../components/custom/UserCard";
+import DataGrid from "../../components/custom/DataGrid";
 
 class UserTable extends React.Component<any, any> {
     constructor(props: any) {
@@ -34,22 +36,23 @@ class UserTable extends React.Component<any, any> {
 							<Button text="Nuevo Usuario" href={'/admin/users'}/>
 						</Grid>
 					: null }
-					<Grid item xs>
-						<Table 
-							data={this.props.table_data}
-							page={this.props.page}
-							size={this.props.size}
-							total={this.props.total}
-							columns={this.state.columns} 
-							showColumns={true}
-							onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
-								this.props.getUserTable(page, size, filters, sort, sortDirection);
-							}}
-							onRowClick={(id: number) => {
-								window.open("/admin/users/" + id, "_self");
-							}}
-						/>
-					</Grid>
+						{ 
+						<Grid item xs>
+							<DataGrid 
+								data={this.props.table_data} 
+								page={this.props.page}
+								size={this.props.size}
+								total={this.props.total}
+								renderData={(u:any) => <Grid item xs={3}><UserCard data={u} /></Grid> }
+								onPaginationFilterChange={(page: number, size: number, filters:any, sort: string, sortDirection: Order) => {
+									this.props.getUserTable(page, size, filters, sort, sortDirection);
+								}}
+								onRowClick={(id: number) => {
+									window.open("/admin/users/" + id, "_self");
+								}}
+							/>
+							</Grid>
+						}
 				</Grid>
 			</>
 		)

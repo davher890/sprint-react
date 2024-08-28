@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import { connect } from "react-redux";
-import { withTheme, makeStyles } from '@mui/styles';
+import { withTheme, makeStyles, styled } from '@mui/styles';
 
 import { Box, Grid, Table, TableBody, TableHead, TableRow, TablePagination, TableCell, TableContainer, TableSortLabel, Checkbox } from '@mui/material';
 
@@ -17,39 +17,55 @@ import functions from '../../../utils/Functions'
 
 import { debounce } from "lodash"
 
+const StyledTableHead = styled(TableHead)(({ theme }) => ({
+	"& .MuiTableCell-head": {
+		color: theme.palette.secondary.main,
+		backgroundColor: theme.palette.primary.main
+	},
+	'& .MuiFormLabel-root.Mui-disabled': {
+		color: 'red',
+	},
+	"& .MuiFormLabel-root": {
+		color: theme.palette.secondary.main,
+	},
+	"& .MuiFormLabel-root.Mui-focused": {
+		color: theme.palette.secondary.main,
+	},
+	"& .MuiInputBase-input.MuiInput-input": {
+		color: theme.palette.secondary.main,
+	}
+}))
+
+const StyledTable = styled(Table)(({ theme }) => ({
+	borderWidth: 'thin',
+	border: 'solid',
+	borderColor: theme.palette.primary.main,
+	"& .MuiTableCell-head": {
+		color: theme.palette.secondary.main,
+		backgroundColor: theme.palette.primary.main
+	},
+	'& .MuiFormLabel-root.Mui-disabled': {
+		color: 'red',
+	},
+	"& .MuiFormLabel-root": {
+		color: theme.palette.secondary.main,
+	},
+	"& .MuiFormLabel-root.Mui-focused": {
+		color: theme.palette.secondary.main,
+	},
+	"& .MuiInputBase-input.MuiInput-input": {
+		color: theme.palette.secondary.main,
+	}
+}))
+
+const StyledTableSortLabel = styled(TableSortLabel)(({ theme }) => ({
+	"& .MuiTableSortLabel-icon": {
+		color: theme.palette.secondary.main,
+		opacity: 1
+	}
+}))
+
 const CustomTable: React.FC<any> = (props) => {
-
-	const styles = makeStyles({
-		root: {
-			"& .MuiTableCell-head": {
-				color: props.theme.palette.secondary.main,
-				backgroundColor: props.theme.palette.primary.main
-			},
-			'& .MuiFormLabel-root.Mui-disabled': {
-				color: 'red',
-			},
-			"& .MuiFormLabel-root": {
-				color: props.theme.palette.secondary.main,
-			},
-			"& .MuiFormLabel-root.Mui-focused": {
-				color: props.theme.palette.secondary.main,
-			},
-			"& .MuiInputBase-input.MuiInput-input": {
-				color: props.theme.palette.secondary.main,
-			}
-		},
-		sortLabelIcon: {
-			color: props.theme.palette.secondary.main,
-			// fontSize: 30,
-			opacity: 1
-		},
-		tableContainer: {
-			maxHeight: "500px", // Adjust the height as needed
-			overflowY: "auto",
-		}
-	});
-
-	const classes = styles();
 
 	const [columns, setColumns] = React.useState<any[]>(props.columns || []);
 	const [page, setPage] = React.useState<number>(props.page || 0)
@@ -160,7 +176,7 @@ const CustomTable: React.FC<any> = (props) => {
     };
 
 	const getTableHead = () => {
-		return <TableHead className={classes.root}>
+		return <StyledTableHead>
 			<TableRow>
 				{props.selectableRows ? <TableCell style={{ minWidth: '50px' }} key={'select'}>
 					<Checkbox
@@ -176,19 +192,15 @@ const CustomTable: React.FC<any> = (props) => {
 				{visibleColumns.map((column) => (
 					<TableCell style={{ minWidth: '250px' }} key={column.dataField}>
 						{ column.sort === false ? getCell(column) : 
-							<Grid container direction="row">
+							<Grid container direction="row" style={{alignItems: "center"}}>
 								<Grid item xs>
 									{ getCell(column) }
 								</Grid>
-								<Grid item xs>
-									<TableSortLabel
+								<Grid item xs={1}>
+									<StyledTableSortLabel
 										active={orderBy === column.dataField}
 										direction={orderBy === column.dataField ? order : 'asc'}
 										onClick={createSortHandler(column.dataField)}
-										classes={{
-											icon: classes.sortLabelIcon,
-											active: classes.sortLabelIcon
-										}}
 									/>
 								</Grid>
 							</Grid>
@@ -196,7 +208,7 @@ const CustomTable: React.FC<any> = (props) => {
 					</TableCell>
 				))}
 			</TableRow>
-		</TableHead>
+		</StyledTableHead>
 
 	}
 
@@ -204,12 +216,7 @@ const CustomTable: React.FC<any> = (props) => {
 		return (() => {
 			if (column.filter){
 				if (column.filter.options && column.filter.options.length > 0){
-					return <Select name={column.dataField} label={column.text} 
-						InputLabelProps={{
-							classes: {
-								root: classes.root,
-							},
-						}}
+					return <Select name={column.dataField} label={column.text}
 						options={column.filter.options} value={1}
 						onChange={(value: string, item: any) => {
 							handleFilterChange(column.filter.type, column.dataField, item ? item.id : '')
@@ -262,7 +269,7 @@ const CustomTable: React.FC<any> = (props) => {
 					}}>
 						<Box overflow="auto">
 							<TableContainer>
-								<Table stickyHeader size="small" className={classes.root}>
+								<StyledTable stickyHeader size="small">
 									{ getTableHead() }
 									<TableBody>
 									{
@@ -273,7 +280,7 @@ const CustomTable: React.FC<any> = (props) => {
 										))
 									}
 									</TableBody>
-								</Table>
+								</StyledTable>
 							</TableContainer>
 							<TablePagination
 								rowsPerPageOptions={[5, 10, 25]}

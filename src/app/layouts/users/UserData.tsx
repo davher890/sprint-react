@@ -11,20 +11,18 @@ import Card from "../../components/custom/Card";
 import SaveButton from "../../components/custom/SaveButton";
 import Spinner from '../../components/custom/Spinner'
 import BottomAppBar from "../../components/custom/BottomAppBar";
+import SportSchoolMultiSelect from "../../components/custom/SportSchoolMultiSelect";
+import GroupMultiSelect from "../../components/custom/GroupMultiSelect";
 
-import { addUser, getUser, changeUserPassword } from "../../redux/actions/users";
+import { addUser, getUser, changeUserPassword, getUserStatistics } from "../../redux/actions/users";
 import { getAllSportSchools, getSportSchoolsGroups } from "../../redux/actions/sportSchools";
 
 import { connect } from "react-redux";
 import { useParams } from 'react-router-dom';
 
 import { getUserId, isAdmin, isManager } from "../../services/LoginService";
-import SportSchoolMultiSelect from "../../components/custom/SportSchoolMultiSelect";
-import GroupMultiSelect from "../../components/custom/GroupMultiSelect";
 
 const CreateUser: React.FC<any> = (props) => {
-
-    // const [user, setUser] = React.useState<any>({})
 
     React.useEffect(() => {
         props.getAllSportSchools()
@@ -34,6 +32,7 @@ const CreateUser: React.FC<any> = (props) => {
                 id = getUserId().toString()
             }
             getUser(id)
+            props.getUserStatistics(id)
         }
     }, [])
 
@@ -242,7 +241,8 @@ const mapDispatchToProps = {
     getUser,
     changeUserPassword,
     getAllSportSchools,
-    getSportSchoolsGroups
+    getSportSchoolsGroups,
+    getUserStatistics
 }
 
 const mapStateToProps = (state: any) => {
@@ -250,7 +250,8 @@ const mapStateToProps = (state: any) => {
         user: state.user_reducer.user,
         sport_schools: state.sport_school_reducer.sport_schools,
         sport_schools_groups: state.group_reducer.sport_schools_groups,
-        loading: state.api_reducer.loading
+        loading: state.api_reducer.loading,
+        user_statistics: state.user_reducer.user_statistics
     };
 };
 

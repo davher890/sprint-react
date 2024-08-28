@@ -276,11 +276,11 @@ const Utils = {
                 type: "options",
                 options : functions.getReceiptStatus()
             }},
-            { dataField: 'enrollmentFee', text: 'Socio' },
-            { dataField: 'membershipFee', text: 'Matricula' },
-            { dataField: 'monthlyFee', text: 'Cuota' },
-            { dataField: 'licenseFee', text: 'Licencia' },
-            { dataField: 'totalFee', text: 'Total' },
+            { dataField: 'enrollmentFee', text: 'Socio', sort: false },
+            { dataField: 'membershipFee', text: 'Matricula', sort: false },
+            { dataField: 'monthlyFee', text: 'Cuota', sort: false },
+            { dataField: 'licenseFee', text: 'Licencia', sort: false },
+            { dataField: 'totalFee', text: 'Total', sort: false },
         ]
     },
 

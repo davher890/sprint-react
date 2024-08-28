@@ -11,3 +11,7 @@ export const changePassword = (body: any) => {
 export const findById = (id: number) => {
     return getRequest("/users/" + id)
 }
+
+export const findUserStatistics = (id: number) => {
+    return getRequest("/users/" + id + "/statistics")
+}
