@@ -31,8 +31,26 @@ const StyledDrawer = styled(Drawer)(({ theme }) => ({
   '& .MuiDrawer-paper': {
     width: drawerWidth,
     boxSizing: 'border-box',
-  },
-}));
+    color: theme.palette.secondary.main,
+    backgroundColor: theme.palette.primary.main
+  }
+}))
+
+const CustomListItem: React.FC<any> = (props) => {
+    return (
+        <ListItem component={props.component} to={props.to} onClick={props.onClick}
+            sx={{
+                color: 'inherit', // Inherit the color from the parent or set a fixed color
+                '&:focus, &:active': {
+                color: 'inherit', // Prevent color change on focus and active states
+                },
+                textDecoration: 'none', // Remove underline if present
+            }}
+        >{props.children}
+        </ListItem>
+    );
+};
+  
 
 const Sidebar: React.FC = () => {
     
@@ -59,114 +77,114 @@ const Sidebar: React.FC = () => {
             anchor="left"
         >
             <List>
-                <ListItem component={Link} to="/sport_schools/list">
+                <CustomListItem component={Link} to="/sport_schools/list">
                     <ListItemIcon>
-                        <Business />
+                        <Business sx={{ color: "secondary.main" }}/>
                     </ListItemIcon>
                     <ListItemText primary="Escuelas" />
-                </ListItem>
-                <ListItem onClick={() => handleClick(athletesOpen, setAthletesOpen)}>
+                </CustomListItem>
+                <CustomListItem onClick={() => handleClick(athletesOpen, setAthletesOpen)}>
                     <ListItemIcon>
-                        <People />
+                        <People sx={{ color: "secondary.main" }}/>
                     </ListItemIcon>
                     <ListItemText primary="Atletas" />
                     {athletesOpen ? <ExpandLess /> : <ExpandMore />}
-                </ListItem>
+                </CustomListItem>
                 <Collapse in={athletesOpen} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        <ListItem component={Link} to="/athletes/list" sx={{ pl: 4 }}>
+                        <CustomListItem component={Link} to="/athletes/list" sx={{ pl: 4 }}>
                             <ListItemText primary="Gestión" />
-                        </ListItem>
-                        <ListItem component={Link} to="/athletes/historic" sx={{ pl: 4 }}>
+                        </CustomListItem>
+                        <CustomListItem component={Link} to="/athletes/historic" sx={{ pl: 4 }}>
                             <ListItemText primary="Histórico" />
-                        </ListItem>
+                        </CustomListItem>
                     </List>
                 </Collapse>
-                <ListItem onClick={() => handleClick(groupsOpen, setGroupsOpen)}>
+                <CustomListItem onClick={() => handleClick(groupsOpen, setGroupsOpen)}>
                     <ListItemIcon>
-                        <FitnessCenter />
+                        <FitnessCenter sx={{ color: "secondary.main" }}/>
                     </ListItemIcon>
                     <ListItemText primary="Grupos de entrenamiento" />
                     {groupsOpen ? <ExpandLess /> : <ExpandMore />}
-                </ListItem>
+                </CustomListItem>
                 <Collapse in={groupsOpen} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        <ListItem component={Link} to="/groups/list" sx={{ pl: 4 }}>
+                        <CustomListItem component={Link} to="/groups/list" sx={{ pl: 4 }}>
                             <ListItemText primary="Gestión" />
-                        </ListItem>
+                        </CustomListItem>
                         { (isAdmin() || isManager() ) && <>
-                            <ListItem component={Link} to="/groups/swap" sx={{ pl: 4 }}>
+                            <CustomListItem component={Link} to="/groups/swap" sx={{ pl: 4 }}>
                                 <ListItemText primary="Intercambio Masivo" />
-                            </ListItem>
-                            <ListItem component={Link} to="/schedules/list" sx={{ pl: 4 }}>
+                            </CustomListItem>
+                            <CustomListItem component={Link} to="/schedules/list" sx={{ pl: 4 }}>
                                 <ListItemText primary="Horarios" />
-                            </ListItem>
-                            <ListItem component={Link} to="/trainers/list" sx={{ pl: 4 }}>
+                            </CustomListItem>
+                            <CustomListItem component={Link} to="/trainers/list" sx={{ pl: 4 }}>
                                 <ListItemText primary="Entrenadores" />
-                            </ListItem>
+                            </CustomListItem>
                         </> }
                     </List>
                 </Collapse>
                 
-                <ListItem onClick={() => handleClick(listingsOpen, setListingsOpen)}>
+                <CustomListItem onClick={() => handleClick(listingsOpen, setListingsOpen)}>
                     <ListItemIcon>
-                        <Assignment />
+                        <Assignment sx={{ color: "secondary.main" }}/>
                     </ListItemIcon>
                     <ListItemText primary="Listados" />
                     {listingsOpen ? <ExpandLess /> : <ExpandMore />}
-                </ListItem>
+                </CustomListItem>
                 <Collapse in={listingsOpen} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        <ListItem component={Link} to="/groups/attendance" sx={{ pl: 4 }}>
+                        <CustomListItem component={Link} to="/groups/attendance" sx={{ pl: 4 }}>
                             <ListItemText primary="Asistencia" />
-                        </ListItem>
-                        <ListItem component={Link} to="/groups/athletes" sx={{ pl: 4 }}>
+                        </CustomListItem>
+                        <CustomListItem component={Link} to="/groups/athletes" sx={{ pl: 4 }}>
                             <ListItemText primary="Atletas-Grupos" />
-                        </ListItem>
+                        </CustomListItem>
                     </List>
                 </Collapse>
                 { (isAdmin() || isManager()) && <>
-                    <ListItem onClick={() => handleClick(receiptsOpen, setReceiptsOpen)}>
+                    <CustomListItem onClick={() => handleClick(receiptsOpen, setReceiptsOpen)}>
                         <ListItemIcon>
-                            <Receipt />
+                            <Receipt sx={{ color: "secondary.main" }}/>
                         </ListItemIcon>
                         <ListItemText primary="Recibos" />
                         {receiptsOpen ? <ExpandLess /> : <ExpandMore />}
-                    </ListItem>
+                    </CustomListItem>
                     <Collapse in={receiptsOpen} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
-                            <ListItem component={Link} to="/receipts/list" sx={{ pl: 4 }}>
+                            <CustomListItem component={Link} to="/receipts/list" sx={{ pl: 4 }}>
                                 <ListItemText primary="Remesas" />
-                            </ListItem>
-                            <ListItem component={Link} to="/receipts/returned/list" sx={{ pl: 4 }}>
+                            </CustomListItem>
+                            <CustomListItem component={Link} to="/receipts/returned/list" sx={{ pl: 4 }}>
                                 <ListItemText primary="Recibos devueltos" />
-                            </ListItem>
-                            <ListItem component={Link} to="/receipts/not_paid/list" sx={{ pl: 4 }}>
+                            </CustomListItem>
+                            <CustomListItem component={Link} to="/receipts/not_paid/list" sx={{ pl: 4 }}>
                                 <ListItemText primary="Recibos no pagados" />
-                            </ListItem>
+                            </CustomListItem>
                         </List>
                     </Collapse>
                 </> }
-                <ListItem component={Link} to="/incidences/list">
+                <CustomListItem component={Link} to="/incidences/list">
                     <ListItemIcon>
-                        <Sports />
+                        <Sports sx={{ color: "secondary.main" }}/>
                     </ListItemIcon>
                     <ListItemText primary="Incidencias" />
-                </ListItem>
-                <ListItem component={Link} to="/communication">
+                </CustomListItem>
+                <CustomListItem component={Link} to="/communication">
                     <ListItemIcon>
-                        <Message />
+                        <Message sx={{ color: "secondary.main" }}/>
                     </ListItemIcon>
                     <ListItemText primary="Comunicacion" />
-                </ListItem>
+                </CustomListItem>
                 { (isAdmin() || isManager()) && <>
-                    <ListItem onClick={() => handleClick(adminOpen, setAdminOpen)}>
+                    <CustomListItem onClick={() => handleClick(adminOpen, setAdminOpen)}>
                         <ListItemIcon>
-                            <Receipt />
+                            <Receipt sx={{ color: "secondary.main" }}/>
                         </ListItemIcon>
                         <ListItemText primary="Admin" />
                         {adminOpen ? <ExpandLess /> : <ExpandMore />}
-                    </ListItem>
+                    </CustomListItem>
                     <Collapse in={adminOpen} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
                             <ListItem component={Link} to="/admin/users/list" sx={{ pl: 4 }}>
@@ -180,15 +198,15 @@ const Sidebar: React.FC = () => {
                         </List>
                     </Collapse>
                 </> }
-                <ListItem component={Link} to={"/users/" + getUserId()}>
+                <CustomListItem component={Link} to={"/users/" + getUserId()}>
                     <ListItemIcon >
-                        <AccountCircle />
+                        <AccountCircle sx={{ color: "secondary.main" }}/>
                     </ListItemIcon>
                     <ListItemText primary="Perfil" />
-                </ListItem>
-                <ListItem>
-                    <ListItemIcon onClick={logout}>
-                        <ExitToApp />
+                </CustomListItem>
+                <ListItem onClick={logout}>
+                    <ListItemIcon>
+                        <ExitToApp sx={{ color: "secondary.main" }}/>
                     </ListItemIcon>
                     <ListItemText primary="Salir" />
                 </ListItem>
